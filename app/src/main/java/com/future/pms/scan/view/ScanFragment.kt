@@ -32,22 +32,24 @@ class ScanFragment : Fragment() {
 
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         // Inflate the layout for this fragment
-        val view =  inflater.inflate(R.layout.fragment_scan, container, false)
+        val view = inflater.inflate(R.layout.fragment_scan, container, false)
 
         initViews()
         ActivityCompat.requestPermissions(
             context as Activity, arrayOf(
-                Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION)
+                Manifest.permission.CAMERA
+            ), REQUEST_CAMERA_PERMISSION
+        )
 
         return view
     }
+
     private fun initialiseDetectorsAndSources() {
-
-        Toast.makeText(context, "Barcode scanner started", Toast.LENGTH_SHORT).show()
-
         barcodeDetector = BarcodeDetector.Builder(context)
             .setBarcodeFormats(Barcode.ALL_FORMATS)
             .build()
@@ -60,22 +62,33 @@ class ScanFragment : Fragment() {
         surfaceView.holder.addCallback(object : SurfaceHolder.Callback {
             override fun surfaceCreated(holder: SurfaceHolder) {
                 try {
-                    if (context?.let { ActivityCompat.checkSelfPermission(it, Manifest.permission.CAMERA) } == PackageManager.PERMISSION_GRANTED) {
+                    if (context?.let {
+                            ActivityCompat.checkSelfPermission(
+                                it,
+                                Manifest.permission.CAMERA
+                            )
+                        } == PackageManager.PERMISSION_GRANTED) {
                         cameraSource!!.start(surfaceView.holder)
                     } else {
                         ActivityCompat.requestPermissions(
                             context as Activity, arrayOf(
-                            Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION)
+                                Manifest.permission.CAMERA
+                            ), REQUEST_CAMERA_PERMISSION
+                        )
                     }
 
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
-
-
             }
 
-            override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {}
+            override fun surfaceChanged(
+                holder: SurfaceHolder,
+                format: Int,
+                width: Int,
+                height: Int
+            ) {
+            }
 
             override fun surfaceDestroyed(holder: SurfaceHolder) {
                 cameraSource!!.stop()
@@ -84,15 +97,11 @@ class ScanFragment : Fragment() {
 
 
         barcodeDetector!!.setProcessor(object : Detector.Processor<Barcode> {
-            override fun release() {
-                Toast.makeText(context, "To prevent memory leaks barcode scanner has been stopped", Toast.LENGTH_SHORT).show()
-            }
+            override fun release() {}
 
             override fun receiveDetections(detections: Detector.Detections<Barcode>) {
                 val barcodes = detections.detectedItems
                 if (barcodes.size() != 0) {
-
-
                     txtBarcodeValue.post {
                         if (barcodes.valueAt(0).email != null) {
                             txtBarcodeValue.removeCallbacks(null)
@@ -113,16 +122,9 @@ class ScanFragment : Fragment() {
     }
 
 
-    override fun onPause() {
-        super.onPause()
-//        cameraSource!!.release()
-    }
-
     override fun onResume() {
         super.onResume()
         initialiseDetectorsAndSources()
-
-
     }
 
     companion object {
