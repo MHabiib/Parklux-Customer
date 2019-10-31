@@ -60,4 +60,7 @@ dependencies {
     //scanner
     api 'com.google.android.gms:play-services-vision:19.0.0'
 
+    // RecyclerView
+    implementation "androidx.recyclerview:recyclerview:1.0.0"
+
 }
