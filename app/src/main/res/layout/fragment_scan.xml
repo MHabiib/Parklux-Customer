@@ -3,8 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/scan_layout"
-    android:layout_marginBottom="20dp">
+    android:background="@drawable/card_layout_grey"
+    android:layout_marginBottom="50dp">
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateDrawable="@drawable/custom_progressbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <SurfaceView
         android:id="@+id/surfaceView"
@@ -23,9 +33,9 @@
         android:gravity="center"
         android:paddingTop="20dp"
         android:text="Scan the QR code"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/colorSecondary"
         android:textSize="25sp"
-        android:textStyle="bold"
+        android:textStyle="italic"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

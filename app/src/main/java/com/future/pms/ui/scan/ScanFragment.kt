@@ -1,26 +1,55 @@
-package com.example.myapplication.ui.scan
+package com.future.pms.ui.scan
 
 import android.Manifest
 import android.app.Activity
-import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.MediaScannerConnection
 import android.os.Bundle
 import android.view.*
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
-import com.future.pms.MainActivity
 import com.future.pms.R
+import com.future.pms.di.component.DaggerFragmentComponent
+import com.future.pms.di.module.FragmentModule
+import com.future.pms.ui.profile.ProfileContract
+import com.future.pms.ui.profile.ProfileFragment
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
+import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_scan.*
+import kotlinx.android.synthetic.main.fragment_scan.progressBar
 import java.io.IOException
+import javax.inject.Inject
 
-class ScanFragment : Fragment() {
+class ScanFragment : Fragment(), ScanContract.View {
+
+    @Inject
+    lateinit var presenter: ScanContract.Presenter
+
+    private lateinit var rootView: View
+
+    fun newInstance(): ScanFragment {
+        return ScanFragment()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        injectDependency()
+    }
+
+    override fun showProgress(show: Boolean) {
+        if (show) {
+            progressBar.visibility = View.VISIBLE
+        } else {
+            progressBar.visibility = View.GONE
+        }
+    }
+
+    override fun loadMessageSuccess(message: String) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     private var barcodeDetector: BarcodeDetector? = null
     private var cameraSource: CameraSource? = null
@@ -73,7 +102,8 @@ class ScanFragment : Fragment() {
                         ActivityCompat.requestPermissions(
                             context as Activity, arrayOf(
                                 Manifest.permission.CAMERA
-                            ), REQUEST_CAMERA_PERMISSION
+                            ),
+                            REQUEST_CAMERA_PERMISSION
                         )
                     }
 
@@ -127,7 +157,15 @@ class ScanFragment : Fragment() {
         initialiseDetectorsAndSources()
     }
 
+    private fun injectDependency() {
+        val scanComponent = DaggerFragmentComponent.builder()
+            .fragmentModule(FragmentModule())
+            .build()
+        scanComponent.inject(this)
+    }
+
     companion object {
         private const val REQUEST_CAMERA_PERMISSION = 201
+        const val TAG: String = "ScanFragment"
     }
 }
