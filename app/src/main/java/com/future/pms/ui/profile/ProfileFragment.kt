@@ -40,13 +40,7 @@ class ProfileFragment : Fragment(), ProfileContract.View {
         return inflater.inflate(R.layout.fragment_profile, container, false)
     }
 
-    override fun showProgress(show: Boolean) {
-        if (show) {
-            progressBar.visibility = View.VISIBLE
-        } else {
-            progressBar.visibility = View.GONE
-        }
-    }
+    override fun showProgress(show: Boolean) {}
 
     override fun loadMessageSuccess(message: String) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.

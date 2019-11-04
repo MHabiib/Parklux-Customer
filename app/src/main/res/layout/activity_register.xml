@@ -15,6 +15,18 @@
         android:contentDescription="@string/header_logo" />
 
     <TextView
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_horizontal_bottom_for_append_card"
+        android:layout_marginVertical="@dimen/margin_padding_vertical_for_card"
+        android:background="@drawable/card_layout_white"
+        android:gravity="center"
+        android:hint="@string/full_name"
+        android:paddingVertical="@dimen/margin_padding_vertical_for_card"
+        app:layout_constraintTop_toBottomOf="@id/imageView" />
+
+    <TextView
         android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,7 +36,19 @@
         android:gravity="center"
         android:hint="@string/email"
         android:paddingVertical="@dimen/margin_padding_vertical_for_card"
-        app:layout_constraintTop_toBottomOf="@id/imageView" />
+        app:layout_constraintTop_toBottomOf="@id/name" />
+
+    <TextView
+        android:id="@+id/phone_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_horizontal_bottom_for_append_card"
+        android:layout_marginVertical="@dimen/space_between_card"
+        android:background="@drawable/card_layout_white"
+        android:gravity="center"
+        android:hint="@string/phone_number"
+        android:paddingVertical="@dimen/margin_padding_vertical_for_card"
+        app:layout_constraintTop_toBottomOf="@id/email" />
 
     <TextView
         android:id="@+id/password"
@@ -36,31 +60,30 @@
         android:gravity="center"
         android:hint="@string/password"
         android:paddingVertical="@dimen/margin_padding_vertical_for_card"
-        app:layout_constraintTop_toBottomOf="@id/email" />
+        app:layout_constraintTop_toBottomOf="@id/phone_number" />
 
     <Button
         android:id="@+id/login_button"
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_button"
         android:layout_marginHorizontal="@dimen/margin_horizontal_bottom_for_append_card"
-        android:layout_marginVertical="@dimen/hundred_margin"
+        android:layout_marginVertical="@dimen/margin_button_vertical"
         android:background="@drawable/card_layout_blue_primary"
         android:gravity="center"
-        android:paddingVertical="@dimen/margin_padding_vertical_for_card"
-        android:text="@string/login"
+        android:text="@string/register"
         android:textColor="@color/white"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/dont_have_account"
+        app:layout_constraintBottom_toTopOf="@id/already_a_member"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
     <TextView
-        android:id="@+id/dont_have_account"
+        android:id="@+id/already_a_member"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/hundred_margin"
         android:layout_marginBottom="@dimen/margin_horizontal_bottom_for_append_card"
-        android:text="@string/don_t_have_account"
+        android:text="@string/already_a_member"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
 
@@ -70,9 +93,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/four_dps"
         android:layout_marginBottom="@dimen/margin_horizontal_bottom_for_append_card"
-        android:text="@string/register"
+        android:text="@string/login"
         android:textColor="@color/colorSecondary"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/dont_have_account" />
+        app:layout_constraintLeft_toRightOf="@id/already_a_member" />
 </androidx.constraintlayout.widget.ConstraintLayout>
