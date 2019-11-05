@@ -41,7 +41,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/profile"
-        app:srcCompat="@drawable/ic_person_black_2@dimen/four_dps"
+        android:src="@drawable/ic_person_black_24dp"
         android:contentDescription="@string/user_avatar" />
 
     <TextView

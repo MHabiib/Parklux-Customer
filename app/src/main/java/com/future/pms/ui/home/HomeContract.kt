@@ -2,7 +2,7 @@ package com.future.pms.ui.home
 
 import com.future.pms.model.DetailsViewModel
 import com.future.pms.model.Post
-import com.future.pms.ui.base.BaseContract
+import com.future.pms.di.base.BaseContract
 
 class HomeContract {
 

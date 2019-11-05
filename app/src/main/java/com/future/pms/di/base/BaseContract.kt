@@ -1,4 +1,4 @@
-package com.future.pms.ui.base
+package com.future.pms.di.base
 
 class BaseContract {
 

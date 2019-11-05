@@ -5,7 +5,7 @@ import com.future.pms.di.component.ApplicationComponent
 import com.future.pms.di.component.DaggerApplicationComponent
 import com.future.pms.di.module.ApplicationModule
 
-class BaseApp: Application() {
+class BaseApp : Application() {
 
     lateinit var component: ApplicationComponent
 

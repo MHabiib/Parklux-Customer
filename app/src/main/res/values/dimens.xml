@@ -4,7 +4,7 @@
     <dimen name="margin_padding_vertical_for_card">12dp</dimen>
     <dimen name="margin_horizontal_bottom_for_append_card">52dp</dimen>
     <dimen name="space_between_card">20dp</dimen>
-    <dimen name="title_and_input">@dimen/four_dps</dimen>
+    <dimen name="title_and_input">4dp</dimen>
     <dimen name="h1">32sp</dimen>
     <dimen name="title_to_top_parent">8dp</dimen>
     <dimen name="h2">16sp</dimen>
@@ -15,5 +15,5 @@
     <dimen name="h_medium">24sp</dimen>
     <dimen name="text_summary_in_out">12dp</dimen>
     <dimen name="space_between_layout">48dp</dimen>
-    <dimen name="four_dps">@dimen/four_dps</dimen>
+    <dimen name="four_dps">4dp</dimen>
 </resources>

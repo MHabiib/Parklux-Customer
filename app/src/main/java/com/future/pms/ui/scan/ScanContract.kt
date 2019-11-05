@@ -1,6 +1,6 @@
 package com.future.pms.ui.scan
 
-import com.future.pms.ui.base.BaseContract
+import com.future.pms.di.base.BaseContract
 
 class ScanContract {
 

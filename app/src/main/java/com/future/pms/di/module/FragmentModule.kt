@@ -1,6 +1,7 @@
 package com.future.pms.di.module
 
-import com.future.pms.api.ApiServiceInterface
+import com.future.pms.network.ApiServiceInterface
+import com.future.pms.network.RetrofitClient
 import com.future.pms.ui.home.HomeContract
 import com.future.pms.ui.home.HomePresenter
 import com.future.pms.ui.profile.ProfileContract
@@ -30,6 +31,6 @@ class FragmentModule {
 
     @Provides
     fun provideApiService(): ApiServiceInterface {
-        return ApiServiceInterface.create()
+        return RetrofitClient.create()
     }
 }

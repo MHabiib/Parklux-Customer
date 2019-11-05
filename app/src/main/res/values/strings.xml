@@ -33,4 +33,7 @@
     <string name="user_avatar">User Avatar</string>
     <string name="logout">Logout</string>
     <string name="customer">Customer</string>
+    <string name="auth_error">Has occurred a error on authentication!</string>
+    <string name="auth_invalid">User or password could be wrong!</string>
+    <string name="authenticating">Authenticating …</string>
 </resources>

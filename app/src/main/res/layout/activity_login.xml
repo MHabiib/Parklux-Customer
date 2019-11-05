@@ -5,52 +5,90 @@
     android:layout_height="match_parent"
     android:background="@color/lightGrey">
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        style="?android:attr/progressBarStyle"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:indeterminateDrawable="@drawable/custom_progressbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/header_login_register"
+        android:layout_height="296dp"
         android:layout_weight="1"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/header_with_logo"
         android:contentDescription="@string/header_logo" />
 
-    <TextView
-        android:id="@+id/email"
-        android:layout_width="match_parent"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/inputLayoutEmail"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_horizontal_bottom_for_append_card"
-        android:layout_marginVertical="@dimen/margin_padding_vertical_for_card"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:background="@drawable/card_layout_white"
-        android:gravity="center"
-        android:hint="@string/email"
-        android:paddingVertical="@dimen/margin_padding_vertical_for_card"
-        app:layout_constraintTop_toBottomOf="@id/imageView" />
+        app:layout_constraintTop_toBottomOf="@id/imageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginHorizontal="30dp"
+        android:paddingHorizontal="10dp"
+        app:layout_constraintHorizontal_bias="0.0">
 
-    <TextView
-        android:id="@+id/password"
-        android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txtEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:maxLines="1"
+            android:singleLine="true" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/inputLayoutPassword"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_horizontal_bottom_for_append_card"
-        android:layout_marginVertical="@dimen/space_between_card"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="8dp"
+        android:paddingHorizontal="10dp"
         android:background="@drawable/card_layout_white"
-        android:gravity="center"
-        android:hint="@string/password"
-        android:paddingVertical="@dimen/margin_padding_vertical_for_card"
-        app:layout_constraintTop_toBottomOf="@id/email" />
+        app:layout_constraintEnd_toEndOf="@+id/inputLayoutEmail"
+        app:layout_constraintStart_toStartOf="@+id/inputLayoutEmail"
+        app:layout_constraintTop_toBottomOf="@+id/inputLayoutEmail">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txtPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Passwrod"
+            android:imeActionId="6"
+            android:imeActionLabel="Sign in"
+            android:imeOptions="actionUnspecified"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:singleLine="true" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/login_button"
+        android:id="@+id/btnSign"
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_button"
         android:layout_marginHorizontal="@dimen/margin_horizontal_bottom_for_append_card"
-        android:layout_marginVertical="@dimen/hundred_margin"
+        android:layout_marginVertical="10dp"
         android:background="@drawable/card_layout_blue_primary"
         android:gravity="center"
         android:paddingVertical="@dimen/margin_padding_vertical_for_card"
         android:text="@string/login"
         android:textColor="@color/white"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/dont_have_account"
+        app:layout_constraintTop_toBottomOf="@id/inputLayoutPassword"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
