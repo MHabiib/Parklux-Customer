@@ -1,34 +1,40 @@
-package com.future.pms.network
+package com.future.pms.ui.login
 
 import android.content.Context
 import com.future.pms.R
 import com.future.pms.model.oauth.Token
-import com.future.pms.model.oauth.request.Refresh
+import com.future.pms.model.oauth.request.Auth
+import com.future.pms.network.APISettings
+import com.future.pms.network.AuthAPI
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-object RefreshFetcher {
+object AuthFetcher {
 
-    class RefreshFetcherImpl(private val context: Context,
-                          private val listener: Listener
-    ){
+    class AuthFetcherImpl(
+        private val context: Context,
+        private val listener: Listener
+    ) {
 
         private var callback: Call<Token>? = null
 
-        fun refresh(refresh: Refresh) {
-            val authFetcher = APICreator(AuthAPI::class.java, APISettings.base).generate()
-            callback = authFetcher.refresh(refresh)
+        fun auth(auth: Auth) {
+            val authFetcher = APICreator(
+                AuthAPI::class.java,
+                APISettings.base
+            ).generate()
+            callback = authFetcher.auth(auth.username, auth.password, auth.grant_type)
             callback?.enqueue(object : Callback<Token> {
 
                 override fun onResponse(call: Call<Token>?, response: Response<Token>?) {
-                    if(response != null){
-                        if(response.isSuccessful){
+                    if (response != null) {
+                        if (response.isSuccessful) {
                             listener.onSuccess(response.body())
-                        }else{
+                        } else {
                             listener.onSuccess(null)
                         }
-                    }else{
+                    } else {
                         listener.onError(Throwable(context.getString(R.string.auth_error)))
                     }
                 }
@@ -40,7 +46,7 @@ object RefreshFetcher {
             })
         }
 
-        fun cancel(){
+        fun cancel() {
             callback?.cancel()
         }
     }

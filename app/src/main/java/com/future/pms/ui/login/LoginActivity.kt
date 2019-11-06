@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.View
 import com.future.pms.R
 import com.future.pms.di.base.BaseMVPActivity
-import com.future.pms.ui.home2.HomeActivity
+import com.future.pms.ui.main.MainActivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_login.progressBar
@@ -36,7 +36,7 @@ class LoginActivity : BaseMVPActivity<LoginContract.LoginView, LoginContract.Log
     }
 
     override fun onSuccess() {
-        val intent = Intent(this, HomeActivity::class.java)
+        val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
     }
@@ -53,8 +53,11 @@ class LoginActivity : BaseMVPActivity<LoginContract.LoginView, LoginContract.Log
         if(!value) inputLayoutEmail.visibility = View.VISIBLE
         else inputLayoutEmail.visibility = View.GONE
 
-        if(!value) inputLayoutPassword.visibility = View.VISIBLE
+        if(!value) btnSign.visibility = View.VISIBLE
         else inputLayoutPassword.visibility = View.GONE
+
+        if(!value) btnSign.visibility = View.VISIBLE
+        else btnSign.visibility = View.GONE
     }
 
     override fun onFailed(e: String) {

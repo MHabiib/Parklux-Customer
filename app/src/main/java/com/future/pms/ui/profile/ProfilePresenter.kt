@@ -1,20 +1,13 @@
 package com.future.pms.ui.profile
 
-class ProfilePresenter : ProfileContract.Presenter {
-    override fun loadMessage() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+import com.future.pms.di.base.BaseMVPPresenterImpl
+import com.future.pms.util.Authentication
 
-    override fun subscribe() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+class ProfilePresenter : BaseMVPPresenterImpl<ProfileContract.View>(), ProfileContract.Presenter {
 
-    override fun unsubscribe() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun signOut() {
+        Authentication.delete(getContext())
 
-    override fun attach(view: ProfileContract.View) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        view?.let { view -> call(view, view::onLogout)}
     }
-
 }

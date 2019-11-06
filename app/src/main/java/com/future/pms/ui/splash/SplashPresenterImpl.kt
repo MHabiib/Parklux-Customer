@@ -4,7 +4,7 @@ import com.future.pms.di.base.BaseMVPPresenterImpl
 import com.future.pms.R
 import com.future.pms.model.oauth.Token
 import com.future.pms.model.oauth.request.Refresh
-import com.future.pms.network.RefreshFetcher
+import com.future.pms.ui.login.RefreshFetcher
 import com.future.pms.util.Authentication
 
 class SplashPresenterImpl : BaseMVPPresenterImpl<SplashContract.SplashView>(),
@@ -28,10 +28,7 @@ class SplashPresenterImpl : BaseMVPPresenterImpl<SplashContract.SplashView>(),
                                 if(token == null){
                                     view?.let { view -> call(view, view::onLogin) }
                                 }else{
-                                    /**
-                                     * Do something like call api
-                                     */
-                                    Authentication.save(getContext(), token)
+                                    Authentication.save(getContext(), token, String())
                                     view?.let { view -> call(view, view::onSuccess) }
                                 }
                             }

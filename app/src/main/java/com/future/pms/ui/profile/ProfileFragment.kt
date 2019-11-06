@@ -1,25 +1,32 @@
 package com.future.pms.ui.profile
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import com.future.pms.R
 import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
-import com.future.pms.ui.scan.ScanContract
-import com.future.pms.ui.scan.ScanFragment
+import com.future.pms.ui.login.LoginActivity
 import kotlinx.android.synthetic.main.fragment_profile.*
 import javax.inject.Inject
+import android.widget.Button
+import androidx.core.content.ContextCompat.startActivity
+import com.future.pms.R
+import com.future.pms.di.base.BaseMVPActivity
+import com.future.pms.di.base.BaseMVPFragment
+import com.future.pms.model.oauth.Token
+import com.future.pms.util.Constants
+import com.google.gson.Gson
+import kotlinx.android.synthetic.main.fragment_home.view.*
+import kotlinx.android.synthetic.main.fragment_profile.view.*
 
-class ProfileFragment : Fragment(), ProfileContract.View {
 
-    @Inject
-    lateinit var presenter: ProfileContract.Presenter
+class ProfileFragment : BaseMVPFragment<ProfileContract.View, ProfileContract.Presenter>(), ProfileContract.View{
+
+    override var presenter: ProfileContract.Presenter = ProfilePresenter()
 
     private lateinit var rootView: View
 
@@ -27,23 +34,32 @@ class ProfileFragment : Fragment(), ProfileContract.View {
         return ProfileFragment()
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        injectDependency()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_profile, container, false)
+        rootView = inflater.inflate(R.layout.fragment_profile, container, false)
+        val submit = rootView.findViewById(R.id.btnLogout) as Button
+        submit.setOnClickListener {
+            btnLogout.visibility = View.GONE
+            progressBar.visibility = View.VISIBLE
+
+            presenter.signOut()
+        }
+
+        rootView.profile_name_display.text = Gson().fromJson(context?.getSharedPreferences(
+            Constants.AUTHENTCATION,
+            Context.MODE_PRIVATE
+        )?.getString(Constants.TOKEN, null), Token::class.java).email
+        return rootView
     }
 
     override fun showProgress(show: Boolean) {}
 
-    override fun loadMessageSuccess(message: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun onLogout() {
+        val intent = Intent(activity, LoginActivity::class.java)
+        startActivity(intent)
     }
 
     private fun injectDependency() {

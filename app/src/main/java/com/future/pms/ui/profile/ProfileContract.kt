@@ -1,15 +1,16 @@
 package com.future.pms.ui.profile
 
-import com.future.pms.di.base.BaseContract
+import com.future.pms.di.base.BaseMVPPresenter
+import com.future.pms.di.base.BaseMVPView
 
 class ProfileContract {
 
-    interface View : BaseContract.View {
+    interface View : BaseMVPView {
         fun showProgress(show: Boolean)
-        fun loadMessageSuccess(message: String)
+        fun onLogout()
     }
 
-    interface Presenter : BaseContract.Presenter<View> {
-        fun loadMessage()
+    interface Presenter : BaseMVPPresenter<View> {
+        fun signOut()
     }
 }

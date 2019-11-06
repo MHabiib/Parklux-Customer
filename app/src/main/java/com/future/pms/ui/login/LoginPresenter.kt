@@ -4,7 +4,6 @@ import com.future.pms.di.base.BaseMVPPresenterImpl
 import com.future.pms.R
 import com.future.pms.model.oauth.Token
 import com.future.pms.model.oauth.request.Auth
-import com.future.pms.network.AuthFetcher
 import com.future.pms.util.Authentication
 
 class LoginPresenterImpl : BaseMVPPresenterImpl<LoginContract.LoginView>(),
@@ -21,7 +20,7 @@ class LoginPresenterImpl : BaseMVPPresenterImpl<LoginContract.LoginView>(),
                         view::onFailed)
                     }
                 } else {
-                    Authentication.save(getContext(), token)
+                    Authentication.save(getContext(), token, username)
                     view?.let { view -> call(view, view::onSuccess)}
                 }
             }

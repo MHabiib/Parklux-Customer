@@ -30,7 +30,6 @@
         </activity>
 
         <activity android:name=".ui.login.LoginActivity" />
-        <activity android:name=".ui.home2.HomeActivity" />
         <activity android:name=".ui.main.MainActivity" />
     </application>
 

@@ -2,32 +2,32 @@ package com.future.pms.util
 
 import android.content.Context
 import com.future.pms.model.oauth.Token
+import com.future.pms.util.Constants.Companion.AUTHENTCATION
+import com.future.pms.util.Constants.Companion.TOKEN
 import com.google.gson.Gson
 import java.util.*
 
 object Authentication {
 
-    private val authentication = "authentication"
-    private val token = "token"
-
     private fun put(context: Context, obj: Token): Boolean {
-        val preferences = context.getSharedPreferences(authentication, Context.MODE_PRIVATE)
+        val preferences = context.getSharedPreferences(AUTHENTCATION, Context.MODE_PRIVATE)
         val editor = preferences.edit()
-        return editor.putString(token, Gson().toJson(obj)).commit()
+        return editor.putString(TOKEN, Gson().toJson(obj)).commit()
     }
 
     fun get(context: Context): Token? {
-        val preferences = context.getSharedPreferences(authentication, Context.MODE_PRIVATE)
-        val json = preferences.getString(token, null)
+        val preferences = context.getSharedPreferences(AUTHENTCATION, Context.MODE_PRIVATE)
+        val json = preferences.getString(TOKEN, null)
         if(json != null) return Gson().fromJson(json, Token::class.java)
         return null
     }
 
-    fun save(context: Context, obj: Token): Boolean {
+    fun save(context: Context, obj: Token, email: String): Boolean {
         val calendar = GregorianCalendar.getInstance()
         var expiresIn: Long = calendar.time.time
         expiresIn += obj.expires_in * 1000
         obj.expires_in = expiresIn
+        obj.email = email
 
         return put(context, obj)
     }
@@ -59,8 +59,10 @@ object Authentication {
     }
 
     fun delete(context: Context) {
-        val preferences = context.getSharedPreferences(authentication, Context.MODE_PRIVATE)
+        val preferences = context.getSharedPreferences(AUTHENTCATION, Context.MODE_PRIVATE)
         val editor = preferences.edit()
-        editor.remove(token).apply()
+        System.out.println(TOKEN + preferences.all[TOKEN])
+        editor.remove(TOKEN).apply()
+        System.out.println(preferences.all[TOKEN])
     }
 }

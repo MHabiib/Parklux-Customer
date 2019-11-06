@@ -1,4 +1,4 @@
-package com.future.pms.network
+package com.future.pms.ui.login
 
 import com.future.pms.BuildConfig
 import okhttp3.OkHttpClient
@@ -20,7 +20,12 @@ class APICreator<out API>(
 
     private fun getOkHttpBuilder(writeTimeout: Long, readTimeout: Long): OkHttpClient.Builder {
         return OkHttpClient.Builder()
-            .addInterceptor(BasicAuthInterceptor("pms-client", "pms-secret"))
+            .addInterceptor(
+                BasicAuthInterceptor(
+                    "pms-client",
+                    "pms-secret"
+                )
+            )
             .writeTimeout(writeTimeout, TimeUnit.SECONDS)
             .readTimeout(readTimeout, TimeUnit.SECONDS)
     }
