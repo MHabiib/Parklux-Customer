@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.media.MediaScannerConnection
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.future.pms.R
@@ -85,7 +86,7 @@ class ScanFragment : Fragment(), ScanContract.View {
 
         cameraSource = CameraSource.Builder(context, barcodeDetector!!)
             .setRequestedPreviewSize(1920, 1080)
-            .setAutoFocusEnabled(true) //you should add this feature
+            .setAutoFocusEnabled(true)
             .build()
 
         surfaceView.holder.addCallback(object : SurfaceHolder.Callback {
@@ -136,13 +137,12 @@ class ScanFragment : Fragment(), ScanContract.View {
                         if (barcodes.valueAt(0).email != null) {
                             txtBarcodeValue.removeCallbacks(null)
                             intentData = barcodes.valueAt(0).email.address
-                            txtBarcodeValue.text = intentData
+                            Toast.makeText(context, intentData, Toast.LENGTH_LONG).show()
                             isEmail = true
                         } else {
                             isEmail = false
                             intentData = barcodes.valueAt(0).displayValue
-                            txtBarcodeValue.text = intentData
-
+                            Toast.makeText(context, intentData, Toast.LENGTH_LONG).show()
                         }
                     }
 

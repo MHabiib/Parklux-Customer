@@ -8,18 +8,21 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-class APICreator<out API>(private val clazz: Class<API>,
-                          private val baseUrl: String,
-                          private var writeTimeout: Long = 30,
-                          private var readTimeout: Long = 30,
-                          private var headers: HashMap<String, String> = HashMap(),
-                          private var converterFactory: Converter.Factory? = GsonConverterFactory.create(),
-                          private var level: HttpLoggingInterceptor.Level? = HttpLoggingInterceptor.Level.HEADERS) {
+class APICreator<out API>(
+    private val clazz: Class<API>,
+    private val baseUrl: String,
+    private var writeTimeout: Long = 30,
+    private var readTimeout: Long = 30,
+    private var headers: HashMap<String, String> = HashMap(),
+    private var converterFactory: Converter.Factory? = GsonConverterFactory.create(),
+    private var level: HttpLoggingInterceptor.Level? = HttpLoggingInterceptor.Level.HEADERS
+) {
 
     private fun getOkHttpBuilder(writeTimeout: Long, readTimeout: Long): OkHttpClient.Builder {
         return OkHttpClient.Builder()
-                .writeTimeout(writeTimeout, TimeUnit.SECONDS)
-                .readTimeout(readTimeout, TimeUnit.SECONDS)
+            .addInterceptor(BasicAuthInterceptor("pms-client", "pms-secret"))
+            .writeTimeout(writeTimeout, TimeUnit.SECONDS)
+            .readTimeout(readTimeout, TimeUnit.SECONDS)
     }
 
     fun generate(): API {
@@ -47,10 +50,10 @@ class APICreator<out API>(private val clazz: Class<API>,
 
         val client = okHttpClient.build()
         val retrofit = Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .client(client)
-                .addConverterFactory(converterFactory!!)
-                .build()
+            .baseUrl(baseUrl)
+            .client(client)
+            .addConverterFactory(converterFactory!!)
+            .build()
         return retrofit.create(clazz)
     }
 }

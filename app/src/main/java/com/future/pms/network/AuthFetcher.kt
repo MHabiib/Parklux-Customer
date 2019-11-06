@@ -10,25 +10,26 @@ import retrofit2.Response
 
 object AuthFetcher {
 
-    class AuthFetcherImpl(private val context: Context,
-                          private val listener: Listener
-    ){
+    class AuthFetcherImpl(
+        private val context: Context,
+        private val listener: Listener
+    ) {
 
         private var callback: Call<Token>? = null
 
         fun auth(auth: Auth) {
             val authFetcher = APICreator(AuthAPI::class.java, APISettings.base).generate()
-            callback = authFetcher.auth(auth)
+            callback = authFetcher.auth(auth.username, auth.password, auth.grant_type)
             callback?.enqueue(object : Callback<Token> {
 
                 override fun onResponse(call: Call<Token>?, response: Response<Token>?) {
-                    if(response != null){
-                        if(response.isSuccessful){
+                    if (response != null) {
+                        if (response.isSuccessful) {
                             listener.onSuccess(response.body())
-                        }else{
+                        } else {
                             listener.onSuccess(null)
                         }
-                    }else{
+                    } else {
                         listener.onError(Throwable(context.getString(R.string.auth_error)))
                     }
                 }
@@ -40,7 +41,7 @@ object AuthFetcher {
             })
         }
 
-        fun cancel(){
+        fun cancel() {
             callback?.cancel()
         }
     }

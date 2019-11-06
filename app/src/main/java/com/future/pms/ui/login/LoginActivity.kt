@@ -9,7 +9,6 @@ import com.future.pms.ui.home2.HomeActivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_login.progressBar
-import kotlinx.android.synthetic.main.activity_splash.*
 
 class LoginActivity : BaseMVPActivity<LoginContract.LoginView, LoginContract.LoginPresenter>(),
     LoginContract.LoginView {

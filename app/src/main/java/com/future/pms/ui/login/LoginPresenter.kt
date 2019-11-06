@@ -12,7 +12,7 @@ class LoginPresenterImpl : BaseMVPPresenterImpl<LoginContract.LoginView>(),
 
     private var authFetcher: AuthFetcher.AuthFetcherImpl?= null
 
-    override fun login(email: String, password: String) {
+    override fun login(username: String, password: String) {
         authFetcher = AuthFetcher.AuthFetcherImpl(getContext(), object : AuthFetcher.Listener {
             override fun onSuccess(token: Token?) {
                 if(token == null) {
@@ -29,7 +29,7 @@ class LoginPresenterImpl : BaseMVPPresenterImpl<LoginContract.LoginView>(),
                 view?.let { view -> call(view, throwable, view::onError) }
             }
         })
-        authFetcher?.auth(Auth(email, password))
+        authFetcher?.auth(Auth(username, password, "password"))
     }
 
     override fun cancel() {
