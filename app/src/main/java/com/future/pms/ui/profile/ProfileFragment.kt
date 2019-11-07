@@ -43,7 +43,6 @@ class ProfileFragment : BaseMVPFragment<ProfileContract.View, ProfileContract.Pr
         val submit = rootView.findViewById(R.id.btnLogout) as Button
         submit.setOnClickListener {
             btnLogout.visibility = View.GONE
-            progressBar.visibility = View.VISIBLE
 
             presenter.signOut()
         }
