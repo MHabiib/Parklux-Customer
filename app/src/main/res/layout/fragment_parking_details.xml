@@ -13,7 +13,7 @@
         android:gravity="center"
         android:text="@string/parking_details"
         android:textColor="@color/colorPrimary"
-        android:textSize="@dimen/h_medium"
+        android:textSize="@dimen/h1"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -40,7 +40,7 @@
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/h_medium"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/parking_slot"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -50,9 +50,9 @@
             android:gravity="center"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/h_medium"
-            app:layout_constraintLeft_toRightOf="@id/your_parking_spot"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/your_parking_spot"
             tools:text="B2 - 77" />
 
         <TextView
@@ -60,28 +60,62 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:paddingTop="16dp"
             android:text="@string/check_in_on"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/h_medium"
             app:layout_constraintEnd_toStartOf="@+id/checkin_time"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/your_parking_spot" />
+            app:layout_constraintTop_toBottomOf="@id/parking_slot" />
 
         <TextView
             android:id="@+id/checkin_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:paddingTop="16dp"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/h_medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/checkin_on"
-            app:layout_constraintTop_toBottomOf="@id/your_parking_spot"
+            app:layout_constraintTop_toBottomOf="@id/parking_slot"
             tools:text="18 : 19" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/parking_time_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/space_between_card"
+        android:layout_marginTop="@dimen/space_between_layout"
+        android:background="@drawable/card_layout_grey"
+        android:padding="26dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/parking_spot_layout">
+
+        <TextView
+            android:id="@+id/your_parking_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="You've parked for"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/h_medium"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/parking_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="00 : 00 : 02"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/h_medium"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/your_parking_time" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
@@ -96,7 +130,7 @@
         android:textSize="@dimen/h2"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/parking_spot_layout" />
+        app:layout_constraintTop_toBottomOf="@id/parking_time_layout" />
 
     <TextView
         android:id="@+id/directions"
@@ -105,7 +139,7 @@
         android:layout_marginTop="@dimen/space_between_layout"
         android:text="@string/directions"
         android:textColor="@color/colorPrimary"
-        android:textSize="@dimen/h_medium"
+        android:textSize="@dimen/h1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/checkout_button" />
@@ -114,10 +148,10 @@
         android:id="@+id/directions_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/space_between_card"
         android:layout_marginTop="@dimen/space_between_layout"
         android:background="@drawable/card_layout_grey"
         android:padding="@dimen/space_between_card"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/directions">
@@ -126,6 +160,7 @@
             android:id="@+id/parking_slot_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="76dp"
             android:paddingBottom="12dp"
             android:textColor="@color/colorSecondary"
             android:textSize="@dimen/h1"
@@ -135,150 +170,7 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="B2 - 77" />
 
-        <TextView
-            android:id="@+id/slot_one"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="@dimen/four_dps"
-            android:paddingVertical="@dimen/margin_padding_vertical_for_card"
-            android:textColor="@color/white"
-            android:textSize="@dimen/h2"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/slot_two"
-            app:layout_constraintTop_toBottomOf="@id/parking_slot_name"
-            tools:background="@drawable/card_layout_dark_grey"
-            tools:text="B2 - 01" />
 
-        <TextView
-            android:id="@+id/slot_two"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="@dimen/four_dps"
-            android:paddingVertical="@dimen/margin_padding_vertical_for_card"
-            android:textColor="@color/white"
-            android:textSize="@dimen/h2"
-            app:layout_constraintLeft_toRightOf="@id/slot_one"
-            app:layout_constraintRight_toLeftOf="@id/slot_three"
-            app:layout_constraintTop_toBottomOf="@id/parking_slot_name"
-            tools:background="@drawable/card_layout_dark_grey"
-            tools:text="B2 - 02" />
-
-        <TextView
-            android:id="@+id/slot_three"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="@dimen/four_dps"
-            android:paddingVertical="@dimen/margin_padding_vertical_for_card"
-            android:textColor="@color/white"
-            android:textSize="@dimen/h2"
-            app:layout_constraintLeft_toRightOf="@id/slot_two"
-            app:layout_constraintRight_toLeftOf="@id/slot_four"
-            app:layout_constraintTop_toBottomOf="@id/parking_slot_name"
-            tools:background="@drawable/card_layout_dark_grey"
-            tools:text="B2 - 03" />
-
-        <TextView
-            android:id="@+id/slot_four"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/h2"
-            android:paddingHorizontal="@dimen/four_dps"
-            android:paddingVertical="@dimen/margin_padding_vertical_for_card"
-            android:textColor="@color/white"
-            app:layout_constraintLeft_toRightOf="@id/slot_three"
-            app:layout_constraintRight_toLeftOf="@id/slot_five"
-            app:layout_constraintTop_toBottomOf="@id/parking_slot_name"
-            tools:background="@drawable/card_layout_dark_grey"
-            tools:text="B2 - 04" />
-
-        <TextView
-            android:id="@+id/slot_five"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="@dimen/four_dps"
-            android:paddingVertical="@dimen/margin_padding_vertical_for_card"
-            android:textColor="@color/white"
-            android:textSize="@dimen/h2"
-            app:layout_constraintLeft_toRightOf="@id/slot_four"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/parking_slot_name"
-            tools:background="@drawable/card_layout_dark_grey"
-            tools:text="B2 - 05" />
-
-        <TextView
-            android:id="@+id/six"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_between_card"
-            android:paddingHorizontal="@dimen/four_dps"
-            android:paddingVertical="@dimen/margin_padding_vertical_for_card"
-            android:textColor="@color/white"
-            android:textSize="@dimen/h2"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/slot_seven"
-            app:layout_constraintTop_toBottomOf="@id/slot_three"
-            tools:background="@drawable/card_layout_dark_grey"
-            tools:text="B2 - 06" />
-
-        <TextView
-            android:id="@+id/slot_seven"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_between_card"
-            android:paddingHorizontal="@dimen/four_dps"
-            android:paddingVertical="@dimen/margin_padding_vertical_for_card"
-            android:textColor="@color/white"
-            android:textSize="@dimen/h2"
-            app:layout_constraintLeft_toRightOf="@id/six"
-            app:layout_constraintRight_toLeftOf="@id/slot_eight"
-            app:layout_constraintTop_toBottomOf="@id/slot_three"
-            tools:background="@drawable/card_layout_dark_grey"
-            tools:text="B2 - 07" />
-
-        <TextView
-            android:id="@+id/slot_eight"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_between_card"
-            android:paddingHorizontal="@dimen/four_dps"
-            android:paddingVertical="@dimen/margin_padding_vertical_for_card"
-            android:textColor="@color/white"
-            android:textSize="@dimen/h2"
-            app:layout_constraintLeft_toRightOf="@id/slot_seven"
-            app:layout_constraintRight_toLeftOf="@id/slot_nine"
-            app:layout_constraintTop_toBottomOf="@id/slot_three"
-            tools:background="@drawable/card_layout_purple_slot"
-            tools:text="B2 - 08" />
-
-        <TextView
-            android:id="@+id/slot_nine"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_between_card"
-            android:paddingHorizontal="@dimen/four_dps"
-            android:paddingVertical="@dimen/margin_padding_vertical_for_card"
-            android:textColor="@color/white"
-            android:textSize="@dimen/h2"
-            app:layout_constraintLeft_toRightOf="@id/slot_eight"
-            app:layout_constraintRight_toLeftOf="@id/slot_ten"
-            app:layout_constraintTop_toBottomOf="@id/slot_three"
-            tools:background="@drawable/card_layout_dark_grey"
-            tools:text="B2 - 09" />
-
-        <TextView
-            android:id="@+id/slot_ten"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_between_card"
-            android:paddingHorizontal="@dimen/four_dps"
-            android:paddingVertical="@dimen/margin_padding_vertical_for_card"
-            android:textColor="@color/white"
-            android:textSize="@dimen/h2"
-            app:layout_constraintLeft_toRightOf="@id/slot_four"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/slot_three"
-            tools:background="@drawable/card_layout_dark_grey"
-            tools:text="B2 - 10" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

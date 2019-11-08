@@ -47,10 +47,10 @@ class ProfileFragment : BaseMVPFragment<ProfileContract.View, ProfileContract.Pr
             presenter.signOut()
         }
 
-        rootView.profile_name_display.text = Gson().fromJson(context?.getSharedPreferences(
+       /* rootView.profile_name_display.text = Gson().fromJson(context?.getSharedPreferences(
             Constants.AUTHENTCATION,
             Context.MODE_PRIVATE
-        )?.getString(Constants.TOKEN, null), Token::class.java).email
+        )?.getString(Constants.TOKEN, null), Token::class.java).email*/
         return rootView
     }
 

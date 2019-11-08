@@ -47,10 +47,6 @@ class HomeFragment : Fragment(), HomeContract.View {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_home, container, false)
-        rootView.user_name.text = Gson().fromJson(context?.getSharedPreferences(
-            AUTHENTCATION,
-            Context.MODE_PRIVATE
-        )?.getString(TOKEN, null), Token::class.java).email
         return rootView
     }
 

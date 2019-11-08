@@ -4,6 +4,8 @@ import com.future.pms.network.ApiServiceInterface
 import com.future.pms.network.RetrofitClient
 import com.future.pms.ui.home.HomeContract
 import com.future.pms.ui.home.HomePresenter
+import com.future.pms.ui.parkingDirection.ParkingDirectionContract
+import com.future.pms.ui.parkingDirection.ParkingDirectionPresenter
 import com.future.pms.ui.profile.ProfileContract
 import com.future.pms.ui.profile.ProfilePresenter
 import com.future.pms.ui.scan.ScanContract
@@ -29,8 +31,15 @@ class FragmentModule {
         return ProfilePresenter()
     }
 
+
+    @Provides
+    fun provideParkingDirectinPresenter(): ParkingDirectionContract.Presenter {
+        return ParkingDirectionPresenter()
+    }
+
     @Provides
     fun provideApiService(): ApiServiceInterface {
         return RetrofitClient.create()
     }
+
 }
