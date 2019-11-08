@@ -4,17 +4,19 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.future.pms.R
 import com.future.pms.di.component.DaggerActivityComponent
 import com.future.pms.di.module.ActivityModule
 import com.future.pms.ui.profile.ProfileFragment
 import com.future.pms.ui.scan.ScanFragment
 import com.future.pms.ui.home.HomeFragment
+import com.future.pms.ui.parkingdirection.ParkingDirectionFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.android.synthetic.main.fragment_home.*
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), MainContract.View{
-
 
     @Inject lateinit var presenter: MainContract.Presenter
 

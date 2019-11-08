@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#000000"
-    tools:context=".ui.parkingDirection.ParkingDirectionFragment">
+    tools:context=".ui.parkingdirection.ParkingDirectionFragment">
 
     <TextView
         android:layout_width="match_parent"
@@ -13,7 +13,6 @@
         android:text="LG Level"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/h1"
-        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"

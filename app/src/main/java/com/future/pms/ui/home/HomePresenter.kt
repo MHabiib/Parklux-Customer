@@ -6,14 +6,15 @@ import com.future.pms.network.RetrofitClient
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
-class HomePresenter : HomeContract.Presenter {
+class HomePresenter @Inject constructor() {
 
     private val subscriptions = CompositeDisposable()
     private val api: ApiServiceInterface = RetrofitClient.create()
-    private lateinit var view: HomeContract.View
+    private lateinit var view: HomeContract
 
-    override fun loadData() {
+    fun loadData() {
         val subscribe = api.getPostList().subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ list: List<Post>? ->
@@ -27,21 +28,17 @@ class HomePresenter : HomeContract.Presenter {
         subscriptions.add(subscribe)
     }
 
-    override fun loadDataAll() {
-    }
+    fun subscribe() {}
 
-    override fun deleteItem(item: Post) {
-        //api.deleteUser(item.id)
-    }
-
-    override fun subscribe() {}
-
-    override fun unsubscribe() {
+    fun unsubscribe() {
         subscriptions.clear()
     }
 
-    override fun attach(view: HomeContract.View) {
+    fun attach(view: HomeContract) {
         this.view = view
     }
 
+    fun onParkingDirectionClick() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 }

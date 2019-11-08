@@ -30,58 +30,66 @@
         android:id="@+id/user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="Customer"
         android:layout_marginStart="8dp"
         android:textAlignment="center"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/h1"
         app:layout_constraintLeft_toRightOf="@id/hi_user"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Customer" />
 
     <TextView
         android:id="@+id/text_announce_user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="Good Morning !"
         android:textAlignment="center"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/h_medium"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/hi_user" />
+        app:layout_constraintTop_toBottomOf="@id/hi_user"
+        tools:text="Good Morning !" />
 
     <TextView
         android:id="@+id/date_now"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="It's Mon 7 October !"
         android:textAlignment="center"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/h2"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_announce_user" />
+        app:layout_constraintTop_toBottomOf="@id/text_announce_user"
+        tools:text="It's Mon 7 October !" />
 
     <TextView
         android:id="@+id/degre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="27&#xb0; C"
         android:textAlignment="center"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/h_medium"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/hi_user"
-        tools:layout_editor_absoluteX="8@dimen/four_dps" />
+        tools:layout_editor_absoluteX="8@dimen/four_dps"
+        tools:text="27&#xb0; C" />
 
     <TextView
         android:id="@+id/location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="Gambir"
         android:textAlignment="center"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/h2"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/degre" />
+        app:layout_constraintTop_toBottomOf="@id/degre"
+        tools:text="Gambir" />
+
+    <Button
+        android:id="@+id/button_go_to"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/your_history"
