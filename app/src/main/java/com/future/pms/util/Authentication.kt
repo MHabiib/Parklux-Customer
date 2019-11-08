@@ -61,8 +61,8 @@ object Authentication {
     fun delete(context: Context) {
         val preferences = context.getSharedPreferences(AUTHENTCATION, Context.MODE_PRIVATE)
         val editor = preferences.edit()
-        System.out.println(TOKEN + preferences.all[TOKEN])
+        println(TOKEN + preferences.all[TOKEN])
         editor.remove(TOKEN).apply()
-        System.out.println(preferences.all[TOKEN])
+        println(preferences.all[TOKEN])
     }
 }

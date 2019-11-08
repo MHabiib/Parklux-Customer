@@ -1,6 +1,5 @@
 package com.future.pms.ui.profile
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,27 +10,25 @@ import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
 import com.future.pms.ui.login.LoginActivity
 import kotlinx.android.synthetic.main.fragment_profile.*
-import javax.inject.Inject
 import android.widget.Button
-import androidx.core.content.ContextCompat.startActivity
 import com.future.pms.R
-import com.future.pms.di.base.BaseMVPActivity
-import com.future.pms.di.base.BaseMVPFragment
-import com.future.pms.model.oauth.Token
-import com.future.pms.util.Constants
-import com.google.gson.Gson
-import kotlinx.android.synthetic.main.fragment_home.view.*
-import kotlinx.android.synthetic.main.fragment_profile.view.*
+import javax.inject.Inject
 
 
-class ProfileFragment : BaseMVPFragment<ProfileContract.View, ProfileContract.Presenter>(), ProfileContract.View{
+class ProfileFragment : Fragment(), ProfileContract {
 
-    override var presenter: ProfileContract.Presenter = ProfilePresenter()
+    @Inject
+    lateinit var presenter: ProfilePresenter
 
     private lateinit var rootView: View
 
     fun newInstance(): ProfileFragment {
         return ProfileFragment()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        injectDependency()
     }
 
     override fun onCreateView(
@@ -43,18 +40,21 @@ class ProfileFragment : BaseMVPFragment<ProfileContract.View, ProfileContract.Pr
         val submit = rootView.findViewById(R.id.btnLogout) as Button
         submit.setOnClickListener {
             btnLogout.visibility = View.GONE
-
             presenter.signOut()
+            onLogout()
         }
-
-       /* rootView.profile_name_display.text = Gson().fromJson(context?.getSharedPreferences(
-            Constants.AUTHENTCATION,
-            Context.MODE_PRIVATE
-        )?.getString(Constants.TOKEN, null), Token::class.java).email*/
+        /* rootView.profile_name_display.text = Gson().fromJson(context?.getSharedPreferences(
+             Constants.AUTHENTCATION,
+             Context.MODE_PRIVATE
+         )?.getString(Constants.TOKEN, null), Token::class.java).email*/
         return rootView
     }
 
-    override fun showProgress(show: Boolean) {}
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        presenter.attach(this)
+        presenter.subscribe()
+    }
 
     override fun onLogout() {
         val intent = Intent(activity, LoginActivity::class.java)
@@ -69,6 +69,6 @@ class ProfileFragment : BaseMVPFragment<ProfileContract.View, ProfileContract.Pr
     }
 
     companion object {
-        const val TAG: String = "ProfileFragment"
+        const val TAG: String = "P`rofileFragment"
     }
 }

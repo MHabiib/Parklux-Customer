@@ -91,17 +91,6 @@ class HomeFragment : Fragment(), HomeContract {
         print(model.toJson())
     }
 
-    fun addFragment(fragment: Fragment, addToBackStack: Boolean, tag: String) {
-        val manager = activity?.supportFragmentManager
-        val ft = manager?.beginTransaction()
-
-        if (addToBackStack) {
-            ft?.addToBackStack(tag)
-        }
-        ft?.replace(com.future.pms.R.id.frame, fragment, tag)
-        ft?.commitAllowingStateLoss()
-    }
-
     override fun showParkingDirectionFragment() {
     }
 

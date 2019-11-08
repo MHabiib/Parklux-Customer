@@ -7,7 +7,7 @@ import com.future.pms.ui.profile.ProfileFragment
 import com.future.pms.ui.scan.ScanFragment
 import dagger.Component
 
-@Component(modules = arrayOf(FragmentModule::class))
+@Component(modules = [FragmentModule::class])
 interface FragmentComponent {
 
     fun inject(homeFragment: HomeFragment)

@@ -20,7 +20,6 @@ class HomeAdapter(private val context: Context?, private val list: MutableList<P
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         val post = list[position]
 
-        // holder!!.bind(post)
         holder.title.text = post.title
         holder.body.text = post.body
     }

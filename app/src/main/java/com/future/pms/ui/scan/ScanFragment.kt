@@ -3,7 +3,6 @@ package com.future.pms.ui.scan
 import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
-import android.media.MediaScannerConnection
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
@@ -12,22 +11,24 @@ import androidx.fragment.app.Fragment
 import com.future.pms.R
 import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
-import com.future.pms.ui.profile.ProfileContract
-import com.future.pms.ui.profile.ProfileFragment
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
-import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_scan.*
 import kotlinx.android.synthetic.main.fragment_scan.progressBar
 import java.io.IOException
 import javax.inject.Inject
 
-class ScanFragment : Fragment(), ScanContract.View {
+class ScanFragment : Fragment(), ScanContract{
+
+    private var barcodeDetector: BarcodeDetector? = null
+    private var cameraSource: CameraSource? = null
+    internal var intentData = ""
+    internal var isEmail = false
 
     @Inject
-    lateinit var presenter: ScanContract.Presenter
+    lateinit var presenter: ScanPresenter
 
     private lateinit var rootView: View
 
@@ -40,43 +41,22 @@ class ScanFragment : Fragment(), ScanContract.View {
         injectDependency()
     }
 
-    override fun showProgress(show: Boolean) {
-        if (show) {
-            progressBar.visibility = View.VISIBLE
-        } else {
-            progressBar.visibility = View.GONE
-        }
-    }
-
-    override fun loadMessageSuccess(message: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    private var barcodeDetector: BarcodeDetector? = null
-    private var cameraSource: CameraSource? = null
-    internal var intentData = ""
-    internal var isEmail = false
-
-    private fun initViews() {
-
-
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_scan, container, false)
-
-        initViews()
         ActivityCompat.requestPermissions(
             context as Activity, arrayOf(
                 Manifest.permission.CAMERA
             ), REQUEST_CAMERA_PERMISSION
         )
-
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        presenter.attach(this)
     }
 
     private fun initialiseDetectorsAndSources() {
@@ -155,6 +135,14 @@ class ScanFragment : Fragment(), ScanContract.View {
     override fun onResume() {
         super.onResume()
         initialiseDetectorsAndSources()
+    }
+
+    override fun showProgress(show: Boolean) {
+        if (show) {
+            progressBar.visibility = View.VISIBLE
+        } else {
+            progressBar.visibility = View.GONE
+        }
     }
 
     private fun injectDependency() {

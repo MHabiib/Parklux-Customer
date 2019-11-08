@@ -9,12 +9,16 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.future.pms.R
 import com.future.pms.di.base.BaseMVPFragment
+import com.future.pms.di.component.DaggerFragmentComponent
+import com.future.pms.di.module.FragmentModule
+import com.future.pms.ui.home.HomeFragment
 import com.future.pms.util.Constants.Companion.SEATS
 import com.future.pms.util.Constants.Companion.STATUS_AVAILABLE
 import com.future.pms.util.Constants.Companion.STATUS_BOOKED
@@ -22,6 +26,7 @@ import com.future.pms.util.Constants.Companion.STATUS_RESERVED
 import com.future.pms.util.Constants.Companion.seatGaping
 import com.future.pms.util.Constants.Companion.seatSize
 import com.future.pms.util.Constants.Companion.selectedIds
+import com.google.android.gms.vision.text.Line
 import java.util.ArrayList
 import javax.inject.Inject
 
@@ -34,14 +39,22 @@ class ParkingDirectionFragment : Fragment(),
     private lateinit var rootView: View
     private var seatViewList: MutableList<TextView> = ArrayList()
 
-    @SuppressLint("WrongViewCast")
+    fun newInstance(): ParkingDirectionFragment {
+        return ParkingDirectionFragment()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        injectDependency()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_parking_direction, container, false)
-        val layout = rootView.findViewById(R.id.layoutSeat) as Layout
+        val layout = rootView.findViewById(R.id.layoutSeat) as HorizontalScrollView
         showParkingSlot(layout)
         return rootView
     }
@@ -49,16 +62,13 @@ class ParkingDirectionFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         presenter.attach(this)
+        presenter.subscribe()
         initView()
     }
 
-    private fun initView() {
-        //presenter.getParkingSlotData(SEATS)
-    }
+    private fun initView() {}
 
-    override fun showProgress(show: Boolean) {}
-
-    private fun showParkingSlot(layout: Layout) {
+    private fun showParkingSlot(layout: HorizontalScrollView) {
         val layoutSeat = LinearLayout(context)
         val params = LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
@@ -156,4 +166,13 @@ class ParkingDirectionFragment : Fragment(),
             Toast.makeText(context, "Seat " + view.id + " is Reserved", Toast.LENGTH_SHORT).show()
         }
     }
+
+    private fun injectDependency() {
+        val homeComponent = DaggerFragmentComponent.builder()
+            .fragmentModule(FragmentModule())
+            .build()
+
+        homeComponent.inject(this)
+    }
+
 }

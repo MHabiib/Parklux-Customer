@@ -1,13 +1,30 @@
 package com.future.pms.ui.profile
 
-import com.future.pms.di.base.BaseMVPPresenterImpl
+import android.app.Activity
+import android.content.Context
+import androidx.fragment.app.Fragment
 import com.future.pms.util.Authentication
+import javax.inject.Inject
 
-class ProfilePresenter : BaseMVPPresenterImpl<ProfileContract.View>(), ProfileContract.Presenter {
+class ProfilePresenter @Inject constructor() {
 
-    override fun signOut() {
-        Authentication.delete(getContext())
+    private lateinit var view: ProfileContract
 
-        view?.let { view -> call(view, view::onLogout)}
+    private fun getContext(): Context {
+        return when (view) {
+            is Fragment -> (view as Fragment).context!!
+            is Activity -> (view as Activity)
+            else -> throw Exception()
+        }
     }
+
+    fun signOut() {
+        Authentication.delete(getContext())
+    }
+
+    fun attach(view: ProfileContract) {
+        this.view = view
+    }
+
+    fun subscribe() {}
 }
