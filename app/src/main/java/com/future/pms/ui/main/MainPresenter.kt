@@ -1,33 +1,34 @@
 package com.future.pms.ui.main
 
 import io.reactivex.disposables.CompositeDisposable
+import javax.inject.Inject
 
-class MainPresenter : MainContract.Presenter {
+class MainPresenter @Inject constructor() {
 
+    private lateinit var view: MainContract
     private val subscriptions = CompositeDisposable()
 
-    private lateinit var view: MainContract.View
-    override fun subscribe() {
+    fun subscribe() {
 
     }
 
-    override fun unsubscribe() {
+    fun unsubscribe() {
         subscriptions.clear()
     }
 
-    override fun onHomeIconClick() {
+    fun onHomeIconClick() {
         view.showHomeFragment()
     }
 
-    override fun onScanIconClick() {
+    fun onScanIconClick() {
         view.showScanFragment()
     }
 
-    override fun onProfileIconClick() {
+    fun onProfileIconClick() {
         view.showProfileFragment()
     }
 
-    override fun attach(view: MainContract.View) {
+    fun attach(view: MainContract) {
         this.view = view
         view.showHomeFragment()
     }

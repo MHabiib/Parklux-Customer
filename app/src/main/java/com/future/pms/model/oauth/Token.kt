@@ -8,6 +8,5 @@ data class Token(
     var expires_in: Long,
     val refresh_token: String,
     val id_token: String,
-    val access_token: String,
-    var email: String
+    val access_token: String
 ) : Serializable

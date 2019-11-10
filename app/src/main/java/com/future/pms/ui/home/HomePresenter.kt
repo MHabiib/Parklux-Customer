@@ -1,12 +1,15 @@
 package com.future.pms.ui.home
 
+import com.future.pms.model.customerbooking.CustomerBooking
 import com.future.pms.network.ApiServiceInterface
-import com.future.pms.model.Post
 import com.future.pms.network.RetrofitClient
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import java.util.*
 import javax.inject.Inject
+import com.future.pms.model.customerdetail.Customer
+
 
 class HomePresenter @Inject constructor() {
 
@@ -14,17 +17,29 @@ class HomePresenter @Inject constructor() {
     private val api: ApiServiceInterface = RetrofitClient.create()
     private lateinit var view: HomeContract
 
-    fun loadData() {
-        val subscribe = api.getPostList().subscribeOn(Schedulers.io())
+    fun loadData(access_token: String) {
+        val subscribe = api.getCustomerDetail(access_token).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ list: List<Post>? ->
+            .subscribe({ customer: Customer ->
                 view.showProgress(false)
-                view.loadDataSuccess(list!!.take(10))
+                view.loadCustomerDetailSuccess(customer)
             }, { error ->
                 view.showProgress(false)
                 view.showErrorMessage(error.localizedMessage)
             })
+        subscriptions.add(subscribe)
+    }
 
+    fun loadCustomerBooking(access_token: String) {
+        val subscribe = api.getCustomerBooking(access_token).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ list: List<CustomerBooking> ->
+                view.showProgress(false)
+                view.loadCustomerBookingSuccess(list)
+            }, { error ->
+                view.showProgress(false)
+                view.showErrorMessage(error.localizedMessage)
+            })
         subscriptions.add(subscribe)
     }
 
@@ -38,7 +53,15 @@ class HomePresenter @Inject constructor() {
         this.view = view
     }
 
-    fun onParkingDirectionClick() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    fun getTextAnnounce(): String {
+        return when (Calendar.getInstance(TimeZone.getTimeZone("Asia/Jakarta")).get(Calendar.HOUR_OF_DAY)) {
+            in 0..11 -> "Good Morning"
+            in 12..15 -> "Good Afternoon"
+            in 16..20 -> "Good Evening"
+            in 21..23 -> "Good Night"
+            else -> {
+                "Hello"
+            }
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.future.pms.ui.splash
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import com.future.pms.R
 import com.future.pms.di.base.BaseMVPActivity
 import com.future.pms.ui.login.LoginActivity
@@ -43,7 +44,7 @@ class SplashActivity: BaseMVPActivity<SplashContract.SplashView,
     }
 
     override fun onError(e: Throwable) {
-        Snackbar.make(container, e.message.toString(), Snackbar.LENGTH_LONG)
+        Toast.makeText(this, e.message.toString(), Toast.LENGTH_LONG).show()
         showLogin()
     }
 }

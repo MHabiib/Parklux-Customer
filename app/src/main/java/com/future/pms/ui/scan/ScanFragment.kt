@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import com.future.pms.R
 import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
+import com.future.pms.util.Constants.Companion.SCAN_FRAGMENT
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.barcode.Barcode
@@ -154,6 +155,6 @@ class ScanFragment : Fragment(), ScanContract{
 
     companion object {
         private const val REQUEST_CAMERA_PERMISSION = 201
-        const val TAG: String = "ScanFragment"
+        const val TAG: String = SCAN_FRAGMENT
     }
 }

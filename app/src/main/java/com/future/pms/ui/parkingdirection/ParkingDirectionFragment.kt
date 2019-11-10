@@ -19,6 +19,7 @@ import com.future.pms.di.base.BaseMVPFragment
 import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
 import com.future.pms.ui.home.HomeFragment
+import com.future.pms.util.Constants.Companion.PARKING_DETAIL_FRAGMENT
 import com.future.pms.util.Constants.Companion.SEATS
 import com.future.pms.util.Constants.Companion.STATUS_AVAILABLE
 import com.future.pms.util.Constants.Companion.STATUS_BOOKED
@@ -175,4 +176,7 @@ class ParkingDirectionFragment : Fragment(),
         homeComponent.inject(this)
     }
 
+    companion object {
+        const val TAG: String = PARKING_DETAIL_FRAGMENT
+    }
 }

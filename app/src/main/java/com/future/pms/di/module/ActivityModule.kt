@@ -15,7 +15,7 @@ class ActivityModule(private var activity: Activity) {
     }
 
     @Provides
-    fun providePresenter(): MainContract.Presenter {
+    fun providePresenter(): MainPresenter {
         return MainPresenter()
     }
 

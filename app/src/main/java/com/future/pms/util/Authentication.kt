@@ -22,12 +22,11 @@ object Authentication {
         return null
     }
 
-    fun save(context: Context, obj: Token, email: String): Boolean {
+    fun save(context: Context, obj: Token): Boolean {
         val calendar = GregorianCalendar.getInstance()
         var expiresIn: Long = calendar.time.time
         expiresIn += obj.expires_in * 1000
         obj.expires_in = expiresIn
-        obj.email = email
 
         return put(context, obj)
     }

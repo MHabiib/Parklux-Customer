@@ -2,10 +2,13 @@ package com.future.pms.util
 
 class Constants {
     companion object {
-        const val BASE_URL =  "https://jsonplaceholder.typicode.com/"
         const val AUTHENTCATION = "authentication"
-        const val TOKEN = "token"
         const val HOME_FRAGMENT = "HomeFragment"
+        const val SCAN_FRAGMENT = "ScanFragment"
+        const val PARKING_DETAIL_FRAGMENT = "ParkingDetailFragment"
+        const val RECEIPT_FRAGMENT = "Receipt Fragment"
+        const val TOKEN = "token"
+        const val PROFILE_FRAGMENT = "ProfileFragment"
         const val ERROR = "Error"
         const val seatSize = 100
         const val seatGaping = 10

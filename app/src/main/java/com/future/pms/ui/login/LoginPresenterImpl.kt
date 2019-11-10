@@ -20,7 +20,7 @@ class LoginPresenterImpl : BaseMVPPresenterImpl<LoginContract.LoginView>(),
                         view::onFailed)
                     }
                 } else {
-                    Authentication.save(getContext(), token, username)
+                    Authentication.save(getContext(), token)
                     view?.let { view -> call(view, view::onSuccess)}
                 }
             }

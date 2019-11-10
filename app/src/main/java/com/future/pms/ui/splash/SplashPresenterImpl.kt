@@ -28,7 +28,7 @@ class SplashPresenterImpl : BaseMVPPresenterImpl<SplashContract.SplashView>(),
                                 if(token == null){
                                     view?.let { view -> call(view, view::onLogin) }
                                 }else{
-                                    Authentication.save(getContext(), token, String())
+                                    Authentication.save(getContext(), token)
                                     view?.let { view -> call(view, view::onSuccess) }
                                 }
                             }

@@ -4,6 +4,7 @@ import com.future.pms.di.module.FragmentModule
 import com.future.pms.ui.home.HomeFragment
 import com.future.pms.ui.parkingdirection.ParkingDirectionFragment
 import com.future.pms.ui.profile.ProfileFragment
+import com.future.pms.ui.receipt.ReceiptFragment
 import com.future.pms.ui.scan.ScanFragment
 import dagger.Component
 
@@ -16,5 +17,7 @@ interface FragmentComponent {
 
     fun inject(profileFragment: ProfileFragment)
 
-    fun inject (parkingDirectionFragment: ParkingDirectionFragment)
+    fun inject(parkingDirectionFragment: ParkingDirectionFragment)
+
+    fun inject(receiptFragment: ReceiptFragment)
 }

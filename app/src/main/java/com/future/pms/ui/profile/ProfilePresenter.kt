@@ -3,12 +3,33 @@ package com.future.pms.ui.profile
 import android.app.Activity
 import android.content.Context
 import androidx.fragment.app.Fragment
+import com.future.pms.model.customerdetail.Customer
+import com.future.pms.network.ApiServiceInterface
+import com.future.pms.network.RetrofitClient
 import com.future.pms.util.Authentication
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class ProfilePresenter @Inject constructor() {
 
+    private val subscriptions = CompositeDisposable()
+    private val api: ApiServiceInterface = RetrofitClient.create()
     private lateinit var view: ProfileContract
+
+    fun loadData(access_token: String) {
+        val subscribe = api.getCustomerDetail(access_token).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ customer: Customer ->
+                view.showProgress(false)
+                view.loadCustomerDetailSuccess(customer)
+            }, { error ->
+                view.showProgress(false)
+                view.showErrorMessage(error.localizedMessage)
+            })
+        subscriptions.add(subscribe)
+    }
 
     private fun getContext(): Context {
         return when (view) {

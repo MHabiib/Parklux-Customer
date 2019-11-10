@@ -3,13 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_marginRight="12dp"
+    android:layout_marginLeft="12dp">
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateDrawable="@drawable/custom_progressbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/logo"
         android:layout_width="120dp"
         android:layout_height="120dp"
-        android:layout_marginStart="@dimen/four_dps"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="28dp"
         android:src="@drawable/logo_blue"
         app:layout_constraintRight_toLeftOf="@+id/receipt_text"
@@ -47,7 +59,6 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/space_between_card"
         android:paddingTop="@dimen/space_between_card"
-        android:paddingEnd="@dimen/space_between_card"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/receipt_text"
         tools:text="FCY15345454532"
@@ -139,6 +150,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/in"
+            android:paddingRight="12dp"
             android:textColor="@color/colorPrimary"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/park_on" />
@@ -154,11 +166,13 @@
             tools:text="5 Jul 2019 - 08 : 00"
             tools:ignore="RtlSymmetry" />
 
+
         <TextView
             android:id="@+id/out_tag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/out"
+            android:paddingRight="2dp"
             android:textColor="@color/colorPrimary"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/in_tag" />
@@ -185,6 +199,54 @@
         app:layout_constraintTop_toBottomOf="@id/parking_summary_layout">
 
         <TextView
+            android:id="@+id/total_time_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Parking Time"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/hours"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintRight_toLeftOf="@id/hours_tag"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="2" />
+
+        <TextView
+            android:id="@+id/hours_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="4dp"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintRight_toLeftOf="@id/minutes"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="Hours"/>
+
+        <TextView
+            android:paddingLeft="8dp"
+            android:id="@+id/minutes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintRight_toLeftOf="@id/minutes_tag"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="2" />
+
+        <TextView
+            android:id="@+id/minutes_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="4dp"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="Minutes"/>
+
+        <TextView
             android:id="@+id/total_tag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -192,7 +254,7 @@
             android:textColor="@color/colorPrimary"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/total_time_tag" />
 
         <TextView
             android:id="@+id/total_price"
@@ -201,8 +263,7 @@
             android:textColor="@color/colorPrimary"
             android:textStyle="bold"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hours_tag"
             tools:text="IDR 40.000" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

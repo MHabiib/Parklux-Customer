@@ -3,9 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-
+    android:layout_height="match_parent"
+    android:layout_marginLeft="12dp"
+    android:layout_marginTop="12dp"
+    android:layout_marginRight="12dp"
+    android:layout_marginBottom="56dp">
 
     <TextView
         android:id="@+id/hi_user"
@@ -53,58 +55,32 @@
         tools:text="It's Mon 7 October !" />
 
     <TextView
-        android:id="@+id/degre"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:textColor="@color/colorPrimary"
-        android:textSize="@dimen/h_medium"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/hi_user"
-        tools:layout_editor_absoluteX="8@dimen/four_dps"
-        tools:text="27&#xb0; C" />
-
-    <TextView
-        android:id="@+id/location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:textColor="@color/colorPrimary"
-        android:textSize="@dimen/h2"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/degre"
-        tools:text="Gambir" />
-
-    <Button
-        android:id="@+id/button_go_to"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
         android:id="@+id/ongoing_parking_tag"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="72dp"
         android:gravity="center"
+        android:paddingBottom="12dp"
         android:text="Your ongoing parking"
         android:textAlignment="center"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/h_medium"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/date_now"/>
+        app:layout_constraintBottom_toTopOf="@id/ongoing_parking_layout"
+        app:layout_constraintEnd_toStartOf="@+id/ongoing_parking_layout"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/date_now" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ongoing_parking_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/card_layout_blue_primary"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:background="@drawable/card_layout_purple"
         android:padding="@dimen/margin_padding_vertical_for_card"
+        app:layout_constraintBottom_toTopOf="@id/your_history"
+        app:layout_constraintEnd_toStartOf="@+id/your_history"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/ongoing_parking_tag"
         app:layout_constraintTop_toBottomOf="@id/ongoing_parking_tag">
 
         <TextView
@@ -113,9 +89,9 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="@color/white"
             android:text="Mall"
-            app:layout_constraintTop_toTopOf="parent"/>
+            android:textColor="@color/white"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/ongoing_parking_body"
@@ -123,13 +99,13 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="@color/white"
             android:text="Body"
-            android:background="@drawable/card_layout_blue_primary"
-            app:layout_constraintTop_toBottomOf="@id/ongoing_parking_title"/>
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/ongoing_parking_title" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-       <TextView
+
+    <TextView
         android:id="@+id/your_history"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -139,34 +115,31 @@
         android:textAlignment="center"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/h_medium"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/recyclerView"
+        app:layout_constraintEnd_toStartOf="@+id/recyclerView"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/ongoing_parking_layout"
         app:layout_constraintTop_toBottomOf="@id/ongoing_parking_layout" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
+        android:layout_height="200sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/your_history"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/your_history"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/space_between_card"
-        app:layout_constraintTop_toBottomOf="@id/your_history">
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminateDrawable="@drawable/custom_progressbar"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/height_button"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        android:indeterminateDrawable="@drawable/custom_progressbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/recyclerView" />
 </androidx.constraintlayout.widget.ConstraintLayout>
