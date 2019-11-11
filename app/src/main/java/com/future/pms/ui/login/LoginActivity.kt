@@ -22,7 +22,7 @@ class LoginActivity : BaseMVPActivity<LoginContract.LoginView, LoginContract.Log
         setContentView(R.layout.activity_login)
 
         btnSign.setOnClickListener {
-            if(isValid()){
+            if (isValid()) {
                 loading(true)
 
                 presenter.login(txtEmail.text.toString(), txtPassword.text.toString())
@@ -31,8 +31,8 @@ class LoginActivity : BaseMVPActivity<LoginContract.LoginView, LoginContract.Log
     }
 
     private fun isValid(): Boolean {
-        if(txtEmail?.text.toString().isEmpty()) return false
-        if(txtPassword?.text.toString().isNullOrEmpty()) return false
+        if (txtEmail?.text.toString().isEmpty()) return false
+        if (txtPassword?.text.toString().isNullOrEmpty()) return false
         return true
     }
 
@@ -42,22 +42,22 @@ class LoginActivity : BaseMVPActivity<LoginContract.LoginView, LoginContract.Log
         finish()
     }
 
-    private fun loading(value: Boolean){
-        if(value) progressBar.visibility = View.VISIBLE
+    private fun loading(value: Boolean) {
+        if (value) progressBar.visibility = View.VISIBLE
         else progressBar.visibility = View.GONE
 
-        if(!value){
+        if (!value) {
             txtEmail.text?.clear()
             txtPassword.text?.clear()
         }
 
-        if(!value) inputLayoutEmail.visibility = View.VISIBLE
+        if (!value) inputLayoutEmail.visibility = View.VISIBLE
         else inputLayoutEmail.visibility = View.GONE
 
-        if(!value) inputLayoutPassword.visibility = View.VISIBLE
+        if (!value) inputLayoutPassword.visibility = View.VISIBLE
         else inputLayoutPassword.visibility = View.GONE
 
-        if(!value) btnSign.visibility = View.VISIBLE
+        if (!value) btnSign.visibility = View.VISIBLE
         else btnSign.visibility = View.GONE
     }
 

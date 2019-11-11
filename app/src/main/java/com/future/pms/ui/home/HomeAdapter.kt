@@ -8,7 +8,10 @@ import com.future.pms.R
 import com.future.pms.model.customerbooking.CustomerBooking
 import kotlinx.android.synthetic.main.item_layout_home.view.*
 
-class HomeAdapter (private val customerBookingList: List<CustomerBooking>, private val clickListener: (CustomerBooking) -> Unit) :
+class HomeAdapter(
+    private val customerBookingList: List<CustomerBooking>,
+    private val clickListener: (CustomerBooking) -> Unit
+) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -29,7 +32,7 @@ class HomeAdapter (private val customerBookingList: List<CustomerBooking>, priva
             itemView.item_parking_slot.text = customerBooking.slotName
             itemView.item_date.text = customerBooking.dateIn.toString()
             itemView.item_total_time.text = customerBooking.totalTime
-            itemView.setOnClickListener { clickListener(customerBooking)}
+            itemView.setOnClickListener { clickListener(customerBooking) }
         }
     }
 }

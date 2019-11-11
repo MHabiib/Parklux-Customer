@@ -49,10 +49,12 @@ class ReceiptFragment : Fragment(), ReceiptContract {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val accessToken = Gson().fromJson(context?.getSharedPreferences(
-            Constants.AUTHENTCATION,
-            Context.MODE_PRIVATE
-        )?.getString(Constants.TOKEN, null), Token::class.java).access_token
+        val accessToken = Gson().fromJson(
+            context?.getSharedPreferences(
+                Constants.AUTHENTCATION,
+                Context.MODE_PRIVATE
+            )?.getString(Constants.TOKEN, null), Token::class.java
+        ).access_token
         presenter.attach(this)
         presenter.subscribe()
         idBooking.let { presenter.loadData(accessToken, it) }

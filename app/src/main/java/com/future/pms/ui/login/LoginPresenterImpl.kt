@@ -9,21 +9,25 @@ import com.future.pms.util.Authentication
 class LoginPresenterImpl : BaseMVPPresenterImpl<LoginContract.LoginView>(),
     LoginContract.LoginPresenter {
 
-    private var authFetcher: AuthFetcher.AuthFetcherImpl?= null
+    private var authFetcher: AuthFetcher.AuthFetcherImpl? = null
 
     override fun login(username: String, password: String) {
         authFetcher = AuthFetcher.AuthFetcherImpl(getContext(), object : AuthFetcher.Listener {
             override fun onSuccess(token: Token?) {
-                if(token == null) {
-                    view?.let { view -> call(view,
-                        getContext().getString(R.string.auth_invalid),
-                        view::onFailed)
+                if (token == null) {
+                    view?.let { view ->
+                        call(
+                            view,
+                            getContext().getString(R.string.auth_invalid),
+                            view::onFailed
+                        )
                     }
                 } else {
                     Authentication.save(getContext(), token)
-                    view?.let { view -> call(view, view::onSuccess)}
+                    view?.let { view -> call(view, view::onSuccess) }
                 }
             }
+
             override fun onError(throwable: Throwable) {
                 view?.let { view -> call(view, throwable, view::onError) }
             }

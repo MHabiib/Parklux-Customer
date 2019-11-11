@@ -16,9 +16,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.fragment_home.*
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), MainContract{
+class MainActivity : AppCompatActivity(), MainContract {
 
-    @Inject lateinit var presenter: MainPresenter
+    @Inject
+    lateinit var presenter: MainPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

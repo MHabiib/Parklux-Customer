@@ -2,7 +2,7 @@ package com.future.pms.ui.parkingdirection
 
 import javax.inject.Inject
 
-class ParkingDirectionPresenter @Inject constructor(){
+class ParkingDirectionPresenter @Inject constructor() {
 
     private lateinit var view: ParkingDirectionContract
 

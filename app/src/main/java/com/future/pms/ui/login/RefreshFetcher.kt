@@ -12,9 +12,10 @@ import retrofit2.Response
 
 object RefreshFetcher {
 
-    class RefreshFetcherImpl(private val context: Context,
-                          private val listener: Listener
-    ){
+    class RefreshFetcherImpl(
+        private val context: Context,
+        private val listener: Listener
+    ) {
 
         private var callback: Call<Token>? = null
 
@@ -27,13 +28,13 @@ object RefreshFetcher {
             callback?.enqueue(object : Callback<Token> {
 
                 override fun onResponse(call: Call<Token>?, response: Response<Token>?) {
-                    if(response != null){
-                        if(response.isSuccessful){
+                    if (response != null) {
+                        if (response.isSuccessful) {
                             listener.onSuccess(response.body())
-                        }else{
+                        } else {
                             listener.onSuccess(null)
                         }
-                    }else{
+                    } else {
                         listener.onError(Throwable(context.getString(R.string.auth_error)))
                     }
                 }
@@ -45,7 +46,7 @@ object RefreshFetcher {
             })
         }
 
-        fun cancel(){
+        fun cancel() {
             callback?.cancel()
         }
     }

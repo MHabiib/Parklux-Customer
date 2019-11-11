@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.fragment_scan.progressBar
 import java.io.IOException
 import javax.inject.Inject
 
-class ScanFragment : Fragment(), ScanContract{
+class ScanFragment : Fragment(), ScanContract {
 
     private var barcodeDetector: BarcodeDetector? = null
     private var cameraSource: CameraSource? = null

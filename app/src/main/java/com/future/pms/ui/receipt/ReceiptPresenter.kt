@@ -10,7 +10,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class ReceiptPresenter @Inject constructor(){
+class ReceiptPresenter @Inject constructor() {
 
     private val subscriptions = CompositeDisposable()
     private val api: ApiServiceInterface = RetrofitClient.create()

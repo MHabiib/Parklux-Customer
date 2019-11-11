@@ -32,7 +32,7 @@ import java.util.ArrayList
 import javax.inject.Inject
 
 class ParkingDirectionFragment : Fragment(),
-    ParkingDirectionContract{
+    ParkingDirectionContract {
 
     @Inject
     lateinit var presenter: ParkingDirectionPresenter

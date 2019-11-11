@@ -56,10 +56,12 @@ class ProfileFragment : Fragment(), ProfileContract {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val accessToken = Gson().fromJson(context?.getSharedPreferences(
-            Constants.AUTHENTCATION,
-            Context.MODE_PRIVATE
-        )?.getString(Constants.TOKEN, null), Token::class.java).access_token
+        val accessToken = Gson().fromJson(
+            context?.getSharedPreferences(
+                Constants.AUTHENTCATION,
+                Context.MODE_PRIVATE
+            )?.getString(Constants.TOKEN, null), Token::class.java
+        ).access_token
         presenter.attach(this)
         presenter.subscribe()
         presenter.loadData(accessToken)
@@ -67,7 +69,7 @@ class ProfileFragment : Fragment(), ProfileContract {
 
     override fun showProgress(show: Boolean) {
         if (show) {
-           progressBar.visibility = View.VISIBLE
+            progressBar.visibility = View.VISIBLE
         } else {
             progressBar.visibility = View.GONE
         }

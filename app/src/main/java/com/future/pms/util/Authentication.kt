@@ -18,7 +18,7 @@ object Authentication {
     fun get(context: Context): Token? {
         val preferences = context.getSharedPreferences(AUTHENTCATION, Context.MODE_PRIVATE)
         val json = preferences.getString(TOKEN, null)
-        if(json != null) return Gson().fromJson(json, Token::class.java)
+        if (json != null) return Gson().fromJson(json, Token::class.java)
         return null
     }
 
@@ -33,7 +33,7 @@ object Authentication {
 
     fun isExpired(context: Context): Boolean {
         val token = get(context)
-        if(token != null) {
+        if (token != null) {
             val calendar = GregorianCalendar.getInstance()
             val currentTime = calendar.time.time
             val expiresIn = token.expires_in
@@ -50,9 +50,9 @@ object Authentication {
 
     fun getRefresh(context: Context): String {
         val token = get(context)
-        if(token != null){
+        if (token != null) {
             return token.refresh_token
-        }else{
+        } else {
             throw WithoutAuthenticatedException()
         }
     }

@@ -53,9 +53,13 @@ class HomeFragment : Fragment(), HomeContract {
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_home, container, false)
         val button = rootView.findViewById(R.id.ongoing_parking_layout) as ConstraintLayout
-        button.setOnClickListener{
+        button.setOnClickListener {
             val fragmentTransaction = fragmentManager!!.beginTransaction()
-            fragmentTransaction.add(R.id.container, ParkingDirectionFragment().newInstance(), ParkingDirectionFragment.TAG)
+            fragmentTransaction.add(
+                R.id.container,
+                ParkingDirectionFragment().newInstance(),
+                ParkingDirectionFragment.TAG
+            )
             fragmentTransaction.addToBackStack(null)
             fragmentTransaction.commit()
         }
@@ -70,10 +74,12 @@ class HomeFragment : Fragment(), HomeContract {
     }
 
     private fun initView() {
-        val accessToken = Gson().fromJson(context?.getSharedPreferences(
-            Constants.AUTHENTCATION,
-            Context.MODE_PRIVATE
-        )?.getString(Constants.TOKEN, null), Token::class.java).access_token
+        val accessToken = Gson().fromJson(
+            context?.getSharedPreferences(
+                Constants.AUTHENTCATION,
+                Context.MODE_PRIVATE
+            )?.getString(Constants.TOKEN, null), Token::class.java
+        ).access_token
         getDateNow()
         presenter.loadData(accessToken)
         presenter.loadCustomerBooking(accessToken)
@@ -97,19 +103,20 @@ class HomeFragment : Fragment(), HomeContract {
     override fun loadCustomerBookingSuccess(list: List<CustomerBooking>) {
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.setHasFixedSize(true)
-        recyclerView.adapter = HomeAdapter(list) { booking : CustomerBooking -> customerBookingClick(booking) }
+        recyclerView.adapter =
+            HomeAdapter(list) { booking: CustomerBooking -> customerBookingClick(booking) }
     }
 
-    private fun customerBookingClick(booking : CustomerBooking) {
+    private fun customerBookingClick(booking: CustomerBooking) {
         idBooking = booking.idBooking
         fragmentManager!!.beginTransaction()
             .disallowAddToBackStack()
             .replace(R.id.frame, ReceiptFragment().newInstance(), ReceiptFragment.TAG)
             .commit()
         // Launch second activity, pass part ID as string parameter
-       /* val showDetailActivityIntent = Intent(this, PartDetailActivity::class.java)
-        showDetailActivityIntent.putExtra(Intent.EXTRA_TEXT, partItem.id.toString())
-        startActivity(showDetailActivityIntent)*/
+        /* val showDetailActivityIntent = Intent(this, PartDetailActivity::class.java)
+         showDetailActivityIntent.putExtra(Intent.EXTRA_TEXT, partItem.id.toString())
+         startActivity(showDetailActivityIntent)*/
     }
 
     override fun loadCustomerDetailSuccess(customer: Customer) {
@@ -126,7 +133,7 @@ class HomeFragment : Fragment(), HomeContract {
     override fun getDateNow() {
         val currentDateTimeString = DateFormat.getDateInstance(DateFormat.FULL).format(Date())
         val dateText = rootView.findViewById(R.id.date_now) as TextView
-        dateText.text = String.format("It's %s",currentDateTimeString)
+        dateText.text = String.format("It's %s", currentDateTimeString)
     }
 
     private fun injectDependency() {
