@@ -17,6 +17,7 @@ import com.future.pms.model.receipt.Receipt
 import com.future.pms.ui.home.HomeFragment.Companion.idBooking
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.RECEIPT_FRAGMENT
+import com.future.pms.util.Utils
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_receipt.*
 import kotlinx.android.synthetic.main.fragment_receipt.view.*
@@ -81,12 +82,12 @@ class ReceiptFragment : Fragment(), ReceiptContract {
         rootView.parking_zone_name.text = receipt.parkingZoneName
         rootView.address.text = receipt.address
         rootView.parking_slot.text = receipt.slotName
-        rootView.price.text = String.format("IDR %d/hour", receipt.price)
-        rootView.in_date.text = receipt.dateIn.toString()
-        rootView.out_date.text = receipt.dateOut.toString()
+        rootView.price.text = String.format("IDR %s0/hour", receipt.price.toString())
+        rootView.in_date.text = Utils.convertLongToTime(receipt.dateIn)
+        rootView.out_date.text = Utils.convertLongToTime(receipt.dateOut)
         rootView.hours.text = receipt.totalHours.toString()
         rootView.minutes.text = receipt.totalMinutes.toString()
-        rootView.total_price.text = receipt.totalPrice
+        rootView.total_price.text = String.format("IDR %s0", receipt.totalPrice)
     }
 
     private fun injectDependency() {

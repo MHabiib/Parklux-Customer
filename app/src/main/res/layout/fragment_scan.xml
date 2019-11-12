@@ -24,22 +24,39 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/transparent_layout"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/frame_qr"
+        app:layout_constraintTop_toBottomOf="@id/top_transparent"
+        app:layout_constraintBottom_toTopOf="@id/bottom_transparent"/>
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="@drawable/transparent_layout"
-        android:paddingTop="212dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/frame_qr"
+        app:layout_constraintTop_toBottomOf="@id/top_transparent"
+        app:layout_constraintBottom_toTopOf="@id/bottom_transparent"/>
+
+    <FrameLayout
+        android:id="@+id/bottom_transparent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/transparent_layout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/frame_qr" />
 
     <FrameLayout
+        android:id="@+id/top_transparent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:background="@drawable/transparent_layout"
-        android:paddingTop="212dp"
         app:layout_constraintBottom_toTopOf="@id/frame_qr"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -47,8 +64,8 @@
 
     <FrameLayout
         android:id="@+id/frame_qr"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:background="@drawable/qr_code_scan_layout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

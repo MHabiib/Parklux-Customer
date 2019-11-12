@@ -21,6 +21,7 @@ import com.future.pms.ui.receipt.ReceiptFragment
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.ERROR
 import com.future.pms.util.Constants.Companion.HOME_FRAGMENT
+import com.future.pms.util.Utils
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
@@ -101,6 +102,7 @@ class HomeFragment : Fragment(), HomeContract {
     }
 
     override fun loadCustomerBookingSuccess(list: List<CustomerBooking>) {
+        getOngoingBooking(list)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter =
@@ -129,6 +131,20 @@ class HomeFragment : Fragment(), HomeContract {
 
     override fun showParkingDirectionFragment() {
     }
+
+    private fun getOngoingBooking(list: List<CustomerBooking>) {
+        for (customerBooking in list) {
+            if (0L == customerBooking.dateOut) {
+                rootView.ongoing_parking_tag.visibility = View.VISIBLE
+                rootView.ongoing_parking_layout.visibility = View.VISIBLE
+                rootView.ongoing_parking_title.text = customerBooking.parkingZoneName
+                rootView.ongoing_parking_body.text = String.format(
+                    "You're start parking on %s",
+                    Utils.convertLongToTimeShortMonth(customerBooking.dateIn))
+            }
+        }
+    }
+
 
     override fun getDateNow() {
         val currentDateTimeString = DateFormat.getDateInstance(DateFormat.FULL).format(Date())

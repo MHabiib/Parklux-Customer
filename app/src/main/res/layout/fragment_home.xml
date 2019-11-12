@@ -60,11 +60,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="72dp"
         android:gravity="center"
-        android:paddingBottom="12dp"
         android:text="Your ongoing parking"
         android:textAlignment="center"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/h_medium"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@id/ongoing_parking_layout"
         app:layout_constraintEnd_toStartOf="@+id/ongoing_parking_layout"
         app:layout_constraintHorizontal_bias="0.5"
@@ -75,11 +75,11 @@
         android:id="@+id/ongoing_parking_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:background="@drawable/card_layout_purple"
         android:padding="@dimen/margin_padding_vertical_for_card"
         app:layout_constraintBottom_toTopOf="@id/your_history"
         app:layout_constraintEnd_toStartOf="@+id/your_history"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/ongoing_parking_tag"
         app:layout_constraintTop_toBottomOf="@id/ongoing_parking_tag">
 
@@ -88,8 +88,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
-            android:maxLines="1"
-            android:text="Mall"
+            android:textSize="20sp"
             android:textColor="@color/white"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -98,9 +97,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
-            android:maxLines="1"
-            android:text="Body"
             android:textColor="@color/white"
+            android:textSize="@dimen/h2"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ongoing_parking_title" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -124,7 +123,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="200sp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
