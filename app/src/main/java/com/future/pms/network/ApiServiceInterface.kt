@@ -1,15 +1,14 @@
 package com.future.pms.network
 
-import com.future.pms.model.customerdetail.Customer
 import com.future.pms.model.customerbooking.CustomerBooking
+import com.future.pms.model.customerdetail.Customer
 import com.future.pms.model.receipt.Receipt
 import io.reactivex.Observable
-import retrofit2.http.*
-
-
+import retrofit2.http.GET
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiServiceInterface {
-
     @GET("api/user/customer/detail")
     fun getCustomerDetail(@Query("access_token") access_token: String?): Observable<Customer>
 

@@ -7,10 +7,8 @@ import dagger.Provides
 
 @Module
 class FragmentModule {
-
     @Provides
     fun provideApiService(): ApiServiceInterface {
         return RetrofitClient.create()
     }
-
 }

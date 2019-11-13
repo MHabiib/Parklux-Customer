@@ -6,37 +6,29 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager.widget.ViewPager
 import com.future.pms.R
 import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
-import com.future.pms.model.customerbooking.CustomerBooking
 import com.future.pms.model.customerdetail.Customer
 import com.future.pms.model.oauth.Token
-import com.future.pms.ui.parkingdirection.ParkingDirectionFragment
-import com.future.pms.ui.receipt.ReceiptFragment
+import com.future.pms.ui.history.HistoryFragment
+import com.future.pms.ui.ongoing.OngoingFragment
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.ERROR
 import com.future.pms.util.Constants.Companion.HOME_FRAGMENT
-import com.future.pms.util.Utils
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
 import java.text.DateFormat
 import java.util.*
 import javax.inject.Inject
 
 class HomeFragment : Fragment(), HomeContract {
-
-
     @Inject
     lateinit var presenter: HomePresenter
-
     private lateinit var rootView: View
-
 
     fun newInstance(): HomeFragment {
         return HomeFragment()
@@ -53,17 +45,12 @@ class HomeFragment : Fragment(), HomeContract {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_home, container, false)
-        val button = rootView.findViewById(R.id.ongoing_parking_layout) as ConstraintLayout
-        button.setOnClickListener {
-            val fragmentTransaction = fragmentManager!!.beginTransaction()
-            fragmentTransaction.add(
-                R.id.container,
-                ParkingDirectionFragment().newInstance(),
-                ParkingDirectionFragment.TAG
-            )
-            fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.commit()
-        }
+        val viewPager = rootView.viewPager as ViewPager
+        val adapter = ViewPagerAdapter(childFragmentManager)
+        adapter.addFragment(OngoingFragment(), "Your Ongoing Paking")
+        adapter.addFragment(HistoryFragment(), "History")
+        viewPager.adapter = adapter
+        rootView.tabs.setupWithViewPager(viewPager)
         return rootView
     }
 
@@ -83,7 +70,6 @@ class HomeFragment : Fragment(), HomeContract {
         ).access_token
         getDateNow()
         presenter.loadData(accessToken)
-        presenter.loadCustomerBooking(accessToken)
         val textAnnounce = rootView.findViewById(R.id.text_announce_user) as TextView
         textAnnounce.text = presenter.getTextAnnounce()
     }
@@ -93,33 +79,7 @@ class HomeFragment : Fragment(), HomeContract {
         presenter.unsubscribe()
     }
 
-    override fun showProgress(show: Boolean) {
-        if (show) {
-            progressBar.visibility = View.VISIBLE
-        } else {
-            progressBar.visibility = View.GONE
-        }
-    }
-
-    override fun loadCustomerBookingSuccess(list: List<CustomerBooking>) {
-        getOngoingBooking(list)
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.setHasFixedSize(true)
-        recyclerView.adapter =
-            HomeAdapter(list) { booking: CustomerBooking -> customerBookingClick(booking) }
-    }
-
-    private fun customerBookingClick(booking: CustomerBooking) {
-        idBooking = booking.idBooking
-        fragmentManager!!.beginTransaction()
-            .disallowAddToBackStack()
-            .replace(R.id.frame, ReceiptFragment().newInstance(), ReceiptFragment.TAG)
-            .commit()
-        // Launch second activity, pass part ID as string parameter
-        /* val showDetailActivityIntent = Intent(this, PartDetailActivity::class.java)
-         showDetailActivityIntent.putExtra(Intent.EXTRA_TEXT, partItem.id.toString())
-         startActivity(showDetailActivityIntent)*/
-    }
+    override fun showProgress(show: Boolean) {}
 
     override fun loadCustomerDetailSuccess(customer: Customer) {
         rootView.user_name.text = customer.body.name
@@ -129,22 +89,8 @@ class HomeFragment : Fragment(), HomeContract {
         Log.e(ERROR, error)
     }
 
-    override fun showParkingDirectionFragment() {
+    override fun showParkingDirectionFragment() { //TODO
     }
-
-    private fun getOngoingBooking(list: List<CustomerBooking>) {
-        for (customerBooking in list) {
-            if (0L == customerBooking.dateOut) {
-                rootView.ongoing_parking_tag.visibility = View.VISIBLE
-                rootView.ongoing_parking_layout.visibility = View.VISIBLE
-                rootView.ongoing_parking_title.text = customerBooking.parkingZoneName
-                rootView.ongoing_parking_body.text = String.format(
-                    "You're start parking on %s",
-                    Utils.convertLongToTimeShortMonth(customerBooking.dateIn))
-            }
-        }
-    }
-
 
     override fun getDateNow() {
         val currentDateTimeString = DateFormat.getDateInstance(DateFormat.FULL).format(Date())
@@ -156,7 +102,6 @@ class HomeFragment : Fragment(), HomeContract {
         val homeComponent = DaggerFragmentComponent.builder()
             .fragmentModule(FragmentModule())
             .build()
-
         homeComponent.inject(this)
     }
 

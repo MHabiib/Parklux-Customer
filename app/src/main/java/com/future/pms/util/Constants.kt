@@ -7,6 +7,7 @@ class Constants {
         const val SCAN_FRAGMENT = "ScanFragment"
         const val PARKING_DETAIL_FRAGMENT = "ParkingDetailFragment"
         const val RECEIPT_FRAGMENT = "Receipt Fragment"
+        const val ONGOING_FRAGMENT = "Ongoin Fragment"
         const val TOKEN = "token"
         const val PROFILE_FRAGMENT = "ProfileFragment"
         const val ERROR = "Error"

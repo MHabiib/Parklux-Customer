@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 
 abstract class BaseMVPActivity<in V : BaseMVPView, P : BaseMVPPresenter<V>>
     : AppCompatActivity(), BaseMVPView {
-
     abstract var presenter: P
 
     override fun onCreate(savedInstanceState: Bundle?) {

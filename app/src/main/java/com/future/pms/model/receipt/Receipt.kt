@@ -1,7 +1,5 @@
 package com.future.pms.model.receipt
 
-import java.net.Inet4Address
-
 data class Receipt(
     val dateIn: Long,
     val dateOut: Long,

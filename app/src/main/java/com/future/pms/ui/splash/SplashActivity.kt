@@ -7,19 +7,15 @@ import com.future.pms.R
 import com.future.pms.di.base.BaseMVPActivity
 import com.future.pms.ui.login.LoginActivity
 import com.future.pms.ui.main.MainActivity
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_splash.*
 
-class SplashActivity: BaseMVPActivity<SplashContract.SplashView,
+class SplashActivity : BaseMVPActivity<SplashContract.SplashView,
         SplashContract.SplashPresenter>(), SplashContract.SplashView {
-
     override var presenter: SplashContract.SplashPresenter = SplashPresenterImpl()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_splash)
-
         presenter.isAuthenticated()
     }
 

@@ -7,14 +7,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
+import com.future.pms.R
 import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
-import com.future.pms.ui.login.LoginActivity
-import android.widget.Button
-import com.future.pms.R
 import com.future.pms.model.customerdetail.Customer
 import com.future.pms.model.oauth.Token
+import com.future.pms.ui.login.LoginActivity
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.PROFILE_FRAGMENT
 import com.google.gson.Gson
@@ -24,10 +24,8 @@ import javax.inject.Inject
 
 
 class ProfileFragment : Fragment(), ProfileContract {
-
     @Inject
     lateinit var presenter: ProfilePresenter
-
     private lateinit var rootView: View
 
     fun newInstance(): ProfileFragment {
@@ -78,7 +76,6 @@ class ProfileFragment : Fragment(), ProfileContract {
     override fun showErrorMessage(error: String) {
         Log.e(Constants.ERROR, error)
     }
-
 
     override fun loadCustomerDetailSuccess(customer: Customer) {
         rootView.profile_name_display.text = customer.body.name

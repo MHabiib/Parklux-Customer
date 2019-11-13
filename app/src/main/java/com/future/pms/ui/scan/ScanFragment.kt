@@ -24,7 +24,6 @@ import java.io.IOException
 import javax.inject.Inject
 
 class ScanFragment : Fragment(), ScanContract {
-
     private var barcodeDetector: BarcodeDetector? = null
     private var cameraSource: CameraSource? = null
     internal var intentData = ""
@@ -87,7 +86,12 @@ class ScanFragment : Fragment(), ScanContract {
                 }
             }
 
-            override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
+            override fun surfaceChanged(
+                holder: SurfaceHolder,
+                format: Int,
+                width: Int,
+                height: Int
+            ) {
                 //No implementation Required
             }
 

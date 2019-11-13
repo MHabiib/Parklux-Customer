@@ -9,7 +9,6 @@ import javax.inject.Singleton
 
 @Module
 class ApplicationModule(private val baseApp: BaseApp) {
-
     @Provides
     @Singleton
     @PerApplication

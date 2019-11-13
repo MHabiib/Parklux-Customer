@@ -11,12 +11,10 @@ import retrofit2.Callback
 import retrofit2.Response
 
 object RefreshFetcher {
-
     class RefreshFetcherImpl(
         private val context: Context,
         private val listener: Listener
     ) {
-
         private var callback: Call<Token>? = null
 
         fun refresh(refresh: Refresh) {

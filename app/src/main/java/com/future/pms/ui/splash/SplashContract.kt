@@ -4,7 +4,6 @@ import com.future.pms.di.base.BaseMVPPresenter
 import com.future.pms.di.base.BaseMVPView
 
 object SplashContract {
-
     interface SplashView : BaseMVPView {
         fun onSuccess()
         fun onMessage(e: String)

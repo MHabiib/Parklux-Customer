@@ -11,12 +11,10 @@ import retrofit2.Callback
 import retrofit2.Response
 
 object AuthFetcher {
-
     class AuthFetcherImpl(
         private val context: Context,
         private val listener: Listener
     ) {
-
         private var callback: Call<Token>? = null
 
         fun auth(auth: Auth) {

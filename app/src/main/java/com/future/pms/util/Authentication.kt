@@ -8,7 +8,6 @@ import com.google.gson.Gson
 import java.util.*
 
 object Authentication {
-
     private fun put(context: Context, obj: Token): Boolean {
         val preferences = context.getSharedPreferences(AUTHENTCATION, Context.MODE_PRIVATE)
         val editor = preferences.edit()
@@ -27,7 +26,6 @@ object Authentication {
         var expiresIn: Long = calendar.time.time
         expiresIn += obj.expires_in * 100000000
         obj.expires_in = expiresIn
-
         return put(context, obj)
     }
 

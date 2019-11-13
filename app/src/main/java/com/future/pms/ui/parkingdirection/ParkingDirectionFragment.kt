@@ -1,9 +1,7 @@
 package com.future.pms.ui.parkingdirection
 
-import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
-import android.text.Layout
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -15,10 +13,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.future.pms.R
-import com.future.pms.di.base.BaseMVPFragment
 import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
-import com.future.pms.ui.home.HomeFragment
 import com.future.pms.util.Constants.Companion.PARKING_DETAIL_FRAGMENT
 import com.future.pms.util.Constants.Companion.SEATS
 import com.future.pms.util.Constants.Companion.STATUS_AVAILABLE
@@ -27,16 +23,13 @@ import com.future.pms.util.Constants.Companion.STATUS_RESERVED
 import com.future.pms.util.Constants.Companion.seatGaping
 import com.future.pms.util.Constants.Companion.seatSize
 import com.future.pms.util.Constants.Companion.selectedIds
-import com.google.android.gms.vision.text.Line
-import java.util.ArrayList
+import java.util.*
 import javax.inject.Inject
 
 class ParkingDirectionFragment : Fragment(),
     ParkingDirectionContract {
-
     @Inject
     lateinit var presenter: ParkingDirectionPresenter
-
     private lateinit var rootView: View
     private var seatViewList: MutableList<TextView> = ArrayList()
 
@@ -81,7 +74,6 @@ class ParkingDirectionFragment : Fragment(),
         layout.addView(layoutSeat)
 
         var layout: LinearLayout? = null
-
         var count = 0
 
         for (index in 0 until SEATS.length) {

@@ -1,23 +1,21 @@
 package com.future.pms.ui.main
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import com.future.pms.R
 import com.future.pms.di.component.DaggerActivityComponent
 import com.future.pms.di.module.ActivityModule
-import com.future.pms.ui.profile.ProfileFragment
-import com.future.pms.ui.scan.ScanFragment
 import com.future.pms.ui.home.HomeFragment
 import com.future.pms.ui.parkingdirection.ParkingDirectionFragment
+import com.future.pms.ui.profile.ProfileFragment
+import com.future.pms.ui.receipt.ReceiptFragment
+import com.future.pms.ui.scan.ScanFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), MainContract {
-
     @Inject
     lateinit var presenter: MainPresenter
 
@@ -25,10 +23,8 @@ class MainActivity : AppCompatActivity(), MainContract {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         injectDependency()
-
         presenter.attach(this)
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
-
         navView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_home -> {
@@ -72,6 +68,26 @@ class MainActivity : AppCompatActivity(), MainContract {
         }
     }
 
+    override fun showReceipt() {
+        nav_view.visibility = View.GONE
+        if (supportFragmentManager.findFragmentByTag(ProfileFragment.TAG) == null) {
+            supportFragmentManager.beginTransaction()
+                .disallowAddToBackStack()
+                .replace(R.id.frame, ReceiptFragment().newInstance(), ReceiptFragment.TAG)
+                .commit()
+        }
+    }
+
+    override fun showParkingDirection() {
+        nav_view.visibility = View.GONE
+        if (supportFragmentManager.findFragmentByTag(ParkingDirectionFragment.TAG) == null) {
+            supportFragmentManager.beginTransaction()
+                .disallowAddToBackStack()
+                .replace(R.id.frame, ParkingDirectionFragment().newInstance(), ParkingDirectionFragment.TAG)
+                .commit()
+        }
+    }
+
     private fun injectDependency() {
         val activityComponent = DaggerActivityComponent.builder()
             .activityModule(ActivityModule(this))
@@ -79,5 +95,4 @@ class MainActivity : AppCompatActivity(), MainContract {
 
         activityComponent.inject(this)
     }
-
 }

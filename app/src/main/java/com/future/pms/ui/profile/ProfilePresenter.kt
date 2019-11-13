@@ -13,7 +13,6 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class ProfilePresenter @Inject constructor() {
-
     private val subscriptions = CompositeDisposable()
     private val api: ApiServiceInterface = RetrofitClient.create()
     private lateinit var view: ProfileContract
@@ -47,5 +46,7 @@ class ProfilePresenter @Inject constructor() {
         this.view = view
     }
 
-    fun subscribe() {}
+    fun subscribe() {
+        //No implement required
+    }
 }

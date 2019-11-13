@@ -1,6 +1,6 @@
 package com.future.pms.ui.home
 
-import com.future.pms.model.customerbooking.CustomerBooking
+import com.future.pms.model.customerdetail.Customer
 import com.future.pms.network.ApiServiceInterface
 import com.future.pms.network.RetrofitClient
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -8,14 +8,22 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 import javax.inject.Inject
-import com.future.pms.model.customerdetail.Customer
 
 
 class HomePresenter @Inject constructor() {
-
     private val subscriptions = CompositeDisposable()
     private val api: ApiServiceInterface = RetrofitClient.create()
     private lateinit var view: HomeContract
+
+    fun subscribe() {}
+
+    fun unsubscribe() {
+        subscriptions.clear()
+    }
+
+    fun attach(view: HomeContract) {
+        this.view = view
+    }
 
     fun loadData(access_token: String) {
         val subscribe = api.getCustomerDetail(access_token).subscribeOn(Schedulers.io())
@@ -28,29 +36,6 @@ class HomePresenter @Inject constructor() {
                 view.showErrorMessage(error.localizedMessage)
             })
         subscriptions.add(subscribe)
-    }
-
-    fun loadCustomerBooking(access_token: String) {
-        val subscribe = api.getCustomerBooking(access_token).subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ list: List<CustomerBooking> ->
-                view.showProgress(false)
-                view.loadCustomerBookingSuccess(list)
-            }, { error ->
-                view.showProgress(false)
-                view.showErrorMessage(error.localizedMessage)
-            })
-        subscriptions.add(subscribe)
-    }
-
-    fun subscribe() {}
-
-    fun unsubscribe() {
-        subscriptions.clear()
-    }
-
-    fun attach(view: HomeContract) {
-        this.view = view
     }
 
     fun getTextAnnounce(): String {

@@ -46,20 +46,19 @@
         android:src="@drawable/ic_person_black_24dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/profile_name_display"/>
 
     <TextView
         android:id="@+id/profile_name_display"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:paddingBottom="@dimen/space_between_card"
         android:textAlignment="center"
         android:textColor="@color/colorSecondary"
         android:textSize="@dimen/h1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_image"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="Customer" />
 
 
@@ -76,7 +75,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/profile_name_display"
+        app:layout_constraintTop_toBottomOf="@id/user_image"
         app:layout_constraintVertical_bias="0.0">
 
         <ProgressBar
@@ -145,6 +144,4 @@
             app:layout_constraintTop_toBottomOf="@id/profile_phone_number_tag"
             tools:text="081214045123" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

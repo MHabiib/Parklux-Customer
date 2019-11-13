@@ -20,9 +20,9 @@
     <string name="parking_summary">Parking Summary</string>
     <string name="booking_id">Booking ID</string>
     <string name="logo">Logo</string>
-    <string name="your_parking_spot_is_on">Your parking spot is on</string>
+    <string name="your_parking_spot_is_on">Slot Name</string>
     <string name="check_in_on">Check-in on :</string>
-    <string name="directions">Directions</string>
+    <string name="directions">Click me to show the Directions</string>
     <string name="header_logo">header logo</string>
     <string name="full_name">Full Name</string>
     <string name="phone_number">Phone Number</string>

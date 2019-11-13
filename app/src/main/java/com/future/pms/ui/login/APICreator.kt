@@ -1,8 +1,6 @@
 package com.future.pms.ui.login
 
-import com.future.pms.BuildConfig
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -14,9 +12,7 @@ class APICreator<out API>(
     private var writeTimeout: Long = 30,
     private var readTimeout: Long = 30,
     private var headers: HashMap<String, String> = HashMap(),
-    private var converterFactory: Converter.Factory? = GsonConverterFactory.create(),
-    private var level: HttpLoggingInterceptor.Level? = HttpLoggingInterceptor.Level.HEADERS
-) {
+    private var converterFactory: Converter.Factory? = GsonConverterFactory.create()) {
 
     private fun getOkHttpBuilder(writeTimeout: Long, readTimeout: Long): OkHttpClient.Builder {
         return OkHttpClient.Builder()
@@ -33,26 +29,16 @@ class APICreator<out API>(
     fun generate(): API {
         val okHttpClient = getOkHttpBuilder(writeTimeout, readTimeout)
 
-        if (BuildConfig.DEBUG) {
-            val loggingInterceptor = HttpLoggingInterceptor()
-            loggingInterceptor.level = level
-            okHttpClient.addInterceptor(loggingInterceptor)
-        }
-
         okHttpClient.addNetworkInterceptor { chain ->
             val original = chain.request()
-
             val requestBuilder = original.newBuilder()
-
             headers.map {
                 requestBuilder.addHeader(it.key, it.value)
             }
-
             requestBuilder.method(original.method(), original.body())
             val request = requestBuilder.build()
             chain.proceed(request)
         }
-
         val client = okHttpClient.build()
         val retrofit = Retrofit.Builder()
             .baseUrl(baseUrl)

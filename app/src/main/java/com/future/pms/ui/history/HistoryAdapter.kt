@@ -1,4 +1,4 @@
-package com.future.pms.ui.home
+package com.future.pms.ui.history
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +9,7 @@ import com.future.pms.model.customerbooking.CustomerBooking
 import com.future.pms.util.Utils
 import kotlinx.android.synthetic.main.item_layout_home.view.*
 
-class HomeAdapter(
+class HistoryAdapter(
     private val customerBookingList: List<CustomerBooking>,
     private val clickListener: (CustomerBooking) -> Unit
 ) :
@@ -23,7 +23,6 @@ class HomeAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         (holder as BookingListViewHolder).bind(customerBookingList[position], clickListener)
     }
-
 
     override fun getItemCount() = customerBookingList.size
 

@@ -5,7 +5,6 @@ import android.content.Context
 import androidx.fragment.app.Fragment
 
 open class BaseMVPPresenterImpl<V : BaseMVPView> : BaseMVPPresenter<V> {
-
     protected var view: V? = null
 
     override fun attachView(view: V) {

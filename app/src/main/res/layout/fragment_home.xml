@@ -4,15 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="12dp"
     android:layout_marginTop="12dp"
-    android:layout_marginRight="12dp"
     android:layout_marginBottom="56dp">
 
     <TextView
         android:id="@+id/hi_user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
         android:text="@string/hi"
         android:textAlignment="center"
         android:textColor="@color/colorPrimary"
@@ -36,6 +36,8 @@
         android:id="@+id/text_announce_user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
         android:textAlignment="center"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/h_medium"
@@ -47,6 +49,8 @@
         android:id="@+id/date_now"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
         android:textAlignment="center"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/h2"
@@ -54,91 +58,34 @@
         app:layout_constraintTop_toBottomOf="@id/text_announce_user"
         tools:text="It's Mon 7 October !" />
 
-    <TextView
-        android:id="@+id/ongoing_parking_tag"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="72dp"
-        android:gravity="center"
-        android:text="Your ongoing parking"
-        android:textAlignment="center"
-        android:textColor="@color/colorPrimary"
-        android:textSize="@dimen/h_medium"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@id/ongoing_parking_layout"
-        app:layout_constraintEnd_toStartOf="@+id/ongoing_parking_layout"
-        app:layout_constraintHorizontal_bias="0.5"
+        android:layout_marginTop="40dp"
+        app:layout_constraintBottom_toTopOf="@+id/viewPager"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/date_now" />
+        app:layout_constraintTop_toBottomOf="@id/date_now">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/ongoing_parking_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:background="@drawable/card_layout_purple"
-        android:padding="@dimen/margin_padding_vertical_for_card"
-        app:layout_constraintBottom_toTopOf="@id/your_history"
-        app:layout_constraintEnd_toStartOf="@+id/your_history"
-        app:layout_constraintStart_toEndOf="@+id/ongoing_parking_tag"
-        app:layout_constraintTop_toBottomOf="@id/ongoing_parking_tag">
-
-        <TextView
-            android:id="@+id/ongoing_parking_title"
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:textSize="20sp"
-            android:textColor="@color/white"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:tabBackground="@color/white"
+            app:tabGravity="fill"
+            app:tabMode="fixed"
+            app:tabTextColor="@color/colorPrimary" />
+    </com.google.android.material.appbar.AppBarLayout>
 
-        <TextView
-            android:id="@+id/ongoing_parking_body"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:textColor="@color/white"
-            android:textSize="@dimen/h2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ongoing_parking_title" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <TextView
-        android:id="@+id/your_history"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/space_between_card"
-        android:gravity="center"
-        android:text="@string/your_history"
-        android:textAlignment="center"
-        android:textColor="@color/colorPrimary"
-        android:textSize="@dimen/h_medium"
-        app:layout_constraintBottom_toTopOf="@id/recyclerView"
-        app:layout_constraintEnd_toStartOf="@+id/recyclerView"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/ongoing_parking_layout"
-        app:layout_constraintTop_toBottomOf="@id/ongoing_parking_layout" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/your_history"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/your_history"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:indeterminateDrawable="@drawable/custom_progressbar"
+        android:layout_margin="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/recyclerView" />
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
+    </androidx.viewpager.widget.ViewPager>
 </androidx.constraintlayout.widget.ConstraintLayout>

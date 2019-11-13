@@ -6,8 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.HorizontalScrollView
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.future.pms.R
 import com.future.pms.di.component.DaggerFragmentComponent
@@ -24,10 +22,8 @@ import kotlinx.android.synthetic.main.fragment_receipt.view.*
 import javax.inject.Inject
 
 class ReceiptFragment : Fragment(), ReceiptContract {
-
     @Inject
     lateinit var presenter: ReceiptPresenter
-
     private lateinit var rootView: View
 
     fun newInstance(): ReceiptFragment {
@@ -62,7 +58,9 @@ class ReceiptFragment : Fragment(), ReceiptContract {
         initView()
     }
 
-    private fun initView() {}
+    private fun initView() {
+        //TODO
+    }
 
     override fun showProgress(show: Boolean) {
         if (show) {

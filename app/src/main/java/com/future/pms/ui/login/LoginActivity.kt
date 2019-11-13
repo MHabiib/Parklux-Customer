@@ -7,24 +7,18 @@ import android.widget.Toast
 import com.future.pms.R
 import com.future.pms.di.base.BaseMVPActivity
 import com.future.pms.ui.main.MainActivity
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.activity_login.progressBar
 
 class LoginActivity : BaseMVPActivity<LoginContract.LoginView, LoginContract.LoginPresenter>(),
     LoginContract.LoginView {
-
     override var presenter: LoginContract.LoginPresenter = LoginPresenterImpl()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_login)
-
         btnSign.setOnClickListener {
             if (isValid()) {
                 loading(true)
-
                 presenter.login(txtEmail.text.toString(), txtPassword.text.toString())
             }
         }
@@ -43,13 +37,12 @@ class LoginActivity : BaseMVPActivity<LoginContract.LoginView, LoginContract.Log
     }
 
     private fun loading(value: Boolean) {
-        if (value) progressBar.visibility = View.VISIBLE
-        else progressBar.visibility = View.GONE
-
         if (!value) {
             txtEmail.text?.clear()
             txtPassword.text?.clear()
         }
+        if (value) progressBar.visibility = View.VISIBLE
+        else progressBar.visibility = View.GONE
 
         if (!value) inputLayoutEmail.visibility = View.VISIBLE
         else inputLayoutEmail.visibility = View.GONE

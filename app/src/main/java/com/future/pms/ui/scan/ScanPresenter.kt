@@ -8,5 +8,4 @@ class ScanPresenter @Inject constructor() {
     fun attach(view: ScanContract) {
         this.view = view
     }
-
 }

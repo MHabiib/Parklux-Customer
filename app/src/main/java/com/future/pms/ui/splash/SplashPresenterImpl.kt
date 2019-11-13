@@ -1,7 +1,7 @@
 package com.future.pms.ui.splash
 
-import com.future.pms.di.base.BaseMVPPresenterImpl
 import com.future.pms.R
+import com.future.pms.di.base.BaseMVPPresenterImpl
 import com.future.pms.model.oauth.Token
 import com.future.pms.model.oauth.request.Refresh
 import com.future.pms.ui.login.RefreshFetcher
@@ -9,7 +9,6 @@ import com.future.pms.util.Authentication
 
 class SplashPresenterImpl : BaseMVPPresenterImpl<SplashContract.SplashView>(),
     SplashContract.SplashPresenter {
-
     private var refreshFetcher: RefreshFetcher.RefreshFetcherImpl? = null
 
     override fun isAuthenticated() {
@@ -26,7 +25,6 @@ class SplashPresenterImpl : BaseMVPPresenterImpl<SplashContract.SplashView>(),
                 }
                 refreshFetcher = RefreshFetcher.RefreshFetcherImpl(getContext(),
                     object : RefreshFetcher.Listener {
-
                         override fun onSuccess(token: Token?) {
                             if (token == null) {
                                 view?.let { view -> call(view, view::onLogin) }
