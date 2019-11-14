@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.SurfaceHolder
 import android.view.View
@@ -14,6 +15,7 @@ import androidx.fragment.app.Fragment
 import com.future.pms.R
 import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
+import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.SCAN_FRAGMENT
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
@@ -56,6 +58,18 @@ class ScanFragment : Fragment(), ScanContract {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         presenter.attach(this)
+    }
+
+    override fun showErrorMessage(error: String) {
+        Log.e(Constants.ERROR, error)
+    }
+
+    override fun showProgress(show: Boolean) {
+        if (show) {
+            progressBar.visibility = View.VISIBLE
+        } else {
+            progressBar.visibility = View.GONE
+        }
     }
 
     private fun initialiseDetectorsAndSources() {
@@ -124,14 +138,6 @@ class ScanFragment : Fragment(), ScanContract {
     override fun onResume() {
         super.onResume()
         initialiseDetectorsAndSources()
-    }
-
-    override fun showProgress(show: Boolean) {
-        if (show) {
-            progressBar.visibility = View.VISIBLE
-        } else {
-            progressBar.visibility = View.GONE
-        }
     }
 
     private fun injectDependency() {

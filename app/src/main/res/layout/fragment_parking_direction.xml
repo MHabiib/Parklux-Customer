@@ -7,6 +7,7 @@
     android:background="#000000"
     tools:context=".ui.parkingdirection.ParkingDirectionFragment">
 
+
     <TextView
         android:id="@+id/parking_level_title"
         android:layout_width="match_parent"
@@ -33,6 +34,14 @@
             android:id="@+id/layoutSeat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
     </ScrollView>
+
+    <ImageView
+        android:id="@+id/back_button"
+        android:layout_width="59dp"
+        android:layout_height="44dp"
+        android:layout_marginLeft="16dp"
+        android:src="@drawable/ic_back_white"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -28,12 +28,9 @@ class HistoryAdapter(
 
     class BookingListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(customerBooking: CustomerBooking, clickListener: (CustomerBooking) -> Unit) {
-            if (0L != customerBooking.dateOut) {
-                itemView.item_title.text = customerBooking.parkingZoneName
-                itemView.item_date.text = Utils.convertLongToTime(customerBooking.dateIn)
-                itemView.setOnClickListener { clickListener(customerBooking) }
-            } else
-                itemView.item_layout.visibility = View.GONE
+          itemView.item_title.text = customerBooking.parkingZoneName
+          itemView.item_date.text = Utils.convertLongToTime(customerBooking.dateIn)
+          itemView.setOnClickListener { clickListener(customerBooking) }
         }
     }
 }

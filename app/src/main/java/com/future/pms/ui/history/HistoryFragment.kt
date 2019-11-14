@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.future.pms.R
@@ -18,6 +17,7 @@ import com.future.pms.ui.home.HomeFragment
 import com.future.pms.ui.main.MainActivity
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.ERROR
+import com.future.pms.util.Utils
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_history.*
 import javax.inject.Inject
@@ -73,11 +73,10 @@ class HistoryFragment : Fragment(), HistoryContract {
     }
 
     override fun loadCustomerBookingSuccess(list: List<CustomerBooking>) {
-        println(list)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.setHasFixedSize(true)
-        recyclerView.adapter =
-            HistoryAdapter(list) { booking: CustomerBooking ->
+        recyclerView.adapter = HistoryAdapter(
+                Utils.getHistoryParking(list)) { booking: CustomerBooking ->
                 customerBookingClick(booking)
             }
     }

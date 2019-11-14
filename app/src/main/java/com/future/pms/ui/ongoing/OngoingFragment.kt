@@ -1,6 +1,8 @@
 package com.future.pms.ui.ongoing
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,16 +11,21 @@ import androidx.fragment.app.Fragment
 import com.future.pms.R
 import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
+import com.future.pms.model.customerbooking.CustomerBooking
+import com.future.pms.model.oauth.Token
 import com.future.pms.ui.main.MainActivity
-import com.future.pms.ui.receipt.ReceiptFragment
-import com.future.pms.ui.receipt.ReceiptPresenter
 import com.future.pms.util.Constants
+import com.future.pms.util.Utils
+import com.google.gson.Gson
+import kotlinx.android.synthetic.main.fragment_ongoing.*
+import kotlinx.android.synthetic.main.fragment_ongoing.view.*
 import javax.inject.Inject
 
 class OngoingFragment : Fragment(), OngoingContract {
     @Inject
     lateinit var presenter: OngoingPresenter
     private lateinit var rootView: View
+    private lateinit var ongoingParking: CustomerBooking
 
     fun newInstance(): OngoingFragment {
         return OngoingFragment()
@@ -45,6 +52,35 @@ class OngoingFragment : Fragment(), OngoingContract {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        presenter.attach(this)
+        presenter.subscribe()
+        initView()
+    }
+
+    private fun initView() {
+        val accessToken = Gson().fromJson(
+            context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
+                Constants.TOKEN, null), Token::class.java).access_token
+        presenter.loadOngoingBooking(accessToken)
+    }
+
+    override fun showProgress(show: Boolean) {
+        if (show) {
+            progressBar.visibility = View.VISIBLE
+        } else {
+            progressBar.visibility = View.GONE
+        }
+    }
+
+    override fun showErrorMessage(error: String) {
+        Log.e(Constants.ERROR, error)
+    }
+
+    override fun loadCustomerOngoingSuccess(ongoing: CustomerBooking) {
+        rootView.ongoing_parking_layout.visibility = View.VISIBLE
+        rootView.parking_zone_name.text = ongoing.parkingZoneName
+        rootView.parking_slot.text = ongoing.slotName
+        rootView.parking_time.text = Utils.convertLongToTimeShortMonth(ongoing.dateIn)
     }
 
     private fun injectDependency() {
