@@ -3,9 +3,9 @@ package com.future.pms.ui.splash
 import com.future.pms.R
 import com.future.pms.di.base.BaseMVPPresenterImpl
 import com.future.pms.model.oauth.Token
-import com.future.pms.model.oauth.request.Refresh
 import com.future.pms.ui.login.RefreshFetcher
 import com.future.pms.util.Authentication
+import com.future.pms.util.Constants.Companion.REFRESH_TOKEN
 
 class SplashPresenterImpl : BaseMVPPresenterImpl<SplashContract.SplashView>(),
     SplashContract.SplashPresenter {
@@ -38,7 +38,7 @@ class SplashPresenterImpl : BaseMVPPresenterImpl<SplashContract.SplashView>(),
                             view?.let { view -> call(view, throwable, view::onError) }
                         }
                     })
-                refreshFetcher?.refresh(Refresh(Authentication.getRefresh(getContext())))
+                refreshFetcher?.refresh(REFRESH_TOKEN, Authentication.getRefresh(getContext()))
             }
         } catch (e: Authentication.WithoutAuthenticatedException) {
             view?.let { view -> call(view, view::onLogin) }

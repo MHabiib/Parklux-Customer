@@ -2,6 +2,7 @@ package com.future.pms.ui.scan
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -15,12 +16,14 @@ import androidx.fragment.app.Fragment
 import com.future.pms.R
 import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
+import com.future.pms.model.oauth.Token
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.SCAN_FRAGMENT
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_scan.*
 import java.io.IOException
 import javax.inject.Inject
@@ -58,6 +61,11 @@ class ScanFragment : Fragment(), ScanContract {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         presenter.attach(this)
+        initView()
+    }
+
+    private fun initView() {
+
     }
 
     override fun showErrorMessage(error: String) {
@@ -125,9 +133,16 @@ class ScanFragment : Fragment(), ScanContract {
                 if (barcodes.size() != 0) {
                     txtBarcodeValue.post {
                         if (barcodes.valueAt(0).displayValue.startsWith("QR")) {
+                            val accessToken = Gson().fromJson(
+                                context?.getSharedPreferences(
+                                    Constants.AUTHENTCATION,
+                                    Context.MODE_PRIVATE
+                                )?.getString(Constants.TOKEN, null), Token::class.java
+                            ).access_token
                             intentData = barcodes.valueAt(0).displayValue
-                            //Call API
-                            Toast.makeText(context, intentData, Toast.LENGTH_LONG).show()
+                            val idSlot = intentData.substringAfter("idSlot=").substringBefore(')')
+                            presenter.createBooking(idSlot, accessToken)
+                            Toast.makeText(context, idSlot, Toast.LENGTH_LONG).show()
                         }
                     }
                 }

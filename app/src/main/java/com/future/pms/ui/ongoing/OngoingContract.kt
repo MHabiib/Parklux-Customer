@@ -5,5 +5,6 @@ import com.future.pms.model.customerbooking.CustomerBooking
 interface OngoingContract {
     fun showProgress(show: Boolean)
     fun showErrorMessage(error: String)
+    fun refreshHome()
     fun loadCustomerOngoingSuccess(ongoing: CustomerBooking)
 }

@@ -9,6 +9,7 @@ class Constants {
         const val RECEIPT_FRAGMENT = "Receipt Fragment"
         const val ONGOING_FRAGMENT = "Ongoin Fragment"
         const val TOKEN = "token"
+        const val REFRESH_TOKEN = "refresh_token"
         const val PROFILE_FRAGMENT = "ProfileFragment"
         const val ERROR = "Error"
         const val seatSize = 100

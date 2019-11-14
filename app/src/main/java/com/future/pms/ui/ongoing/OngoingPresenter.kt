@@ -1,5 +1,6 @@
 package com.future.pms.ui.ongoing
 
+import android.util.Log
 import com.future.pms.model.customerbooking.CustomerBooking
 import com.future.pms.network.ApiServiceInterface
 import com.future.pms.network.RetrofitClient
@@ -23,6 +24,16 @@ class OngoingPresenter @Inject constructor() {
                 view.showErrorMessage(error.localizedMessage)
             })
         subscriptions.add(subscribe)
+    }
+
+    fun checkoutBooking(access_token: String) {
+        val subscribe = api.postBookingCheckout(access_token).subscribeOn(
+            Schedulers.io()
+        ).observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ },
+                { error -> Log.e("ERROR", error.message) })
+        subscriptions.add(subscribe)
+        view.refreshHome()
     }
 
     fun subscribe() {}

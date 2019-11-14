@@ -3,7 +3,6 @@ package com.future.pms.ui.login
 import android.content.Context
 import com.future.pms.R
 import com.future.pms.model.oauth.Token
-import com.future.pms.model.oauth.request.Refresh
 import com.future.pms.network.APISettings
 import com.future.pms.network.AuthAPI
 import retrofit2.Call
@@ -17,12 +16,12 @@ object RefreshFetcher {
     ) {
         private var callback: Call<Token>? = null
 
-        fun refresh(refresh: Refresh) {
+        fun refresh(grant_type: String, refresh: String) {
             val authFetcher = APICreator(
                 AuthAPI::class.java,
                 APISettings.base
             ).generate()
-            callback = authFetcher.refresh(refresh)
+            callback = authFetcher.refresh(grant_type, refresh)
             callback?.enqueue(object : Callback<Token> {
 
                 override fun onResponse(call: Call<Token>?, response: Response<Token>?) {

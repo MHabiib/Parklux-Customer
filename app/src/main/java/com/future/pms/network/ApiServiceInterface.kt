@@ -3,7 +3,6 @@ package com.future.pms.network
 import com.future.pms.model.customerbooking.CustomerBooking
 import com.future.pms.model.customerdetail.Customer
 import com.future.pms.model.receipt.Receipt
-import com.future.pms.model.scan.ScanRequest
 import io.reactivex.Observable
 import retrofit2.http.*
 
@@ -20,6 +19,15 @@ interface ApiServiceInterface {
     @GET("api/booking/customer/ongoing") fun getOngoingBooking(@Query("access_token")
     access_token: String?): Observable<CustomerBooking>
 
-    @POST("api/booking") fun postCreateBooking(@Body idSlot: ScanRequest, @Query("access_token")
-    access_token: String?): Observable<Receipt>
+    @POST("api/booking")
+    fun postCreateBooking(
+        @Body idSlot: String?, @Query("access_token")
+        access_token: String?
+    ): Observable<String>
+
+    @POST("api/booking/checkout")
+    fun postBookingCheckout(
+        @Query("access_token")
+        access_token: String?
+    ): Observable<String>
 }
