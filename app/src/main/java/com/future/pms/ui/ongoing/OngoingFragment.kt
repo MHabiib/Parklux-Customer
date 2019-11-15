@@ -1,6 +1,7 @@
 package com.future.pms.ui.ongoing
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -26,7 +27,6 @@ class OngoingFragment : Fragment(), OngoingContract {
     @Inject
     lateinit var presenter: OngoingPresenter
     private lateinit var rootView: View
-    private lateinit var ongoingParking: CustomerBooking
 
     fun newInstance(): OngoingFragment {
         return OngoingFragment()
@@ -81,7 +81,11 @@ class OngoingFragment : Fragment(), OngoingContract {
     }
 
     override fun refreshHome() {
-        //TODO
+        val ft = fragmentManager!!.beginTransaction()
+        if (Build.VERSION.SDK_INT >= 26) {
+            ft.setReorderingAllowed(false)
+        }
+        ft.detach(this).attach(this).commit()
     }
 
     override fun showErrorMessage(error: String) {

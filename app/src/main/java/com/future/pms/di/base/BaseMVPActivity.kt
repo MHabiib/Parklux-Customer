@@ -3,7 +3,7 @@ package com.future.pms.di.base
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 
-abstract class BaseMVPActivity<in V : BaseMVPView, P : BaseMVPPresenter<V>>
+abstract class BaseMVPActivity<in V : BaseMVPView, P : IBasePresenter<V>>
     : AppCompatActivity(), BaseMVPView {
     abstract var presenter: P
 

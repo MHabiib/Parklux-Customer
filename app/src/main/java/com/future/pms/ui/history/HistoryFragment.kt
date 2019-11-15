@@ -1,6 +1,7 @@
 package com.future.pms.ui.history
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -50,6 +51,13 @@ class HistoryFragment : Fragment(), HistoryContract {
         initView()
     }
 
+  override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+    super.setUserVisibleHint(isVisibleToUser)
+    if (isVisibleToUser) {
+      refreshPage()
+    }
+  }
+
     private fun initView() {
         val accessToken = Gson().fromJson(
             context?.getSharedPreferences(
@@ -94,4 +102,12 @@ class HistoryFragment : Fragment(), HistoryContract {
 
         homeComponent.inject(this)
     }
+
+  override fun refreshPage() {
+    val ft = fragmentManager!!.beginTransaction()
+    if (Build.VERSION.SDK_INT >= 26) {
+      ft.setReorderingAllowed(false)
+    }
+    ft.detach(this).attach(this).commit()
+  }
 }

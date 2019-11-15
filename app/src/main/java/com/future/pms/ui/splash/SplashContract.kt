@@ -1,7 +1,7 @@
 package com.future.pms.ui.splash
 
-import com.future.pms.di.base.BaseMVPPresenter
 import com.future.pms.di.base.BaseMVPView
+import com.future.pms.di.base.IBasePresenter
 
 object SplashContract {
     interface SplashView : BaseMVPView {
@@ -11,7 +11,7 @@ object SplashContract {
         fun onError(e: Throwable)
     }
 
-    interface SplashPresenter : BaseMVPPresenter<SplashView> {
+    interface SplashPresenterI : IBasePresenter<SplashView> {
         fun isAuthenticated()
         fun cancel()
     }

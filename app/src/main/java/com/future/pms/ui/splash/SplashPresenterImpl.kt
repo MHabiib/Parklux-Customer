@@ -1,14 +1,14 @@
 package com.future.pms.ui.splash
 
 import com.future.pms.R
-import com.future.pms.di.base.BaseMVPPresenterImpl
+import com.future.pms.di.base.BasePresenter
 import com.future.pms.model.oauth.Token
 import com.future.pms.ui.login.RefreshFetcher
 import com.future.pms.util.Authentication
 import com.future.pms.util.Constants.Companion.REFRESH_TOKEN
 
-class SplashPresenterImpl : BaseMVPPresenterImpl<SplashContract.SplashView>(),
-    SplashContract.SplashPresenter {
+class SplashPresenterImpl : BasePresenter<SplashContract.SplashView>(),
+        SplashContract.SplashPresenterI {
     private var refreshFetcher: RefreshFetcher.RefreshFetcherImpl? = null
 
     override fun isAuthenticated() {

@@ -9,9 +9,9 @@ import com.future.pms.ui.login.LoginActivity
 import com.future.pms.ui.main.MainActivity
 import kotlinx.android.synthetic.main.activity_splash.*
 
-class SplashActivity : BaseMVPActivity<SplashContract.SplashView,
-        SplashContract.SplashPresenter>(), SplashContract.SplashView {
-    override var presenter: SplashContract.SplashPresenter = SplashPresenterImpl()
+class SplashActivity : BaseMVPActivity<SplashContract.SplashView, SplashContract.SplashPresenterI>(),
+    SplashContract.SplashView {
+  override var presenter: SplashContract.SplashPresenterI = SplashPresenterImpl()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
