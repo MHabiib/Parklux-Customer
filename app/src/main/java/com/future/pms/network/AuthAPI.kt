@@ -15,8 +15,7 @@ interface AuthAPI {
         @Field("grant_type") grant_type: String
     ): Call<Token>
 
-    @FormUrlEncoded
-    @POST("auth/token")
+    @FormUrlEncoded @POST("oauth/token")
     fun refresh(
         @Field("grant_type") grant_type: String,
         @Field("refresh_token") refreshAuth: String

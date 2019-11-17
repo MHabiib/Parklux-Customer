@@ -6,4 +6,7 @@ interface MainContract {
     fun showProfileFragment()
     fun showReceipt()
     fun showParkingDirection()
+  fun showBookingDetail(idBooking: String)
+  fun showBookingFailed()
+  fun showLoginPage()
 }

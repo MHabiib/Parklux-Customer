@@ -21,6 +21,7 @@ import com.future.pms.util.Constants.Companion.ERROR
 import com.future.pms.util.Utils
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_history.*
+import kotlinx.android.synthetic.main.fragment_history.view.*
 import javax.inject.Inject
 
 class HistoryFragment : Fragment(), HistoryContract {
@@ -40,9 +41,10 @@ class HistoryFragment : Fragment(), HistoryContract {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) =
-        inflater.inflate(R.layout.fragment_history, container, false)!!
+        savedInstanceState: Bundle?): View? {
+      rootView = inflater.inflate(R.layout.fragment_history, container, false)
+      return rootView
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -69,10 +71,12 @@ class HistoryFragment : Fragment(), HistoryContract {
     }
 
     override fun showProgress(show: Boolean) {
+      if (null != progressBar) {
         if (show) {
-            progressBar.visibility = View.VISIBLE
+          progressBar.visibility = View.VISIBLE
         } else {
-            progressBar.visibility = View.GONE
+          progressBar.visibility = View.GONE
+        }
         }
     }
 
@@ -81,10 +85,11 @@ class HistoryFragment : Fragment(), HistoryContract {
     }
 
     override fun loadCustomerBookingSuccess(list: List<CustomerBooking>) {
+      if (list.isEmpty() || list.size == 1 && 0L == list[0].dateOut) rootView.dont_have_order.visibility = View.VISIBLE
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = HistoryAdapter(
-                Utils.getHistoryParking(list)) { booking: CustomerBooking ->
+            Utils.getHistoryParking(list.reversed())) { booking: CustomerBooking ->
                 customerBookingClick(booking)
             }
     }
@@ -94,6 +99,10 @@ class HistoryFragment : Fragment(), HistoryContract {
         val activity = activity as MainActivity?
         activity?.presenter?.showReceipt()
     }
+
+  override fun loadCustomerBookingError() {
+    rootView.dont_have_order.visibility = View.VISIBLE
+  }
 
     private fun injectDependency() {
         val homeComponent = DaggerFragmentComponent.builder()

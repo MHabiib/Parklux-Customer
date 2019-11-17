@@ -9,7 +9,6 @@ import io.reactivex.schedulers.Schedulers
 import java.util.*
 import javax.inject.Inject
 
-
 class HomePresenter @Inject constructor() {
     private val subscriptions = CompositeDisposable()
     private val api: ApiServiceInterface = RetrofitClient.create()
@@ -29,11 +28,10 @@ class HomePresenter @Inject constructor() {
         val subscribe = api.getCustomerDetail(access_token).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ customer: Customer ->
-                view.showProgress(false)
                 view.loadCustomerDetailSuccess(customer)
             }, { error ->
-                view.showProgress(false)
                 view.showErrorMessage(error.localizedMessage)
+              view.unauthorized()
             })
         subscriptions.add(subscribe)
     }

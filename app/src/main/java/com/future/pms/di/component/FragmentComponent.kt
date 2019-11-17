@@ -1,6 +1,7 @@
 package com.future.pms.di.component
 
 import com.future.pms.di.module.FragmentModule
+import com.future.pms.ui.bookingdetail.BookingDetailFragment
 import com.future.pms.ui.history.HistoryFragment
 import com.future.pms.ui.home.HomeFragment
 import com.future.pms.ui.ongoing.OngoingFragment
@@ -25,4 +26,6 @@ interface FragmentComponent {
     fun inject(historyFragment: HistoryFragment)
 
     fun inject(ongoingFragment: OngoingFragment)
+
+  fun inject(bookingDetailFragment: BookingDetailFragment)
 }

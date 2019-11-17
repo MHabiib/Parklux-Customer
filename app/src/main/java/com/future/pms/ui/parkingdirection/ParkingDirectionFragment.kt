@@ -11,10 +11,13 @@ import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.addCallback
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.future.pms.R
 import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
+import com.future.pms.ui.main.MainActivity
 import com.future.pms.util.Constants.Companion.PARKING_DETAIL_FRAGMENT
 import com.future.pms.util.Constants.Companion.SEATS
 import com.future.pms.util.Constants.Companion.STATUS_AVAILABLE
@@ -39,6 +42,10 @@ class ParkingDirectionFragment : Fragment(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+      requireActivity().onBackPressedDispatcher.addCallback(this) {
+        val activity = activity as MainActivity?
+        activity?.presenter?.onHomeIconClick()
+      }
         injectDependency()
     }
 
@@ -48,8 +55,11 @@ class ParkingDirectionFragment : Fragment(),
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_parking_direction, container, false)
+      val toolbar = rootView.findViewById(R.id.toolbar) as Toolbar
         val layout = rootView.findViewById(R.id.layoutSeat) as HorizontalScrollView
+      toolbar.setNavigationIcon(R.drawable.ic_back_white)
         showParkingSlot(layout)
+      toolbar.setNavigationOnClickListener { backToHome() }
         return rootView
     }
 
@@ -159,6 +169,11 @@ class ParkingDirectionFragment : Fragment(),
             Toast.makeText(context, "Seat " + view.id + " is Reserved", Toast.LENGTH_SHORT).show()
         }
     }
+
+  fun backToHome() {
+    val activity = activity as MainActivity?
+    activity?.presenter?.onHomeIconClick()
+  }
 
     private fun injectDependency() {
         val homeComponent = DaggerFragmentComponent.builder()

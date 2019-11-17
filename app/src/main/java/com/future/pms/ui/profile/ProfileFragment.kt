@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import com.future.pms.R
 import com.future.pms.di.component.DaggerFragmentComponent
@@ -15,13 +16,13 @@ import com.future.pms.di.module.FragmentModule
 import com.future.pms.model.customerdetail.Customer
 import com.future.pms.model.oauth.Token
 import com.future.pms.ui.login.LoginActivity
+import com.future.pms.ui.main.MainActivity
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.PROFILE_FRAGMENT
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 import javax.inject.Inject
-
 
 class ProfileFragment : Fragment(), ProfileContract {
     @Inject
@@ -34,6 +35,10 @@ class ProfileFragment : Fragment(), ProfileContract {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            val activity = activity as MainActivity?
+            activity?.presenter?.onHomeIconClick()
+        }
         injectDependency()
     }
 
@@ -66,10 +71,12 @@ class ProfileFragment : Fragment(), ProfileContract {
     }
 
     override fun showProgress(show: Boolean) {
-        if (show) {
-            progressBar.visibility = View.VISIBLE
-        } else {
-            progressBar.visibility = View.GONE
+        if (null != progressBar) {
+            if (show) {
+                progressBar.visibility = View.VISIBLE
+            } else {
+                progressBar.visibility = View.GONE
+            }
         }
     }
 
@@ -79,11 +86,13 @@ class ProfileFragment : Fragment(), ProfileContract {
 
     override fun loadCustomerDetailSuccess(customer: Customer) {
         rootView.profile_name_display.text = customer.body.name
-        rootView.profile_name.text = customer.body.name
-        rootView.profile_email.text = customer.body.email
-        rootView.profile_phone_number.text = when {
-            customer.body.phoneNumber == "" -> "You haven't enter your phone number yet !"
-            else -> customer.body.phoneNumber
+        rootView.profile_name.setText(customer.body.name)
+        rootView.profile_email.setText(customer.body.email)
+        rootView.profile_password.hint = "********"
+        if (customer.body.phoneNumber == "") {
+            rootView.profile_phone_number.hint = "You haven't enter your phone number yet !"
+        } else {
+            rootView.profile_phone_number.setText(customer.body.phoneNumber)
         }
     }
 

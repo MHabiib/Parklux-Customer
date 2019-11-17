@@ -25,9 +25,21 @@ class MainPresenter @Inject constructor() {
         view.showReceipt()
     }
 
+  fun showBookingDetail(idBooking: String) {
+    view.showBookingDetail(idBooking)
+  }
+
+  fun showBookingFailed() {
+    view.showBookingFailed()
+  }
+
     fun showParkingDirection() {
         view.showParkingDirection()
     }
+
+  fun showLoginPage() {
+    view.showLoginPage()
+  }
 
     fun attach(view: MainContract) {
         this.view = view

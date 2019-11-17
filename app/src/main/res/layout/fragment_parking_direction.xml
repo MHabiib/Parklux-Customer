@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000"
+    app:behavior_peekHeight="100dp"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
     tools:context=".ui.parkingdirection.ParkingDirectionFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -20,8 +22,8 @@
             android:layout_height="?attr/actionBarSize"
             android:paddingStart="6dp"
             android:paddingEnd="16dp"
-            app:contentInsetStartWithNavigation="0dp"
-            app:navigationIcon="@drawable/ic_back_white">
+            app:contentInsetStartWithNavigation="0dp">
+            <!-- app:navigationIcon="@drawable/ic_back_white"-->>
 
             <TextView
                 android:id="@+id/parking_level_title"

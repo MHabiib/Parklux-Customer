@@ -1,4 +1,4 @@
-package com.future.pms.ui.login
+package com.future.pms.network
 
 import okhttp3.OkHttpClient
 import retrofit2.Converter

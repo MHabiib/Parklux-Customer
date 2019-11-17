@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.future.pms.R
@@ -15,6 +16,7 @@ import com.future.pms.di.module.FragmentModule
 import com.future.pms.model.customerdetail.Customer
 import com.future.pms.model.oauth.Token
 import com.future.pms.ui.history.HistoryFragment
+import com.future.pms.ui.main.MainActivity
 import com.future.pms.ui.ongoing.OngoingFragment
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.ERROR
@@ -47,10 +49,14 @@ class HomeFragment : Fragment(), HomeContract {
         rootView = inflater.inflate(R.layout.fragment_home, container, false)
         val viewPager = rootView.viewPager as ViewPager
         val adapter = ViewPagerAdapter(childFragmentManager)
-        adapter.addFragment(OngoingFragment(), "Your Ongoing Paking")
+      adapter.addFragment(OngoingFragment(), "Your Ongoing Parking")
         adapter.addFragment(HistoryFragment(), "History")
         viewPager.adapter = adapter
         rootView.tabs.setupWithViewPager(viewPager)
+      for (i in 0 until rootView.tabs.tabCount) {
+        if (i == 0) rootView.tabs.getTabAt(i)?.setIcon(R.drawable.ic_parking)
+        else rootView.tabs.getTabAt(i)?.setIcon(R.drawable.ic_history)
+      }
         return rootView
     }
 
@@ -79,8 +85,6 @@ class HomeFragment : Fragment(), HomeContract {
         presenter.unsubscribe()
     }
 
-    override fun showProgress(show: Boolean) {}
-
     override fun loadCustomerDetailSuccess(customer: Customer) {
         rootView.user_name.text = customer.body.name
     }
@@ -89,7 +93,11 @@ class HomeFragment : Fragment(), HomeContract {
         Log.e(ERROR, error)
     }
 
-    override fun showParkingDirectionFragment() { //TODO
+  override fun unauthorized() {
+    requireActivity().onBackPressedDispatcher.addCallback(this) {
+      val activity = activity as MainActivity?
+      activity?.presenter?.onHomeIconClick()
+    }
     }
 
     override fun getDateNow() {

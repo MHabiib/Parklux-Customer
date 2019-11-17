@@ -21,16 +21,13 @@ class HistoryPresenter @Inject constructor() {
                 view.loadCustomerBookingSuccess(list)
             }, { error ->
                 view.showProgress(false)
+              view.loadCustomerBookingError()
                 view.showErrorMessage(error.localizedMessage)
             })
         subscriptions.add(subscribe)
     }
 
     fun subscribe() {}
-
-    fun unsubscribe() {
-        subscriptions.clear()
-    }
 
     fun attach(view: HistoryContract) {
         this.view = view

@@ -9,6 +9,5 @@ data class CustomerBooking(
     val idUser: String,
     val parkingZoneName: String,
     val price: Double,
-    val slotName: String,
-    val totalTime: String
+    val slotName: String, val totalTime: String, val imageUrl: String
 )

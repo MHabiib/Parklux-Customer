@@ -19,14 +19,22 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/imageView"
+    <Button
+        android:id="@+id/btnSign"
         android:layout_width="match_parent"
-        android:layout_height="296dp"
-        android:layout_weight="1"
-        android:contentDescription="@string/header_logo"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/header_with_logo" />
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="12dp"
+        style="@style/NoCaps"
+        android:background="@drawable/card_layout_blue_primary"
+        android:gravity="center"
+        android:paddingVertical="@dimen/margin_padding_vertical_for_card"
+        android:text="@string/login"
+        android:textColor="@color/white"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/inputLayoutPassword" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/inputLayoutEmail"
@@ -88,21 +96,16 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
-        android:id="@+id/btnSign"
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="12dp"
-        android:background="@drawable/card_layout_blue_primary"
-        android:gravity="center"
-        android:paddingVertical="@dimen/margin_padding_vertical_for_card"
-        android:text="@string/login"
-        android:textColor="@color/white"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inputLayoutPassword" />
+        android:layout_gravity="center"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:layout_weight="1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/header_with_logo" />
 
     <TextView
         android:id="@+id/dont_have_account"

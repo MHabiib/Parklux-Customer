@@ -7,4 +7,5 @@ interface OngoingContract {
     fun showErrorMessage(error: String)
     fun refreshHome()
     fun loadCustomerOngoingSuccess(ongoing: CustomerBooking)
+  fun loadCustomerOngoingFailed()
 }

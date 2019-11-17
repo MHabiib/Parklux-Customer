@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="48dp">
+    android:background="@color/black">
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -64,8 +64,8 @@
 
     <FrameLayout
         android:id="@+id/frame_qr"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="240dp"
+        android:layout_height="240dp"
         android:background="@drawable/qr_code_scan_layout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

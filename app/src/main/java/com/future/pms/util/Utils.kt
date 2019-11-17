@@ -8,7 +8,7 @@ class Utils {
     companion object {
         fun convertLongToTime(time: Long): String {
             val date = Date(time)
-            val format = SimpleDateFormat("HH:mm dd MMMM yyyy ")
+          val format = SimpleDateFormat("HH:mm - dd MMMM yyyy ")
             return format.format(date)
         }
 

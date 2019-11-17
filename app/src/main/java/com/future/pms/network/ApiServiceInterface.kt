@@ -7,7 +7,7 @@ import io.reactivex.Observable
 import retrofit2.http.*
 
 interface ApiServiceInterface {
-    @GET("api/user/customer/detail")
+  @GET("api/customer/detail")
     fun getCustomerDetail(@Query("access_token") access_token: String?): Observable<Customer>
 
     @GET("api/booking/customer")
@@ -22,8 +22,7 @@ interface ApiServiceInterface {
     @POST("api/booking")
     fun postCreateBooking(
         @Body idSlot: String?, @Query("access_token")
-        access_token: String?
-    ): Observable<String>
+        access_token: String?): Observable<CustomerBooking>
 
     @POST("api/booking/checkout")
     fun postBookingCheckout(

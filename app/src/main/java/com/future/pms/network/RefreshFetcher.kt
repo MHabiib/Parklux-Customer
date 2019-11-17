@@ -1,28 +1,25 @@
-package com.future.pms.ui.login
+package com.future.pms.network
 
 import android.content.Context
 import com.future.pms.R
 import com.future.pms.model.oauth.Token
-import com.future.pms.model.oauth.request.Auth
-import com.future.pms.network.APISettings
-import com.future.pms.network.AuthAPI
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-object AuthFetcher {
-    class AuthFetcherImpl(
+object RefreshFetcher {
+    class RefreshFetcherImpl(
         private val context: Context,
         private val listener: Listener
     ) {
         private var callback: Call<Token>? = null
 
-        fun auth(auth: Auth) {
+        fun refresh(grant_type: String, refresh: String) {
             val authFetcher = APICreator(
                 AuthAPI::class.java,
                 APISettings.base
             ).generate()
-            callback = authFetcher.auth(auth.username, auth.password, auth.grant_type)
+            callback = authFetcher.refresh(grant_type, refresh)
             callback?.enqueue(object : Callback<Token> {
 
                 override fun onResponse(call: Call<Token>?, response: Response<Token>?) {

@@ -6,6 +6,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import com.future.pms.R
 import com.future.pms.di.component.DaggerFragmentComponent
@@ -13,6 +15,7 @@ import com.future.pms.di.module.FragmentModule
 import com.future.pms.model.oauth.Token
 import com.future.pms.model.receipt.Receipt
 import com.future.pms.ui.home.HomeFragment.Companion.idBooking
+import com.future.pms.ui.main.MainActivity
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.RECEIPT_FRAGMENT
 import com.future.pms.util.Utils
@@ -32,6 +35,10 @@ class ReceiptFragment : Fragment(), ReceiptContract {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+      requireActivity().onBackPressedDispatcher.addCallback(this) {
+        val activity = activity as MainActivity?
+        activity?.presenter?.onHomeIconClick()
+      }
         injectDependency()
     }
 
@@ -41,6 +48,11 @@ class ReceiptFragment : Fragment(), ReceiptContract {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_receipt, container, false)
+      val backButton = rootView.findViewById(R.id.button_back_receipt) as ImageButton
+      backButton.setOnClickListener {
+        val activity = activity as MainActivity?
+        activity?.presenter?.onHomeIconClick()
+      }
         return rootView
     }
 
@@ -63,10 +75,12 @@ class ReceiptFragment : Fragment(), ReceiptContract {
     }
 
     override fun showProgress(show: Boolean) {
+      if (null != progressBar) {
         if (show) {
-            progressBar.visibility = View.VISIBLE
+          progressBar.visibility = View.VISIBLE
         } else {
-            progressBar.visibility = View.GONE
+          progressBar.visibility = View.GONE
+        }
         }
     }
 

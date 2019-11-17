@@ -24,7 +24,7 @@ object Authentication {
     fun save(context: Context, obj: Token): Boolean {
         val calendar = GregorianCalendar.getInstance()
         var expiresIn: Long = calendar.time.time
-        expiresIn += obj.expires_in * 500
+      expiresIn += obj.expires_in * 24 * 60 * 60
         obj.expires_in = expiresIn
         return put(context, obj)
     }

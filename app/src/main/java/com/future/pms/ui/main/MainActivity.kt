@@ -1,12 +1,15 @@
 package com.future.pms.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.future.pms.R
 import com.future.pms.di.component.DaggerActivityComponent
 import com.future.pms.di.module.ActivityModule
+import com.future.pms.ui.bookingdetail.BookingDetailFragment
 import com.future.pms.ui.home.HomeFragment
+import com.future.pms.ui.login.LoginActivity
 import com.future.pms.ui.parkingdirection.ParkingDirectionFragment
 import com.future.pms.ui.profile.ProfileFragment
 import com.future.pms.ui.receipt.ReceiptFragment
@@ -41,7 +44,14 @@ class MainActivity : AppCompatActivity(), MainContract {
         }
     }
 
+    override fun showLoginPage() {
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
     override fun showHomeFragment() {
+        nav_view.visibility = View.VISIBLE
         if (supportFragmentManager.findFragmentByTag(HomeFragment.TAG) == null) {
             supportFragmentManager.beginTransaction()
                 .disallowAddToBackStack()
@@ -51,6 +61,7 @@ class MainActivity : AppCompatActivity(), MainContract {
     }
 
     override fun showScanFragment() {
+        nav_view.visibility = View.VISIBLE
         if (supportFragmentManager.findFragmentByTag(ScanFragment.TAG) == null) {
             supportFragmentManager.beginTransaction()
                 .disallowAddToBackStack()
@@ -75,6 +86,27 @@ class MainActivity : AppCompatActivity(), MainContract {
                 .disallowAddToBackStack()
                 .replace(R.id.frame, ReceiptFragment().newInstance(), ReceiptFragment.TAG)
                 .commit()
+        }
+    }
+
+    override fun showBookingDetail(idBooking: String) {
+        nav_view.visibility = View.GONE
+        val fragment = BookingDetailFragment()
+        val bundle = Bundle()
+        bundle.putString("idBooking", idBooking)
+        fragment.arguments = bundle
+        if (supportFragmentManager.findFragmentByTag(ParkingDirectionFragment.TAG) == null) {
+            supportFragmentManager.beginTransaction().replace(R.id.frame, fragment,
+                    BookingDetailFragment.TAG).commit()
+        }
+    }
+
+    override fun showBookingFailed() {
+        nav_view.visibility = View.GONE
+        if (supportFragmentManager.findFragmentByTag(ParkingDirectionFragment.TAG) == null) {
+            supportFragmentManager.beginTransaction().disallowAddToBackStack().replace(R.id.frame,
+                            BookingDetailFragment().newInstance(),
+                            BookingDetailFragment.TAG).commit()
         }
     }
 

@@ -1,4 +1,4 @@
-package com.future.pms.ui.login
+package com.future.pms.network
 
 import okhttp3.Credentials
 import okhttp3.Interceptor

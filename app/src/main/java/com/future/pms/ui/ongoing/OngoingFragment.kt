@@ -10,6 +10,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.future.pms.R
 import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
@@ -73,10 +76,12 @@ class OngoingFragment : Fragment(), OngoingContract {
     }
 
     override fun showProgress(show: Boolean) {
+      if (null != progressBar) {
         if (show) {
-            progressBar.visibility = View.VISIBLE
+          progressBar.visibility = View.VISIBLE
         } else {
-            progressBar.visibility = View.GONE
+          progressBar.visibility = View.GONE
+        }
         }
     }
 
@@ -98,7 +103,18 @@ class OngoingFragment : Fragment(), OngoingContract {
         rootView.parking_zone_name.text = ongoing.parkingZoneName
         rootView.parking_slot.text = ongoing.slotName
         rootView.parking_time.text = Utils.convertLongToTimeOnly(ongoing.dateIn)
+      loadImage(ongoing.imageUrl)
     }
+
+  override fun loadCustomerOngoingFailed() {
+    rootView.dont_have_ongoing.visibility = View.VISIBLE
+  }
+
+  fun loadImage(imageUrl: String) {
+    Glide.with(rootView).load(imageUrl).transform(CenterCrop(), RoundedCorners(80)).placeholder(
+            R.drawable.ic_image_place_holder).error(R.drawable.ic_image_place_holder).fallback(
+            R.drawable.ic_image_place_holder).into(rootView.ongoing_iv)
+  }
 
     private fun injectDependency() {
         val homeComponent = DaggerFragmentComponent.builder()

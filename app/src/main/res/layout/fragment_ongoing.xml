@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="12dp"
+    android:background="@color/baseWhite"
+    android:clipChildren="false"
+    android:clipToPadding="false"
     android:orientation="vertical">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="12dp"
+        android:clipChildren="false"
+        android:clipToPadding="false">
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
@@ -17,88 +25,85 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
+        <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/dont_have_ongoing"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="You dont have any ongoing order" />
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/no_order_icon"
+                android:layout_width="240dp"
+                android:layout_height="240dp"
+                android:src="@drawable/ic_no_order"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/no_order"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="You dont have any ongoing order"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/no_order_icon" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ongoing_parking_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="invisible">
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/checkout_button"
+            style="@style/NoCaps"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_width="match_parent"
+            android:background="@drawable/card_layout_grey"
+            android:text="@string/check_out"
+            android:textColor="@color/red"
+            android:textSize="@dimen/h2"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/directions_layout" />
+
+        <ImageView
+            android:id="@+id/ongoing_iv"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/parking_zone_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:paddingTop="12dp"
             android:paddingBottom="12dp"
             android:textColor="@color/colorPrimary"
             android:textSize="24sp"
+            android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ongoing_iv"
             tools:text="Parking Zone Name" />
-
-        <TextView
-            android:id="@+id/your_parking_spot"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/your_parking_spot_is_on"
-            android:textColor="@color/colorSecondary"
-            android:textSize="20sp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/parking_zone_name" />
-
-        <TextView
-            android:id="@+id/parking_slot"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="B2 - 77"
-            android:textColor="@color/colorSecondary"
-            android:textSize="@dimen/h1"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/your_parking_spot" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/parking_spot_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/parking_zone_name">
-
-            <TextView
-                android:id="@+id/your_parking_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="You've start parked from"
-                android:textColor="@color/colorPrimary"
-                android:textSize="20sp"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/parking_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="00 : 00 : 02"
-                android:textColor="@color/colorPrimary"
-                android:textSize="20sp"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/your_parking_time" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/directions_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="12dp"
             android:background="@drawable/card_layout_purple"
             android:padding="@dimen/space_between_card"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -119,19 +124,55 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <Button
-            android:id="@+id/checkout_button"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/parking_spot_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/card_layout_grey"
-            android:paddingHorizontal="80dp"
-            android:text="@string/check_out"
-            android:textColor="@color/colorAccent"
-            android:textSize="@dimen/h2"
-            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/directions_layout" />
+            app:layout_constraintTop_toBottomOf="@id/parking_zone_name">
+
+            <TextView
+                android:id="@+id/your_parking_spot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/your_parking_spot_is_on"
+                android:textColor="@color/colorSecondary"
+                android:textSize="20sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/parking_slot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/colorSecondary"
+                android:textSize="@dimen/h1"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/your_parking_spot"
+                tools:text="B2 - 77" />
+
+            <TextView
+                android:id="@+id/your_parking_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="You've start parked from"
+                android:textColor="@color/colorPrimary"
+                android:textSize="20sp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/parking_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="32sp"
+                android:textColor="@color/colorPrimary"
+                tools:text="00 : 00 : 02"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/your_parking_time" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
-
+</ScrollView>

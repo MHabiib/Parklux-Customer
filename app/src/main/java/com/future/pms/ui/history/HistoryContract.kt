@@ -6,5 +6,6 @@ interface HistoryContract {
     fun showProgress(show: Boolean)
     fun showErrorMessage(error: String)
     fun loadCustomerBookingSuccess(list: List<CustomerBooking>)
+  fun loadCustomerBookingError()
     fun refreshPage()
 }

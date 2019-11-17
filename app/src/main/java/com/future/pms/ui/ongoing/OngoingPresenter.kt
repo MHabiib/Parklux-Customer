@@ -21,6 +21,7 @@ class OngoingPresenter @Inject constructor() {
       view.loadCustomerOngoingSuccess(ongoing)
     }, { error ->
       view.showProgress(false)
+      view.loadCustomerOngoingFailed()
       view.showErrorMessage(error.localizedMessage)
     })
     subscriptions.add(subscribe)

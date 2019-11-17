@@ -4,16 +4,8 @@ import android.app.Activity
 import android.content.Context
 import androidx.fragment.app.Fragment
 
-open class BasePresenter<V : BaseMVPView> : BaseModel(), IBasePresenter<V> {
+open class BasePresenter<V : BaseMVPView> {
     protected var view: V? = null
-
-    override fun attachView(view: V) {
-        this.view = view
-    }
-
-    override fun detachView() {
-        view = null
-    }
 
     protected fun call(view: V, function: () -> Unit) {
         when (view) {

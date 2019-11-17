@@ -6,17 +6,15 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.SurfaceHolder
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
+import android.view.*
+import android.widget.ImageView
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.future.pms.R
 import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
 import com.future.pms.model.oauth.Token
+import com.future.pms.ui.main.MainActivity
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.SCAN_FRAGMENT
 import com.google.android.gms.vision.CameraSource
@@ -32,6 +30,8 @@ class ScanFragment : Fragment(), ScanContract {
     private var barcodeDetector: BarcodeDetector? = null
     private var cameraSource: CameraSource? = null
     internal var intentData = ""
+  private var accessToken = ""
+  private var mSurfaceView: SurfaceView? = null
 
     @Inject
     lateinit var presenter: ScanPresenter
@@ -49,23 +49,21 @@ class ScanFragment : Fragment(), ScanContract {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+      checkPermission()
         val view = inflater.inflate(R.layout.fragment_scan, container, false)
-        ActivityCompat.requestPermissions(
-            context as Activity, arrayOf(
-                Manifest.permission.CAMERA
-            ), REQUEST_CAMERA_PERMISSION
-        )
+      accessToken = Gson().fromJson(
+          context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
+              Constants.TOKEN, null), Token::class.java).access_token
+      val toggleFlash = view.findViewById(R.id.toggleFlash) as ImageView
+      toggleFlash.setOnClickListener { flashToggle() }
+      mSurfaceView = view.findViewById(R.id.surfaceView) as SurfaceView
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         presenter.attach(this)
-        initView()
-    }
-
-    private fun initView() {
-
+      initialiseDetectorsAndSources()
     }
 
     override fun showErrorMessage(error: String) {
@@ -73,10 +71,12 @@ class ScanFragment : Fragment(), ScanContract {
     }
 
     override fun showProgress(show: Boolean) {
+      if (null != progressBar) {
         if (show) {
-            progressBar.visibility = View.VISIBLE
+          progressBar.visibility = View.VISIBLE
         } else {
-            progressBar.visibility = View.GONE
+          progressBar.visibility = View.GONE
+        }
         }
     }
 
@@ -93,16 +93,7 @@ class ScanFragment : Fragment(), ScanContract {
         surfaceView.holder.addCallback(object : SurfaceHolder.Callback {
             override fun surfaceCreated(holder: SurfaceHolder) {
                 try {
-                    if (context?.let {
-                            ActivityCompat.checkSelfPermission(it, Manifest.permission.CAMERA)
-                        } == PackageManager.PERMISSION_GRANTED) {
-                        cameraSource?.start(surfaceView.holder)
-                    } else {
-                        ActivityCompat.requestPermissions(
-                            context as Activity, arrayOf(Manifest.permission.CAMERA)
-                            , REQUEST_CAMERA_PERMISSION
-                        )
-                    }
+                  cameraSource?.start(surfaceView.holder)
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
@@ -114,15 +105,17 @@ class ScanFragment : Fragment(), ScanContract {
                 width: Int,
                 height: Int
             ) {
-                //No implementation Required
+              try {
+                cameraSource?.start(surfaceView.holder)
+              } catch (e: IOException) {
+                e.printStackTrace()
+              }
             }
 
             override fun surfaceDestroyed(holder: SurfaceHolder) {
                 cameraSource!!.stop()
             }
         })
-
-
         barcodeDetector?.setProcessor(object : Detector.Processor<Barcode> {
             override fun release() {
                 //No implementation required
@@ -133,16 +126,11 @@ class ScanFragment : Fragment(), ScanContract {
                 if (barcodes.size() != 0) {
                     txtBarcodeValue.post {
                         if (barcodes.valueAt(0).displayValue.startsWith("QR")) {
-                            val accessToken = Gson().fromJson(
-                                context?.getSharedPreferences(
-                                    Constants.AUTHENTCATION,
-                                    Context.MODE_PRIVATE
-                                )?.getString(Constants.TOKEN, null), Token::class.java
-                            ).access_token
+                          stopCamera()
+                          showProgress(true)
                             intentData = barcodes.valueAt(0).displayValue
-                            val idSlot = intentData.substringAfter("idSlot=").substringBefore(')')
+                          val idSlot = intentData.substringAfter("idSlot=").substringBefore(')')
                             presenter.createBooking(idSlot, accessToken)
-                            Toast.makeText(context, idSlot, Toast.LENGTH_LONG).show()
                         }
                     }
                 }
@@ -150,9 +138,39 @@ class ScanFragment : Fragment(), ScanContract {
         })
     }
 
-    override fun onResume() {
-        super.onResume()
-        initialiseDetectorsAndSources()
+  private fun checkPermission() {
+    when (context?.let {
+      ActivityCompat.checkSelfPermission(it, Manifest.permission.CAMERA)
+    } != PackageManager.PERMISSION_GRANTED) {
+      true -> {
+        requestPermission()
+      }
+    }
+  }
+
+  private fun requestPermission() {
+    ActivityCompat.requestPermissions(context as Activity, arrayOf(Manifest.permission.CAMERA),
+        REQUEST_CAMERA_PERMISSION)
+  }
+
+  override fun bookingSuccess(idBooking: String) {
+    val activity = activity as MainActivity?
+    activity?.presenter?.showBookingDetail(idBooking)
+  }
+
+  override fun bookingFailed() {
+    val activity = activity as MainActivity?
+    activity?.presenter?.showBookingFailed()
+  }
+
+  fun stopCamera() {
+    if (null != barcodeDetector) {
+      barcodeDetector?.release()
+    }
+  }
+
+  fun flashToggle() {
+    //TODO
     }
 
     private fun injectDependency() {
@@ -163,7 +181,7 @@ class ScanFragment : Fragment(), ScanContract {
     }
 
     companion object {
-        private const val REQUEST_CAMERA_PERMISSION = 201
+      private const val REQUEST_CAMERA_PERMISSION = 0
         const val TAG: String = SCAN_FRAGMENT
     }
 }
