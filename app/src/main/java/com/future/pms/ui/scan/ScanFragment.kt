@@ -41,20 +41,6 @@ class ScanFragment : Fragment(), ScanContract {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     injectDependency()
-
-    surfaceView.holder.addCallback(object : SurfaceHolder.Callback {
-      override fun surfaceCreated(holder: SurfaceHolder) {
-        checkPermission()
-      }
-
-      override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
-        //No implementation required
-      }
-
-      override fun surfaceDestroyed(holder: SurfaceHolder) {
-        cameraSource!!.stop()
-      }
-    })
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -91,6 +77,19 @@ class ScanFragment : Fragment(), ScanContract {
   }
 
   private fun initialiseDetectorsAndSources() {
+    surfaceView.holder.addCallback(object : SurfaceHolder.Callback {
+      override fun surfaceCreated(holder: SurfaceHolder) {
+        checkPermission()
+      }
+
+      override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
+        //No implementation required
+      }
+
+      override fun surfaceDestroyed(holder: SurfaceHolder) {
+        cameraSource!!.stop()
+      }
+    })
     barcodeDetector = BarcodeDetector.Builder(context).setBarcodeFormats(Barcode.QR_CODE).build()
 
     cameraSource = CameraSource.Builder(context, barcodeDetector!!).setRequestedPreviewSize(1920,
