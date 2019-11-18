@@ -19,7 +19,6 @@ import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
 import com.future.pms.ui.main.MainActivity
 import com.future.pms.util.Constants.Companion.PARKING_DETAIL_FRAGMENT
-import com.future.pms.util.Constants.Companion.SEATS
 import com.future.pms.util.Constants.Companion.STATUS_AVAILABLE
 import com.future.pms.util.Constants.Companion.STATUS_BOOKED
 import com.future.pms.util.Constants.Companion.STATUS_RESERVED
@@ -30,6 +29,9 @@ import java.util.*
 import javax.inject.Inject
 
 class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
+  private var SEATS =
+    ("/\$_UUAAU_RR_UU_UU_/" + "________________/" + "_AARAU_UU_UU_UU_/" + "_UUARR_RR_UU_AR_/" + "________________/" + "_URAAU_RA_UU_UU_/" + "_RUUAU_RR_UU_UU_/" + "________________/" + "_UU_AU_RU_UR_UU_/" + "_UU_AU_RR_AR_UU_/" + "________________/" + "_UURAUARRAUUAUU_/" + "________________/" + "_URRAUARARUURUU_/" + "________________/")
+
   @Inject lateinit var presenter: ParkingDirectionPresenter
   private lateinit var rootView: View
   private var seatViewList: MutableList<TextView> = ArrayList()
@@ -93,7 +95,7 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
         view.setPadding(0, 0, 0, 2 * seatGaping)
         view.id = count
         view.gravity = Gravity.CENTER
-        view.setBackgroundResource(R.drawable.ic_seats_booked)
+        view.setBackgroundResource(R.drawable.ic_car)
         view.setTextColor(Color.WHITE)
         view.tag = STATUS_BOOKED
         view.text = count.toString() + ""
@@ -110,7 +112,7 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
         view.setPadding(0, 0, 0, 2 * seatGaping)
         view.id = count
         view.gravity = Gravity.CENTER
-        view.setBackgroundResource(R.drawable.ic_seats_book)
+        view.setBackgroundResource(R.drawable.ic_park)
         view.text = count.toString() + ""
         view.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9f)
         view.setTextColor(Color.BLACK)
@@ -127,7 +129,7 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
         view.setPadding(0, 0, 0, 2 * seatGaping)
         view.id = count
         view.gravity = Gravity.CENTER
-        view.setBackgroundResource(R.drawable.ic_seats_reserved)
+        view.setBackgroundResource(R.drawable.ic_disable)
         view.text = count.toString() + ""
         view.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9f)
         view.setTextColor(Color.WHITE)
@@ -140,7 +142,7 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
         val layoutParams = LinearLayout.LayoutParams(seatSize, seatSize)
         layoutParams.setMargins(seatGaping, seatGaping, seatGaping, seatGaping)
         view.layoutParams = layoutParams
-        view.setBackgroundColor(Color.TRANSPARENT)
+        view.setBackgroundResource(R.drawable.ic_road)
         view.text = ""
         layout!!.addView(view)
       }
@@ -151,10 +153,10 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
     if (view.tag as Int == STATUS_AVAILABLE) {
       if (selectedIds.contains(view.id.toString() + ",")) {
         selectedIds = selectedIds.replace((+view.id).toString() + ",", "")
-        view.setBackgroundResource(R.drawable.ic_seats_book)
+        view.setBackgroundResource(R.drawable.ic_car)
       } else {
         selectedIds = selectedIds + view.id + ","
-        view.setBackgroundResource(R.drawable.ic_seats_selected)
+        view.setBackgroundResource(R.drawable.ic_my_location)
       }
     } else if (view.tag as Int == STATUS_BOOKED) {
       Toast.makeText(context, "Seat " + view.id + " is Booked", Toast.LENGTH_SHORT).show()

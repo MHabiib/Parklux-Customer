@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.future.pms.R
 import com.future.pms.di.component.DaggerActivityComponent
@@ -26,7 +27,12 @@ class RegisterActivity : AppCompatActivity(), RegisterContract {
       if (isValid()) {
         loading(true)
         hideKeyboard()
-        presenter.register(txtEmail.text.toString(), txtPassword.text.toString())
+        presenter.register(
+          txtName.text.toString(),
+          txtEmail.text.toString(),
+          txtPassword.text.toString(),
+          txtPhone.text.toString()
+        )
       }
     }
     login.setOnClickListener {
@@ -59,11 +65,11 @@ class RegisterActivity : AppCompatActivity(), RegisterContract {
   }
 
   override fun onSuccess() {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    Toast.makeText(this, "Success create user, please login", Toast.LENGTH_LONG).show()
   }
 
   override fun onFailed(e: String) {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    Toast.makeText(this, e, Toast.LENGTH_SHORT).show()
   }
 
   override fun onError(e: Throwable) {

@@ -87,6 +87,11 @@ class OngoingFragment : Fragment(), OngoingContract {
     ft.detach(this).attach(this).commit()
   }
 
+  override fun checkoutSuccess() {
+    val activity = activity as MainActivity?
+    activity?.presenter?.showReceipt()
+  }
+
   override fun showErrorMessage(error: String) {
     Log.e(Constants.ERROR, error)
   }

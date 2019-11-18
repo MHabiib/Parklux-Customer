@@ -8,4 +8,5 @@ interface OngoingContract {
   fun refreshHome()
   fun loadCustomerOngoingSuccess(ongoing: CustomerBooking)
   fun loadCustomerOngoingFailed()
+  fun checkoutSuccess()
 }

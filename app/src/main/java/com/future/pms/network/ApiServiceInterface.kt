@@ -3,6 +3,7 @@ package com.future.pms.network
 import com.future.pms.model.customerbooking.CustomerBooking
 import com.future.pms.model.customerdetail.Customer
 import com.future.pms.model.receipt.Receipt
+import com.future.pms.model.register.CustomerRequest
 import io.reactivex.Observable
 import retrofit2.http.*
 
@@ -30,4 +31,12 @@ interface ApiServiceInterface {
   @POST("api/booking/checkout") fun postBookingCheckout(
     @Query("access_token") access_token: String?
   ): Observable<String>
+
+  @POST("customer/create") fun postCreateCustomer(
+    @Body customerReques: CustomerRequest
+  ): Observable<CustomerRequest>
+
+  @POST("api/customer/update") fun postUpdateCustomer(
+    @Query("access_token") access_token: String?, @Part customerReques: CustomerRequest
+  ): Observable<CustomerRequest>
 }

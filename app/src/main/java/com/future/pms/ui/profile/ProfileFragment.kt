@@ -27,6 +27,7 @@ import javax.inject.Inject
 class ProfileFragment : Fragment(), ProfileContract {
   @Inject lateinit var presenter: ProfilePresenter
   private lateinit var rootView: View
+  private var update: Button? = null
 
   fun newInstance(): ProfileFragment {
     return ProfileFragment()
@@ -41,10 +42,12 @@ class ProfileFragment : Fragment(), ProfileContract {
     injectDependency()
   }
 
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-      savedInstanceState: Bundle?): View? {
+  override fun onCreateView(
+    inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+  ): View? {
     rootView = inflater.inflate(R.layout.fragment_profile, container, false)
     val submit = rootView.findViewById(R.id.btnLogout) as Button
+    update = rootView.findViewById(R.id.btn_edit_profile) as Button
     submit.setOnClickListener {
       btnLogout.visibility = View.GONE
       presenter.signOut()
@@ -56,11 +59,22 @@ class ProfileFragment : Fragment(), ProfileContract {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     val accessToken = Gson().fromJson(
-        context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
-            Constants.TOKEN, null), Token::class.java).access_token
+      context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
+        Constants.TOKEN, null
+      ), Token::class.java
+    ).access_token
     presenter.attach(this)
     presenter.subscribe()
     presenter.loadData(accessToken)
+    update?.setOnClickListener {
+      presenter.update(
+        profile_name.toString(),
+        profile_email.toString(),
+        profile_password.toString(),
+        profile_phone_number.toString(),
+        accessToken
+      )
+    }
   }
 
   override fun showProgress(show: Boolean) {
@@ -89,6 +103,18 @@ class ProfileFragment : Fragment(), ProfileContract {
     }
   }
 
+  override fun onSuccess() {
+    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+  }
+
+  override fun onFailed(e: String) {
+    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+  }
+
+  override fun onError(e: Throwable) {
+    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+  }
+
   override fun onLogout() {
     val intent = Intent(activity, LoginActivity::class.java)
     startActivity(intent)
@@ -96,7 +122,8 @@ class ProfileFragment : Fragment(), ProfileContract {
 
   private fun injectDependency() {
     val profileComponent = DaggerFragmentComponent.builder().fragmentModule(
-        FragmentModule()).build()
+      FragmentModule()
+    ).build()
     profileComponent.inject(this)
   }
 

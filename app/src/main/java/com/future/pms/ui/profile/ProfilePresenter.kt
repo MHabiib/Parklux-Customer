@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import androidx.fragment.app.Fragment
 import com.future.pms.model.customerdetail.Customer
+import com.future.pms.model.register.CustomerRequest
 import com.future.pms.network.ApiServiceInterface
 import com.future.pms.network.RetrofitClient
 import com.future.pms.util.Authentication
@@ -26,6 +27,18 @@ class ProfilePresenter @Inject constructor() {
         view.showProgress(false)
         view.showErrorMessage(error.localizedMessage)
       })
+    subscriptions.add(subscribe)
+  }
+
+  fun update(name: String, email: String, password: String, phoneNumber: String, token: String) {
+    val customer = CustomerRequest(email, name, password, phoneNumber)
+    val subscribe = api.postUpdateCustomer(token, customer).subscribeOn(Schedulers.io()).observeOn(
+      AndroidSchedulers.mainThread()
+    ).subscribe({
+      view.onSuccess()
+    }, {
+      view.onFailed(it.message.toString())
+    })
     subscriptions.add(subscribe)
   }
 
