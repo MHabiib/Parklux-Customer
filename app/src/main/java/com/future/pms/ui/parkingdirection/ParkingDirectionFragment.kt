@@ -29,161 +29,152 @@ import com.future.pms.util.Constants.Companion.selectedIds
 import java.util.*
 import javax.inject.Inject
 
-class ParkingDirectionFragment : Fragment(),
-    ParkingDirectionContract {
-    @Inject
-    lateinit var presenter: ParkingDirectionPresenter
-    private lateinit var rootView: View
-    private var seatViewList: MutableList<TextView> = ArrayList()
+class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
+  @Inject lateinit var presenter: ParkingDirectionPresenter
+  private lateinit var rootView: View
+  private var seatViewList: MutableList<TextView> = ArrayList()
 
-    fun newInstance(): ParkingDirectionFragment {
-        return ParkingDirectionFragment()
+  fun newInstance(): ParkingDirectionFragment {
+    return ParkingDirectionFragment()
+  }
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    requireActivity().onBackPressedDispatcher.addCallback(this) {
+      val activity = activity as MainActivity?
+      activity?.presenter?.onHomeIconClick()
     }
+    injectDependency()
+  }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-      requireActivity().onBackPressedDispatcher.addCallback(this) {
-        val activity = activity as MainActivity?
-        activity?.presenter?.onHomeIconClick()
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+      savedInstanceState: Bundle?): View? {
+    rootView = inflater.inflate(R.layout.fragment_parking_direction, container, false)
+    val toolbar = rootView.findViewById(R.id.toolbar) as Toolbar
+    val layout = rootView.findViewById(R.id.layoutSeat) as HorizontalScrollView
+    toolbar.setNavigationIcon(R.drawable.ic_back_white)
+    showParkingSlot(layout)
+    toolbar.setNavigationOnClickListener { backToHome() }
+    return rootView
+  }
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    presenter.attach(this)
+    presenter.subscribe()
+    initView()
+  }
+
+  private fun initView() {}
+
+  private fun showParkingSlot(layout: HorizontalScrollView) {
+    val layoutSeat = LinearLayout(context)
+    val params = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.WRAP_CONTENT)
+    layoutSeat.orientation = LinearLayout.VERTICAL
+    layoutSeat.layoutParams = params
+    layoutSeat.setPadding(8 * seatGaping, 8 * seatGaping, 8 * seatGaping, 8 * seatGaping)
+    layout.addView(layoutSeat)
+
+    var layout: LinearLayout? = null
+    var count = 0
+
+    for (index in 0 until SEATS.length) {
+      if (SEATS.get(index) == '/') {
+        layout = LinearLayout(context)
+        layout.orientation = LinearLayout.HORIZONTAL
+        layoutSeat.addView(layout)
+      } else if (SEATS.get(index) == 'U') {
+        count++
+        val view = TextView(context)
+        val layoutParams = LinearLayout.LayoutParams(seatSize, seatSize)
+        layoutParams.setMargins(seatGaping, seatGaping, seatGaping, seatGaping)
+        view.layoutParams = layoutParams
+        view.setPadding(0, 0, 0, 2 * seatGaping)
+        view.id = count
+        view.gravity = Gravity.CENTER
+        view.setBackgroundResource(R.drawable.ic_seats_booked)
+        view.setTextColor(Color.WHITE)
+        view.tag = STATUS_BOOKED
+        view.text = count.toString() + ""
+        view.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9f)
+        layout!!.addView(view)
+        seatViewList.add(view)
+        view.setOnClickListener { onClick(view) }
+      } else if (SEATS.get(index) == 'A') {
+        count++
+        val view = TextView(context)
+        val layoutParams = LinearLayout.LayoutParams(seatSize, seatSize)
+        layoutParams.setMargins(seatGaping, seatGaping, seatGaping, seatGaping)
+        view.layoutParams = layoutParams
+        view.setPadding(0, 0, 0, 2 * seatGaping)
+        view.id = count
+        view.gravity = Gravity.CENTER
+        view.setBackgroundResource(R.drawable.ic_seats_book)
+        view.text = count.toString() + ""
+        view.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9f)
+        view.setTextColor(Color.BLACK)
+        view.tag = STATUS_AVAILABLE
+        layout!!.addView(view)
+        seatViewList.add(view)
+        view.setOnClickListener { onClick(view) }
+      } else if (SEATS.get(index) == 'R') {
+        count++
+        val view = TextView(context)
+        val layoutParams = LinearLayout.LayoutParams(seatSize, seatSize)
+        layoutParams.setMargins(seatGaping, seatGaping, seatGaping, seatGaping)
+        view.layoutParams = layoutParams
+        view.setPadding(0, 0, 0, 2 * seatGaping)
+        view.id = count
+        view.gravity = Gravity.CENTER
+        view.setBackgroundResource(R.drawable.ic_seats_reserved)
+        view.text = count.toString() + ""
+        view.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9f)
+        view.setTextColor(Color.WHITE)
+        view.tag = STATUS_RESERVED
+        layout!!.addView(view)
+        seatViewList.add(view)
+        view.setOnClickListener { onClick(view) }
+      } else if (SEATS.get(index) == '_') {
+        val view = TextView(context)
+        val layoutParams = LinearLayout.LayoutParams(seatSize, seatSize)
+        layoutParams.setMargins(seatGaping, seatGaping, seatGaping, seatGaping)
+        view.layoutParams = layoutParams
+        view.setBackgroundColor(Color.TRANSPARENT)
+        view.text = ""
+        layout!!.addView(view)
       }
-        injectDependency()
     }
+  }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        rootView = inflater.inflate(R.layout.fragment_parking_direction, container, false)
-      val toolbar = rootView.findViewById(R.id.toolbar) as Toolbar
-        val layout = rootView.findViewById(R.id.layoutSeat) as HorizontalScrollView
-      toolbar.setNavigationIcon(R.drawable.ic_back_white)
-        showParkingSlot(layout)
-      toolbar.setNavigationOnClickListener { backToHome() }
-        return rootView
+  private fun onClick(view: View) {
+    if (view.tag as Int == STATUS_AVAILABLE) {
+      if (selectedIds.contains(view.id.toString() + ",")) {
+        selectedIds = selectedIds.replace((+view.id).toString() + ",", "")
+        view.setBackgroundResource(R.drawable.ic_seats_book)
+      } else {
+        selectedIds = selectedIds + view.id + ","
+        view.setBackgroundResource(R.drawable.ic_seats_selected)
+      }
+    } else if (view.tag as Int == STATUS_BOOKED) {
+      Toast.makeText(context, "Seat " + view.id + " is Booked", Toast.LENGTH_SHORT).show()
+    } else if (view.tag as Int == STATUS_RESERVED) {
+      Toast.makeText(context, "Seat " + view.id + " is Reserved", Toast.LENGTH_SHORT).show()
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        presenter.attach(this)
-        presenter.subscribe()
-        initView()
-    }
-
-    private fun initView() {}
-
-    private fun showParkingSlot(layout: HorizontalScrollView) {
-        val layoutSeat = LinearLayout(context)
-        val params = LinearLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-        layoutSeat.orientation = LinearLayout.VERTICAL
-        layoutSeat.layoutParams = params
-        layoutSeat.setPadding(8 * seatGaping, 8 * seatGaping, 8 * seatGaping, 8 * seatGaping)
-        layout.addView(layoutSeat)
-
-        var layout: LinearLayout? = null
-        var count = 0
-
-        for (index in 0 until SEATS.length) {
-            if (SEATS.get(index) == '/') {
-                layout = LinearLayout(context)
-                layout.orientation = LinearLayout.HORIZONTAL
-                layoutSeat.addView(layout)
-            } else if (SEATS.get(index) == 'U') {
-                count++
-                val view = TextView(context)
-                val layoutParams = LinearLayout.LayoutParams(seatSize, seatSize)
-                layoutParams.setMargins(seatGaping, seatGaping, seatGaping, seatGaping)
-                view.layoutParams = layoutParams
-                view.setPadding(0, 0, 0, 2 * seatGaping)
-                view.id = count
-                view.gravity = Gravity.CENTER
-                view.setBackgroundResource(R.drawable.ic_seats_booked)
-                view.setTextColor(Color.WHITE)
-                view.tag = STATUS_BOOKED
-                view.text = count.toString() + ""
-                view.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9f)
-                layout!!.addView(view)
-                seatViewList.add(view)
-                view.setOnClickListener { onClick(view) }
-            } else if (SEATS.get(index) == 'A') {
-                count++
-                val view = TextView(context)
-                val layoutParams = LinearLayout.LayoutParams(seatSize, seatSize)
-                layoutParams.setMargins(seatGaping, seatGaping, seatGaping, seatGaping)
-                view.layoutParams = layoutParams
-                view.setPadding(0, 0, 0, 2 * seatGaping)
-                view.id = count
-                view.gravity = Gravity.CENTER
-                view.setBackgroundResource(R.drawable.ic_seats_book)
-                view.text = count.toString() + ""
-                view.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9f)
-                view.setTextColor(Color.BLACK)
-                view.tag = STATUS_AVAILABLE
-                layout!!.addView(view)
-                seatViewList.add(view)
-                view.setOnClickListener { onClick(view) }
-            } else if (SEATS.get(index) == 'R') {
-                count++
-                val view = TextView(context)
-                val layoutParams = LinearLayout.LayoutParams(seatSize, seatSize)
-                layoutParams.setMargins(seatGaping, seatGaping, seatGaping, seatGaping)
-                view.layoutParams = layoutParams
-                view.setPadding(0, 0, 0, 2 * seatGaping)
-                view.id = count
-                view.gravity = Gravity.CENTER
-                view.setBackgroundResource(R.drawable.ic_seats_reserved)
-                view.text = count.toString() + ""
-                view.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9f)
-                view.setTextColor(Color.WHITE)
-                view.tag = STATUS_RESERVED
-                layout!!.addView(view)
-                seatViewList.add(view)
-                view.setOnClickListener { onClick(view) }
-            } else if (SEATS.get(index) == '_') {
-                val view = TextView(context)
-                val layoutParams = LinearLayout.LayoutParams(seatSize, seatSize)
-                layoutParams.setMargins(seatGaping, seatGaping, seatGaping, seatGaping)
-                view.layoutParams = layoutParams
-                view.setBackgroundColor(Color.TRANSPARENT)
-                view.text = ""
-                layout!!.addView(view)
-            }
-        }
-    }
-
-    private fun onClick(view: View) {
-        if (view.tag as Int == STATUS_AVAILABLE) {
-            if (selectedIds.contains(view.id.toString() + ",")) {
-                selectedIds = selectedIds.replace((+view.id).toString() + ",", "")
-                view.setBackgroundResource(R.drawable.ic_seats_book)
-            } else {
-                selectedIds = selectedIds + view.id + ","
-                view.setBackgroundResource(R.drawable.ic_seats_selected)
-            }
-        } else if (view.tag as Int == STATUS_BOOKED) {
-            Toast.makeText(context, "Seat " + view.id + " is Booked", Toast.LENGTH_SHORT).show()
-        } else if (view.tag as Int == STATUS_RESERVED) {
-            Toast.makeText(context, "Seat " + view.id + " is Reserved", Toast.LENGTH_SHORT).show()
-        }
-    }
+  }
 
   fun backToHome() {
     val activity = activity as MainActivity?
     activity?.presenter?.onHomeIconClick()
   }
 
-    private fun injectDependency() {
-        val homeComponent = DaggerFragmentComponent.builder()
-            .fragmentModule(FragmentModule())
-            .build()
+  private fun injectDependency() {
+    val homeComponent = DaggerFragmentComponent.builder().fragmentModule(FragmentModule()).build()
 
-        homeComponent.inject(this)
-    }
+    homeComponent.inject(this)
+  }
 
-    companion object {
-        const val TAG: String = PARKING_DETAIL_FRAGMENT
-    }
+  companion object {
+    const val TAG: String = PARKING_DETAIL_FRAGMENT
+  }
 }

@@ -25,90 +25,82 @@ import kotlinx.android.synthetic.main.fragment_profile.view.*
 import javax.inject.Inject
 
 class ProfileFragment : Fragment(), ProfileContract {
-    @Inject
-    lateinit var presenter: ProfilePresenter
-    private lateinit var rootView: View
+  @Inject lateinit var presenter: ProfilePresenter
+  private lateinit var rootView: View
 
-    fun newInstance(): ProfileFragment {
-        return ProfileFragment()
-    }
+  fun newInstance(): ProfileFragment {
+    return ProfileFragment()
+  }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            val activity = activity as MainActivity?
-            activity?.presenter?.onHomeIconClick()
-        }
-        injectDependency()
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    requireActivity().onBackPressedDispatcher.addCallback(this) {
+      val activity = activity as MainActivity?
+      activity?.presenter?.onHomeIconClick()
     }
+    injectDependency()
+  }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        rootView = inflater.inflate(R.layout.fragment_profile, container, false)
-        val submit = rootView.findViewById(R.id.btnLogout) as Button
-        submit.setOnClickListener {
-            btnLogout.visibility = View.GONE
-            presenter.signOut()
-            onLogout()
-        }
-        return rootView
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+      savedInstanceState: Bundle?): View? {
+    rootView = inflater.inflate(R.layout.fragment_profile, container, false)
+    val submit = rootView.findViewById(R.id.btnLogout) as Button
+    submit.setOnClickListener {
+      btnLogout.visibility = View.GONE
+      presenter.signOut()
+      onLogout()
     }
+    return rootView
+  }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val accessToken = Gson().fromJson(
-            context?.getSharedPreferences(
-                Constants.AUTHENTCATION,
-                Context.MODE_PRIVATE
-            )?.getString(Constants.TOKEN, null), Token::class.java
-        ).access_token
-        presenter.attach(this)
-        presenter.subscribe()
-        presenter.loadData(accessToken)
-    }
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    val accessToken = Gson().fromJson(
+        context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
+            Constants.TOKEN, null), Token::class.java).access_token
+    presenter.attach(this)
+    presenter.subscribe()
+    presenter.loadData(accessToken)
+  }
 
-    override fun showProgress(show: Boolean) {
-        if (null != progressBar) {
-            if (show) {
-                progressBar.visibility = View.VISIBLE
-            } else {
-                progressBar.visibility = View.GONE
-            }
-        }
+  override fun showProgress(show: Boolean) {
+    if (null != progressBar) {
+      if (show) {
+        progressBar.visibility = View.VISIBLE
+      } else {
+        progressBar.visibility = View.GONE
+      }
     }
+  }
 
-    override fun showErrorMessage(error: String) {
-        Log.e(Constants.ERROR, error)
-    }
+  override fun showErrorMessage(error: String) {
+    Log.e(Constants.ERROR, error)
+  }
 
-    override fun loadCustomerDetailSuccess(customer: Customer) {
-        rootView.profile_name_display.text = customer.body.name
-        rootView.profile_name.setText(customer.body.name)
-        rootView.profile_email.setText(customer.body.email)
-        rootView.profile_password.hint = "********"
-        if (customer.body.phoneNumber == "") {
-            rootView.profile_phone_number.hint = "You haven't enter your phone number yet !"
-        } else {
-            rootView.profile_phone_number.setText(customer.body.phoneNumber)
-        }
+  override fun loadCustomerDetailSuccess(customer: Customer) {
+    rootView.profile_name_display.text = customer.body.name
+    rootView.profile_name.setText(customer.body.name)
+    rootView.profile_email.setText(customer.body.email)
+    rootView.profile_password.hint = "********"
+    if (customer.body.phoneNumber == "") {
+      rootView.profile_phone_number.hint = "You haven't enter your phone number yet !"
+    } else {
+      rootView.profile_phone_number.setText(customer.body.phoneNumber)
     }
+  }
 
-    override fun onLogout() {
-        val intent = Intent(activity, LoginActivity::class.java)
-        startActivity(intent)
-    }
+  override fun onLogout() {
+    val intent = Intent(activity, LoginActivity::class.java)
+    startActivity(intent)
+  }
 
-    private fun injectDependency() {
-        val profileComponent = DaggerFragmentComponent.builder()
-            .fragmentModule(FragmentModule())
-            .build()
-        profileComponent.inject(this)
-    }
+  private fun injectDependency() {
+    val profileComponent = DaggerFragmentComponent.builder().fragmentModule(
+        FragmentModule()).build()
+    profileComponent.inject(this)
+  }
 
-    companion object {
-        const val TAG: String = PROFILE_FRAGMENT
-    }
+  companion object {
+    const val TAG: String = PROFILE_FRAGMENT
+  }
 }

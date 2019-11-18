@@ -7,13 +7,12 @@ import com.future.pms.ui.register.RegisterActivity
 import com.future.pms.ui.splash.SplashActivity
 import dagger.Component
 
-@Component(modules = arrayOf(ActivityModule::class))
-interface ActivityComponent {
-    fun inject(mainActivity: MainActivity)
+@Component(modules = arrayOf(ActivityModule::class)) interface ActivityComponent {
+  fun inject(mainActivity: MainActivity)
 
-    fun inject(splashActivity: SplashActivity)
+  fun inject(splashActivity: SplashActivity)
 
-    fun inject(loginActivity: LoginActivity)
+  fun inject(loginActivity: LoginActivity)
 
-    fun inject(registerActivity: RegisterActivity)
+  fun inject(registerActivity: RegisterActivity)
 }

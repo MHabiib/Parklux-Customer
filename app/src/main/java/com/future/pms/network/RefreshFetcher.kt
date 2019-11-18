@@ -8,46 +8,44 @@ import retrofit2.Callback
 import retrofit2.Response
 
 object RefreshFetcher {
-    class RefreshFetcherImpl(
-        private val context: Context,
-        private val listener: Listener
-    ) {
-        private var callback: Call<Token>? = null
+  class RefreshFetcherImpl(
+    private val context: Context, private val listener: Listener
+  ) {
+    private var callback: Call<Token>? = null
 
-        fun refresh(grant_type: String, refresh: String) {
-            val authFetcher = APICreator(
-                AuthAPI::class.java,
-                APISettings.base
-            ).generate()
-            callback = authFetcher.refresh(grant_type, refresh)
-            callback?.enqueue(object : Callback<Token> {
+    fun refresh(grant_type: String, refresh: String) {
+      val authFetcher = APICreator(
+        AuthAPI::class.java, APISettings.base
+      ).generate()
+      callback = authFetcher.refresh(grant_type, refresh)
+      callback?.enqueue(object : Callback<Token> {
 
-                override fun onResponse(call: Call<Token>?, response: Response<Token>?) {
-                    if (response != null) {
-                        if (response.isSuccessful) {
-                            listener.onSuccess(response.body())
-                        } else {
-                            listener.onSuccess(null)
-                        }
-                    } else {
-                        listener.onError(Throwable(context.getString(R.string.auth_error)))
-                    }
-                }
-
-                override fun onFailure(call: Call<Token>?, t: Throwable?) {
-                    val msg = context.getString(R.string.auth_error)
-                    listener.onError(Throwable("$msg : ${t?.message}"))
-                }
-            })
+        override fun onResponse(call: Call<Token>?, response: Response<Token>?) {
+          if (response != null) {
+            if (response.isSuccessful) {
+              listener.onSuccess(response.body())
+            } else {
+              listener.onSuccess(null)
+            }
+          } else {
+            listener.onError(Throwable(context.getString(R.string.auth_error)))
+          }
         }
 
-        fun cancel() {
-            callback?.cancel()
+        override fun onFailure(call: Call<Token>?, t: Throwable?) {
+          val msg = context.getString(R.string.auth_error)
+          listener.onError(Throwable("$msg : ${t?.message}"))
         }
+      })
     }
 
-    interface Listener {
-        fun onSuccess(token: Token?)
-        fun onError(throwable: Throwable)
+    fun cancel() {
+      callback?.cancel()
     }
+  }
+
+  interface Listener {
+    fun onSuccess(token: Token?)
+    fun onError(throwable: Throwable)
+  }
 }

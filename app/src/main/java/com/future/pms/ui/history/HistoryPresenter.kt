@@ -9,27 +9,26 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class HistoryPresenter @Inject constructor() {
-    private val api: ApiServiceInterface = RetrofitClient.create()
-    private val subscriptions = CompositeDisposable()
-    private lateinit var view: HistoryContract
+  private val api: ApiServiceInterface = RetrofitClient.create()
+  private val subscriptions = CompositeDisposable()
+  private lateinit var view: HistoryContract
 
-    fun loadCustomerBooking(access_token: String) {
-        val subscribe = api.getCustomerBooking(access_token).subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ list: List<CustomerBooking> ->
-                view.showProgress(false)
-                view.loadCustomerBookingSuccess(list)
-            }, { error ->
-                view.showProgress(false)
-              view.loadCustomerBookingError()
-                view.showErrorMessage(error.localizedMessage)
-            })
-        subscriptions.add(subscribe)
-    }
+  fun loadCustomerBooking(access_token: String) {
+    val subscribe = api.getCustomerBooking(access_token).subscribeOn(Schedulers.io()).observeOn(
+        AndroidSchedulers.mainThread()).subscribe({ list: List<CustomerBooking> ->
+          view.showProgress(false)
+          view.loadCustomerBookingSuccess(list)
+        }, { error ->
+          view.showProgress(false)
+          view.loadCustomerBookingError()
+          view.showErrorMessage(error.localizedMessage)
+        })
+    subscriptions.add(subscribe)
+  }
 
-    fun subscribe() {}
+  fun subscribe() {}
 
-    fun attach(view: HistoryContract) {
-        this.view = view
-    }
+  fun attach(view: HistoryContract) {
+    this.view = view
+  }
 }

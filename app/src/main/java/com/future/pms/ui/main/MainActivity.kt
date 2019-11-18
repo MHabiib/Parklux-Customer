@@ -19,112 +19,99 @@ import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), MainContract {
-    @Inject
-    lateinit var presenter: MainPresenter
+  @Inject lateinit var presenter: MainPresenter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        injectDependency()
-        presenter.attach(this)
-        val navView: BottomNavigationView = findViewById(R.id.nav_view)
-        navView.setOnNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.navigation_home -> {
-                    presenter.onHomeIconClick()
-                }
-                R.id.navigation_scan -> {
-                    presenter.onScanIconClick()
-                }
-                R.id.navigation_profile -> {
-                    presenter.onProfileIconClick()
-                }
-            }
-            return@setOnNavigationItemSelectedListener true
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_main)
+    injectDependency()
+    presenter.attach(this)
+    val navView: BottomNavigationView = findViewById(R.id.nav_view)
+    navView.setOnNavigationItemSelectedListener { item ->
+      when (item.itemId) {
+        R.id.navigation_home -> {
+          presenter.onHomeIconClick()
         }
-    }
-
-    override fun showLoginPage() {
-        val intent = Intent(this, LoginActivity::class.java)
-        startActivity(intent)
-        finish()
-    }
-
-    override fun showHomeFragment() {
-        nav_view.visibility = View.VISIBLE
-        if (supportFragmentManager.findFragmentByTag(HomeFragment.TAG) == null) {
-            supportFragmentManager.beginTransaction()
-                .disallowAddToBackStack()
-                .replace(R.id.frame, HomeFragment().newInstance(), HomeFragment.TAG)
-                .commit()
+        R.id.navigation_scan -> {
+          presenter.onScanIconClick()
         }
-    }
-
-    override fun showScanFragment() {
-        nav_view.visibility = View.VISIBLE
-        if (supportFragmentManager.findFragmentByTag(ScanFragment.TAG) == null) {
-            supportFragmentManager.beginTransaction()
-                .disallowAddToBackStack()
-                .replace(R.id.frame, ScanFragment().newInstance(), ScanFragment.TAG)
-                .commit()
+        R.id.navigation_profile -> {
+          presenter.onProfileIconClick()
         }
+      }
+      return@setOnNavigationItemSelectedListener true
     }
+  }
 
-    override fun showProfileFragment() {
-        if (supportFragmentManager.findFragmentByTag(ProfileFragment.TAG) == null) {
-            supportFragmentManager.beginTransaction()
-                .disallowAddToBackStack()
-                .replace(R.id.frame, ProfileFragment().newInstance(), ProfileFragment.TAG)
-                .commit()
-        }
+  override fun showLoginPage() {
+    val intent = Intent(this, LoginActivity::class.java)
+    startActivity(intent)
+    finish()
+  }
+
+  override fun showHomeFragment() {
+    nav_view.visibility = View.VISIBLE
+    if (supportFragmentManager.findFragmentByTag(HomeFragment.TAG) == null) {
+      supportFragmentManager.beginTransaction().disallowAddToBackStack().replace(R.id.frame,
+              HomeFragment().newInstance(), HomeFragment.TAG).commit()
     }
+  }
 
-    override fun showReceipt() {
-        nav_view.visibility = View.GONE
-        if (supportFragmentManager.findFragmentByTag(ProfileFragment.TAG) == null) {
-            supportFragmentManager.beginTransaction()
-                .disallowAddToBackStack()
-                .replace(R.id.frame, ReceiptFragment().newInstance(), ReceiptFragment.TAG)
-                .commit()
-        }
+  override fun showScanFragment() {
+    nav_view.visibility = View.VISIBLE
+    if (supportFragmentManager.findFragmentByTag(ScanFragment.TAG) == null) {
+      supportFragmentManager.beginTransaction().disallowAddToBackStack().replace(R.id.frame,
+              ScanFragment().newInstance(), ScanFragment.TAG).commit()
     }
+  }
 
-    override fun showBookingDetail(idBooking: String) {
-        nav_view.visibility = View.GONE
-        val fragment = BookingDetailFragment()
-        val bundle = Bundle()
-        bundle.putString("idBooking", idBooking)
-        fragment.arguments = bundle
-        if (supportFragmentManager.findFragmentByTag(ParkingDirectionFragment.TAG) == null) {
-            supportFragmentManager.beginTransaction().replace(R.id.frame, fragment,
-                    BookingDetailFragment.TAG).commit()
-        }
+  override fun showProfileFragment() {
+    if (supportFragmentManager.findFragmentByTag(ProfileFragment.TAG) == null) {
+      supportFragmentManager.beginTransaction().disallowAddToBackStack().replace(R.id.frame,
+              ProfileFragment().newInstance(), ProfileFragment.TAG).commit()
     }
+  }
 
-    override fun showBookingFailed() {
-        nav_view.visibility = View.GONE
-        if (supportFragmentManager.findFragmentByTag(ParkingDirectionFragment.TAG) == null) {
-            supportFragmentManager.beginTransaction().disallowAddToBackStack().replace(R.id.frame,
-                            BookingDetailFragment().newInstance(),
-                            BookingDetailFragment.TAG).commit()
-        }
+  override fun showReceipt() {
+    nav_view.visibility = View.GONE
+    if (supportFragmentManager.findFragmentByTag(ProfileFragment.TAG) == null) {
+      supportFragmentManager.beginTransaction().disallowAddToBackStack().replace(R.id.frame,
+              ReceiptFragment().newInstance(), ReceiptFragment.TAG).commit()
     }
+  }
 
-    override fun showParkingDirection() {
-        nav_view.visibility = View.GONE
-        if (supportFragmentManager.findFragmentByTag(ParkingDirectionFragment.TAG) == null) {
-            supportFragmentManager.beginTransaction()
-                .disallowAddToBackStack()
-                .replace(R.id.frame, ParkingDirectionFragment().newInstance(), ParkingDirectionFragment.TAG)
-                .commit()
-        }
+  override fun showBookingDetail(idBooking: String) {
+    nav_view.visibility = View.GONE
+    val fragment = BookingDetailFragment()
+    val bundle = Bundle()
+    bundle.putString("idBooking", idBooking)
+    fragment.arguments = bundle
+    if (supportFragmentManager.findFragmentByTag(ParkingDirectionFragment.TAG) == null) {
+      supportFragmentManager.beginTransaction().replace(R.id.frame, fragment,
+          BookingDetailFragment.TAG).commit()
     }
+  }
 
-    private fun injectDependency() {
-        val activityComponent = DaggerActivityComponent.builder()
-            .activityModule(ActivityModule(this))
-            .build()
-
-        activityComponent.inject(this)
+  override fun showBookingFailed() {
+    nav_view.visibility = View.GONE
+    if (supportFragmentManager.findFragmentByTag(ParkingDirectionFragment.TAG) == null) {
+      supportFragmentManager.beginTransaction().disallowAddToBackStack().replace(R.id.frame,
+          BookingDetailFragment().newInstance(), BookingDetailFragment.TAG).commit()
     }
+  }
+
+  override fun showParkingDirection() {
+    nav_view.visibility = View.GONE
+    if (supportFragmentManager.findFragmentByTag(ParkingDirectionFragment.TAG) == null) {
+      supportFragmentManager.beginTransaction().disallowAddToBackStack().replace(R.id.frame,
+              ParkingDirectionFragment().newInstance(), ParkingDirectionFragment.TAG).commit()
+    }
+  }
+
+  private fun injectDependency() {
+    val activityComponent = DaggerActivityComponent.builder().activityModule(
+        ActivityModule(this)).build()
+
+    activityComponent.inject(this)
+  }
 }

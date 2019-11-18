@@ -13,40 +13,39 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class ProfilePresenter @Inject constructor() {
-    private val subscriptions = CompositeDisposable()
-    private val api: ApiServiceInterface = RetrofitClient.create()
-    private lateinit var view: ProfileContract
+  private val subscriptions = CompositeDisposable()
+  private val api: ApiServiceInterface = RetrofitClient.create()
+  private lateinit var view: ProfileContract
 
-    fun loadData(access_token: String) {
-        val subscribe = api.getCustomerDetail(access_token).subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ customer: Customer ->
-                view.showProgress(false)
-                view.loadCustomerDetailSuccess(customer)
-            }, { error ->
-                view.showProgress(false)
-                view.showErrorMessage(error.localizedMessage)
-            })
-        subscriptions.add(subscribe)
-    }
+  fun loadData(access_token: String) {
+    val subscribe = api.getCustomerDetail(access_token).subscribeOn(Schedulers.io())
+      .observeOn(AndroidSchedulers.mainThread()).subscribe({ customer: Customer ->
+        view.showProgress(false)
+        view.loadCustomerDetailSuccess(customer)
+      }, { error ->
+        view.showProgress(false)
+        view.showErrorMessage(error.localizedMessage)
+      })
+    subscriptions.add(subscribe)
+  }
 
-    private fun getContext(): Context {
-        return when (view) {
-            is Fragment -> (view as Fragment).context!!
-            is Activity -> (view as Activity)
-            else -> throw Exception()
-        }
+  private fun getContext(): Context {
+    return when (view) {
+      is Fragment -> (view as Fragment).context!!
+      is Activity -> (view as Activity)
+      else -> throw Exception()
     }
+  }
 
-    fun signOut() {
-        Authentication.delete(getContext())
-    }
+  fun signOut() {
+    Authentication.delete(getContext())
+  }
 
-    fun attach(view: ProfileContract) {
-        this.view = view
-    }
+  fun attach(view: ProfileContract) {
+    this.view = view
+  }
 
-    fun subscribe() {
-        //No implement required
-    }
+  fun subscribe() {
+    //No implement required
+  }
 }

@@ -19,14 +19,14 @@ class SplashPresenter @Inject constructor() {
   }
 
   fun isAuthenticated() {
-        try {
-          if (Authentication.isAuthenticated(view.isAuthenticated()!!)) {
-            view.onSuccess()
-            } else {
-            view.refreshFetcher()
-            }
-        } catch (e: Authentication.WithoutAuthenticatedException) {
-          view.onLogin()
-        }
+    try {
+      if (Authentication.isAuthenticated(view.isAuthenticated()!!)) {
+        view.onSuccess()
+      } else {
+        view.refreshFetcher()
+      }
+    } catch (e: Authentication.WithoutAuthenticatedException) {
+      view.onLogin()
     }
+  }
 }

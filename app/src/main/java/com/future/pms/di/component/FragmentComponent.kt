@@ -11,21 +11,20 @@ import com.future.pms.ui.receipt.ReceiptFragment
 import com.future.pms.ui.scan.ScanFragment
 import dagger.Component
 
-@Component(modules = [FragmentModule::class])
-interface FragmentComponent {
-    fun inject(homeFragment: HomeFragment)
+@Component(modules = [FragmentModule::class]) interface FragmentComponent {
+  fun inject(homeFragment: HomeFragment)
 
-    fun inject(scanFragment: ScanFragment)
+  fun inject(scanFragment: ScanFragment)
 
-    fun inject(profileFragment: ProfileFragment)
+  fun inject(profileFragment: ProfileFragment)
 
-    fun inject(parkingDirectionFragment: ParkingDirectionFragment)
+  fun inject(parkingDirectionFragment: ParkingDirectionFragment)
 
-    fun inject(receiptFragment: ReceiptFragment)
+  fun inject(receiptFragment: ReceiptFragment)
 
-    fun inject(historyFragment: HistoryFragment)
+  fun inject(historyFragment: HistoryFragment)
 
-    fun inject(ongoingFragment: OngoingFragment)
+  fun inject(ongoingFragment: OngoingFragment)
 
   fun inject(bookingDetailFragment: BookingDetailFragment)
 }

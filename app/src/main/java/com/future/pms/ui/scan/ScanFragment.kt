@@ -23,120 +23,101 @@ import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_scan.*
-import java.io.IOException
 import javax.inject.Inject
 
 class ScanFragment : Fragment(), ScanContract {
-    private var barcodeDetector: BarcodeDetector? = null
-    private var cameraSource: CameraSource? = null
-    internal var intentData = ""
+  private var barcodeDetector: BarcodeDetector? = null
+  private var cameraSource: CameraSource? = null
+  internal var intentData = ""
   private var accessToken = ""
   private var mSurfaceView: SurfaceView? = null
 
-    @Inject
-    lateinit var presenter: ScanPresenter
+  @Inject lateinit var presenter: ScanPresenter
 
-    fun newInstance(): ScanFragment {
-        return ScanFragment()
+  fun newInstance(): ScanFragment {
+    return ScanFragment()
+  }
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    injectDependency()
+
+    surfaceView.holder.addCallback(object : SurfaceHolder.Callback {
+      override fun surfaceCreated(holder: SurfaceHolder) {
+        checkPermission()
+      }
+
+      override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
+        //No implementation required
+      }
+
+      override fun surfaceDestroyed(holder: SurfaceHolder) {
+        cameraSource!!.stop()
+      }
+    })
+  }
+
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+      savedInstanceState: Bundle?): View? {
+    checkPermission()
+    val view = inflater.inflate(R.layout.fragment_scan, container, false)
+    accessToken = Gson().fromJson(
+        context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
+            Constants.TOKEN, null), Token::class.java).access_token
+    val toggleFlash = view.findViewById(R.id.toggleFlash) as ImageView
+    toggleFlash.setOnClickListener { flashToggle() }
+    mSurfaceView = view.findViewById(R.id.surfaceView) as SurfaceView
+    return view
+  }
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    presenter.attach(this)
+    initialiseDetectorsAndSources()
+  }
+
+  override fun showErrorMessage(error: String) {
+    Log.e(Constants.ERROR, error)
+  }
+
+  override fun showProgress(show: Boolean) {
+    if (null != progressBar) {
+      if (show) {
+        progressBar.visibility = View.VISIBLE
+      } else {
+        progressBar.visibility = View.GONE
+      }
     }
+  }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        injectDependency()
-    }
+  private fun initialiseDetectorsAndSources() {
+    barcodeDetector = BarcodeDetector.Builder(context).setBarcodeFormats(Barcode.QR_CODE).build()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-      checkPermission()
-        val view = inflater.inflate(R.layout.fragment_scan, container, false)
-      accessToken = Gson().fromJson(
-          context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
-              Constants.TOKEN, null), Token::class.java).access_token
-      val toggleFlash = view.findViewById(R.id.toggleFlash) as ImageView
-      toggleFlash.setOnClickListener { flashToggle() }
-      mSurfaceView = view.findViewById(R.id.surfaceView) as SurfaceView
-        return view
-    }
+    cameraSource = CameraSource.Builder(context, barcodeDetector!!).setRequestedPreviewSize(1920,
+        1080).setAutoFocusEnabled(true).build()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        presenter.attach(this)
-      initialiseDetectorsAndSources()
-    }
 
-    override fun showErrorMessage(error: String) {
-        Log.e(Constants.ERROR, error)
-    }
+    barcodeDetector?.setProcessor(object : Detector.Processor<Barcode> {
+      override fun release() {
+        //No implementation required
+      }
 
-    override fun showProgress(show: Boolean) {
-      if (null != progressBar) {
-        if (show) {
-          progressBar.visibility = View.VISIBLE
-        } else {
-          progressBar.visibility = View.GONE
+      override fun receiveDetections(detections: Detector.Detections<Barcode>) {
+        val barcodes = detections.detectedItems
+        if (barcodes.size() != 0) {
+          txtBarcodeValue.post {
+            if (barcodes.valueAt(0).displayValue.startsWith("QR")) {
+              stopCamera()
+              showProgress(true)
+              intentData = barcodes.valueAt(0).displayValue
+              val idSlot = intentData.substringAfter("idSlot=").substringBefore(')')
+              presenter.createBooking(idSlot, accessToken)
+            }
+          }
         }
-        }
-    }
-
-    private fun initialiseDetectorsAndSources() {
-        barcodeDetector = BarcodeDetector.Builder(context)
-            .setBarcodeFormats(Barcode.QR_CODE)
-            .build()
-
-        cameraSource = CameraSource.Builder(context, barcodeDetector!!)
-            .setRequestedPreviewSize(1920, 1080)
-            .setAutoFocusEnabled(true)
-            .build()
-
-        surfaceView.holder.addCallback(object : SurfaceHolder.Callback {
-            override fun surfaceCreated(holder: SurfaceHolder) {
-                try {
-                  cameraSource?.start(surfaceView.holder)
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-            }
-
-            override fun surfaceChanged(
-                holder: SurfaceHolder,
-                format: Int,
-                width: Int,
-                height: Int
-            ) {
-              try {
-                cameraSource?.start(surfaceView.holder)
-              } catch (e: IOException) {
-                e.printStackTrace()
-              }
-            }
-
-            override fun surfaceDestroyed(holder: SurfaceHolder) {
-                cameraSource!!.stop()
-            }
-        })
-        barcodeDetector?.setProcessor(object : Detector.Processor<Barcode> {
-            override fun release() {
-                //No implementation required
-            }
-
-            override fun receiveDetections(detections: Detector.Detections<Barcode>) {
-                val barcodes = detections.detectedItems
-                if (barcodes.size() != 0) {
-                    txtBarcodeValue.post {
-                        if (barcodes.valueAt(0).displayValue.startsWith("QR")) {
-                          stopCamera()
-                          showProgress(true)
-                            intentData = barcodes.valueAt(0).displayValue
-                          val idSlot = intentData.substringAfter("idSlot=").substringBefore(')')
-                            presenter.createBooking(idSlot, accessToken)
-                        }
-                    }
-                }
-            }
-        })
-    }
+      }
+    })
+  }
 
   private fun checkPermission() {
     when (context?.let {
@@ -171,17 +152,15 @@ class ScanFragment : Fragment(), ScanContract {
 
   fun flashToggle() {
     //TODO
-    }
+  }
 
-    private fun injectDependency() {
-        val scanComponent = DaggerFragmentComponent.builder()
-            .fragmentModule(FragmentModule())
-            .build()
-        scanComponent.inject(this)
-    }
+  private fun injectDependency() {
+    val scanComponent = DaggerFragmentComponent.builder().fragmentModule(FragmentModule()).build()
+    scanComponent.inject(this)
+  }
 
-    companion object {
-      private const val REQUEST_CAMERA_PERMISSION = 0
-        const val TAG: String = SCAN_FRAGMENT
-    }
+  companion object {
+    private const val REQUEST_CAMERA_PERMISSION = 0
+    const val TAG: String = SCAN_FRAGMENT
+  }
 }

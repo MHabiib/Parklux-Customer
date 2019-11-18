@@ -15,8 +15,7 @@ class ScanPresenter @Inject constructor() {
   fun createBooking(idSlot: String, access_token: String) {
     view.showProgress(true)
     val subscribe = api.postCreateBooking(idSlot, access_token).subscribeOn(
-      Schedulers.io()
-    ).observeOn(AndroidSchedulers.mainThread()).subscribe({
+        Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe({
       if (null != it) {
         view.bookingSuccess(it.idBooking)
       }

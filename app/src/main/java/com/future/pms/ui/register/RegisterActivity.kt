@@ -31,7 +31,8 @@ class RegisterActivity : AppCompatActivity(), RegisterContract {
 
   private fun injectDependency() {
     val activityComponent = DaggerActivityComponent.builder().activityModule(
-        ActivityModule(this)).build()
+      ActivityModule(this)
+    ).build()
     activityComponent.inject(this)
   }
 
