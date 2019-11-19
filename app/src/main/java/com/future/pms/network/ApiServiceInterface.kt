@@ -34,9 +34,9 @@ interface ApiServiceInterface {
 
   @POST("customer/create") fun postCreateCustomer(
     @Body customerReques: CustomerRequest
-  ): Observable<CustomerRequest>
+  ): Observable<String>
 
-  @POST("api/customer/update") fun postUpdateCustomer(
-    @Query("access_token") access_token: String?, @Part customerReques: CustomerRequest
+  @Multipart @PUT("api/customer/update") fun putUpdateCustomer(
+    @Query("access_token") access_token: String?, @Part("customer") customer: CustomerRequest
   ): Observable<CustomerRequest>
 }

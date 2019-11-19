@@ -2,12 +2,14 @@ package com.future.pms.ui.profile
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import com.future.pms.R
@@ -68,10 +70,10 @@ class ProfileFragment : Fragment(), ProfileContract {
     presenter.loadData(accessToken)
     update?.setOnClickListener {
       presenter.update(
-        profile_name.toString(),
-        profile_email.toString(),
-        profile_password.toString(),
-        profile_phone_number.toString(),
+        profile_name.text.toString(),
+        profile_email.text.toString(),
+        profile_password.text.toString(),
+        profile_phone_number.text.toString(),
         accessToken
       )
     }
@@ -104,7 +106,8 @@ class ProfileFragment : Fragment(), ProfileContract {
   }
 
   override fun onSuccess() {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    Toast.makeText(context, "Updated", Toast.LENGTH_LONG).show()
+    refreshPage()
   }
 
   override fun onFailed(e: String) {
@@ -118,6 +121,14 @@ class ProfileFragment : Fragment(), ProfileContract {
   override fun onLogout() {
     val intent = Intent(activity, LoginActivity::class.java)
     startActivity(intent)
+  }
+
+  private fun refreshPage() {
+    val ft = fragmentManager!!.beginTransaction()
+    if (Build.VERSION.SDK_INT >= 26) {
+      ft.setReorderingAllowed(false)
+    }
+    ft.detach(this).attach(this).commit()
   }
 
   private fun injectDependency() {

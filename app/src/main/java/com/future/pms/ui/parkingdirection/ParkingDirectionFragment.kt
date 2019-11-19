@@ -29,7 +29,7 @@ import java.util.*
 import javax.inject.Inject
 
 class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
-  private var SEATS =
+  private var SLOTS =
     ("/\$_UUAAU_RR_UU_UU_/" + "________________/" + "_AARAU_UU_UU_UU_/" + "_UUARR_RR_UU_AR_/" + "________________/" + "_URAAU_RA_UU_UU_/" + "_RUUAU_RR_UU_UU_/" + "________________/" + "_UU_AU_RU_UR_UU_/" + "_UU_AU_RR_AR_UU_/" + "________________/" + "_UURAUARRAUUAUU_/" + "________________/" + "_URRAUARARUURUU_/" + "________________/")
 
   @Inject lateinit var presenter: ParkingDirectionPresenter
@@ -81,12 +81,12 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
     var layout: LinearLayout? = null
     var count = 0
 
-    for (index in 0 until SEATS.length) {
-      if (SEATS.get(index) == '/') {
+    for (index in 0 until SLOTS.length) {
+      if (SLOTS.get(index) == '/') {
         layout = LinearLayout(context)
         layout.orientation = LinearLayout.HORIZONTAL
         layoutSeat.addView(layout)
-      } else if (SEATS.get(index) == 'U') {
+      } else if (SLOTS.get(index) == 'U') {
         count++
         val view = TextView(context)
         val layoutParams = LinearLayout.LayoutParams(seatSize, seatSize)
@@ -103,7 +103,7 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
         layout!!.addView(view)
         seatViewList.add(view)
         view.setOnClickListener { onClick(view) }
-      } else if (SEATS.get(index) == 'A') {
+      } else if (SLOTS.get(index) == 'A') {
         count++
         val view = TextView(context)
         val layoutParams = LinearLayout.LayoutParams(seatSize, seatSize)
@@ -120,7 +120,7 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
         layout!!.addView(view)
         seatViewList.add(view)
         view.setOnClickListener { onClick(view) }
-      } else if (SEATS.get(index) == 'R') {
+      } else if (SLOTS.get(index) == 'R') {
         count++
         val view = TextView(context)
         val layoutParams = LinearLayout.LayoutParams(seatSize, seatSize)
@@ -137,7 +137,7 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
         layout!!.addView(view)
         seatViewList.add(view)
         view.setOnClickListener { onClick(view) }
-      } else if (SEATS.get(index) == '_') {
+      } else if (SLOTS.get(index) == '_') {
         val view = TextView(context)
         val layoutParams = LinearLayout.LayoutParams(seatSize, seatSize)
         layoutParams.setMargins(seatGaping, seatGaping, seatGaping, seatGaping)

@@ -32,7 +32,7 @@ class ProfilePresenter @Inject constructor() {
 
   fun update(name: String, email: String, password: String, phoneNumber: String, token: String) {
     val customer = CustomerRequest(email, name, password, phoneNumber)
-    val subscribe = api.postUpdateCustomer(token, customer).subscribeOn(Schedulers.io()).observeOn(
+    val subscribe = api.putUpdateCustomer(token, customer).subscribeOn(Schedulers.io()).observeOn(
       AndroidSchedulers.mainThread()
     ).subscribe({
       view.onSuccess()

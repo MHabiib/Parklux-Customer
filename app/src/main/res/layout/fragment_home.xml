@@ -26,6 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:textAlignment="center"
+        android:maxLines="1"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/h1"
         app:layout_constraintLeft_toRightOf="@id/hi_user"

@@ -61,7 +61,6 @@ class LoginActivity : AppCompatActivity(), LoginContract {
 
   private fun loading(value: Boolean) {
     if (!value) {
-      txtEmail.text?.clear()
       txtPassword.text?.clear()
       progressBar.visibility = View.GONE
       inputLayoutEmail.visibility = View.VISIBLE
@@ -87,6 +86,11 @@ class LoginActivity : AppCompatActivity(), LoginContract {
   override fun onError(e: Throwable) {
     loading(false)
     Toast.makeText(this, e.message.toString(), Toast.LENGTH_LONG).show()
+  }
+
+  override fun onBackPressed() {
+    super.onBackPressed()
+    this.finishAffinity()
   }
 
   private fun injectDependency() {
