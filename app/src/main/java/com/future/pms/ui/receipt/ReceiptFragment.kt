@@ -1,20 +1,24 @@
 package com.future.pms.ui.receipt
 
 import android.content.Context
+import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.os.Environment
+import android.os.StrictMode
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.activity.addCallback
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.future.pms.R
 import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
 import com.future.pms.model.oauth.Token
 import com.future.pms.model.receipt.Receipt
-import com.future.pms.ui.home.HomeFragment.Companion.idBooking
 import com.future.pms.ui.main.MainActivity
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.RECEIPT_FRAGMENT
@@ -22,11 +26,17 @@ import com.future.pms.util.Utils
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_receipt.*
 import kotlinx.android.synthetic.main.fragment_receipt.view.*
+import java.io.File
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.io.IOException
 import javax.inject.Inject
 
 class ReceiptFragment : Fragment(), ReceiptContract {
   @Inject lateinit var presenter: ReceiptPresenter
   private lateinit var rootView: View
+  private lateinit var idBooking: String
+  private lateinit var imagePath: File
 
   fun newInstance(): ReceiptFragment {
     return ReceiptFragment()
@@ -38,6 +48,8 @@ class ReceiptFragment : Fragment(), ReceiptContract {
       val activity = activity as MainActivity?
       activity?.presenter?.onHomeIconClick()
     }
+    val builder = StrictMode.VmPolicy.Builder()
+    StrictMode.setVmPolicy(builder.build())
     injectDependency()
   }
 
@@ -46,10 +58,17 @@ class ReceiptFragment : Fragment(), ReceiptContract {
   ): View? {
     rootView = inflater.inflate(R.layout.fragment_receipt, container, false)
     val backButton = rootView.findViewById(R.id.button_back_receipt) as ImageButton
+    val shareButton = rootView.findViewById(R.id.button_share_receipt) as ImageButton
     backButton.setOnClickListener {
       val activity = activity as MainActivity?
       activity?.presenter?.onHomeIconClick()
     }
+    shareButton.setOnClickListener {
+      val bitmap = takeScreenshot()
+      saveBitmap(bitmap)
+      shareIt()
+    }
+    idBooking = this.arguments?.getString("idBooking").toString()
     return rootView
   }
 
@@ -96,6 +115,43 @@ class ReceiptFragment : Fragment(), ReceiptContract {
     rootView.hours.text = receipt.totalHours.toString()
     rootView.minutes.text = receipt.totalMinutes.toString()
     rootView.total_price.text = String.format("IDR %s0", receipt.totalPrice)
+  }
+
+  fun takeScreenshot(): Bitmap {
+    rootView.isDrawingCacheEnabled = true
+    return rootView.drawingCache
+  }
+
+  fun saveBitmap(bitmap: Bitmap) {
+    imagePath = File(String.format("%s/screenshot.png", Environment.getExternalStorageDirectory()))
+    val fos: FileOutputStream
+    try {
+      fos = FileOutputStream(imagePath)
+      bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
+      fos.flush()
+      fos.close()
+    } catch (e: FileNotFoundException) {
+      Log.e("E:", e.message, e)
+    } catch (e: IOException) {
+      Log.e("E:", e.message, e)
+    }
+  }
+
+  private fun shareIt() {
+    val uri = context?.let {
+      FileProvider.getUriForFile(
+        it, context?.applicationContext?.packageName + ".provider", imagePath
+        //https://stackoverflow.com/questions/38200282/android-os-fileuriexposedexception-file-storage-emulated-0-test-txt-exposed
+      )
+    }
+    val sharingIntent = Intent(Intent.ACTION_SEND)
+    sharingIntent.type = "image/*"
+    val shareBody = "This is my parking receipt using PMS apps."
+    sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Parking Management System (P M S)")
+    sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody)
+    sharingIntent.putExtra(Intent.EXTRA_STREAM, uri)
+
+    startActivity(Intent.createChooser(sharingIntent, "Share via"))
   }
 
   private fun injectDependency() {

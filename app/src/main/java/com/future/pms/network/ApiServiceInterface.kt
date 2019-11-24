@@ -30,7 +30,7 @@ interface ApiServiceInterface {
 
   @POST("api/booking/checkout") fun postBookingCheckout(
     @Query("access_token") access_token: String?
-  ): Observable<String>
+  ): Observable<Receipt>
 
   @POST("customer/create") fun postCreateCustomer(
     @Body customerReques: CustomerRequest

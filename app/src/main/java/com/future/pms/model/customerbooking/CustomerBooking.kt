@@ -7,7 +7,7 @@ data class CustomerBooking(
   val idParkingZone: String,
   val idSlot: String,
   val idUser: String,
-  val parkingZoneName: String,
+  val parkingZoneName: String, val address: String,
   val price: Double,
   val slotName: String,
   val totalTime: String,

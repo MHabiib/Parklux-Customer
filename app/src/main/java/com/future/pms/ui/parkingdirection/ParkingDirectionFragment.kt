@@ -30,7 +30,7 @@ import javax.inject.Inject
 
 class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
   private var SLOTS =
-    ("/\$_UUAAU_RR_UU_UU_/" + "________________/" + "_AARAU_UU_UU_UU_/" + "_UUARR_RR_UU_AR_/" + "________________/" + "_URAAU_RA_UU_UU_/" + "_RUUAU_RR_UU_UU_/" + "________________/" + "_UU_AU_RU_UR_UU_/" + "_UU_AU_RR_AR_UU_/" + "________________/" + "_UURAUARRAUUAUU_/" + "________________/" + "_URRAUARARUURUU_/" + "________________/")
+    ("/\$_UUAAU_RR_UU_UU_/" + "___Z_____________/" + "_AARAU_UU_UU_UU_/" + "_UUARR_RR_UU_AR_/" + "________________/" + "_URAAU_RA_UU_UU_/" + "_RUUAU_RR_UU_UU_/" + "________________/" + "_UU_AU_RU_UR_UU_/" + "_UU_AU_RR_AR_UU_/" + "________________/" + "_UURAUARRAUUAUU_/" + "________________/" + "_URRAUARARUURUU_/" + "________________/")
 
   @Inject lateinit var presenter: ParkingDirectionPresenter
   private lateinit var rootView: View
@@ -75,76 +75,82 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
         ViewGroup.LayoutParams.WRAP_CONTENT)
     layoutSeat.orientation = LinearLayout.VERTICAL
     layoutSeat.layoutParams = params
-    layoutSeat.setPadding(8 * seatGaping, 8 * seatGaping, 8 * seatGaping, 8 * seatGaping)
+    layoutSeat.setPadding(4 * seatGaping, 4 * seatGaping, 4 * seatGaping, 4 * seatGaping)
     layout.addView(layoutSeat)
 
     var layout: LinearLayout? = null
     var count = 0
 
     for (index in 0 until SLOTS.length) {
-      if (SLOTS.get(index) == '/') {
-        layout = LinearLayout(context)
-        layout.orientation = LinearLayout.HORIZONTAL
-        layoutSeat.addView(layout)
-      } else if (SLOTS.get(index) == 'U') {
-        count++
-        val view = TextView(context)
-        val layoutParams = LinearLayout.LayoutParams(seatSize, seatSize)
-        layoutParams.setMargins(seatGaping, seatGaping, seatGaping, seatGaping)
-        view.layoutParams = layoutParams
-        view.setPadding(0, 0, 0, 2 * seatGaping)
-        view.id = count
-        view.gravity = Gravity.CENTER
-        view.setBackgroundResource(R.drawable.ic_car)
-        view.setTextColor(Color.WHITE)
-        view.tag = STATUS_BOOKED
-        view.text = count.toString() + ""
-        view.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9f)
-        layout!!.addView(view)
-        seatViewList.add(view)
-        view.setOnClickListener { onClick(view) }
-      } else if (SLOTS.get(index) == 'A') {
-        count++
-        val view = TextView(context)
-        val layoutParams = LinearLayout.LayoutParams(seatSize, seatSize)
-        layoutParams.setMargins(seatGaping, seatGaping, seatGaping, seatGaping)
-        view.layoutParams = layoutParams
-        view.setPadding(0, 0, 0, 2 * seatGaping)
-        view.id = count
-        view.gravity = Gravity.CENTER
-        view.setBackgroundResource(R.drawable.ic_park)
-        view.text = count.toString() + ""
-        view.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9f)
-        view.setTextColor(Color.BLACK)
-        view.tag = STATUS_AVAILABLE
-        layout!!.addView(view)
-        seatViewList.add(view)
-        view.setOnClickListener { onClick(view) }
-      } else if (SLOTS.get(index) == 'R') {
-        count++
-        val view = TextView(context)
-        val layoutParams = LinearLayout.LayoutParams(seatSize, seatSize)
-        layoutParams.setMargins(seatGaping, seatGaping, seatGaping, seatGaping)
-        view.layoutParams = layoutParams
-        view.setPadding(0, 0, 0, 2 * seatGaping)
-        view.id = count
-        view.gravity = Gravity.CENTER
-        view.setBackgroundResource(R.drawable.ic_disable)
-        view.text = count.toString() + ""
-        view.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9f)
-        view.setTextColor(Color.WHITE)
-        view.tag = STATUS_RESERVED
-        layout!!.addView(view)
-        seatViewList.add(view)
-        view.setOnClickListener { onClick(view) }
-      } else if (SLOTS.get(index) == '_') {
-        val view = TextView(context)
-        val layoutParams = LinearLayout.LayoutParams(seatSize, seatSize)
-        layoutParams.setMargins(seatGaping, seatGaping, seatGaping, seatGaping)
-        view.layoutParams = layoutParams
-        view.setBackgroundResource(R.drawable.ic_road)
-        view.text = ""
-        layout!!.addView(view)
+      when {
+        SLOTS[index] == '/' -> {
+          layout = LinearLayout(context)
+          layout.orientation = LinearLayout.HORIZONTAL
+          layoutSeat.addView(layout)
+        }
+        SLOTS[index] == 'U' -> {
+          count++
+          val view = TextView(context)
+          val layoutParams = LinearLayout.LayoutParams(seatSize, seatSize)
+          layoutParams.setMargins(seatGaping, seatGaping, seatGaping, seatGaping)
+          view.layoutParams = layoutParams
+          view.setPadding(0, 0, 0, 0)
+          view.id = count
+          view.gravity = Gravity.CENTER
+          view.setBackgroundResource(R.drawable.ic_car)
+          view.setTextColor(Color.WHITE)
+          view.tag = STATUS_BOOKED
+          view.text = count.toString()
+          view.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9f)
+          layout!!.addView(view)
+          seatViewList.add(view)
+          view.setOnClickListener { onClick(view) }
+        }
+        SLOTS[index] == 'A' -> {
+          count++
+          val view = TextView(context)
+          val layoutParams = LinearLayout.LayoutParams(seatSize, seatSize)
+          layoutParams.setMargins(seatGaping, seatGaping, seatGaping, seatGaping)
+          view.layoutParams = layoutParams
+          view.setPadding(0, 0, 0, 2 * seatGaping)
+          view.id = count
+          view.gravity = Gravity.CENTER
+          view.setBackgroundResource(R.drawable.ic_park)
+          view.text = count.toString()
+          view.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9f)
+          view.setTextColor(Color.BLACK)
+          view.tag = STATUS_AVAILABLE
+          layout!!.addView(view)
+          seatViewList.add(view)
+          view.setOnClickListener { onClick(view) }
+        }
+        SLOTS[index] == 'R' -> {
+          count++
+          val view = TextView(context)
+          val layoutParams = LinearLayout.LayoutParams(seatSize, seatSize)
+          layoutParams.setMargins(seatGaping, seatGaping, seatGaping, seatGaping)
+          view.layoutParams = layoutParams
+          view.id = count
+          view.gravity = Gravity.CENTER
+          view.setBackgroundResource(R.drawable.ic_disable)
+          view.text = count.toString()
+          view.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9f)
+          view.setTextColor(Color.WHITE)
+          view.tag = STATUS_RESERVED
+          layout!!.addView(view)
+          seatViewList.add(view)
+          view.setOnClickListener { onClick(view) }
+        }
+        SLOTS[index] == '_' -> {
+          val view = TextView(context)
+          val layoutParams = LinearLayout.LayoutParams(seatSize, seatSize)
+          layoutParams.setMargins(seatGaping, seatGaping, seatGaping, seatGaping)
+          view.layoutParams = layoutParams
+          view.gravity = Gravity.CENTER
+          view.setBackgroundResource(R.drawable.ic_road)
+          view.text = ""
+          layout!!.addView(view)
+        }
       }
     }
   }
@@ -165,7 +171,7 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
     }
   }
 
-  fun backToHome() {
+  private fun backToHome() {
     val activity = activity as MainActivity?
     activity?.presenter?.onHomeIconClick()
   }

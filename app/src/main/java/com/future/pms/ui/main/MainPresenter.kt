@@ -21,8 +21,8 @@ class MainPresenter @Inject constructor() {
     view.showProfileFragment()
   }
 
-  fun showReceipt() {
-    view.showReceipt()
+  fun showReceipt(idBooking: String) {
+    view.showReceipt(idBooking)
   }
 
   fun showBookingDetail(idBooking: String) {

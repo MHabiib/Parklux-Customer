@@ -1,7 +1,6 @@
 package com.future.pms.ui.history
 
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,7 +13,6 @@ import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
 import com.future.pms.model.customerbooking.CustomerBooking
 import com.future.pms.model.oauth.Token
-import com.future.pms.ui.home.HomeFragment
 import com.future.pms.ui.main.MainActivity
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.ERROR
@@ -50,13 +48,6 @@ class HistoryFragment : Fragment(), HistoryContract {
     initView()
   }
 
-  override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-    super.setUserVisibleHint(isVisibleToUser)
-    if (isVisibleToUser) {
-      refreshPage()
-    }
-  }
-
   private fun initView() {
     val accessToken = Gson().fromJson(
         context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
@@ -89,9 +80,8 @@ class HistoryFragment : Fragment(), HistoryContract {
   }
 
   private fun customerBookingClick(booking: CustomerBooking) {
-    HomeFragment.idBooking = booking.idBooking
     val activity = activity as MainActivity?
-    activity?.presenter?.showReceipt()
+    activity?.presenter?.showReceipt(booking.idBooking)
   }
 
   override fun loadCustomerBookingError() {
@@ -102,13 +92,5 @@ class HistoryFragment : Fragment(), HistoryContract {
     val homeComponent = DaggerFragmentComponent.builder().fragmentModule(FragmentModule()).build()
 
     homeComponent.inject(this)
-  }
-
-  override fun refreshPage() {
-    val ft = fragmentManager!!.beginTransaction()
-    if (Build.VERSION.SDK_INT >= 26) {
-      ft.setReorderingAllowed(false)
-    }
-    ft.detach(this).attach(this).commit()
   }
 }

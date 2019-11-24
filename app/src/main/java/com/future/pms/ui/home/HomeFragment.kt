@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.future.pms.R
@@ -87,10 +86,8 @@ class HomeFragment : Fragment(), HomeContract {
   }
 
   override fun unauthorized() {
-    requireActivity().onBackPressedDispatcher.addCallback(this) {
-      val activity = activity as MainActivity?
-      activity?.presenter?.onHomeIconClick()
-    }
+    val activity = activity as MainActivity?
+    activity?.presenter?.showLoginPage()
   }
 
   override fun getDateNow() {
@@ -106,6 +103,5 @@ class HomeFragment : Fragment(), HomeContract {
 
   companion object {
     const val TAG: String = HOME_FRAGMENT
-    lateinit var idBooking: String
   }
 }

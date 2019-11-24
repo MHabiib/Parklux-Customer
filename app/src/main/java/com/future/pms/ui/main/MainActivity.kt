@@ -52,7 +52,14 @@ class MainActivity : AppCompatActivity(), MainContract {
   override fun showHomeFragment() {
     nav_view.visibility = View.VISIBLE
     if (supportFragmentManager.findFragmentByTag(HomeFragment.TAG) == null) {
-      supportFragmentManager.beginTransaction().disallowAddToBackStack().replace(R.id.frame,
+      nav_view.menu.findItem(R.id.navigation_home).isChecked = true
+      supportFragmentManager.beginTransaction().disallowAddToBackStack().setCustomAnimations(
+        R.anim.enter_from_left,
+        R.anim.exit_to_right,
+        R.anim.enter_from_right,
+        R.anim.exit_to_left
+      ).replace(
+        R.id.frame,
               HomeFragment().newInstance(), HomeFragment.TAG).commit()
     }
   }
@@ -67,17 +74,26 @@ class MainActivity : AppCompatActivity(), MainContract {
 
   override fun showProfileFragment() {
     if (supportFragmentManager.findFragmentByTag(ProfileFragment.TAG) == null) {
-      supportFragmentManager.beginTransaction().disallowAddToBackStack().replace(R.id.frame,
+      supportFragmentManager.beginTransaction().disallowAddToBackStack().setCustomAnimations(
+        R.anim.enter_from_right,
+        R.anim.exit_to_left,
+        R.anim.enter_from_left,
+        R.anim.exit_to_right
+      ).replace(
+        R.id.frame,
               ProfileFragment().newInstance(), ProfileFragment.TAG).commit()
     }
   }
 
-  override fun showReceipt() {
+  override fun showReceipt(idBooking: String) {
     nav_view.visibility = View.GONE
-    if (supportFragmentManager.findFragmentByTag(ProfileFragment.TAG) == null) {
-      supportFragmentManager.beginTransaction().disallowAddToBackStack().replace(R.id.frame,
-              ReceiptFragment().newInstance(), ReceiptFragment.TAG).commit()
-    }
+    val fragment = ReceiptFragment()
+    val bundle = Bundle()
+    bundle.putString("idBooking", idBooking)
+    fragment.arguments = bundle
+    supportFragmentManager.beginTransaction().disallowAddToBackStack().replace(
+      R.id.frame, fragment, ReceiptFragment.TAG
+    ).commit()
   }
 
   override fun showBookingDetail(idBooking: String) {

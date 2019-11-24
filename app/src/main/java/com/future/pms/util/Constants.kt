@@ -14,7 +14,7 @@ class Constants {
     const val PROFILE_FRAGMENT = "ProfileFragment"
     const val ERROR = "Error"
     const val seatSize = 100
-    const val seatGaping = 10
+    const val seatGaping = 5
     const val STATUS_AVAILABLE = 1
     const val STATUS_BOOKED = 2
     const val STATUS_RESERVED = 3

@@ -38,12 +38,12 @@ class HomePresenter @Inject constructor() {
   fun getTextAnnounce(): String {
     return when (Calendar.getInstance(TimeZone.getTimeZone("Asia/Jakarta")).get(
         Calendar.HOUR_OF_DAY)) {
-      in 0 .. 11 -> "Good Morning"
-      in 12 .. 15 -> "Good Afternoon"
-      in 16 .. 20 -> "Good Evening"
-      in 21 .. 23 -> "Good Night"
+      in 0 .. 11 -> "Good Morning,"
+      in 12 .. 15 -> "Good Afternoon,"
+      in 16 .. 20 -> "Good Evening,"
+      in 21 .. 23 -> "Good Night,"
       else -> {
-        "Hello"
+        "Hello,"
       }
     }
   }

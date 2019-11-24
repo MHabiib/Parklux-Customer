@@ -107,6 +107,7 @@ class ProfileFragment : Fragment(), ProfileContract {
 
   override fun onSuccess() {
     Toast.makeText(context, "Updated", Toast.LENGTH_LONG).show()
+    profile_password.text?.clear()
     refreshPage()
   }
 
@@ -116,6 +117,11 @@ class ProfileFragment : Fragment(), ProfileContract {
 
   override fun onError(e: Throwable) {
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+  }
+
+  override fun unauthorized() {
+    val activity = activity as MainActivity?
+    activity?.presenter?.showLoginPage()
   }
 
   override fun onLogout() {
