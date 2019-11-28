@@ -6,7 +6,6 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.Environment
 import android.os.StrictMode
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +25,7 @@ import com.future.pms.util.Utils
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_receipt.*
 import kotlinx.android.synthetic.main.fragment_receipt.view.*
+import timber.log.Timber
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -37,6 +37,10 @@ class ReceiptFragment : Fragment(), ReceiptContract {
   private lateinit var rootView: View
   private lateinit var idBooking: String
   private lateinit var imagePath: File
+
+  companion object {
+    const val TAG: String = RECEIPT_FRAGMENT
+  }
 
   fun newInstance(): ReceiptFragment {
     return ReceiptFragment()
@@ -78,7 +82,7 @@ class ReceiptFragment : Fragment(), ReceiptContract {
       context?.getSharedPreferences(
         Constants.AUTHENTCATION, Context.MODE_PRIVATE
       )?.getString(Constants.TOKEN, null), Token::class.java
-    ).access_token
+    ).accessToken
     presenter.attach(this)
     presenter.subscribe()
     idBooking.let { presenter.loadData(accessToken, it) }
@@ -90,17 +94,15 @@ class ReceiptFragment : Fragment(), ReceiptContract {
   }
 
   override fun showProgress(show: Boolean) {
-    if (null != progressBar) {
-      if (show) {
-        progressBar.visibility = View.VISIBLE
-      } else {
-        progressBar.visibility = View.GONE
-      }
+    if (null != progressBar && show) {
+      progressBar.visibility = View.VISIBLE
+    } else {
+      progressBar.visibility = View.GONE
     }
   }
 
   override fun showErrorMessage(error: String) {
-    Log.e(Constants.ERROR, error)
+    Timber.tag(Constants.ERROR).e(error)
   }
 
   override fun loadReceiptSuccess(receipt: Receipt) {
@@ -131,9 +133,9 @@ class ReceiptFragment : Fragment(), ReceiptContract {
       fos.flush()
       fos.close()
     } catch (e: FileNotFoundException) {
-      Log.e("E:", e.message, e)
+      Timber.tag(Constants.ERROR).e(e)
     } catch (e: IOException) {
-      Log.e("E:", e.message, e)
+      Timber.tag(Constants.ERROR).e(e)
     }
   }
 
@@ -157,9 +159,5 @@ class ReceiptFragment : Fragment(), ReceiptContract {
   private fun injectDependency() {
     val homeComponent = DaggerFragmentComponent.builder().fragmentModule(FragmentModule()).build()
     homeComponent.inject(this)
-  }
-
-  companion object {
-    const val TAG: String = RECEIPT_FRAGMENT
   }
 }

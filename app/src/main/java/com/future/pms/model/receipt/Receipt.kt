@@ -1,13 +1,13 @@
 package com.future.pms.model.receipt
 
+import com.google.gson.annotations.SerializedName
+
 data class Receipt(
-  val dateIn: Long,
-  val dateOut: Long,
-  val idBooking: String,
-  val parkingZoneName: String,
-  val address: String,
-  val price: Double,
-  val slotName: String,
-  val totalHours: Int,
-  val totalMinutes: Int, val totalPrice: String, val imageUrl: String
+  @SerializedName("dateIn") val dateIn: Long, @SerializedName("dateOut") val dateOut: Long,
+  @SerializedName("idBooking") val idBooking: String, @SerializedName("parkingZoneName")
+  val parkingZoneName: String, @SerializedName("address") val address: String,
+  @SerializedName("price") val price: Double, @SerializedName("slotName") val slotName: String,
+  @SerializedName("totalHours") val totalHours: Int, @SerializedName("totalMinutes")
+  val totalMinutes: Int, @SerializedName("totalPrice") val totalPrice: String,
+  @SerializedName("imageUrl") val imageUrl: String
 )

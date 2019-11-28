@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import androidx.activity.addCallback
@@ -24,15 +23,21 @@ import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_scan.*
+import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
 
 class ScanFragment : Fragment(), ScanContract {
   private var barcodeDetector: BarcodeDetector? = null
   private var cameraSource: CameraSource? = null
-  internal var intentData = ""
-  private var accessToken = ""
+  private lateinit var intentData: String
+  private lateinit var accessToken: String
   private var mSurfaceView: SurfaceView? = null
+
+  companion object {
+    private const val REQUEST_CAMERA_PERMISSION = 0
+    const val TAG: String = SCAN_FRAGMENT
+  }
 
   @Inject lateinit var presenter: ScanPresenter
 
@@ -58,7 +63,7 @@ class ScanFragment : Fragment(), ScanContract {
       context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
         Constants.TOKEN, null
       ), Token::class.java
-    ).access_token
+    ).accessToken
     val toggleFlash = view.findViewById(R.id.toggleFlash) as ImageView
     toggleFlash.setOnClickListener { flashToggle() }
     mSurfaceView = view.findViewById(R.id.surfaceView) as SurfaceView
@@ -72,16 +77,14 @@ class ScanFragment : Fragment(), ScanContract {
   }
 
   override fun showErrorMessage(error: String) {
-    Log.e(Constants.ERROR, error)
+    Timber.tag(Constants.ERROR).e(error)
   }
 
   override fun showProgress(show: Boolean) {
-    if (null != progressBar) {
-      if (show) {
-        progressBar.visibility = View.VISIBLE
-      } else {
-        progressBar.visibility = View.GONE
-      }
+    if (null != progressBar && show) {
+      progressBar.visibility = View.VISIBLE
+    } else {
+      progressBar.visibility = View.GONE
     }
   }
 
@@ -176,10 +179,5 @@ class ScanFragment : Fragment(), ScanContract {
   private fun injectDependency() {
     val scanComponent = DaggerFragmentComponent.builder().fragmentModule(FragmentModule()).build()
     scanComponent.inject(this)
-  }
-
-  companion object {
-    private const val REQUEST_CAMERA_PERMISSION = 0
-    const val TAG: String = SCAN_FRAGMENT
   }
 }

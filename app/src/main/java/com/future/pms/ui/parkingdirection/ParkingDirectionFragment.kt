@@ -36,6 +36,10 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
   private lateinit var rootView: View
   private var seatViewList: MutableList<TextView> = ArrayList()
 
+  companion object {
+    const val TAG: String = PARKING_DETAIL_FRAGMENT
+  }
+
   fun newInstance(): ParkingDirectionFragment {
     return ParkingDirectionFragment()
   }
@@ -180,9 +184,5 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
     val homeComponent = DaggerFragmentComponent.builder().fragmentModule(FragmentModule()).build()
 
     homeComponent.inject(this)
-  }
-
-  companion object {
-    const val TAG: String = PARKING_DETAIL_FRAGMENT
   }
 }

@@ -9,27 +9,27 @@ import retrofit2.http.*
 
 interface ApiServiceInterface {
   @GET("api/customer/detail") fun getCustomerDetail(
-    @Query("access_token") access_token: String?
+    @Query("access_token") accessToken: String?
   ): Observable<Customer>
 
   @GET("api/booking/customer") fun getCustomerBooking(
-    @Query("access_token") access_token: String?
+    @Query("access_token") accessToken: String?
   ): Observable<List<CustomerBooking>>
 
   @GET("api/booking/{id}/receipt") fun getBookingReceipt(
-    @Path("id") idReceipt: String, @Query("access_token") access_token: String?
+    @Path("id") idReceipt: String, @Query("access_token") accessToken: String?
   ): Observable<Receipt>
 
   @GET("api/booking/customer/ongoing") fun getOngoingBooking(
-    @Query("access_token") access_token: String?
+    @Query("access_token") accessToken: String?
   ): Observable<CustomerBooking>
 
   @POST("api/booking") fun postCreateBooking(
-    @Body idSlot: String?, @Query("access_token") access_token: String?
+    @Body idSlot: String?, @Query("access_token") accessToken: String?
   ): Observable<CustomerBooking>
 
   @POST("api/booking/checkout") fun postBookingCheckout(
-    @Query("access_token") access_token: String?
+    @Query("access_token") accessToken: String?
   ): Observable<Receipt>
 
   @POST("customer/create") fun postCreateCustomer(
@@ -37,6 +37,6 @@ interface ApiServiceInterface {
   ): Observable<String>
 
   @Multipart @PUT("api/customer/update") fun putUpdateCustomer(
-    @Query("access_token") access_token: String?, @Part("customer") customer: CustomerRequest
+    @Query("access_token") accessToken: String?, @Part("customer") customer: CustomerRequest
   ): Observable<CustomerRequest>
 }

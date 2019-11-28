@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,12 +23,17 @@ import com.future.pms.util.Constants.Companion.PROFILE_FRAGMENT
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_profile.view.*
+import timber.log.Timber
 import javax.inject.Inject
 
 class ProfileFragment : Fragment(), ProfileContract {
   @Inject lateinit var presenter: ProfilePresenter
   private lateinit var rootView: View
   private var update: Button? = null
+
+  companion object {
+    const val TAG: String = PROFILE_FRAGMENT
+  }
 
   fun newInstance(): ProfileFragment {
     return ProfileFragment()
@@ -64,7 +68,7 @@ class ProfileFragment : Fragment(), ProfileContract {
       context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
         Constants.TOKEN, null
       ), Token::class.java
-    ).access_token
+    ).accessToken
     presenter.attach(this)
     presenter.subscribe()
     presenter.loadData(accessToken)
@@ -80,17 +84,15 @@ class ProfileFragment : Fragment(), ProfileContract {
   }
 
   override fun showProgress(show: Boolean) {
-    if (null != progressBar) {
-      if (show) {
-        progressBar.visibility = View.VISIBLE
-      } else {
-        progressBar.visibility = View.GONE
-      }
+    if (null != progressBar && show) {
+      progressBar.visibility = View.VISIBLE
+    } else {
+      progressBar.visibility = View.GONE
     }
   }
 
   override fun showErrorMessage(error: String) {
-    Log.e(Constants.ERROR, error)
+    Timber.tag(Constants.ERROR).e(error)
   }
 
   override fun loadCustomerDetailSuccess(customer: Customer) {
@@ -131,7 +133,7 @@ class ProfileFragment : Fragment(), ProfileContract {
 
   private fun refreshPage() {
     val ft = fragmentManager!!.beginTransaction()
-    if (Build.VERSION.SDK_INT >= 26) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       ft.setReorderingAllowed(false)
     }
     ft.detach(this).attach(this).commit()
@@ -142,9 +144,5 @@ class ProfileFragment : Fragment(), ProfileContract {
       FragmentModule()
     ).build()
     profileComponent.inject(this)
-  }
-
-  companion object {
-    const val TAG: String = PROFILE_FRAGMENT
   }
 }

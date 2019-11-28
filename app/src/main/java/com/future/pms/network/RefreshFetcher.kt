@@ -12,21 +12,17 @@ object RefreshFetcher {
     private val context: Context, private val listener: Listener
   ) {
     private var callback: Call<Token>? = null
-
-    fun refresh(grant_type: String, refresh: String) {
+    fun refresh(grantType: String, refresh: String) {
       val authFetcher = APICreator(
-        AuthAPI::class.java, APISettings.base
+        AuthAPI::class.java
       ).generate()
-      callback = authFetcher.refresh(grant_type, refresh)
+      callback = authFetcher.refresh(grantType, refresh)
       callback?.enqueue(object : Callback<Token> {
-
         override fun onResponse(call: Call<Token>?, response: Response<Token>?) {
-          if (response != null) {
-            if (response.isSuccessful) {
-              listener.onSuccess(response.body())
-            } else {
-              listener.onSuccess(null)
-            }
+          if (null != response && response.isSuccessful) {
+            listener.onSuccess(response.body())
+          } else if (null != response && !response.isSuccessful) {
+            listener.onSuccess(null)
           } else {
             listener.onError(Throwable(context.getString(R.string.auth_error)))
           }
@@ -37,10 +33,6 @@ object RefreshFetcher {
           listener.onError(Throwable("$msg : ${t?.message}"))
         }
       })
-    }
-
-    fun cancel() {
-      callback?.cancel()
     }
   }
 

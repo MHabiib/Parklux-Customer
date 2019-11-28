@@ -12,9 +12,9 @@ class ScanPresenter @Inject constructor() {
   private val subscriptions = CompositeDisposable()
   private lateinit var view: ScanContract
 
-  fun createBooking(idSlot: String, access_token: String) {
+  fun createBooking(idSlot: String, accessToken: String) {
     view.showProgress(true)
-    val subscribe = api.postCreateBooking(idSlot, access_token).subscribeOn(
+    val subscribe = api.postCreateBooking(idSlot, accessToken).subscribeOn(
         Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe({
       if (null != it) {
         view.bookingSuccess(it.idBooking)

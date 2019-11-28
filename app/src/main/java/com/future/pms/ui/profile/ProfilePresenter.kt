@@ -18,8 +18,8 @@ class ProfilePresenter @Inject constructor() {
   private val api: ApiServiceInterface = RetrofitClient.create()
   private lateinit var view: ProfileContract
 
-  fun loadData(access_token: String) {
-    val subscribe = api.getCustomerDetail(access_token).subscribeOn(Schedulers.io())
+  fun loadData(accessToken: String) {
+    val subscribe = api.getCustomerDetail(accessToken).subscribeOn(Schedulers.io())
       .observeOn(AndroidSchedulers.mainThread()).subscribe({ customer: Customer ->
         view.showProgress(false)
         view.loadCustomerDetailSuccess(customer)

@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +24,7 @@ import com.future.pms.util.Constants
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_ongoing.*
 import kotlinx.android.synthetic.main.fragment_ongoing.view.*
+import timber.log.Timber
 import java.time.LocalDateTime
 import java.time.ZoneId
 import javax.inject.Inject
@@ -33,6 +33,10 @@ class OngoingFragment : Fragment(), OngoingContract {
   @Inject lateinit var presenter: OngoingPresenter
   private lateinit var rootView: View
   private lateinit var parkingTime: Chronometer
+
+  companion object {
+    const val TAG: String = Constants.ONGOING_FRAGMENT
+  }
 
   fun newInstance(): OngoingFragment {
     return OngoingFragment()
@@ -50,7 +54,7 @@ class OngoingFragment : Fragment(), OngoingContract {
       context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
         Constants.TOKEN, null
       ), Token::class.java
-    ).access_token
+    ).accessToken
     rootView = inflater.inflate(R.layout.fragment_ongoing, container, false)
     val directionLayout = rootView.findViewById(R.id.directions_layout) as ConstraintLayout
     directionLayout.setOnClickListener {
@@ -75,23 +79,21 @@ class OngoingFragment : Fragment(), OngoingContract {
       context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
         Constants.TOKEN, null
       ), Token::class.java
-    ).access_token
+    ).accessToken
     presenter.loadOngoingBooking(accessToken)
   }
 
   override fun showProgress(show: Boolean) {
-    if (null != progressBar) {
-      if (show) {
-        progressBar.visibility = View.VISIBLE
-      } else {
-        progressBar.visibility = View.GONE
-      }
+    if (null != progressBar && show) {
+      progressBar.visibility = View.VISIBLE
+    } else {
+      progressBar.visibility = View.GONE
     }
   }
 
   override fun refreshHome() {
     val ft = fragmentManager!!.beginTransaction()
-    if (Build.VERSION.SDK_INT >= 26) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       ft.setReorderingAllowed(false)
     }
     ft.detach(this).attach(this).commit()
@@ -103,7 +105,7 @@ class OngoingFragment : Fragment(), OngoingContract {
   }
 
   override fun showErrorMessage(error: String) {
-    Log.e(Constants.ERROR, error)
+    Timber.tag(Constants.ERROR).e(error)
   }
 
   override fun loadCustomerOngoingSuccess(ongoing: CustomerBooking) {
@@ -135,9 +137,5 @@ class OngoingFragment : Fragment(), OngoingContract {
   private fun injectDependency() {
     val homeComponent = DaggerFragmentComponent.builder().fragmentModule(FragmentModule()).build()
     homeComponent.inject(this)
-  }
-
-  companion object {
-    const val TAG: String = Constants.ONGOING_FRAGMENT
   }
 }

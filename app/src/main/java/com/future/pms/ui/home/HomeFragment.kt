@@ -2,7 +2,6 @@ package com.future.pms.ui.home
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +21,7 @@ import com.future.pms.util.Constants.Companion.ERROR
 import com.future.pms.util.Constants.Companion.HOME_FRAGMENT
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_home.view.*
+import timber.log.Timber
 import java.text.DateFormat
 import java.util.*
 import javax.inject.Inject
@@ -29,6 +29,10 @@ import javax.inject.Inject
 class HomeFragment : Fragment(), HomeContract {
   @Inject lateinit var presenter: HomePresenter
   private lateinit var rootView: View
+
+  companion object {
+    const val TAG: String = HOME_FRAGMENT
+  }
 
   fun newInstance(): HomeFragment {
     return HomeFragment()
@@ -65,7 +69,9 @@ class HomeFragment : Fragment(), HomeContract {
   private fun initView() {
     val accessToken = Gson().fromJson(
         context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
-            Constants.TOKEN, null), Token::class.java).access_token
+          Constants.TOKEN, null
+        ), Token::class.java
+    ).accessToken
     getDateNow()
     presenter.loadData(accessToken)
     val textAnnounce = rootView.findViewById(R.id.text_announce_user) as TextView
@@ -82,7 +88,7 @@ class HomeFragment : Fragment(), HomeContract {
   }
 
   override fun showErrorMessage(error: String) {
-    Log.e(ERROR, error)
+    Timber.tag(ERROR).e(error)
   }
 
   override fun unauthorized() {
@@ -99,9 +105,5 @@ class HomeFragment : Fragment(), HomeContract {
   private fun injectDependency() {
     val homeComponent = DaggerFragmentComponent.builder().fragmentModule(FragmentModule()).build()
     homeComponent.inject(this)
-  }
-
-  companion object {
-    const val TAG: String = HOME_FRAGMENT
   }
 }

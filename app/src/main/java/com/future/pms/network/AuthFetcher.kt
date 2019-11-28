@@ -15,19 +15,14 @@ object AuthFetcher {
     private var callback: Call<Token>? = null
 
     fun auth(auth: Auth) {
-      val authFetcher = APICreator(
-        AuthAPI::class.java, APISettings.base
-      ).generate()
-      callback = authFetcher.auth(auth.username, auth.password, auth.grant_type)
+      val authFetcher = APICreator(AuthAPI::class.java).generate()
+      callback = authFetcher.auth(auth.username, auth.password, auth.grantType)
       callback?.enqueue(object : Callback<Token> {
-
         override fun onResponse(call: Call<Token>?, response: Response<Token>?) {
-          if (response != null) {
-            if (response.isSuccessful) {
-              listener.onSuccess(response.body())
-            } else {
-              listener.onSuccess(null)
-            }
+          if (null != response && response.isSuccessful) {
+            listener.onSuccess(response.body())
+          } else if (null != response && !response.isSuccessful) {
+            listener.onSuccess(null)
           } else {
             listener.onError(Throwable(context.getString(R.string.auth_error)))
           }
@@ -38,10 +33,6 @@ object AuthFetcher {
           listener.onError(Throwable("$msg : ${t?.message}"))
         }
       })
-    }
-
-    fun cancel() {
-      callback?.cancel()
     }
   }
 

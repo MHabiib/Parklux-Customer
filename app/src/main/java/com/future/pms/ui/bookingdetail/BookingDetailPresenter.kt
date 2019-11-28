@@ -13,9 +13,9 @@ class BookingDetailPresenter @Inject constructor() {
   private val subscriptions = CompositeDisposable()
   private lateinit var view: BookingDetailContract
 
-  fun loadBooking(access_token: String) {
+  fun loadBooking(accessToken: String) {
     view.showProgress(true)
-    val subscribe = api.getOngoingBooking(access_token).subscribeOn(Schedulers.io()).observeOn(
+    val subscribe = api.getOngoingBooking(accessToken).subscribeOn(Schedulers.io()).observeOn(
         AndroidSchedulers.mainThread()).subscribe({ booking: CustomerBooking ->
       view.showProgress(false)
       view.loadBookingSuccess(booking)

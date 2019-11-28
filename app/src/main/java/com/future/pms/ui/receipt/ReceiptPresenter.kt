@@ -13,8 +13,8 @@ class ReceiptPresenter @Inject constructor() {
   private val api: ApiServiceInterface = RetrofitClient.create()
   private lateinit var view: ReceiptContract
 
-  fun loadData(access_token: String, idBooking: String) {
-    val subscribe = api.getBookingReceipt(idBooking, access_token).subscribeOn(Schedulers.io())
+  fun loadData(accessToken: String, idBooking: String) {
+    val subscribe = api.getBookingReceipt(idBooking, accessToken).subscribeOn(Schedulers.io())
       .observeOn(AndroidSchedulers.mainThread()).subscribe({ receipt: Receipt ->
         view.showProgress(false)
         view.loadReceiptSuccess(receipt)

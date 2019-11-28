@@ -1,7 +1,11 @@
 package com.future.pms.model.oauth.request
 
-import java.io.Serializable
+import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class Auth(
-  val username: String, val password: String, val grant_type: String
-) : Serializable
+  @SerializedName("username") val username: String, @SerializedName("password")
+  val password: String, @SerializedName("grant_type") val grantType: String
+) : Parcelable

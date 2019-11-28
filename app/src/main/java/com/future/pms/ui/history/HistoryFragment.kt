@@ -2,7 +2,6 @@ package com.future.pms.ui.history
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +19,7 @@ import com.future.pms.util.Utils
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_history.*
 import kotlinx.android.synthetic.main.fragment_history.view.*
+import timber.log.Timber
 import javax.inject.Inject
 
 class HistoryFragment : Fragment(), HistoryContract {
@@ -51,22 +51,22 @@ class HistoryFragment : Fragment(), HistoryContract {
   private fun initView() {
     val accessToken = Gson().fromJson(
         context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
-            Constants.TOKEN, null), Token::class.java).access_token
+          Constants.TOKEN, null
+        ), Token::class.java
+    ).accessToken
     presenter.loadCustomerBooking(accessToken)
   }
 
   override fun showProgress(show: Boolean) {
-    if (null != progressBar) {
-      if (show) {
-        progressBar.visibility = View.VISIBLE
-      } else {
-        progressBar.visibility = View.GONE
-      }
+    if (null != progressBar && show) {
+      progressBar.visibility = View.VISIBLE
+    } else {
+      progressBar.visibility = View.GONE
     }
   }
 
   override fun showErrorMessage(error: String) {
-    Log.e(ERROR, error)
+    Timber.tag(ERROR).e(error)
   }
 
   override fun loadCustomerBookingSuccess(list: List<CustomerBooking>) {

@@ -39,4 +39,11 @@
     <string name="you_dont_have_any_ongoing_order">You dont have any ongoing order</string>
     <string name="parking_completed">Parking completed</string>
     <string name="you_dont_have_any_order">You dont have any order</string>
+    <string name="oops">Oops…</string>
+    <string name="failed_create_booking">Failed to create booking, something went wrong.</string>
+    <string name="welcome_to">Welcome to %s</string>
+    <string name="only_placeholder">%s</string>
+    <string name="empty">""</string>
+    <string name="is_booked">is Booked</string>
+    <string name="is_reserved">is Reserved</string>
 </resources>

@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class RetrofitClient {
   companion object Factory {
     fun create(): ApiServiceInterface {
-      val retrofit = retrofit2.Retrofit.Builder().baseUrl(APISettings.base)
+      val retrofit = retrofit2.Retrofit.Builder().baseUrl(NetworkConstant.BASE)
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .client(UnsafeOkHttpClient.unsafeOkHttpClient)
         .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))

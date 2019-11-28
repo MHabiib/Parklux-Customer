@@ -32,6 +32,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    androidExtensions {
+        experimental = true
+    }
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
@@ -46,6 +52,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation 'com.jakewharton.timber:timber:4.7.1'
 
     // retrofit + gson
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
@@ -63,6 +70,7 @@ dependencies {
     implementation "com.google.dagger:dagger-android-support:$dagger2_version"
     kapt "com.google.dagger:dagger-compiler:$dagger2_version"
     kapt "com.google.dagger:dagger-android-processor:$dagger2_version"
+    kapt 'com.android.databinding:compiler:3.1.4'
     compileOnly 'javax.annotation:jsr250-api:1.0'
     implementation 'javax.inject:javax.inject:1'
 

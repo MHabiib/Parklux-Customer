@@ -1,5 +1,9 @@
 package com.future.pms.model.register
 
+import com.google.gson.annotations.SerializedName
+
 data class CustomerRequest(
-  val email: String, val name: String, val password: String, val phoneNumber: String
+  @SerializedName("email") val email: String, @SerializedName("name") val name: String,
+  @SerializedName("password") val password: String, @SerializedName("phoneNumber")
+  val phoneNumber: String
 )

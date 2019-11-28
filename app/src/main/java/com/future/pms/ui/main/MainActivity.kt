@@ -14,6 +14,7 @@ import com.future.pms.ui.parkingdirection.ParkingDirectionFragment
 import com.future.pms.ui.profile.ProfileFragment
 import com.future.pms.ui.receipt.ReceiptFragment
 import com.future.pms.ui.scan.ScanFragment
+import com.future.pms.util.Constants.Companion.ID_BOOKING
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
@@ -89,7 +90,7 @@ class MainActivity : AppCompatActivity(), MainContract {
     nav_view.visibility = View.GONE
     val fragment = ReceiptFragment()
     val bundle = Bundle()
-    bundle.putString("idBooking", idBooking)
+    bundle.putString(ID_BOOKING, idBooking)
     fragment.arguments = bundle
     supportFragmentManager.beginTransaction().disallowAddToBackStack().replace(
       R.id.frame, fragment, ReceiptFragment.TAG
@@ -100,7 +101,7 @@ class MainActivity : AppCompatActivity(), MainContract {
     nav_view.visibility = View.GONE
     val fragment = BookingDetailFragment()
     val bundle = Bundle()
-    bundle.putString("idBooking", idBooking)
+    bundle.putString(ID_BOOKING, idBooking)
     fragment.arguments = bundle
     if (supportFragmentManager.findFragmentByTag(ParkingDirectionFragment.TAG) == null) {
       supportFragmentManager.beginTransaction().replace(R.id.frame, fragment,

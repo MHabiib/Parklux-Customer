@@ -1,12 +1,13 @@
 package com.future.pms.model.oauth
 
-import java.io.Serializable
+import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class Token(
-  val scope: String,
-  val token_type: String,
-  var expires_in: Long,
-  val refresh_token: String,
-  val id_token: String,
-  val access_token: String
-) : Serializable
+  @SerializedName("scope") val scope: String, @SerializedName("token_type") val tokenType: String,
+  @SerializedName("expires_in") var expiresIn: Long, @SerializedName("refresh_token")
+  val refreshToken: String, @SerializedName("id_token") val idToken: String,
+  @SerializedName("access_token") val accessToken: String
+) : Parcelable
