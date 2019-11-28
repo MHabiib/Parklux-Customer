@@ -26,6 +26,7 @@ import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_booking_detail.view.*
 import kotlinx.android.synthetic.main.fragment_bottom_sheet_content.*
 import kotlinx.android.synthetic.main.fragment_bottom_sheet_content.view.*
+import kotlinx.android.synthetic.main.fragment_parking_direction.view.*
 import java.util.*
 import javax.inject.Inject
 
@@ -84,6 +85,7 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
 
   override fun loadBookingSuccess(booking: CustomerBooking) {
     showParkingLayout(layout)
+    rootView.swipe_up_indicator.visibility = View.VISIBLE
     rootView.welcome_to.text = String.format("Welcome to %s", booking.parkingZoneName)
     rootView.slot_name.text = booking.slotName
     rootView.layout_booking_detail.visibility = View.VISIBLE

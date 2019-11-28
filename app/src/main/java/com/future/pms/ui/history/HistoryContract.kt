@@ -7,5 +7,4 @@ interface HistoryContract {
   fun showErrorMessage(error: String)
   fun loadCustomerBookingSuccess(list: List<CustomerBooking>)
   fun loadCustomerBookingError()
-  fun refreshPage()
 }

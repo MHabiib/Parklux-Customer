@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.ImageView
+import androidx.activity.addCallback
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.future.pms.R
@@ -41,6 +42,10 @@ class ScanFragment : Fragment(), ScanContract {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    requireActivity().onBackPressedDispatcher.addCallback(this) {
+      val activity = activity as MainActivity?
+      activity?.presenter?.onHomeIconClick()
+    }
     injectDependency()
   }
 

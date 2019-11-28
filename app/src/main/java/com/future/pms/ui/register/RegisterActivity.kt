@@ -66,6 +66,9 @@ class RegisterActivity : AppCompatActivity(), RegisterContract {
 
   override fun onSuccess() {
     Toast.makeText(this, "Success create user, please login", Toast.LENGTH_LONG).show()
+    val intent = Intent(this, LoginActivity::class.java)
+    startActivity(intent)
+    finish()
   }
 
   override fun onFailed(e: String) {

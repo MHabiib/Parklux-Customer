@@ -26,6 +26,7 @@ class ProfilePresenter @Inject constructor() {
       }, { error ->
         view.showProgress(false)
         view.showErrorMessage(error.localizedMessage)
+        view.unauthorized()
       })
     subscriptions.add(subscribe)
   }

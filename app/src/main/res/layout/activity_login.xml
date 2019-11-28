@@ -51,6 +51,7 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="12dp"
+                android:fontFamily="sans-serif-light"
                 android:background="@drawable/card_layout_blue_primary"
                 android:gravity="center"
                 android:paddingVertical="@dimen/margin_padding_vertical_for_card"

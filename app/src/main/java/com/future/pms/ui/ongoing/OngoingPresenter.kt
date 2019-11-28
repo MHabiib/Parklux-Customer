@@ -32,7 +32,7 @@ class OngoingPresenter @Inject constructor() {
     val subscribe = api.postBookingCheckout(access_token).subscribeOn(Schedulers.io()).observeOn(
         AndroidSchedulers.mainThread()).subscribe({
       view.showProgress(false)
-      view.checkoutSuccess()
+      view.checkoutSuccess(it.idBooking)
     }, {
       view.showErrorMessage(it.message.toString())
     })
