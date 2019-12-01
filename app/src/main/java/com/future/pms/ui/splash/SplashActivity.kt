@@ -9,15 +9,20 @@ import com.future.pms.R
 import com.future.pms.di.component.DaggerActivityComponent
 import com.future.pms.di.module.ActivityModule
 import com.future.pms.model.oauth.Token
-import com.future.pms.network.RefreshFetcher
+import com.future.pms.network.APICreator
+import com.future.pms.network.AuthAPI
+import com.future.pms.network.NetworkConstant.GRANT_TYPE
 import com.future.pms.ui.login.LoginActivity
 import com.future.pms.ui.main.MainActivity
 import com.future.pms.util.Authentication
-import com.future.pms.util.Constants
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class SplashActivity : AppCompatActivity(), SplashContract {
   @Inject lateinit var presenter: SplashPresenter
+  private val subscriptions = CompositeDisposable()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -46,22 +51,15 @@ class SplashActivity : AppCompatActivity(), SplashContract {
   }
 
   override fun refreshFetcher() {
-    val refreshFetcher =
-      RefreshFetcher.RefreshFetcherImpl(applicationContext, object : RefreshFetcher.Listener {
-        override fun onSuccess(token: Token?) {
-          if (token == null) {
-            onLogin()
-          } else {
-            Authentication.save(applicationContext, token)
-            onSuccess()
-          }
-        }
-
-        override fun onError(throwable: Throwable) {
-          onError(throwable)
-        }
-      })
-    refreshFetcher.refresh(Constants.REFRESH_TOKEN, Authentication.getRefresh(applicationContext))
+    val authFetcher = APICreator(AuthAPI::class.java).generate()
+    val subscribe =
+      authFetcher.refresh(GRANT_TYPE, Authentication.getRefresh(applicationContext)).subscribeOn(
+        Schedulers.io()
+      ).observeOn(AndroidSchedulers.mainThread()).subscribe({ token: Token ->
+        Authentication.save(applicationContext, token)
+        onSuccess()
+      }, { onLogin() })
+    subscriptions.add(subscribe)
   }
 
   private fun showLogin() {
