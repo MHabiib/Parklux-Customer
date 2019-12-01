@@ -6,11 +6,12 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.*
-import android.widget.ImageView
 import androidx.activity.addCallback
 import androidx.core.app.ActivityCompat
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.future.pms.R
+import com.future.pms.databinding.FragmentScanBinding
 import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
 import com.future.pms.model.oauth.Token
@@ -33,6 +34,7 @@ class ScanFragment : Fragment(), ScanContract {
   private lateinit var intentData: String
   private lateinit var accessToken: String
   private var mSurfaceView: SurfaceView? = null
+  private lateinit var binding: FragmentScanBinding
 
   companion object {
     private const val REQUEST_CAMERA_PERMISSION = 0
@@ -58,16 +60,16 @@ class ScanFragment : Fragment(), ScanContract {
     inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
   ): View? {
     checkPermission()
-    val view = inflater.inflate(R.layout.fragment_scan, container, false)
+    binding = DataBindingUtil.inflate(inflater, R.layout.fragment_scan, container, false)
     accessToken = Gson().fromJson(
       context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
         Constants.TOKEN, null
       ), Token::class.java
     ).accessToken
-    val toggleFlash = view.findViewById(R.id.toggleFlash) as ImageView
+    val toggleFlash = binding.toggleFlash
     toggleFlash.setOnClickListener { flashToggle() }
-    mSurfaceView = view.findViewById(R.id.surfaceView) as SurfaceView
-    return view
+    mSurfaceView = binding.surfaceView
+    return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -83,7 +85,7 @@ class ScanFragment : Fragment(), ScanContract {
   override fun showProgress(show: Boolean) {
     if (null != progressBar && show) {
       progressBar.visibility = View.VISIBLE
-    } else {
+    } else if (null != progressBar && !show) {
       progressBar.visibility = View.GONE
     }
   }

@@ -9,11 +9,12 @@ import android.os.StrictMode
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import androidx.activity.addCallback
 import androidx.core.content.FileProvider
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.future.pms.R
+import com.future.pms.databinding.FragmentReceiptBinding
 import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
 import com.future.pms.model.oauth.Token
@@ -24,7 +25,6 @@ import com.future.pms.util.Constants.Companion.RECEIPT_FRAGMENT
 import com.future.pms.util.Utils
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_receipt.*
-import kotlinx.android.synthetic.main.fragment_receipt.view.*
 import timber.log.Timber
 import java.io.File
 import java.io.FileNotFoundException
@@ -34,7 +34,7 @@ import javax.inject.Inject
 
 class ReceiptFragment : Fragment(), ReceiptContract {
   @Inject lateinit var presenter: ReceiptPresenter
-  private lateinit var rootView: View
+  private lateinit var binding: FragmentReceiptBinding
   private lateinit var idBooking: String
   private lateinit var imagePath: File
 
@@ -60,9 +60,9 @@ class ReceiptFragment : Fragment(), ReceiptContract {
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
   ): View? {
-    rootView = inflater.inflate(R.layout.fragment_receipt, container, false)
-    val backButton = rootView.findViewById(R.id.button_back_receipt) as ImageButton
-    val shareButton = rootView.findViewById(R.id.button_share_receipt) as ImageButton
+    binding = DataBindingUtil.inflate(inflater, R.layout.fragment_receipt, container, false)
+    val backButton = binding.buttonBackReceipt
+    val shareButton = binding.buttonShareReceipt
     backButton.setOnClickListener {
       val activity = activity as MainActivity?
       activity?.presenter?.onHomeIconClick()
@@ -73,7 +73,7 @@ class ReceiptFragment : Fragment(), ReceiptContract {
       shareIt()
     }
     idBooking = this.arguments?.getString("idBooking").toString()
-    return rootView
+    return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -86,17 +86,12 @@ class ReceiptFragment : Fragment(), ReceiptContract {
     presenter.attach(this)
     presenter.subscribe()
     idBooking.let { presenter.loadData(accessToken, it) }
-    initView()
-  }
-
-  private fun initView() {
-    //TODO
   }
 
   override fun showProgress(show: Boolean) {
     if (null != progressBar && show) {
       progressBar.visibility = View.VISIBLE
-    } else {
+    } else if (null != progressBar && !show) {
       progressBar.visibility = View.GONE
     }
   }
@@ -107,21 +102,21 @@ class ReceiptFragment : Fragment(), ReceiptContract {
 
   override fun loadReceiptSuccess(receipt: Receipt) {
     println(receipt)
-    rootView.booking_id.text = receipt.idBooking
-    rootView.parking_zone_name.text = receipt.parkingZoneName
-    rootView.address.text = receipt.address
-    rootView.parking_slot.text = receipt.slotName
-    rootView.price.text = String.format("IDR %s0/hour", receipt.price.toString())
-    rootView.in_date.text = Utils.convertLongToTime(receipt.dateIn)
-    rootView.out_date.text = Utils.convertLongToTime(receipt.dateOut)
-    rootView.hours.text = receipt.totalHours.toString()
-    rootView.minutes.text = receipt.totalMinutes.toString()
-    rootView.total_price.text = String.format("IDR %s0", receipt.totalPrice)
+    binding.bookingId.text = receipt.idBooking
+    binding.parkingZoneName.text = receipt.parkingZoneName
+    binding.address.text = receipt.address
+    binding.parkingSlot.text = receipt.slotName
+    binding.price.text = String.format("IDR %s0/hour", receipt.price.toString())
+    binding.inDate.text = Utils.convertLongToTime(receipt.dateIn)
+    binding.outDate.text = Utils.convertLongToTime(receipt.dateOut)
+    binding.hours.text = receipt.totalHours.toString()
+    binding.minutes.text = receipt.totalMinutes.toString()
+    binding.totalPrice.text = String.format("IDR %s0", receipt.totalPrice)
   }
 
   fun takeScreenshot(): Bitmap {
-    rootView.isDrawingCacheEnabled = true
-    return rootView.drawingCache
+    binding.root.isDrawingCacheEnabled = true
+    return binding.root.drawingCache
   }
 
   fun saveBitmap(bitmap: Bitmap) {

@@ -8,10 +8,16 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.HorizontalScrollView
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.addCallback
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.future.pms.R
+import com.future.pms.databinding.ActivityMainBinding
+import com.future.pms.databinding.FragmentBookingDetailBinding
 import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
 import com.future.pms.model.customerbooking.CustomerBooking
@@ -27,23 +33,20 @@ import com.future.pms.util.Constants.Companion.NULL
 import com.future.pms.util.Constants.Companion.SPACING
 import com.future.pms.util.Constants.Companion.TAKEN_SLOT
 import com.future.pms.util.Utils
-import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.fragment_booking_detail.view.*
 import kotlinx.android.synthetic.main.fragment_bottom_sheet_content.*
-import kotlinx.android.synthetic.main.fragment_bottom_sheet_content.view.*
-import kotlinx.android.synthetic.main.fragment_parking_direction.view.*
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
 class BookingDetailFragment : Fragment(), BookingDetailContract {
-  private lateinit var rootView: View
+  private var parkViewList: MutableList<TextView> = ArrayList()
+  @Inject lateinit var presenter: BookingDetailPresenter
   private lateinit var idBooking: String
   private lateinit var accessToken: String
-  private var seatViewList: MutableList<TextView> = ArrayList()
   private lateinit var layout: HorizontalScrollView
-  @Inject lateinit var presenter: BookingDetailPresenter
+  private lateinit var binding: FragmentBookingDetailBinding
+  private lateinit var bindingActivityMain: ActivityMainBinding
   private var SLOTS =
     ("/\$_UUAAU_RR_UU_UU_/" + "________________/" + "_AARAU_UU_UU_UU_/" + "_UUARR_RR_UU_AR_/" + "________________/" + "_URAAU_RA_UU_UU_/" + "_RUUAU_RR_UU_UU_/" + "________________/" + "_UU_AU_RU_UR_UU_/" + "_UU_AU_RR_AR_UU_/" + "________________/" + "_UURAUARRAUUAUU_/" + "________________/" + "_URRAUARARUURUU_/" + "________________/")
 
@@ -64,19 +67,22 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
     injectDependency()
   }
 
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-      savedInstanceState: Bundle?): View? {
+  override fun onCreateView(
+    inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+  ): View? {
+    binding = DataBindingUtil.inflate(inflater, R.layout.fragment_booking_detail, container, false)
+    bindingActivityMain = DataBindingUtil.inflate(inflater, R.layout.activity_main, null, false)
+
     accessToken = Gson().fromJson(
-        context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
-          Constants.TOKEN, null
-        ), Token::class.java
+      context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
+        Constants.TOKEN, null
+      ), Token::class.java
     ).accessToken
-    rootView = inflater.inflate(R.layout.fragment_booking_detail, container, false)
-    rootView.findViewById<ImageButton>(R.id.back_booking_detail).setOnClickListener { backToHome() }
-    rootView.findViewById<Button>(R.id.button_scan_again).setOnClickListener { scanAgain() }
+    binding.parkingDirectionContent.backBookingDetail.setOnClickListener { backToHome() }
+    binding.parkingDirectionContent.buttonScanAgain.setOnClickListener { scanAgain() }
     idBooking = this.arguments?.getString(ID_BOOKING).toString()
-    layout = rootView.findViewById(R.id.layoutSeat)
-    return rootView
+    layout = binding.parkingDirectionSheet.layoutPark.findViewById(R.id.layoutPark)
+    return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -87,29 +93,29 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
       presenter.loadBooking(accessToken)
     } else {
       showProgress(false)
-      rootView.error_text.visibility = View.VISIBLE
-      rootView.button_scan_again.visibility = View.VISIBLE
-      rootView.parking_direction_sheet.visibility = View.GONE
-      rootView.icon_booking_detail.setImageResource(R.drawable.ic_sad)
-      rootView.welcome_to.text = getString(R.string.oops)
-      rootView.error_text.text = getString(R.string.failed_create_booking)
+      binding.parkingDirectionContent.errorText.visibility = View.VISIBLE
+      binding.parkingDirectionContent.buttonScanAgain.visibility = View.VISIBLE
+      binding.parkingDirectionContent.iconBookingDetail.setImageResource(R.drawable.ic_sad)
+      binding.parkingDirectionContent.welcomeTo.text = getString(R.string.oops)
+      binding.parkingDirectionContent.errorText.text = getString(R.string.failed_create_booking)
+      binding.parkingDirectionSheet.root.visibility = View.GONE
     }
   }
 
   override fun loadBookingSuccess(booking: CustomerBooking) {
     showParkingLayout(layout)
-    rootView.swipe_up_indicator.visibility = View.VISIBLE
-    rootView.welcome_to.text =
+    binding.parkingDirectionSheet.swipeUpIndicator.visibility = View.VISIBLE
+    binding.parkingDirectionContent.welcomeTo.text =
       String.format(getString(R.string.welcome_to), booking.parkingZoneName)
-    rootView.slot_name.text = booking.slotName
-    rootView.layout_booking_detail.visibility = View.VISIBLE
-    rootView.icon_booking_detail.setImageResource(R.drawable.ic_smile)
-    rootView.date_in.text = Utils.convertLongToTimeOnly(booking.dateIn)
+    binding.parkingDirectionContent.slotName.text = booking.slotName
+    binding.parkingDirectionContent.layoutBookingDetail.visibility = View.VISIBLE
+    binding.parkingDirectionContent.iconBookingDetail.setImageResource(R.drawable.ic_smile)
+    binding.parkingDirectionContent.dateIn.text = Utils.convertLongToTimeOnly(booking.dateIn)
     hideItem()
   }
 
   private fun hideItem() {
-    val navigationView = rootView.findViewById(R.id.nav_view) as NavigationView
+    val navigationView = bindingActivityMain.navView
     navigationView.menu.findItem(R.id.navigation_home).isVisible = false
   }
 
@@ -126,7 +132,7 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
   override fun showProgress(show: Boolean) {
     if (null != progressBar && show) {
       progressBar.visibility = View.VISIBLE
-    } else {
+    } else if (null != progressBar && !show) {
       progressBar.visibility = View.GONE
     }
   }
@@ -141,19 +147,19 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
   }
 
   private fun showParkingLayout(layout: HorizontalScrollView) {
-    val layoutSeat = LinearLayout(context)
+    val layoutPark = LinearLayout(context)
     val params = LinearLayout.LayoutParams(
       ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
     )
-    layoutSeat.orientation = LinearLayout.VERTICAL
-    layoutSeat.layoutParams = params
-    layoutSeat.setPadding(
-      8 * Constants.seatGaping,
-      8 * Constants.seatGaping,
-      8 * Constants.seatGaping,
-      8 * Constants.seatGaping
+    layoutPark.orientation = LinearLayout.VERTICAL
+    layoutPark.layoutParams = params
+    layoutPark.setPadding(
+      8 * Constants.parkGaping,
+      8 * Constants.parkGaping,
+      8 * Constants.parkGaping,
+      8 * Constants.parkGaping
     )
-    layout.addView(layoutSeat)
+    layout.addView(layoutPark)
 
     var newLayout: LinearLayout? = null
     var count = 0
@@ -162,16 +168,16 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
       if (SLOTS[index] == ADD_NEW_LINE) {
         newLayout = LinearLayout(context)
         newLayout.orientation = LinearLayout.HORIZONTAL
-        layoutSeat.addView(newLayout)
+        layoutPark.addView(newLayout)
       } else if (SLOTS[index] == TAKEN_SLOT) {
         count++
         val view = TextView(context)
-        val layoutParams = LinearLayout.LayoutParams(Constants.seatSize, Constants.seatSize)
+        val layoutParams = LinearLayout.LayoutParams(Constants.parkSize, Constants.parkSize)
         layoutParams.setMargins(
-          Constants.seatGaping, Constants.seatGaping, Constants.seatGaping, Constants.seatGaping
+          Constants.parkGaping, Constants.parkGaping, Constants.parkGaping, Constants.parkGaping
         )
         view.layoutParams = layoutParams
-        view.setPadding(0, 0, 0, 4 * Constants.seatGaping)
+        view.setPadding(0, 0, 0, 4 * Constants.parkGaping)
         view.id = count
         view.gravity = Gravity.CENTER
         view.setBackgroundResource(R.drawable.ic_car)
@@ -180,17 +186,17 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
         view.text = String.format(getString(R.string.only_placeholder), count.toString())
         view.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9f)
         newLayout!!.addView(view)
-        seatViewList.add(view)
+        parkViewList.add(view)
         view.setOnClickListener { onClick(view) }
       } else if (SLOTS[index] == EMPTY_SLOT) {
         count++
         val view = TextView(context)
-        val layoutParams = LinearLayout.LayoutParams(Constants.seatSize, Constants.seatSize)
+        val layoutParams = LinearLayout.LayoutParams(Constants.parkSize, Constants.parkSize)
         layoutParams.setMargins(
-          Constants.seatGaping, Constants.seatGaping, Constants.seatGaping, Constants.seatGaping
+          Constants.parkGaping, Constants.parkGaping, Constants.parkGaping, Constants.parkGaping
         )
         view.layoutParams = layoutParams
-        view.setPadding(0, 0, 0, 4 * Constants.seatGaping)
+        view.setPadding(0, 0, 0, 4 * Constants.parkGaping)
         view.id = count
         view.gravity = Gravity.CENTER
         view.setBackgroundResource(R.drawable.ic_park)
@@ -199,17 +205,17 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
         view.setTextColor(Color.BLACK)
         view.tag = Constants.STATUS_AVAILABLE
         newLayout!!.addView(view)
-        seatViewList.add(view)
+        parkViewList.add(view)
         view.setOnClickListener { onClick(view) }
       } else if (SLOTS[index] == DISABLED_SLOT) {
         count++
         val view = TextView(context)
-        val layoutParams = LinearLayout.LayoutParams(Constants.seatSize, Constants.seatSize)
+        val layoutParams = LinearLayout.LayoutParams(Constants.parkSize, Constants.parkSize)
         layoutParams.setMargins(
-          Constants.seatGaping, Constants.seatGaping, Constants.seatGaping, Constants.seatGaping
+          Constants.parkGaping, Constants.parkGaping, Constants.parkGaping, Constants.parkGaping
         )
         view.layoutParams = layoutParams
-        view.setPadding(0, 0, 0, 4 * Constants.seatGaping)
+        view.setPadding(0, 0, 0, 4 * Constants.parkGaping)
         view.id = count
         view.gravity = Gravity.CENTER
         view.setBackgroundResource(R.drawable.ic_disable)
@@ -218,13 +224,13 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
         view.setTextColor(Color.WHITE)
         view.tag = Constants.STATUS_RESERVED
         newLayout!!.addView(view)
-        seatViewList.add(view)
+        parkViewList.add(view)
         view.setOnClickListener { onClick(view) }
       } else if (SLOTS[index] == SPACING) {
         val view = TextView(context)
-        val layoutParams = LinearLayout.LayoutParams(Constants.seatSize, Constants.seatSize)
+        val layoutParams = LinearLayout.LayoutParams(Constants.parkSize, Constants.parkSize)
         layoutParams.setMargins(
-          Constants.seatGaping, Constants.seatGaping, Constants.seatGaping, Constants.seatGaping
+          Constants.parkGaping, Constants.parkGaping, Constants.parkGaping, Constants.parkGaping
         )
         view.layoutParams = layoutParams
         view.setBackgroundResource(R.drawable.ic_road)
@@ -245,15 +251,11 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
       }
     } else if (view.tag as Int == Constants.STATUS_BOOKED) {
       Toast.makeText(
-        context,
-        "Slot ${view.id} ${getString(R.string.is_booked)}",
-        Toast.LENGTH_SHORT
+        context, "Slot ${view.id} ${getString(R.string.is_booked)}", Toast.LENGTH_SHORT
       ).show()
     } else if (view.tag as Int == Constants.STATUS_RESERVED) {
       Toast.makeText(
-        context,
-        "Slot ${view.id} ${getString(R.string.is_reserved)}",
-        Toast.LENGTH_SHORT
+        context, "Slot ${view.id} ${getString(R.string.is_reserved)}", Toast.LENGTH_SHORT
       ).show()
     }
   }

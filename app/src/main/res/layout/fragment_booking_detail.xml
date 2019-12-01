@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/baseWhite">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- include main content -->
-    <include layout="@layout/fragment_bottom_sheet_content" />
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/baseWhite">
 
-    <!-- include bottom sheet -->
-    <include
-        android:id="@+id/parking_direction_sheet"
-        layout="@layout/fragment_parking_direction" />
+        <!-- include main content -->
+        <include
+            android:id="@+id/parking_direction_content"
+            layout="@layout/fragment_bottom_sheet_content" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <!-- include bottom sheet -->
+        <include
+            android:id="@+id/parking_direction_sheet"
+            layout="@layout/fragment_parking_direction" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

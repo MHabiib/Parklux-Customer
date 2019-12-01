@@ -12,9 +12,10 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.addCallback
-import androidx.appcompat.widget.Toolbar
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.future.pms.R
+import com.future.pms.databinding.FragmentParkingDirectionBinding
 import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
 import com.future.pms.ui.main.MainActivity
@@ -22,19 +23,18 @@ import com.future.pms.util.Constants.Companion.PARKING_DETAIL_FRAGMENT
 import com.future.pms.util.Constants.Companion.STATUS_AVAILABLE
 import com.future.pms.util.Constants.Companion.STATUS_BOOKED
 import com.future.pms.util.Constants.Companion.STATUS_RESERVED
-import com.future.pms.util.Constants.Companion.seatGaping
-import com.future.pms.util.Constants.Companion.seatSize
+import com.future.pms.util.Constants.Companion.parkGaping
+import com.future.pms.util.Constants.Companion.parkSize
 import com.future.pms.util.Constants.Companion.selectedIds
 import java.util.*
 import javax.inject.Inject
 
 class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
+  @Inject lateinit var presenter: ParkingDirectionPresenter
+  private lateinit var binding: FragmentParkingDirectionBinding
+  private var parkViewList: MutableList<TextView> = ArrayList()
   private var SLOTS =
     ("/\$_UUAAU_RR_UU_UU_/" + "___Z_____________/" + "_AARAU_UU_UU_UU_/" + "_UUARR_RR_UU_AR_/" + "________________/" + "_URAAU_RA_UU_UU_/" + "_RUUAU_RR_UU_UU_/" + "________________/" + "_UU_AU_RU_UR_UU_/" + "_UU_AU_RR_AR_UU_/" + "________________/" + "_UURAUARRAUUAUU_/" + "________________/" + "_URRAUARARUURUU_/" + "________________/")
-
-  @Inject lateinit var presenter: ParkingDirectionPresenter
-  private lateinit var rootView: View
-  private var seatViewList: MutableList<TextView> = ArrayList()
 
   companion object {
     const val TAG: String = PARKING_DETAIL_FRAGMENT
@@ -55,13 +55,14 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
       savedInstanceState: Bundle?): View? {
-    rootView = inflater.inflate(R.layout.fragment_parking_direction, container, false)
-    val toolbar = rootView.findViewById(R.id.toolbar) as Toolbar
-    val layout = rootView.findViewById(R.id.layoutSeat) as HorizontalScrollView
+    binding =
+      DataBindingUtil.inflate(inflater, R.layout.fragment_parking_direction, container, false)
+    val toolbar = binding.toolbar
+    val layout = binding.layoutPark
     toolbar.setNavigationIcon(R.drawable.ic_back_white)
     showParkingSlot(layout)
     toolbar.setNavigationOnClickListener { backToHome() }
-    return rootView
+    return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -74,13 +75,13 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
   private fun initView() {}
 
   private fun showParkingSlot(layout: HorizontalScrollView) {
-    val layoutSeat = LinearLayout(context)
+    val layoutPark = LinearLayout(context)
     val params = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
         ViewGroup.LayoutParams.WRAP_CONTENT)
-    layoutSeat.orientation = LinearLayout.VERTICAL
-    layoutSeat.layoutParams = params
-    layoutSeat.setPadding(4 * seatGaping, 4 * seatGaping, 4 * seatGaping, 4 * seatGaping)
-    layout.addView(layoutSeat)
+    layoutPark.orientation = LinearLayout.VERTICAL
+    layoutPark.layoutParams = params
+    layoutPark.setPadding(4 * parkGaping, 4 * parkGaping, 4 * parkGaping, 4 * parkGaping)
+    layout.addView(layoutPark)
 
     var layout: LinearLayout? = null
     var count = 0
@@ -90,13 +91,13 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
         SLOTS[index] == '/' -> {
           layout = LinearLayout(context)
           layout.orientation = LinearLayout.HORIZONTAL
-          layoutSeat.addView(layout)
+          layoutPark.addView(layout)
         }
         SLOTS[index] == 'U' -> {
           count++
           val view = TextView(context)
-          val layoutParams = LinearLayout.LayoutParams(seatSize, seatSize)
-          layoutParams.setMargins(seatGaping, seatGaping, seatGaping, seatGaping)
+          val layoutParams = LinearLayout.LayoutParams(parkSize, parkSize)
+          layoutParams.setMargins(parkGaping, parkGaping, parkGaping, parkGaping)
           view.layoutParams = layoutParams
           view.setPadding(0, 0, 0, 0)
           view.id = count
@@ -107,16 +108,16 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
           view.text = count.toString()
           view.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9f)
           layout!!.addView(view)
-          seatViewList.add(view)
+          parkViewList.add(view)
           view.setOnClickListener { onClick(view) }
         }
         SLOTS[index] == 'A' -> {
           count++
           val view = TextView(context)
-          val layoutParams = LinearLayout.LayoutParams(seatSize, seatSize)
-          layoutParams.setMargins(seatGaping, seatGaping, seatGaping, seatGaping)
+          val layoutParams = LinearLayout.LayoutParams(parkSize, parkSize)
+          layoutParams.setMargins(parkGaping, parkGaping, parkGaping, parkGaping)
           view.layoutParams = layoutParams
-          view.setPadding(0, 0, 0, 2 * seatGaping)
+          view.setPadding(0, 0, 0, 2 * parkGaping)
           view.id = count
           view.gravity = Gravity.CENTER
           view.setBackgroundResource(R.drawable.ic_park)
@@ -125,14 +126,14 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
           view.setTextColor(Color.BLACK)
           view.tag = STATUS_AVAILABLE
           layout!!.addView(view)
-          seatViewList.add(view)
+          parkViewList.add(view)
           view.setOnClickListener { onClick(view) }
         }
         SLOTS[index] == 'R' -> {
           count++
           val view = TextView(context)
-          val layoutParams = LinearLayout.LayoutParams(seatSize, seatSize)
-          layoutParams.setMargins(seatGaping, seatGaping, seatGaping, seatGaping)
+          val layoutParams = LinearLayout.LayoutParams(parkSize, parkSize)
+          layoutParams.setMargins(parkGaping, parkGaping, parkGaping, parkGaping)
           view.layoutParams = layoutParams
           view.id = count
           view.gravity = Gravity.CENTER
@@ -142,13 +143,13 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
           view.setTextColor(Color.WHITE)
           view.tag = STATUS_RESERVED
           layout!!.addView(view)
-          seatViewList.add(view)
+          parkViewList.add(view)
           view.setOnClickListener { onClick(view) }
         }
         SLOTS[index] == '_' -> {
           val view = TextView(context)
-          val layoutParams = LinearLayout.LayoutParams(seatSize, seatSize)
-          layoutParams.setMargins(seatGaping, seatGaping, seatGaping, seatGaping)
+          val layoutParams = LinearLayout.LayoutParams(parkSize, parkSize)
+          layoutParams.setMargins(parkGaping, parkGaping, parkGaping, parkGaping)
           view.layoutParams = layoutParams
           view.gravity = Gravity.CENTER
           view.setBackgroundResource(R.drawable.ic_road)
@@ -169,9 +170,9 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
         view.setBackgroundResource(R.drawable.ic_my_location)
       }
     } else if (view.tag as Int == STATUS_BOOKED) {
-      Toast.makeText(context, "Seat " + view.id + " is Booked", Toast.LENGTH_SHORT).show()
+      Toast.makeText(context, "Park " + view.id + " is Booked", Toast.LENGTH_SHORT).show()
     } else if (view.tag as Int == STATUS_RESERVED) {
-      Toast.makeText(context, "Seat " + view.id + " is Reserved", Toast.LENGTH_SHORT).show()
+      Toast.makeText(context, "Park " + view.id + " is Reserved", Toast.LENGTH_SHORT).show()
     }
   }
 

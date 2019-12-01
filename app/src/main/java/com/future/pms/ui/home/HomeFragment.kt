@@ -5,10 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.future.pms.R
+import com.future.pms.databinding.FragmentHomeBinding
 import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
 import com.future.pms.model.customerdetail.Customer
@@ -20,7 +21,6 @@ import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.ERROR
 import com.future.pms.util.Constants.Companion.HOME_FRAGMENT
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.fragment_home.view.*
 import timber.log.Timber
 import java.text.DateFormat
 import java.util.*
@@ -28,7 +28,7 @@ import javax.inject.Inject
 
 class HomeFragment : Fragment(), HomeContract {
   @Inject lateinit var presenter: HomePresenter
-  private lateinit var rootView: View
+  private lateinit var binding: FragmentHomeBinding
 
   companion object {
     const val TAG: String = HOME_FRAGMENT
@@ -45,18 +45,18 @@ class HomeFragment : Fragment(), HomeContract {
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
       savedInstanceState: Bundle?): View? {
-    rootView = inflater.inflate(R.layout.fragment_home, container, false)
-    val viewPager = rootView.viewPager as ViewPager
+    binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
+    val viewPager = binding.viewPager as ViewPager
     val adapter = ViewPagerAdapter(childFragmentManager)
     adapter.addFragment(OngoingFragment(), "Your Ongoing Parking")
     adapter.addFragment(HistoryFragment(), "History")
     viewPager.adapter = adapter
-    rootView.tabs.setupWithViewPager(viewPager)
-    for (i in 0 until rootView.tabs.tabCount) {
-      if (i == 0) rootView.tabs.getTabAt(i)?.setIcon(R.drawable.ic_parking)
-      else rootView.tabs.getTabAt(i)?.setIcon(R.drawable.ic_history)
+    binding.tabs.setupWithViewPager(viewPager)
+    for (i in 0 until binding.tabs.tabCount) {
+      if (i == 0) binding.tabs.getTabAt(i)?.setIcon(R.drawable.ic_parking)
+      else binding.tabs.getTabAt(i)?.setIcon(R.drawable.ic_history)
     }
-    return rootView
+    return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -74,7 +74,7 @@ class HomeFragment : Fragment(), HomeContract {
     ).accessToken
     getDateNow()
     presenter.loadData(accessToken)
-    val textAnnounce = rootView.findViewById(R.id.text_announce_user) as TextView
+    val textAnnounce = binding.textAnnounceUser
     textAnnounce.text = presenter.getTextAnnounce()
   }
 
@@ -84,7 +84,7 @@ class HomeFragment : Fragment(), HomeContract {
   }
 
   override fun loadCustomerDetailSuccess(customer: Customer) {
-    rootView.user_name.text = customer.body.name
+    binding.userName.text = customer.body.name
   }
 
   override fun showErrorMessage(error: String) {
@@ -98,7 +98,7 @@ class HomeFragment : Fragment(), HomeContract {
 
   override fun getDateNow() {
     val currentDateTimeString = DateFormat.getDateInstance(DateFormat.FULL).format(Date())
-    val dateText = rootView.findViewById(R.id.date_now) as TextView
+    val dateText = binding.dateNow
     dateText.text = String.format("It's %s", currentDateTimeString)
   }
 

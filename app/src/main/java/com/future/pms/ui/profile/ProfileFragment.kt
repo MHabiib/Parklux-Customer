@@ -10,8 +10,10 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.addCallback
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.future.pms.R
+import com.future.pms.databinding.FragmentProfileBinding
 import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
 import com.future.pms.model.customerdetail.Customer
@@ -22,13 +24,12 @@ import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.PROFILE_FRAGMENT
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_profile.*
-import kotlinx.android.synthetic.main.fragment_profile.view.*
 import timber.log.Timber
 import javax.inject.Inject
 
 class ProfileFragment : Fragment(), ProfileContract {
   @Inject lateinit var presenter: ProfilePresenter
-  private lateinit var rootView: View
+  private lateinit var binding: FragmentProfileBinding
   private var update: Button? = null
 
   companion object {
@@ -51,15 +52,15 @@ class ProfileFragment : Fragment(), ProfileContract {
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
   ): View? {
-    rootView = inflater.inflate(R.layout.fragment_profile, container, false)
-    val submit = rootView.findViewById(R.id.btnLogout) as Button
-    update = rootView.findViewById(R.id.btn_edit_profile) as Button
-    submit.setOnClickListener {
+    binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container, false)
+    val logout = binding.btnLogout
+    update = binding.btnEditProfile
+    logout.setOnClickListener {
       btnLogout.visibility = View.GONE
       presenter.signOut()
       onLogout()
     }
-    return rootView
+    return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -86,7 +87,7 @@ class ProfileFragment : Fragment(), ProfileContract {
   override fun showProgress(show: Boolean) {
     if (null != progressBar && show) {
       progressBar.visibility = View.VISIBLE
-    } else {
+    } else if (null != progressBar && !show) {
       progressBar.visibility = View.GONE
     }
   }
@@ -96,14 +97,14 @@ class ProfileFragment : Fragment(), ProfileContract {
   }
 
   override fun loadCustomerDetailSuccess(customer: Customer) {
-    rootView.profile_name_display.text = customer.body.name
-    rootView.profile_name.setText(customer.body.name)
-    rootView.profile_email.setText(customer.body.email)
-    rootView.profile_password.hint = "********"
+    binding.profileNameDisplay.text = customer.body.name
+    binding.profileName.setText(customer.body.name)
+    binding.profileEmail.setText(customer.body.email)
+    binding.profilePassword.hint = "********"
     if (customer.body.phoneNumber == "") {
-      rootView.profile_phone_number.hint = "You haven't enter your phone number yet !"
+      binding.profilePhoneNumber.hint = "You haven't enter your phone number yet !"
     } else {
-      rootView.profile_phone_number.setText(customer.body.phoneNumber)
+      binding.profilePhoneNumber.setText(customer.body.phoneNumber)
     }
   }
 

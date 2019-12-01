@@ -19,8 +19,8 @@ class Constants {
     const val FULL_DATE_TIME_FORMAT = "HH:mm - dd MMMM yyyy "
     const val TIME_FORMAT = "HH:mm"
 
-    const val seatSize = 100
-    const val seatGaping = 8
+    const val parkSize = 100
+    const val parkGaping = 8
     const val STATUS_AVAILABLE = 1
     const val STATUS_BOOKED = 2
     const val STATUS_RESERVED = 3
