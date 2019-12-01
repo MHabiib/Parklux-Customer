@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -74,11 +76,12 @@ class ProfileFragment : Fragment(), ProfileContract {
     presenter.subscribe()
     presenter.loadData(accessToken)
     update?.setOnClickListener {
+      showProgress(true)
       presenter.update(
-        profile_name.text.toString(),
-        profile_email.text.toString(),
-        profile_password.text.toString(),
-        profile_phone_number.text.toString(),
+        binding.profileName.text.toString(),
+        binding.profileEmail.text.toString(),
+        binding.profilePassword.text.toString(),
+        binding.profilePhoneNumber.text.toString(),
         accessToken
       )
     }
@@ -106,6 +109,22 @@ class ProfileFragment : Fragment(), ProfileContract {
     } else {
       binding.profilePhoneNumber.setText(customer.body.phoneNumber)
     }
+    binding.profileName.addTextChangedListener(textWatcher())
+    binding.profileEmail.addTextChangedListener(textWatcher())
+    binding.profilePassword.addTextChangedListener(textWatcher())
+    binding.profilePhoneNumber.addTextChangedListener(textWatcher())
+  }
+
+  private fun textWatcher(): TextWatcher {
+    return object : TextWatcher {
+      override fun afterTextChanged(s: Editable?) {}
+      override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        binding.btnEditProfile.setBackgroundResource(R.drawable.card_layout_purple)
+        binding.btnEditProfile.isEnabled = true
+      }
+
+      override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+    }
   }
 
   override fun onSuccess() {
@@ -115,10 +134,6 @@ class ProfileFragment : Fragment(), ProfileContract {
   }
 
   override fun onFailed(e: String) {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-  }
-
-  override fun onError(e: Throwable) {
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 

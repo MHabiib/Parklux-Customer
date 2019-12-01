@@ -21,10 +21,8 @@ class ProfilePresenter @Inject constructor() {
   fun loadData(accessToken: String) {
     val subscribe = api.getCustomerDetail(accessToken).subscribeOn(Schedulers.io())
       .observeOn(AndroidSchedulers.mainThread()).subscribe({ customer: Customer ->
-        view.showProgress(false)
         view.loadCustomerDetailSuccess(customer)
       }, { error ->
-        view.showProgress(false)
         view.showErrorMessage(error.localizedMessage)
         view.unauthorized()
       })
@@ -36,8 +34,10 @@ class ProfilePresenter @Inject constructor() {
     val subscribe = api.putUpdateCustomer(token, customer).subscribeOn(Schedulers.io()).observeOn(
       AndroidSchedulers.mainThread()
     ).subscribe({
+      view.showProgress(false)
       view.onSuccess()
     }, {
+      view.showProgress(false)
       view.onFailed(it.message.toString())
     })
     subscriptions.add(subscribe)

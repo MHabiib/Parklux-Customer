@@ -1,6 +1,10 @@
 package com.future.pms.ui.ongoing
 
+import android.app.Notification
+import android.app.NotificationChannel.DEFAULT_CHANNEL_ID
+import android.app.NotificationManager
 import android.content.Context
+import android.content.Context.NOTIFICATION_SERVICE
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
@@ -8,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Chronometer
+import androidx.core.app.NotificationCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
@@ -21,6 +26,7 @@ import com.future.pms.model.customerbooking.CustomerBooking
 import com.future.pms.model.oauth.Token
 import com.future.pms.ui.main.MainActivity
 import com.future.pms.util.Constants
+import com.future.pms.util.Utils
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_ongoing.*
 import timber.log.Timber
@@ -80,6 +86,10 @@ class OngoingFragment : Fragment(), OngoingContract {
       ), Token::class.java
     ).accessToken
     presenter.loadOngoingBooking(accessToken)
+    val mNotificationManager =
+      context?.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+    Utils.createNotificationChannel(mNotificationManager)
+    mNotificationManager.notify(1, notificationDetails())
   }
 
   override fun showProgress(show: Boolean) {
@@ -125,12 +135,22 @@ class OngoingFragment : Fragment(), OngoingContract {
     binding.dontHaveOngoing.visibility = View.VISIBLE
   }
 
-  fun loadImage(imageUrl: String) {
+  private fun loadImage(imageUrl: String) {
     Glide.with(binding.root).load(imageUrl).transform(CenterCrop(), RoundedCorners(80)).placeholder(
       R.drawable.ic_image_place_holder
     ).error(R.drawable.ic_image_place_holder).fallback(
       R.drawable.ic_image_place_holder
     ).into(binding.ongoingIv)
+  }
+
+  private fun notificationDetails(): Notification {
+    return NotificationCompat.Builder(context!!, DEFAULT_CHANNEL_ID)
+      .setContentTitle("Check out parking success")
+      .setContentText("Thank you for using Parking Management System apps !")
+      .setSmallIcon(R.drawable.logo_blue).setStyle(
+        NotificationCompat.BigTextStyle().bigText("Thank you for using Parking Management System apps !")
+      ).build()
+    //todo
   }
 
   private fun injectDependency() {

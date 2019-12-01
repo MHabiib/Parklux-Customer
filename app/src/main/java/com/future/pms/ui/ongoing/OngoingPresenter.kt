@@ -14,13 +14,10 @@ class OngoingPresenter @Inject constructor() {
   private lateinit var view: OngoingContract
 
   fun loadOngoingBooking(accessToken: String) {
-    view.showProgress(true)
     val subscribe = api.getOngoingBooking(accessToken).subscribeOn(Schedulers.io()).observeOn(
         AndroidSchedulers.mainThread()).subscribe({ ongoing: CustomerBooking ->
-      view.showProgress(false)
       view.loadCustomerOngoingSuccess(ongoing)
     }, { error ->
-      view.showProgress(false)
       view.loadCustomerOngoingFailed()
       view.showErrorMessage(error.localizedMessage)
     })
