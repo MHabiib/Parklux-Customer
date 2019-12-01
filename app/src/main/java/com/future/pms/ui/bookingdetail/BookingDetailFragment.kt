@@ -23,15 +23,19 @@ import com.future.pms.di.module.FragmentModule
 import com.future.pms.model.customerbooking.CustomerBooking
 import com.future.pms.model.oauth.Token
 import com.future.pms.ui.main.MainActivity
-import com.future.pms.util.Constants
-import com.future.pms.util.Constants.Companion.ADD_NEW_LINE
-import com.future.pms.util.Constants.Companion.DISABLED_SLOT
-import com.future.pms.util.Constants.Companion.EMPTY_SLOT
+import com.future.pms.util.Constants.Companion.AUTHENTCATION
+import com.future.pms.util.Constants.Companion.BOOKING_DETAIL_FRAGMENT
 import com.future.pms.util.Constants.Companion.ERROR
 import com.future.pms.util.Constants.Companion.ID_BOOKING
 import com.future.pms.util.Constants.Companion.NULL
-import com.future.pms.util.Constants.Companion.SPACING
-import com.future.pms.util.Constants.Companion.TAKEN_SLOT
+import com.future.pms.util.Constants.Companion.STATUS_AVAILABLE
+import com.future.pms.util.Constants.Companion.STATUS_BOOKED
+import com.future.pms.util.Constants.Companion.STATUS_RESERVED
+import com.future.pms.util.Constants.Companion.STATUS_ROAD
+import com.future.pms.util.Constants.Companion.TOKEN
+import com.future.pms.util.Constants.Companion.parkGaping
+import com.future.pms.util.Constants.Companion.parkSize
+import com.future.pms.util.Constants.Companion.selectedIds
 import com.future.pms.util.Utils
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_bottom_sheet_content.*
@@ -51,7 +55,7 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
     ("/\$_UUAAU_RR_UU_UU_/" + "________________/" + "_AARAU_UU_UU_UU_/" + "_UUARR_RR_UU_AR_/" + "________________/" + "_URAAU_RA_UU_UU_/" + "_RUUAU_RR_UU_UU_/" + "________________/" + "_UU_AU_RU_UR_UU_/" + "_UU_AU_RR_AR_UU_/" + "________________/" + "_UURAUARRAUUAUU_/" + "________________/" + "_URRAUARARUURUU_/" + "________________/")
 
   companion object {
-    const val TAG: String = Constants.BOOKING_DETAIL_FRAGMENT
+    const val TAG: String = BOOKING_DETAIL_FRAGMENT
   }
 
   fun newInstance(): BookingDetailFragment {
@@ -74,8 +78,8 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
     bindingActivityMain = DataBindingUtil.inflate(inflater, R.layout.activity_main, null, false)
 
     accessToken = Gson().fromJson(
-      context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
-        Constants.TOKEN, null
+      context?.getSharedPreferences(AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
+        TOKEN, null
       ), Token::class.java
     ).accessToken
     binding.parkingDirectionContent.backBookingDetail.setOnClickListener { backToHome() }
@@ -148,114 +152,91 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
 
   private fun showParkingLayout(layout: HorizontalScrollView) {
     val layoutPark = LinearLayout(context)
+    var parkingLayout: LinearLayout? = null
+    var count = 0
     val params = LinearLayout.LayoutParams(
       ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
     )
     layoutPark.orientation = LinearLayout.VERTICAL
     layoutPark.layoutParams = params
-    layoutPark.setPadding(
-      8 * Constants.parkGaping,
-      8 * Constants.parkGaping,
-      8 * Constants.parkGaping,
-      8 * Constants.parkGaping
-    )
+    layoutPark.setPadding(4 * parkGaping, 4 * parkGaping, 4 * parkGaping, 4 * parkGaping)
     layout.addView(layoutPark)
 
-    var newLayout: LinearLayout? = null
-    var count = 0
-
     for (index in 0 until SLOTS.length) {
-      if (SLOTS[index] == ADD_NEW_LINE) {
-        newLayout = LinearLayout(context)
-        newLayout.orientation = LinearLayout.HORIZONTAL
-        layoutPark.addView(newLayout)
-      } else if (SLOTS[index] == TAKEN_SLOT) {
-        count++
-        val view = TextView(context)
-        val layoutParams = LinearLayout.LayoutParams(Constants.parkSize, Constants.parkSize)
-        layoutParams.setMargins(
-          Constants.parkGaping, Constants.parkGaping, Constants.parkGaping, Constants.parkGaping
-        )
-        view.layoutParams = layoutParams
-        view.setPadding(0, 0, 0, 4 * Constants.parkGaping)
-        view.id = count
-        view.gravity = Gravity.CENTER
-        view.setBackgroundResource(R.drawable.ic_car)
-        view.setTextColor(Color.WHITE)
-        view.tag = Constants.STATUS_BOOKED
-        view.text = String.format(getString(R.string.only_placeholder), count.toString())
-        view.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9f)
-        newLayout!!.addView(view)
-        parkViewList.add(view)
-        view.setOnClickListener { onClick(view) }
-      } else if (SLOTS[index] == EMPTY_SLOT) {
-        count++
-        val view = TextView(context)
-        val layoutParams = LinearLayout.LayoutParams(Constants.parkSize, Constants.parkSize)
-        layoutParams.setMargins(
-          Constants.parkGaping, Constants.parkGaping, Constants.parkGaping, Constants.parkGaping
-        )
-        view.layoutParams = layoutParams
-        view.setPadding(0, 0, 0, 4 * Constants.parkGaping)
-        view.id = count
-        view.gravity = Gravity.CENTER
-        view.setBackgroundResource(R.drawable.ic_park)
-        view.text = String.format(getString(R.string.only_placeholder), count.toString())
-        view.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9f)
-        view.setTextColor(Color.BLACK)
-        view.tag = Constants.STATUS_AVAILABLE
-        newLayout!!.addView(view)
-        parkViewList.add(view)
-        view.setOnClickListener { onClick(view) }
-      } else if (SLOTS[index] == DISABLED_SLOT) {
-        count++
-        val view = TextView(context)
-        val layoutParams = LinearLayout.LayoutParams(Constants.parkSize, Constants.parkSize)
-        layoutParams.setMargins(
-          Constants.parkGaping, Constants.parkGaping, Constants.parkGaping, Constants.parkGaping
-        )
-        view.layoutParams = layoutParams
-        view.setPadding(0, 0, 0, 4 * Constants.parkGaping)
-        view.id = count
-        view.gravity = Gravity.CENTER
-        view.setBackgroundResource(R.drawable.ic_disable)
-        view.text = String.format(getString(R.string.only_placeholder), count.toString())
-        view.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9f)
-        view.setTextColor(Color.WHITE)
-        view.tag = Constants.STATUS_RESERVED
-        newLayout!!.addView(view)
-        parkViewList.add(view)
-        view.setOnClickListener { onClick(view) }
-      } else if (SLOTS[index] == SPACING) {
-        val view = TextView(context)
-        val layoutParams = LinearLayout.LayoutParams(Constants.parkSize, Constants.parkSize)
-        layoutParams.setMargins(
-          Constants.parkGaping, Constants.parkGaping, Constants.parkGaping, Constants.parkGaping
-        )
-        view.layoutParams = layoutParams
-        view.setBackgroundResource(R.drawable.ic_road)
-        view.text = getString(R.string.empty)
-        newLayout!!.addView(view)
+      when {
+        SLOTS[index] == '/' -> {
+          parkingLayout = LinearLayout(context)
+          parkingLayout.orientation = LinearLayout.HORIZONTAL
+          layoutPark.addView(parkingLayout)
+        }
+        SLOTS[index] == 'U' -> {
+          count++
+          setupParkingView(count, parkingLayout, SLOTS[index], STATUS_BOOKED, R.drawable.ic_car)
+        }
+        SLOTS[index] == 'A' -> {
+          count++
+          setupParkingView(count, parkingLayout, SLOTS[index], STATUS_AVAILABLE, R.drawable.ic_park)
+        }
+        SLOTS[index] == 'R' -> {
+          count++
+          setupParkingView(
+            count, parkingLayout, SLOTS[index], STATUS_RESERVED, R.drawable.ic_disable
+          )
+        }
+        SLOTS[index] == '_' -> {
+          setupParkingView(count, parkingLayout, SLOTS[index], STATUS_ROAD, R.drawable.ic_road)
+        }
       }
     }
   }
 
+  private fun setupParkingView(
+    count: Int, layout: LinearLayout?, code: Char, tag: Int, icon: Int
+  ): TextView {
+    val view = TextView(context)
+    val layoutParams = LinearLayout.LayoutParams(parkSize, parkSize)
+    layoutParams.setMargins(
+      parkGaping, parkGaping, parkGaping, parkGaping
+    )
+    view.layoutParams = layoutParams
+    view.setPadding(0, 0, 0, 0)
+    view.gravity = Gravity.CENTER
+    view.setBackgroundResource(icon)
+    view.setTextColor(Color.WHITE)
+    view.tag = tag
+    if (code != '_') {
+      view.id = count
+      view.text = count.toString()
+      view.setOnClickListener { onClick(view) }
+    } else {
+      view.text = ""
+    }
+    view.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9f)
+    layout!!.addView(view)
+    parkViewList.add(view)
+    return view
+  }
+
   private fun onClick(view: View) {
-    if (view.tag as Int == Constants.STATUS_AVAILABLE) {
-      if (Constants.selectedIds.contains(view.id.toString() + ",")) {
-        Constants.selectedIds = Constants.selectedIds.replace((+view.id).toString() + ",", "")
-        view.setBackgroundResource(R.drawable.ic_car)
+    if (view.tag as Int == STATUS_AVAILABLE) {
+      if (selectedIds.contains(view.id.toString() + ",")) {
+        selectedIds = selectedIds.replace((+view.id).toString() + ",", "")
+        view.setBackgroundResource(R.drawable.ic_park)
       } else {
-        Constants.selectedIds = Constants.selectedIds + view.id + ","
+        selectedIds = selectedIds + view.id + ","
         view.setBackgroundResource(R.drawable.ic_my_location)
       }
-    } else if (view.tag as Int == Constants.STATUS_BOOKED) {
+    } else if (view.tag as Int == STATUS_BOOKED) {
       Toast.makeText(
-        context, "Slot ${view.id} ${getString(R.string.is_booked)}", Toast.LENGTH_SHORT
+        context,
+        String.format(getString(R.string.park_is_booked), view.id),
+        Toast.LENGTH_SHORT
       ).show()
-    } else if (view.tag as Int == Constants.STATUS_RESERVED) {
+    } else if (view.tag as Int == STATUS_RESERVED) {
       Toast.makeText(
-        context, "Slot ${view.id} ${getString(R.string.is_reserved)}", Toast.LENGTH_SHORT
+        context,
+        String.format(getString(R.string.park_is_reserved), view.id),
+        Toast.LENGTH_SHORT
       ).show()
     }
   }

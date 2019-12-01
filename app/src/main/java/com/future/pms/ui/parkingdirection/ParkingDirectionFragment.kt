@@ -23,6 +23,7 @@ import com.future.pms.util.Constants.Companion.PARKING_DETAIL_FRAGMENT
 import com.future.pms.util.Constants.Companion.STATUS_AVAILABLE
 import com.future.pms.util.Constants.Companion.STATUS_BOOKED
 import com.future.pms.util.Constants.Companion.STATUS_RESERVED
+import com.future.pms.util.Constants.Companion.STATUS_ROAD
 import com.future.pms.util.Constants.Companion.parkGaping
 import com.future.pms.util.Constants.Companion.parkSize
 import com.future.pms.util.Constants.Companion.selectedIds
@@ -53,8 +54,9 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
     injectDependency()
   }
 
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-      savedInstanceState: Bundle?): View? {
+  override fun onCreateView(
+    inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+  ): View? {
     binding =
       DataBindingUtil.inflate(inflater, R.layout.fragment_parking_direction, container, false)
     val toolbar = binding.toolbar
@@ -76,103 +78,90 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
 
   private fun showParkingSlot(layout: HorizontalScrollView) {
     val layoutPark = LinearLayout(context)
-    val params = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-        ViewGroup.LayoutParams.WRAP_CONTENT)
+    var parkingLayout: LinearLayout? = null
+    var count = 0
+    val params = LinearLayout.LayoutParams(
+      ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
+    )
     layoutPark.orientation = LinearLayout.VERTICAL
     layoutPark.layoutParams = params
     layoutPark.setPadding(4 * parkGaping, 4 * parkGaping, 4 * parkGaping, 4 * parkGaping)
     layout.addView(layoutPark)
 
-    var layout: LinearLayout? = null
-    var count = 0
-
     for (index in 0 until SLOTS.length) {
       when {
         SLOTS[index] == '/' -> {
-          layout = LinearLayout(context)
-          layout.orientation = LinearLayout.HORIZONTAL
-          layoutPark.addView(layout)
+          parkingLayout = LinearLayout(context)
+          parkingLayout.orientation = LinearLayout.HORIZONTAL
+          layoutPark.addView(parkingLayout)
         }
         SLOTS[index] == 'U' -> {
           count++
-          val view = TextView(context)
-          val layoutParams = LinearLayout.LayoutParams(parkSize, parkSize)
-          layoutParams.setMargins(parkGaping, parkGaping, parkGaping, parkGaping)
-          view.layoutParams = layoutParams
-          view.setPadding(0, 0, 0, 0)
-          view.id = count
-          view.gravity = Gravity.CENTER
-          view.setBackgroundResource(R.drawable.ic_car)
-          view.setTextColor(Color.WHITE)
-          view.tag = STATUS_BOOKED
-          view.text = count.toString()
-          view.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9f)
-          layout!!.addView(view)
-          parkViewList.add(view)
-          view.setOnClickListener { onClick(view) }
+          setupParkingView(count, parkingLayout, SLOTS[index], STATUS_BOOKED, R.drawable.ic_car)
         }
         SLOTS[index] == 'A' -> {
           count++
-          val view = TextView(context)
-          val layoutParams = LinearLayout.LayoutParams(parkSize, parkSize)
-          layoutParams.setMargins(parkGaping, parkGaping, parkGaping, parkGaping)
-          view.layoutParams = layoutParams
-          view.setPadding(0, 0, 0, 2 * parkGaping)
-          view.id = count
-          view.gravity = Gravity.CENTER
-          view.setBackgroundResource(R.drawable.ic_park)
-          view.text = count.toString()
-          view.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9f)
-          view.setTextColor(Color.BLACK)
-          view.tag = STATUS_AVAILABLE
-          layout!!.addView(view)
-          parkViewList.add(view)
-          view.setOnClickListener { onClick(view) }
+          setupParkingView(count, parkingLayout, SLOTS[index], STATUS_AVAILABLE, R.drawable.ic_park)
         }
         SLOTS[index] == 'R' -> {
           count++
-          val view = TextView(context)
-          val layoutParams = LinearLayout.LayoutParams(parkSize, parkSize)
-          layoutParams.setMargins(parkGaping, parkGaping, parkGaping, parkGaping)
-          view.layoutParams = layoutParams
-          view.id = count
-          view.gravity = Gravity.CENTER
-          view.setBackgroundResource(R.drawable.ic_disable)
-          view.text = count.toString()
-          view.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9f)
-          view.setTextColor(Color.WHITE)
-          view.tag = STATUS_RESERVED
-          layout!!.addView(view)
-          parkViewList.add(view)
-          view.setOnClickListener { onClick(view) }
+          setupParkingView(
+            count, parkingLayout, SLOTS[index], STATUS_RESERVED, R.drawable.ic_disable
+          )
         }
         SLOTS[index] == '_' -> {
-          val view = TextView(context)
-          val layoutParams = LinearLayout.LayoutParams(parkSize, parkSize)
-          layoutParams.setMargins(parkGaping, parkGaping, parkGaping, parkGaping)
-          view.layoutParams = layoutParams
-          view.gravity = Gravity.CENTER
-          view.setBackgroundResource(R.drawable.ic_road)
-          view.text = ""
-          layout!!.addView(view)
+          setupParkingView(count, parkingLayout, SLOTS[index], STATUS_ROAD, R.drawable.ic_road)
         }
       }
     }
+  }
+
+  private fun setupParkingView(
+    count: Int, layout: LinearLayout?, code: Char, tag: Int, icon: Int
+  ): TextView {
+    val view = TextView(context)
+    val layoutParams = LinearLayout.LayoutParams(parkSize, parkSize)
+    layoutParams.setMargins(parkGaping, parkGaping, parkGaping, parkGaping)
+    view.layoutParams = layoutParams
+    view.setPadding(0, 0, 0, 0)
+    view.gravity = Gravity.CENTER
+    view.setBackgroundResource(icon)
+    view.setTextColor(Color.WHITE)
+    view.tag = tag
+    if (code != '_') {
+      view.id = count
+      view.text = count.toString()
+      view.setOnClickListener { onClick(view) }
+    } else {
+      view.text = ""
+    }
+    view.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9f)
+    layout!!.addView(view)
+    parkViewList.add(view)
+    return view
   }
 
   private fun onClick(view: View) {
     if (view.tag as Int == STATUS_AVAILABLE) {
       if (selectedIds.contains(view.id.toString() + ",")) {
         selectedIds = selectedIds.replace((+view.id).toString() + ",", "")
-        view.setBackgroundResource(R.drawable.ic_car)
+        view.setBackgroundResource(R.drawable.ic_park)
       } else {
         selectedIds = selectedIds + view.id + ","
         view.setBackgroundResource(R.drawable.ic_my_location)
       }
     } else if (view.tag as Int == STATUS_BOOKED) {
-      Toast.makeText(context, "Park " + view.id + " is Booked", Toast.LENGTH_SHORT).show()
+      Toast.makeText(
+        context,
+        String.format(getString(R.string.park_is_booked), view.id),
+        Toast.LENGTH_SHORT
+      ).show()
     } else if (view.tag as Int == STATUS_RESERVED) {
-      Toast.makeText(context, "Park " + view.id + " is Reserved", Toast.LENGTH_SHORT).show()
+      Toast.makeText(
+        context,
+        String.format(getString(R.string.park_is_reserved), view.id),
+        Toast.LENGTH_SHORT
+      ).show()
     }
   }
 

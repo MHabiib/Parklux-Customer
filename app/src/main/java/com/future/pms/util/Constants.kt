@@ -24,6 +24,7 @@ class Constants {
     const val STATUS_AVAILABLE = 1
     const val STATUS_BOOKED = 2
     const val STATUS_RESERVED = 3
+    const val STATUS_ROAD = 4
     const val ADD_NEW_LINE = '/'
     const val TAKEN_SLOT = 'U'
     const val EMPTY_SLOT = 'A'

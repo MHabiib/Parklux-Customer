@@ -49,4 +49,6 @@
     <string name="slot_name">Slot name</string>
     <string name="scan_again">Scan again</string>
     <string name="email_password_incorect">The email or password is incorrect.</string>
+    <string name="park_is_booked">Park %d is Booked</string>
+    <string name="park_is_reserved">Park %d is Reserved</string>
 </resources>
