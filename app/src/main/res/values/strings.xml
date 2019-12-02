@@ -55,4 +55,14 @@
     <string name="price_per_hour">IDR %s0/hour</string>
     <string name="total_price">IDR %s0</string>
     <string name="screenshot_png">%s/screenshot.png</string>
+    <string name="phone">Phone</string>
+    <string name="your_slot">Your slot</string>
+    <string name="empty_slot">Empty slot</string>
+    <string name="disabled_slot">Disabled slot</string>
+    <string name="taken_slot">Taken slot</string>
+    <string name="road">Road</string>
+    <string name="update_profile">Update profile</string>
+    <string name="hours">Hours</string>
+    <string name="parking_time">Parking Time</string>
+    <string name="minutes">Minutes</string>
 </resources>

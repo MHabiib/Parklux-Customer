@@ -2,6 +2,7 @@ package com.future.pms.util
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.graphics.Color
 import android.icu.text.SimpleDateFormat
 import android.os.Build
 import com.future.pms.model.customerbooking.CustomerBooking
@@ -16,13 +17,21 @@ class Utils {
 
     fun convertLongToTime(time: Long): String {
       val date = Date(time)
-      val format = SimpleDateFormat(FULL_DATE_TIME_FORMAT)
+      val format = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        SimpleDateFormat(FULL_DATE_TIME_FORMAT)
+      } else {
+        TODO("VERSION.SDK_INT < N")
+      }
       return format.format(date)
     }
 
     fun convertLongToTimeOnly(time: Long): String {
       val date = Date(time)
-      val format = SimpleDateFormat(TIME_FORMAT)
+      val format = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        SimpleDateFormat(TIME_FORMAT)
+      } else {
+        TODO("VERSION.SDK_INT < N")
+      }
       return "${format.format(date)} WIB"
     }
 
@@ -38,13 +47,14 @@ class Utils {
 
     fun createNotificationChannel(notificationManager: NotificationManager) {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        if (notificationManager.getNotificationChannel(DEFAULT_CHANNEL_ID) == null) {
-          notificationManager.createNotificationChannel(
-            NotificationChannel(
-              DEFAULT_CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT
-            )
-          )
-        }
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val notificationChannel = NotificationChannel(DEFAULT_CHANNEL_ID, CHANNEL_NAME, importance)
+        notificationChannel.enableLights(true)
+        notificationChannel.lightColor = Color.RED
+        notificationChannel.enableVibration(true)
+        notificationChannel.vibrationPattern =
+          longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400)
+        notificationManager.createNotificationChannel(notificationChannel)
       }
     }
   }

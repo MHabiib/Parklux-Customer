@@ -59,8 +59,15 @@ class LoginActivity : AppCompatActivity(), LoginContract {
     }
   }
 
-  private fun loading(value: Boolean) {
-    if (!value) {
+  private fun loading(isLoading: Boolean) {
+    if (isLoading) {
+      inputLayoutEmail.visibility = View.GONE
+      progressBar.visibility = View.VISIBLE
+      inputLayoutPassword.visibility = View.GONE
+      btnSign.visibility = View.GONE
+      dont_have_account.visibility = View.GONE
+      register.visibility = View.GONE
+    } else {
       txtPassword.text?.clear()
       progressBar.visibility = View.GONE
       inputLayoutEmail.visibility = View.VISIBLE
@@ -68,13 +75,6 @@ class LoginActivity : AppCompatActivity(), LoginContract {
       btnSign.visibility = View.VISIBLE
       dont_have_account.visibility = View.VISIBLE
       register.visibility = View.VISIBLE
-    } else {
-      inputLayoutEmail.visibility = View.GONE
-      progressBar.visibility = View.VISIBLE
-      inputLayoutPassword.visibility = View.GONE
-      btnSign.visibility = View.GONE
-      dont_have_account.visibility = View.GONE
-      register.visibility = View.GONE
     }
   }
 

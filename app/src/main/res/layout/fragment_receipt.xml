@@ -176,7 +176,7 @@
                 android:id="@+id/out_tag"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:paddingRight="2dp"
+                android:paddingEnd="2dp"
                 android:text="@string/out"
                 android:textColor="@color/colorPrimary"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -209,7 +209,7 @@
                 android:id="@+id/total_time_tag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Parking Time"
+                android:text="@string/parking_time"
                 android:textColor="@color/colorPrimary"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -227,8 +227,8 @@
                 android:id="@+id/hours_tag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="4dp"
-                android:text="Hours"
+                android:paddingStart="4dp"
+                android:text="@string/hours"
                 android:textColor="@color/colorPrimary"
                 app:layout_constraintRight_toLeftOf="@id/minutes"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -237,7 +237,7 @@
                 android:id="@+id/minutes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="8dp"
+                android:paddingStart="8dp"
                 android:textColor="@color/colorPrimary"
                 app:layout_constraintRight_toLeftOf="@id/minutes_tag"
                 app:layout_constraintTop_toTopOf="parent"
@@ -247,8 +247,8 @@
                 android:id="@+id/minutes_tag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="4dp"
-                android:text="Minutes"
+                android:paddingStart="4dp"
+                android:text="@string/minutes"
                 android:textColor="@color/colorPrimary"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -287,7 +287,7 @@
                 android:layout_height="60dp"
                 android:background="@drawable/card_layout_grey"
                 android:padding="12dp"
-                android:src="@drawable/ic_back"
+                app:srcCompat="@drawable/ic_back"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -297,7 +297,7 @@
                 android:layout_height="60dp"
                 android:background="@drawable/card_layout_grey"
                 android:padding="12dp"
-                android:src="@drawable/ic_share"
+                app:srcCompat="@drawable/ic_share"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>

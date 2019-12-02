@@ -44,23 +44,23 @@ class RegisterActivity : AppCompatActivity(), RegisterContract {
 
   private fun isValid(): Boolean {
     if (txtName?.text.toString().isEmpty()) return false
-    if (txtEmail?.text.toString().isNullOrEmpty()) return false
-    if (txtPassword?.text.toString().isNullOrEmpty()) return false
-    if (txtPhone?.text.toString().isNullOrEmpty()) return false
+    if (txtEmail?.text.toString().isEmpty()) return false
+    if (txtPassword?.text.toString().isEmpty()) return false
+    if (txtPhone?.text.toString().isEmpty()) return false
     return true
   }
 
-  private fun loading(value: Boolean) {
-    if (!value) {
+  private fun loading(isLoading: Boolean) {
+    if (isLoading) {
+      progressBarReg.visibility = View.VISIBLE
+      register_layout.visibility = View.VISIBLE
+    } else {
       progressBarReg.visibility = View.GONE
       txtName.text?.clear()
       txtEmail.text?.clear()
       txtPassword.text?.clear()
       txtPhone.text?.clear()
       register_layout.visibility = View.GONE
-    } else {
-      progressBarReg.visibility = View.VISIBLE
-      register_layout.visibility = View.VISIBLE
     }
   }
 
@@ -72,6 +72,7 @@ class RegisterActivity : AppCompatActivity(), RegisterContract {
   }
 
   override fun onFailed(e: String) {
+    loading(false)
     Toast.makeText(this, e, Toast.LENGTH_SHORT).show()
   }
 

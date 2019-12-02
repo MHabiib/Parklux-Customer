@@ -8,6 +8,7 @@
     <dimen name="h1">32sp</dimen>
     <dimen name="title_to_top_parent">8dp</dimen>
     <dimen name="h2">16sp</dimen>
+    <dimen name="h3">14sp</dimen>
     <dimen name="input_and_title">12dp</dimen>
     <dimen name="hundred_margin">100dp</dimen>
     <dimen name="height_button">40dp</dimen>

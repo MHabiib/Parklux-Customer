@@ -21,9 +21,9 @@ open class BasePresenter<V : BaseMVPView> {
     }
   }
 
-  protected fun getContext(): Context {
+  protected fun getContext(): Context? {
     return when (view) {
-      is Fragment -> (view as Fragment).context!!
+      is Fragment -> (view as Fragment).context
       is Activity -> (view as Activity)
       else -> throw Exception()
     }

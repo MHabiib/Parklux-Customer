@@ -43,16 +43,16 @@ class ProfilePresenter @Inject constructor() {
     subscriptions.add(subscribe)
   }
 
-  private fun getContext(): Context {
+  private fun getContext(): Context? {
     return when (view) {
-      is Fragment -> (view as Fragment).context!!
+      is Fragment -> (view as Fragment).context
       is Activity -> (view as Activity)
       else -> throw Exception()
     }
   }
 
   fun signOut() {
-    Authentication.delete(getContext())
+    getContext()?.let { Authentication.delete(it) }
   }
 
   fun attach(view: ProfileContract) {

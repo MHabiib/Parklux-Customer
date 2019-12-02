@@ -1,7 +1,6 @@
 package com.future.pms.ui.ongoing
 
 import android.app.Notification
-import android.app.NotificationChannel.DEFAULT_CHANNEL_ID
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
@@ -12,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Chronometer
-import androidx.core.app.NotificationCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
@@ -87,9 +85,13 @@ class OngoingFragment : Fragment(), OngoingContract {
     ).accessToken
     presenter.loadOngoingBooking(accessToken)
     val mNotificationManager =
-      context?.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+      activity?.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
     Utils.createNotificationChannel(mNotificationManager)
-    mNotificationManager.notify(1, notificationDetails())
+    val notification = Notification.Builder(context).setContentTitle("Check out parking success")
+      .setContentText("Thank you for using Parking Management System apps !")
+      .setSmallIcon(R.drawable.logo_blue).build()
+    mNotificationManager.notify(1, notification)
+    //todo
   }
 
   override fun showProgress(show: Boolean) {
@@ -103,11 +105,11 @@ class OngoingFragment : Fragment(), OngoingContract {
   }
 
   override fun refreshHome() {
-    val ft = fragmentManager!!.beginTransaction()
+    val ft = fragmentManager?.beginTransaction()
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      ft.setReorderingAllowed(false)
+      ft?.setReorderingAllowed(false)
     }
-    ft.detach(this).attach(this).commit()
+    ft?.detach(this)?.attach(this)?.commit()
   }
 
   override fun checkoutSuccess(idBooking: String) {
@@ -145,16 +147,6 @@ class OngoingFragment : Fragment(), OngoingContract {
     ).error(R.drawable.ic_image_place_holder).fallback(
       R.drawable.ic_image_place_holder
     ).into(binding.ongoingIv)
-  }
-
-  private fun notificationDetails(): Notification {
-    return NotificationCompat.Builder(context!!, DEFAULT_CHANNEL_ID)
-      .setContentTitle("Check out parking success")
-      .setContentText("Thank you for using Parking Management System apps !")
-      .setSmallIcon(R.drawable.logo_blue).setStyle(
-        NotificationCompat.BigTextStyle().bigText("Thank you for using Parking Management System apps !")
-      ).build()
-    //todo
   }
 
   private fun injectDependency() {

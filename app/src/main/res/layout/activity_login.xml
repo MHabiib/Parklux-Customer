@@ -15,7 +15,8 @@
         android:adjustViewBounds="true"
         android:scaleType="fitXY"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/header_with_logo" />
+        app:srcCompat="@drawable/header_with_logo"
+        tools:ignore="MissingConstraints" />
 
 
     <ScrollView
@@ -54,7 +55,8 @@
                 android:fontFamily="sans-serif-light"
                 android:background="@drawable/card_layout_blue_primary"
                 android:gravity="center"
-                android:paddingVertical="@dimen/margin_padding_vertical_for_card"
+                android:paddingStart="@dimen/margin_padding_vertical_for_card"
+                android:paddingEnd="@dimen/margin_padding_vertical_for_card"
                 android:text="@string/login"
                 android:textColor="@color/white"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -83,7 +85,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
-                    android:hint="Email"
+                    android:hint="@string/email"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
                     android:singleLine="true"
@@ -98,6 +100,7 @@
                 android:layout_marginTop="12dp"
                 android:background="@drawable/card_layout_white"
                 android:paddingStart="16dp"
+                android:paddingEnd="16dp"
                 android:paddingTop="8dp"
                 android:paddingBottom="12dp"
                 app:layout_constraintEnd_toEndOf="@+id/inputLayoutEmail"
@@ -110,7 +113,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
-                    android:hint="Password"
+                    android:hint="@string/password"
                     android:imeActionId="6"
                     android:imeActionLabel="Sign in"
                     android:imeOptions="actionUnspecified"

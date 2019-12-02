@@ -14,9 +14,9 @@ object Authentication {
     return editor.putString(TOKEN, Gson().toJson(obj)).commit()
   }
 
-  fun get(context: Context): Token? {
-    val preferences = context.getSharedPreferences(AUTHENTCATION, Context.MODE_PRIVATE)
-    val json = preferences.getString(TOKEN, null)
+  fun get(context: Context?): Token? {
+    val preferences = context?.getSharedPreferences(AUTHENTCATION, Context.MODE_PRIVATE)
+    val json = preferences?.getString(TOKEN, null)
     if (json != null) return Gson().fromJson(json, Token::class.java)
     return null
   }
@@ -29,7 +29,7 @@ object Authentication {
     return put(context, obj)
   }
 
-  fun isExpired(context: Context): Boolean {
+  fun isExpired(context: Context?): Boolean {
     val token = get(context)
     if (token != null) {
       val calendar = GregorianCalendar.getInstance()
@@ -42,13 +42,13 @@ object Authentication {
     }
   }
 
-  fun isAuthenticated(context: Context): Boolean = !isExpired(context)
+  fun isAuthenticated(context: Context?): Boolean = !isExpired(context)
 
   class WithoutAuthenticatedException : Exception()
 
   fun getRefresh(context: Context): String {
     val token = get(context)
-    if (token != null) {
+    if (null != token) {
       return token.refreshToken
     } else {
       throw WithoutAuthenticatedException()

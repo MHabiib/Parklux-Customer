@@ -15,7 +15,8 @@
         android:adjustViewBounds="true"
         android:scaleType="fitXY"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/header_with_logo" />
+        app:srcCompat="@drawable/header_with_logo"
+        tools:ignore="MissingConstraints" />
 
     <ProgressBar
         android:id="@+id/progressBarReg"
@@ -54,7 +55,8 @@
                 android:layout_marginEnd="12dp"
                 android:background="@drawable/card_layout_blue_primary"
                 android:gravity="center"
-                android:paddingVertical="@dimen/margin_padding_vertical_for_card"
+                android:paddingStart="@dimen/margin_padding_vertical_for_card"
+                android:paddingEnd="@dimen/margin_padding_vertical_for_card"
                 android:text="@string/register"
                 android:textColor="@color/white"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -105,7 +107,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
-                    android:hint="   Password"
+                    android:hint="@string/password"
                     android:inputType="textPassword"
                     android:maxLines="1"
                     android:singleLine="true"
@@ -132,7 +134,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
-                    android:hint="   Full Name"
+                    android:hint="@string/full_name"
                     android:inputType="textPersonName"
                     android:maxLines="1"
                     android:singleLine="true"
@@ -161,7 +163,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
-                    android:hint="   Email"
+                    android:hint="@string/email"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
                     android:singleLine="true"
@@ -190,7 +192,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
-                    android:hint="   Phone"
+                    android:hint="@string/phone"
                     android:inputType="phone"
                     android:maxLines="1"
 
@@ -198,6 +200,5 @@
                     android:textSize="16sp" />
             </com.google.android.material.textfield.TextInputLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
-        >
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

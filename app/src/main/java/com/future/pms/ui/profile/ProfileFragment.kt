@@ -154,11 +154,11 @@ class ProfileFragment : Fragment(), ProfileContract {
   }
 
   private fun refreshPage() {
-    val ft = fragmentManager!!.beginTransaction()
+    val ft = fragmentManager?.beginTransaction()
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      ft.setReorderingAllowed(false)
+      ft?.setReorderingAllowed(false)
     }
-    ft.detach(this).attach(this).commit()
+    ft?.detach(this)?.attach(this)?.commit()
   }
 
   private fun injectDependency() {

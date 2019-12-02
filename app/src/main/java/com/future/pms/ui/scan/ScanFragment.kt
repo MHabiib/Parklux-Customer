@@ -96,7 +96,7 @@ class ScanFragment : Fragment(), ScanContract {
     barcodeDetector = BarcodeDetector.Builder(context).setBarcodeFormats(Barcode.QR_CODE).build()
 
     cameraSource =
-      CameraSource.Builder(context, barcodeDetector!!).setRequestedPreviewSize(1920, 1080)
+      CameraSource.Builder(context, barcodeDetector).setRequestedPreviewSize(1920, 1080)
         .setAutoFocusEnabled(true).build()
 
     surfaceView.holder.addCallback(object : SurfaceHolder.Callback {
@@ -119,7 +119,7 @@ class ScanFragment : Fragment(), ScanContract {
       }
 
       override fun surfaceDestroyed(holder: SurfaceHolder) {
-        cameraSource!!.stop()
+        cameraSource?.stop()
       }
     })
     barcodeDetector?.setProcessor(object : Detector.Processor<Barcode> {

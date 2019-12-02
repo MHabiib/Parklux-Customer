@@ -25,7 +25,7 @@ class LoginPresenter @Inject constructor() : BasePresenter<LoginContract>() {
     val subscribe = authFetcher.auth(username, password, GRANT_TYPE).subscribeOn(
       Schedulers.io()
     ).observeOn(AndroidSchedulers.mainThread()).subscribe({ token: Token ->
-      Authentication.save(getContext(), token)
+      getContext()?.let { Authentication.save(it, token) }
       view?.let { view -> call(view, view::onSuccess) }
     }, { view?.onError() })
     subscriptions.add(subscribe)

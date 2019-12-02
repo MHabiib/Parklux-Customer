@@ -20,7 +20,7 @@ class SplashPresenter @Inject constructor() {
 
   fun isAuthenticated() {
     try {
-      if (Authentication.isAuthenticated(view.isAuthenticated()!!)) {
+      if (Authentication.isAuthenticated(view.isAuthenticated())) {
         view.onSuccess()
       } else {
         view.refreshFetcher()
