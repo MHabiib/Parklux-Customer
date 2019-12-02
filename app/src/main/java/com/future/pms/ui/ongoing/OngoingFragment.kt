@@ -93,10 +93,12 @@ class OngoingFragment : Fragment(), OngoingContract {
   }
 
   override fun showProgress(show: Boolean) {
-    if (null != progressBar && show) {
-      progressBar.visibility = View.VISIBLE
-    } else if (null != progressBar && !show) {
-      progressBar.visibility = View.GONE
+    if (null != progressBar) {
+      if (show) {
+        progressBar.visibility = View.VISIBLE
+      } else {
+        progressBar.visibility = View.GONE
+      }
     }
   }
 
@@ -118,11 +120,13 @@ class OngoingFragment : Fragment(), OngoingContract {
   }
 
   override fun loadCustomerOngoingSuccess(ongoing: CustomerBooking) {
-    binding.dontHaveOngoing.visibility = View.GONE
-    binding.ongoingParkingLayout.visibility = View.VISIBLE
-    binding.parkingZoneName.text = ongoing.parkingZoneName
-    binding.parkingZoneAddress.text = ongoing.address
-    binding.parkingSlot.text = ongoing.slotName
+    with(binding) {
+      dontHaveOngoing.visibility = View.GONE
+      ongoingParkingLayout.visibility = View.VISIBLE
+      parkingZoneName.text = ongoing.parkingZoneName
+      parkingZoneAddress.text = ongoing.address
+      parkingSlot.text = ongoing.slotName
+    }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       parkingTime.base =
         SystemClock.elapsedRealtime() - ((LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()) - ongoing.dateIn)

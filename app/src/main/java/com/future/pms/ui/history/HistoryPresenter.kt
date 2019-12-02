@@ -14,16 +14,18 @@ class HistoryPresenter @Inject constructor() {
   private lateinit var view: HistoryContract
 
   fun loadCustomerBooking(accessToken: String) {
-    val subscribe = api.getCustomerBooking(accessToken).subscribeOn(Schedulers.io()).observeOn(
-        AndroidSchedulers.mainThread()).subscribe({ list: List<CustomerBooking> ->
-          view.showProgress(false)
-          view.loadCustomerBookingSuccess(list)
-        }, { error ->
-          view.showProgress(false)
-          view.loadCustomerBookingError()
-          view.showErrorMessage(error.localizedMessage)
-        })
-    subscriptions.add(subscribe)
+    with(view) {
+      val subscribe = api.getCustomerBooking(accessToken).subscribeOn(Schedulers.io()).observeOn(
+          AndroidSchedulers.mainThread()).subscribe({ list: List<CustomerBooking> ->
+        showProgress(false)
+        loadCustomerBookingSuccess(list)
+      }, { error ->
+        showProgress(false)
+        loadCustomerBookingError()
+        showErrorMessage(error.localizedMessage)
+      })
+      subscriptions.add(subscribe)
+    }
   }
 
   fun subscribe() {}

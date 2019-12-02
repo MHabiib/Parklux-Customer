@@ -83,10 +83,12 @@ class ScanFragment : Fragment(), ScanContract {
   }
 
   override fun showProgress(show: Boolean) {
-    if (null != progressBar && show) {
-      progressBar.visibility = View.VISIBLE
-    } else if (null != progressBar && !show) {
-      progressBar.visibility = View.GONE
+    if (null != progressBar) {
+      if (show) {
+        progressBar.visibility = View.VISIBLE
+      } else {
+        progressBar.visibility = View.GONE
+      }
     }
   }
 

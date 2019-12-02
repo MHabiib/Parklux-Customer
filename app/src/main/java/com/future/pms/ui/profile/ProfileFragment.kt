@@ -55,14 +55,16 @@ class ProfileFragment : Fragment(), ProfileContract {
     inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
   ): View? {
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container, false)
-    val logout = binding.btnLogout
-    update = binding.btnEditProfile
-    logout.setOnClickListener {
-      btnLogout.visibility = View.GONE
-      presenter.signOut()
-      onLogout()
+    with(binding) {
+      val logout = btnLogout
+      update = btnEditProfile
+      logout.setOnClickListener {
+        btnLogout.visibility = View.GONE
+        presenter.signOut()
+        onLogout()
+      }
+      return root
     }
-    return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -73,25 +75,26 @@ class ProfileFragment : Fragment(), ProfileContract {
       ), Token::class.java
     ).accessToken
     presenter.attach(this)
-    presenter.subscribe()
-    presenter.loadData(accessToken)
-    update?.setOnClickListener {
-      showProgress(true)
-      presenter.update(
-        binding.profileName.text.toString(),
-        binding.profileEmail.text.toString(),
-        binding.profilePassword.text.toString(),
-        binding.profilePhoneNumber.text.toString(),
-        accessToken
-      )
+    presenter.apply {
+      subscribe()
+      loadData(accessToken)
+      update?.setOnClickListener {
+        showProgress(true)
+        update(binding.profileName.text.toString(), binding.profileEmail.text.toString(),
+            binding.profilePassword.text.toString(), binding.profilePhoneNumber.text.toString(),
+            accessToken)
+      }
     }
+
   }
 
   override fun showProgress(show: Boolean) {
-    if (null != progressBar && show) {
-      progressBar.visibility = View.VISIBLE
-    } else if (null != progressBar && !show) {
-      progressBar.visibility = View.GONE
+    if (null != progressBar) {
+      if (show) {
+        progressBar.visibility = View.VISIBLE
+      } else {
+        progressBar.visibility = View.GONE
+      }
     }
   }
 
@@ -100,19 +103,22 @@ class ProfileFragment : Fragment(), ProfileContract {
   }
 
   override fun loadCustomerDetailSuccess(customer: Customer) {
-    binding.profileNameDisplay.text = customer.body.name
-    binding.profileName.setText(customer.body.name)
-    binding.profileEmail.setText(customer.body.email)
-    binding.profilePassword.hint = "********"
-    if (customer.body.phoneNumber == "") {
-      binding.profilePhoneNumber.hint = "You haven't enter your phone number yet !"
-    } else {
-      binding.profilePhoneNumber.setText(customer.body.phoneNumber)
+    with(binding) {
+      profileNameDisplay.text = customer.body.name
+      profileName.setText(customer.body.name)
+      profileEmail.setText(customer.body.email)
+      profilePassword.hint = "********"
+      if (customer.body.phoneNumber == "") {
+        profilePhoneNumber.hint = "You haven't enter your phone number yet !"
+      } else {
+        profilePhoneNumber.setText(customer.body.phoneNumber)
+      }
+      profileName.addTextChangedListener(textWatcher())
+      profileEmail.addTextChangedListener(textWatcher())
+      profilePassword.addTextChangedListener(textWatcher())
+      profilePhoneNumber.addTextChangedListener(textWatcher())
     }
-    binding.profileName.addTextChangedListener(textWatcher())
-    binding.profileEmail.addTextChangedListener(textWatcher())
-    binding.profilePassword.addTextChangedListener(textWatcher())
-    binding.profilePhoneNumber.addTextChangedListener(textWatcher())
+
   }
 
   private fun textWatcher(): TextWatcher {

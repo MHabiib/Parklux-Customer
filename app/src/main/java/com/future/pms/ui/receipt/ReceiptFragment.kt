@@ -89,10 +89,12 @@ class ReceiptFragment : Fragment(), ReceiptContract {
   }
 
   override fun showProgress(show: Boolean) {
-    if (null != progressBar && show) {
-      progressBar.visibility = View.VISIBLE
-    } else if (null != progressBar && !show) {
-      progressBar.visibility = View.GONE
+    if (null != progressBar) {
+      if (show) {
+        progressBar.visibility = View.VISIBLE
+      } else {
+        progressBar.visibility = View.GONE
+      }
     }
   }
 
@@ -102,16 +104,18 @@ class ReceiptFragment : Fragment(), ReceiptContract {
 
   override fun loadReceiptSuccess(receipt: Receipt) {
     println(receipt)
-    binding.bookingId.text = receipt.idBooking
-    binding.parkingZoneName.text = receipt.parkingZoneName
-    binding.address.text = receipt.address
-    binding.parkingSlot.text = receipt.slotName
-    binding.price.text = String.format("IDR %s0/hour", receipt.price.toString())
-    binding.inDate.text = Utils.convertLongToTime(receipt.dateIn)
-    binding.outDate.text = Utils.convertLongToTime(receipt.dateOut)
-    binding.hours.text = receipt.totalHours.toString()
-    binding.minutes.text = receipt.totalMinutes.toString()
-    binding.totalPrice.text = String.format("IDR %s0", receipt.totalPrice)
+    with(binding) {
+      bookingId.text = receipt.idBooking
+      parkingZoneName.text = receipt.parkingZoneName
+      address.text = receipt.address
+      parkingSlot.text = receipt.slotName
+      price.text = String.format(getString(R.string.price_per_hour), receipt.price.toString())
+      inDate.text = Utils.convertLongToTime(receipt.dateIn)
+      outDate.text = Utils.convertLongToTime(receipt.dateOut)
+      hours.text = receipt.totalHours.toString()
+      minutes.text = receipt.totalMinutes.toString()
+      totalPrice.text = String.format(getString(R.string.total_price), receipt.totalPrice)
+    }
   }
 
   fun takeScreenshot(): Bitmap {
@@ -120,7 +124,8 @@ class ReceiptFragment : Fragment(), ReceiptContract {
   }
 
   fun saveBitmap(bitmap: Bitmap) {
-    imagePath = File(String.format("%s/screenshot.png", Environment.getExternalStorageDirectory()))
+    imagePath = File(String.format(getString(R.string.screenshot_png),
+        Environment.getExternalStorageDirectory()))
     val fos: FileOutputStream
     try {
       fos = FileOutputStream(imagePath)
@@ -142,13 +147,15 @@ class ReceiptFragment : Fragment(), ReceiptContract {
       )
     }
     val sharingIntent = Intent(Intent.ACTION_SEND)
-    sharingIntent.type = "image/*"
-    val shareBody = "This is my parking receipt using PMS apps."
-    sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Parking Management System (P M S)")
-    sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody)
-    sharingIntent.putExtra(Intent.EXTRA_STREAM, uri)
+    sharingIntent.apply {
+      type = "image/*"
+      val shareBody = "This is my parking receipt using PMS apps."
+      putExtra(Intent.EXTRA_SUBJECT, "Parking Management System (P M S)")
+      putExtra(Intent.EXTRA_TEXT, shareBody)
+      putExtra(Intent.EXTRA_STREAM, uri)
 
-    startActivity(Intent.createChooser(sharingIntent, "Share via"))
+      startActivity(Intent.createChooser(sharingIntent, "Share via"))
+    }
   }
 
   private fun injectDependency() {

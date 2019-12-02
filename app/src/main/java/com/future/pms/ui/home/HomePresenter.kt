@@ -25,14 +25,16 @@ class HomePresenter @Inject constructor() {
   }
 
   fun loadData(accessToken: String) {
-    val subscribe = api.getCustomerDetail(accessToken).subscribeOn(Schedulers.io()).observeOn(
-        AndroidSchedulers.mainThread()).subscribe({ customer: Customer ->
-          view.loadCustomerDetailSuccess(customer)
-        }, { error ->
-          view.showErrorMessage(error.localizedMessage)
-          view.unauthorized()
-        })
-    subscriptions.add(subscribe)
+    with(view) {
+      val subscribe = api.getCustomerDetail(accessToken).subscribeOn(Schedulers.io()).observeOn(
+          AndroidSchedulers.mainThread()).subscribe({ customer: Customer ->
+        loadCustomerDetailSuccess(customer)
+      }, { error ->
+        showErrorMessage(error.localizedMessage)
+        unauthorized()
+      })
+      subscriptions.add(subscribe)
+    }
   }
 
   fun getTextAnnounce(): String {

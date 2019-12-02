@@ -51,4 +51,8 @@
     <string name="email_password_incorect">The email or password is incorrect.</string>
     <string name="park_is_booked">Park %d is Booked</string>
     <string name="park_is_reserved">Park %d is Reserved</string>
+    <string name="date_now">It\'s %s</string>
+    <string name="price_per_hour">IDR %s0/hour</string>
+    <string name="total_price">IDR %s0</string>
+    <string name="screenshot_png">%s/screenshot.png</string>
 </resources>

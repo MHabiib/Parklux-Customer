@@ -25,16 +25,18 @@ class OngoingPresenter @Inject constructor() {
   }
 
   fun checkoutBooking(accessToken: String) {
-    view.showProgress(true)
-    val subscribe = api.postBookingCheckout(accessToken).subscribeOn(Schedulers.io()).observeOn(
-        AndroidSchedulers.mainThread()).subscribe({
-      view.showProgress(false)
-      view.checkoutSuccess(it.idBooking)
-    }, {
-      view.showErrorMessage(it.message.toString())
-    })
-    subscriptions.add(subscribe)
-    view.refreshHome()
+    with(view) {
+      showProgress(true)
+      val subscribe = api.postBookingCheckout(accessToken).subscribeOn(Schedulers.io()).observeOn(
+          AndroidSchedulers.mainThread()).subscribe({
+        showProgress(false)
+        checkoutSuccess(it.idBooking)
+      }, {
+        showErrorMessage(it.message.toString())
+      })
+      subscriptions.add(subscribe)
+      refreshHome()
+    }
   }
 
   fun subscribe() {}

@@ -46,17 +46,19 @@ class HomeFragment : Fragment(), HomeContract {
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
       savedInstanceState: Bundle?): View? {
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
-    val viewPager = binding.viewPager as ViewPager
-    val adapter = ViewPagerAdapter(childFragmentManager)
-    adapter.addFragment(OngoingFragment(), "Your Ongoing Parking")
-    adapter.addFragment(HistoryFragment(), "History")
-    viewPager.adapter = adapter
-    binding.tabs.setupWithViewPager(viewPager)
-    for (i in 0 until binding.tabs.tabCount) {
-      if (i == 0) binding.tabs.getTabAt(i)?.setIcon(R.drawable.ic_parking)
-      else binding.tabs.getTabAt(i)?.setIcon(R.drawable.ic_history)
+    with(binding) {
+      val viewPager = viewPager as ViewPager
+      val adapter = ViewPagerAdapter(childFragmentManager)
+      adapter.addFragment(OngoingFragment(), "Your Ongoing Parking")
+      adapter.addFragment(HistoryFragment(), "History")
+      viewPager.adapter = adapter
+      tabs.setupWithViewPager(viewPager)
+      for (i in 0 until tabs.tabCount) {
+        if (i == 0) tabs.getTabAt(i)?.setIcon(R.drawable.ic_parking)
+        else tabs.getTabAt(i)?.setIcon(R.drawable.ic_history)
+      }
+      return root
     }
-    return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -99,7 +101,7 @@ class HomeFragment : Fragment(), HomeContract {
   override fun getDateNow() {
     val currentDateTimeString = DateFormat.getDateInstance(DateFormat.FULL).format(Date())
     val dateText = binding.dateNow
-    dateText.text = String.format("It's %s", currentDateTimeString)
+    dateText.text = String.format(getString(R.string.date_now), currentDateTimeString)
   }
 
   private fun injectDependency() {

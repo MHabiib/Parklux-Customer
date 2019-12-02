@@ -33,7 +33,8 @@ import com.future.pms.util.Constants.Companion.STATUS_BOOKED
 import com.future.pms.util.Constants.Companion.STATUS_RESERVED
 import com.future.pms.util.Constants.Companion.STATUS_ROAD
 import com.future.pms.util.Constants.Companion.TOKEN
-import com.future.pms.util.Constants.Companion.parkGaping
+import com.future.pms.util.Constants.Companion.parkMargin
+import com.future.pms.util.Constants.Companion.parkPadding
 import com.future.pms.util.Constants.Companion.parkSize
 import com.future.pms.util.Constants.Companion.selectedIds
 import com.future.pms.util.Utils
@@ -51,8 +52,7 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
   private lateinit var layout: HorizontalScrollView
   private lateinit var binding: FragmentBookingDetailBinding
   private lateinit var bindingActivityMain: ActivityMainBinding
-  private var SLOTS =
-    ("/\$_UUAAU_RR_UU_UU_/" + "________________/" + "_AARAU_UU_UU_UU_/" + "_UUARR_RR_UU_AR_/" + "________________/" + "_URAAU_RA_UU_UU_/" + "_RUUAU_RR_UU_UU_/" + "________________/" + "_UU_AU_RU_UR_UU_/" + "_UU_AU_RR_AR_UU_/" + "________________/" + "_UURAUARRAUUAUU_/" + "________________/" + "_URRAUARARUURUU_/" + "________________/")
+  private var SLOTS = ("/\$_UUAAU_RR_UU_UU_/" + "________________/" + "_AARAU_UU_UU_UU_/" + "_UUARR_RR_UU_AR_/" + "________________/" + "_URAAU_RA_UU_UU_/" + "_RUUAU_RR_UU_UU_/" + "________________/" + "_UU_AU_RU_UR_UU_/" + "_UU_AU_RR_AR_UU_/" + "________________/" + "_UURAUARRAUUAUU_/" + "________________/" + "_URRAUARARUURUU_/" + "________________/")
 
   companion object {
     const val TAG: String = BOOKING_DETAIL_FRAGMENT
@@ -71,22 +71,21 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
     injectDependency()
   }
 
-  override fun onCreateView(
-    inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-  ): View? {
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+      savedInstanceState: Bundle?): View? {
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_booking_detail, container, false)
     bindingActivityMain = DataBindingUtil.inflate(inflater, R.layout.activity_main, null, false)
 
     accessToken = Gson().fromJson(
-      context?.getSharedPreferences(AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
-        TOKEN, null
-      ), Token::class.java
-    ).accessToken
-    binding.parkingDirectionContent.backBookingDetail.setOnClickListener { backToHome() }
-    binding.parkingDirectionContent.buttonScanAgain.setOnClickListener { scanAgain() }
+        context?.getSharedPreferences(AUTHENTCATION, Context.MODE_PRIVATE)?.getString(TOKEN, null),
+        Token::class.java).accessToken
     idBooking = this.arguments?.getString(ID_BOOKING).toString()
-    layout = binding.parkingDirectionSheet.layoutPark.findViewById(R.id.layoutPark)
-    return binding.root
+    with(binding) {
+      parkingDirectionContent.backBookingDetail.setOnClickListener { backToHome() }
+      parkingDirectionContent.buttonScanAgain.setOnClickListener { scanAgain() }
+      layout = parkingDirectionSheet.layoutPark.findViewById(R.id.layoutPark)
+      return root
+    }
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -97,24 +96,31 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
       presenter.loadBooking(accessToken)
     } else {
       showProgress(false)
-      binding.parkingDirectionContent.errorText.visibility = View.VISIBLE
-      binding.parkingDirectionContent.buttonScanAgain.visibility = View.VISIBLE
-      binding.parkingDirectionContent.iconBookingDetail.setImageResource(R.drawable.ic_sad)
-      binding.parkingDirectionContent.welcomeTo.text = getString(R.string.oops)
-      binding.parkingDirectionContent.errorText.text = getString(R.string.failed_create_booking)
-      binding.parkingDirectionSheet.root.visibility = View.GONE
+      with(binding) {
+        parkingDirectionContent.apply {
+          errorText.visibility = View.VISIBLE
+          buttonScanAgain.visibility = View.VISIBLE
+          iconBookingDetail.setImageResource(R.drawable.ic_sad)
+          welcomeTo.text = getString(R.string.oops)
+          errorText.text = getString(R.string.failed_create_booking)
+        }
+        parkingDirectionSheet.root.visibility = View.GONE
+      }
     }
   }
 
   override fun loadBookingSuccess(booking: CustomerBooking) {
     showParkingLayout(layout)
-    binding.parkingDirectionSheet.swipeUpIndicator.visibility = View.VISIBLE
-    binding.parkingDirectionContent.welcomeTo.text =
-      String.format(getString(R.string.welcome_to), booking.parkingZoneName)
-    binding.parkingDirectionContent.slotName.text = booking.slotName
-    binding.parkingDirectionContent.layoutBookingDetail.visibility = View.VISIBLE
-    binding.parkingDirectionContent.iconBookingDetail.setImageResource(R.drawable.ic_smile)
-    binding.parkingDirectionContent.dateIn.text = Utils.convertLongToTimeOnly(booking.dateIn)
+    with(binding) {
+      parkingDirectionContent.apply {
+        welcomeTo.text = String.format(getString(R.string.welcome_to), booking.parkingZoneName)
+        slotName.text = booking.slotName
+        layoutBookingDetail.visibility = View.VISIBLE
+        iconBookingDetail.setImageResource(R.drawable.ic_smile)
+        dateIn.text = Utils.convertLongToTimeOnly(booking.dateIn)
+      }
+      parkingDirectionSheet.swipeUpIndicator.visibility = View.VISIBLE
+    }
     hideItem()
   }
 
@@ -134,10 +140,12 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
   }
 
   override fun showProgress(show: Boolean) {
-    if (null != progressBar && show) {
-      progressBar.visibility = View.VISIBLE
-    } else if (null != progressBar && !show) {
-      progressBar.visibility = View.GONE
+    if (null != progressBar) {
+      if (show) {
+        progressBar.visibility = View.VISIBLE
+      } else {
+        progressBar.visibility = View.GONE
+      }
     }
   }
 
@@ -154,12 +162,13 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
     val layoutPark = LinearLayout(context)
     var parkingLayout: LinearLayout? = null
     var count = 0
-    val params = LinearLayout.LayoutParams(
-      ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
-    )
-    layoutPark.orientation = LinearLayout.VERTICAL
-    layoutPark.layoutParams = params
-    layoutPark.setPadding(4 * parkGaping, 4 * parkGaping, 4 * parkGaping, 4 * parkGaping)
+    val params = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.WRAP_CONTENT)
+    layoutPark.apply {
+      orientation = LinearLayout.VERTICAL
+      layoutParams = params
+      setPadding(parkPadding, parkPadding, parkPadding, parkPadding)
+    }
     layout.addView(layoutPark)
 
     for (index in 0 until SLOTS.length) {
@@ -179,9 +188,8 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
         }
         SLOTS[index] == 'R' -> {
           count++
-          setupParkingView(
-            count, parkingLayout, SLOTS[index], STATUS_RESERVED, R.drawable.ic_disable
-          )
+          setupParkingView(count, parkingLayout, SLOTS[index], STATUS_RESERVED,
+              R.drawable.ic_disable)
         }
         SLOTS[index] == '_' -> {
           setupParkingView(count, parkingLayout, SLOTS[index], STATUS_ROAD, R.drawable.ic_road)
@@ -190,29 +198,30 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
     }
   }
 
-  private fun setupParkingView(
-    count: Int, layout: LinearLayout?, code: Char, tag: Int, icon: Int
-  ): TextView {
+  private fun setupParkingView(count: Int, layout: LinearLayout?, code: Char, tags: Int,
+      icon: Int): TextView {
     val view = TextView(context)
-    val layoutParams = LinearLayout.LayoutParams(parkSize, parkSize)
-    layoutParams.setMargins(
-      parkGaping, parkGaping, parkGaping, parkGaping
-    )
-    view.layoutParams = layoutParams
-    view.setPadding(0, 0, 0, 0)
-    view.gravity = Gravity.CENTER
-    view.setBackgroundResource(icon)
-    view.setTextColor(Color.WHITE)
-    view.tag = tag
-    if (code != '_') {
-      view.id = count
-      view.text = count.toString()
-      view.setOnClickListener { onClick(view) }
-    } else {
-      view.text = ""
+    view.apply {
+      layoutParams = LinearLayout.LayoutParams(parkSize, parkSize).apply {
+        setMargins(parkMargin, parkMargin, parkMargin, parkMargin)
+      }
+      setPadding(0, 0, 0, 0)
+      gravity = Gravity.CENTER
+      setBackgroundResource(icon)
+      setTextColor(Color.WHITE)
+      tag = tags
+      if (code != '_') {
+        id = count
+        text = count.toString()
+        setOnClickListener { onClick(view) }
+      } else {
+        text = ""
+      }
+      setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9f)
     }
-    view.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9f)
-    layout!!.addView(view)
+    layout?.let {
+      it.addView(view)
+    }
     parkViewList.add(view)
     return view
   }
@@ -227,17 +236,11 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
         view.setBackgroundResource(R.drawable.ic_my_location)
       }
     } else if (view.tag as Int == STATUS_BOOKED) {
-      Toast.makeText(
-        context,
-        String.format(getString(R.string.park_is_booked), view.id),
-        Toast.LENGTH_SHORT
-      ).show()
+      Toast.makeText(context, String.format(getString(R.string.park_is_booked), view.id),
+          Toast.LENGTH_SHORT).show()
     } else if (view.tag as Int == STATUS_RESERVED) {
-      Toast.makeText(
-        context,
-        String.format(getString(R.string.park_is_reserved), view.id),
-        Toast.LENGTH_SHORT
-      ).show()
+      Toast.makeText(context, String.format(getString(R.string.park_is_reserved), view.id),
+          Toast.LENGTH_SHORT).show()
     }
   }
 }

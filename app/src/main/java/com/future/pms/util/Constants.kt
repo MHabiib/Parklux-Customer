@@ -20,7 +20,8 @@ class Constants {
     const val TIME_FORMAT = "HH:mm"
 
     const val parkSize = 100
-    const val parkGaping = 8
+    const val parkMargin = 8
+    const val parkPadding = 4 * 8
     const val STATUS_AVAILABLE = 1
     const val STATUS_BOOKED = 2
     const val STATUS_RESERVED = 3

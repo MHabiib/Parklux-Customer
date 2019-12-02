@@ -14,16 +14,18 @@ class BookingDetailPresenter @Inject constructor() {
   private lateinit var view: BookingDetailContract
 
   fun loadBooking(accessToken: String) {
-    view.showProgress(true)
-    val subscribe = api.getOngoingBooking(accessToken).subscribeOn(Schedulers.io()).observeOn(
-        AndroidSchedulers.mainThread()).subscribe({ booking: CustomerBooking ->
-      view.showProgress(false)
-      view.loadBookingSuccess(booking)
-    }, { error ->
-      view.showProgress(false)
-      view.showErrorMessage(error.localizedMessage)
-    })
-    subscriptions.add(subscribe)
+    with(view) {
+      showProgress(true)
+      val subscribe = api.getOngoingBooking(accessToken).subscribeOn(Schedulers.io()).observeOn(
+          AndroidSchedulers.mainThread()).subscribe({ booking: CustomerBooking ->
+        showProgress(false)
+        loadBookingSuccess(booking)
+      }, { error ->
+        showProgress(false)
+        showErrorMessage(error.localizedMessage)
+      })
+      subscriptions.add(subscribe)
+    }
   }
 
   fun subscribe() {}

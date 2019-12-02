@@ -26,9 +26,11 @@ class HistoryAdapter(private val customerBookingList: List<CustomerBooking>,
 
   class BookingListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(customerBooking: CustomerBooking, clickListener: (CustomerBooking) -> Unit) {
-      itemView.item_title.text = customerBooking.parkingZoneName
-      itemView.item_date.text = Utils.convertLongToTime(customerBooking.dateIn)
-      itemView.setOnClickListener { clickListener(customerBooking) }
+      itemView.apply {
+        item_title.text = customerBooking.parkingZoneName
+        item_date.text = Utils.convertLongToTime(customerBooking.dateIn)
+        setOnClickListener { clickListener(customerBooking) }
+      }
     }
   }
 }

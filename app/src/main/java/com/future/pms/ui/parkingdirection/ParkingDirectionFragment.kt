@@ -24,7 +24,8 @@ import com.future.pms.util.Constants.Companion.STATUS_AVAILABLE
 import com.future.pms.util.Constants.Companion.STATUS_BOOKED
 import com.future.pms.util.Constants.Companion.STATUS_RESERVED
 import com.future.pms.util.Constants.Companion.STATUS_ROAD
-import com.future.pms.util.Constants.Companion.parkGaping
+import com.future.pms.util.Constants.Companion.parkMargin
+import com.future.pms.util.Constants.Companion.parkPadding
 import com.future.pms.util.Constants.Companion.parkSize
 import com.future.pms.util.Constants.Companion.selectedIds
 import java.util.*
@@ -62,7 +63,7 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
     val toolbar = binding.toolbar
     val layout = binding.layoutPark
     toolbar.setNavigationIcon(R.drawable.ic_back_white)
-    showParkingSlot(layout)
+    showParkingLayout(layout)
     toolbar.setNavigationOnClickListener { backToHome() }
     return binding.root
   }
@@ -76,16 +77,17 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
 
   private fun initView() {}
 
-  private fun showParkingSlot(layout: HorizontalScrollView) {
+  private fun showParkingLayout(layout: HorizontalScrollView) {
     val layoutPark = LinearLayout(context)
     var parkingLayout: LinearLayout? = null
     var count = 0
-    val params = LinearLayout.LayoutParams(
-      ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
-    )
-    layoutPark.orientation = LinearLayout.VERTICAL
-    layoutPark.layoutParams = params
-    layoutPark.setPadding(4 * parkGaping, 4 * parkGaping, 4 * parkGaping, 4 * parkGaping)
+    val params = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.WRAP_CONTENT)
+    layoutPark.apply {
+      orientation = LinearLayout.VERTICAL
+      layoutParams = params
+      setPadding(parkPadding, parkPadding, parkPadding, parkPadding)
+    }
     layout.addView(layoutPark)
 
     for (index in 0 until SLOTS.length) {
@@ -105,9 +107,8 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
         }
         SLOTS[index] == 'R' -> {
           count++
-          setupParkingView(
-            count, parkingLayout, SLOTS[index], STATUS_RESERVED, R.drawable.ic_disable
-          )
+          setupParkingView(count, parkingLayout, SLOTS[index], STATUS_RESERVED,
+              R.drawable.ic_disable)
         }
         SLOTS[index] == '_' -> {
           setupParkingView(count, parkingLayout, SLOTS[index], STATUS_ROAD, R.drawable.ic_road)
@@ -116,27 +117,30 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
     }
   }
 
-  private fun setupParkingView(
-    count: Int, layout: LinearLayout?, code: Char, tag: Int, icon: Int
-  ): TextView {
+  private fun setupParkingView(count: Int, layout: LinearLayout?, code: Char, tags: Int,
+      icon: Int): TextView {
     val view = TextView(context)
-    val layoutParams = LinearLayout.LayoutParams(parkSize, parkSize)
-    layoutParams.setMargins(parkGaping, parkGaping, parkGaping, parkGaping)
-    view.layoutParams = layoutParams
-    view.setPadding(0, 0, 0, 0)
-    view.gravity = Gravity.CENTER
-    view.setBackgroundResource(icon)
-    view.setTextColor(Color.WHITE)
-    view.tag = tag
-    if (code != '_') {
-      view.id = count
-      view.text = count.toString()
-      view.setOnClickListener { onClick(view) }
-    } else {
-      view.text = ""
+    view.apply {
+      layoutParams = LinearLayout.LayoutParams(parkSize, parkSize).apply {
+        setMargins(parkMargin, parkMargin, parkMargin, parkMargin)
+      }
+      setPadding(0, 0, 0, 0)
+      gravity = Gravity.CENTER
+      setBackgroundResource(icon)
+      setTextColor(Color.WHITE)
+      tag = tags
+      if (code != '_') {
+        id = count
+        text = count.toString()
+        setOnClickListener { onClick(view) }
+      } else {
+        text = ""
+      }
+      setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9f)
     }
-    view.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9f)
-    layout!!.addView(view)
+    layout?.let {
+      it.addView(view)
+    }
     parkViewList.add(view)
     return view
   }

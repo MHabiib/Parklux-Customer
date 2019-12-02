@@ -23,7 +23,7 @@ class Utils {
     fun convertLongToTimeOnly(time: Long): String {
       val date = Date(time)
       val format = SimpleDateFormat(TIME_FORMAT)
-      return String.format("%s WIB", format.format(date))
+      return "${format.format(date)} WIB"
     }
 
     fun getHistoryParking(list: List<CustomerBooking>): List<CustomerBooking> {
