@@ -1,17 +1,18 @@
 package com.future.pms.ui.login
 
-import com.future.pms.R
 import com.future.pms.di.base.BasePresenter
 import com.future.pms.model.oauth.Token
-import com.future.pms.model.oauth.request.Auth
-import com.future.pms.network.AuthFetcher
+import com.future.pms.network.APICreator
+import com.future.pms.network.AuthAPI
+import com.future.pms.network.NetworkConstant.GRANT_TYPE
 import com.future.pms.util.Authentication
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class LoginPresenter @Inject constructor() : BasePresenter<LoginContract>() {
   private val subscriptions = CompositeDisposable()
-  private var authFetcher: AuthFetcher.AuthFetcherImpl? = null
 
   fun subscribe() {}
 
@@ -20,22 +21,13 @@ class LoginPresenter @Inject constructor() : BasePresenter<LoginContract>() {
   }
 
   fun login(username: String, password: String) {
-    authFetcher = AuthFetcher.AuthFetcherImpl(getContext(), object : AuthFetcher.Listener {
-      override fun onSuccess(token: Token?) {
-        if (token == null) {
-          view?.let { view ->
-            call(view, getContext().getString(R.string.auth_invalid), view::onFailed)
-          }
-        } else {
-          Authentication.save(getContext(), token)
-          view?.let { view -> call(view, view::onSuccess) }
-        }
-      }
-
-      override fun onError(throwable: Throwable) {
-        view?.let { view -> call(view, throwable, view::onError) }
-      }
-    })
-    authFetcher?.auth(Auth(username, password, "password"))
+    val authFetcher = APICreator(AuthAPI::class.java).generate()
+    val subscribe = authFetcher.auth(username, password, GRANT_TYPE).subscribeOn(
+      Schedulers.io()
+    ).observeOn(AndroidSchedulers.mainThread()).subscribe({ token: Token ->
+      Authentication.save(getContext(), token)
+      view?.let { view -> call(view, view::onSuccess) }
+    }, { view?.onError() })
+    subscriptions.add(subscribe)
   }
 }

@@ -13,8 +13,8 @@ class HistoryPresenter @Inject constructor() {
   private val subscriptions = CompositeDisposable()
   private lateinit var view: HistoryContract
 
-  fun loadCustomerBooking(access_token: String) {
-    val subscribe = api.getCustomerBooking(access_token).subscribeOn(Schedulers.io()).observeOn(
+  fun loadCustomerBooking(accessToken: String) {
+    val subscribe = api.getCustomerBooking(accessToken).subscribeOn(Schedulers.io()).observeOn(
         AndroidSchedulers.mainThread()).subscribe({ list: List<CustomerBooking> ->
           view.showProgress(false)
           view.loadCustomerBookingSuccess(list)

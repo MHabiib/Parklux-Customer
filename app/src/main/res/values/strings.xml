@@ -20,7 +20,7 @@
     <string name="booking_id">Booking ID</string>
     <string name="logo">Logo</string>
     <string name="your_parking_spot_is_on">Slot name</string>
-    <string name="check_in_on">Check-in on :</string>
+    <string name="check_in_on">Check-in on</string>
     <string name="directions">Click me to show the directions</string>
     <string name="header_logo">header logo</string>
     <string name="full_name">Full name</string>
@@ -39,4 +39,16 @@
     <string name="you_dont_have_any_ongoing_order">You dont have any ongoing order</string>
     <string name="parking_completed">Parking completed</string>
     <string name="you_dont_have_any_order">You dont have any order</string>
+    <string name="oops">Oops…</string>
+    <string name="failed_create_booking">Failed to create booking, something went wrong.</string>
+    <string name="welcome_to">Welcome to %s</string>
+    <string name="only_placeholder">%s</string>
+    <string name="empty">""</string>
+    <string name="is_booked">is Booked</string>
+    <string name="is_reserved">is Reserved</string>
+    <string name="slot_name">Slot name</string>
+    <string name="scan_again">Scan again</string>
+    <string name="email_password_incorect">The email or password is incorrect.</string>
+    <string name="park_is_booked">Park %d is Booked</string>
+    <string name="park_is_reserved">Park %d is Reserved</string>
 </resources>

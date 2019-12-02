@@ -5,5 +5,5 @@ import com.future.pms.di.base.BaseMVPView
 interface LoginContract : BaseMVPView {
   fun onSuccess()
   fun onFailed(e: String)
-  fun onError(e: Throwable)
+  fun onError()
 }

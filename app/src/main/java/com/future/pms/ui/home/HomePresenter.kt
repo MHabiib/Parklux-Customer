@@ -24,8 +24,8 @@ class HomePresenter @Inject constructor() {
     this.view = view
   }
 
-  fun loadData(access_token: String) {
-    val subscribe = api.getCustomerDetail(access_token).subscribeOn(Schedulers.io()).observeOn(
+  fun loadData(accessToken: String) {
+    val subscribe = api.getCustomerDetail(accessToken).subscribeOn(Schedulers.io()).observeOn(
         AndroidSchedulers.mainThread()).subscribe({ customer: Customer ->
           view.loadCustomerDetailSuccess(customer)
         }, { error ->

@@ -1,26 +1,28 @@
 package com.future.pms.util
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.icu.text.SimpleDateFormat
+import android.os.Build
 import com.future.pms.model.customerbooking.CustomerBooking
+import com.future.pms.util.Constants.Companion.FULL_DATE_TIME_FORMAT
+import com.future.pms.util.Constants.Companion.TIME_FORMAT
 import java.util.*
 
 class Utils {
   companion object {
+    private var DEFAULT_CHANNEL_ID = "pms"
+    private var CHANNEL_NAME = "PMS Channel"
+
     fun convertLongToTime(time: Long): String {
       val date = Date(time)
-      val format = SimpleDateFormat("HH:mm - dd MMMM yyyy ")
-      return format.format(date)
-    }
-
-    fun convertLongToTimeShortMonth(time: Long): String {
-      val date = Date(time)
-      val format = SimpleDateFormat("HH:mm dd MMM yyyy ")
+      val format = SimpleDateFormat(FULL_DATE_TIME_FORMAT)
       return format.format(date)
     }
 
     fun convertLongToTimeOnly(time: Long): String {
       val date = Date(time)
-      val format = SimpleDateFormat("HH:mm")
+      val format = SimpleDateFormat(TIME_FORMAT)
       return String.format("%s WIB", format.format(date))
     }
 
@@ -32,6 +34,18 @@ class Utils {
         }
       }
       return historyParking
+    }
+
+    fun createNotificationChannel(notificationManager: NotificationManager) {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (notificationManager.getNotificationChannel(DEFAULT_CHANNEL_ID) == null) {
+          notificationManager.createNotificationChannel(
+            NotificationChannel(
+              DEFAULT_CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT
+            )
+          )
+        }
+      }
     }
   }
 }

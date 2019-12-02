@@ -1,5 +1,9 @@
 package com.future.pms.model.oauth.request
 
-import java.io.Serializable
+import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
-data class Refresh(val refresh: String) : Serializable
+@Parcelize data class Refresh(
+  @SerializedName("refresh") val refresh: String
+) : Parcelable

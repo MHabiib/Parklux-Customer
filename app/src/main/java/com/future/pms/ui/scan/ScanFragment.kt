@@ -5,13 +5,13 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import android.widget.ImageView
 import androidx.activity.addCallback
 import androidx.core.app.ActivityCompat
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.future.pms.R
+import com.future.pms.databinding.FragmentScanBinding
 import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
 import com.future.pms.model.oauth.Token
@@ -24,15 +24,22 @@ import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_scan.*
+import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
 
 class ScanFragment : Fragment(), ScanContract {
   private var barcodeDetector: BarcodeDetector? = null
   private var cameraSource: CameraSource? = null
-  internal var intentData = ""
-  private var accessToken = ""
+  private lateinit var intentData: String
+  private lateinit var accessToken: String
   private var mSurfaceView: SurfaceView? = null
+  private lateinit var binding: FragmentScanBinding
+
+  companion object {
+    private const val REQUEST_CAMERA_PERMISSION = 0
+    const val TAG: String = SCAN_FRAGMENT
+  }
 
   @Inject lateinit var presenter: ScanPresenter
 
@@ -53,16 +60,16 @@ class ScanFragment : Fragment(), ScanContract {
     inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
   ): View? {
     checkPermission()
-    val view = inflater.inflate(R.layout.fragment_scan, container, false)
+    binding = DataBindingUtil.inflate(inflater, R.layout.fragment_scan, container, false)
     accessToken = Gson().fromJson(
       context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
         Constants.TOKEN, null
       ), Token::class.java
-    ).access_token
-    val toggleFlash = view.findViewById(R.id.toggleFlash) as ImageView
+    ).accessToken
+    val toggleFlash = binding.toggleFlash
     toggleFlash.setOnClickListener { flashToggle() }
-    mSurfaceView = view.findViewById(R.id.surfaceView) as SurfaceView
-    return view
+    mSurfaceView = binding.surfaceView
+    return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -72,16 +79,14 @@ class ScanFragment : Fragment(), ScanContract {
   }
 
   override fun showErrorMessage(error: String) {
-    Log.e(Constants.ERROR, error)
+    Timber.tag(Constants.ERROR).e(error)
   }
 
   override fun showProgress(show: Boolean) {
-    if (null != progressBar) {
-      if (show) {
-        progressBar.visibility = View.VISIBLE
-      } else {
-        progressBar.visibility = View.GONE
-      }
+    if (null != progressBar && show) {
+      progressBar.visibility = View.VISIBLE
+    } else if (null != progressBar && !show) {
+      progressBar.visibility = View.GONE
     }
   }
 
@@ -176,10 +181,5 @@ class ScanFragment : Fragment(), ScanContract {
   private fun injectDependency() {
     val scanComponent = DaggerFragmentComponent.builder().fragmentModule(FragmentModule()).build()
     scanComponent.inject(this)
-  }
-
-  companion object {
-    private const val REQUEST_CAMERA_PERMISSION = 0
-    const val TAG: String = SCAN_FRAGMENT
   }
 }

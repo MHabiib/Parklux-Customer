@@ -1,31 +1,27 @@
 package com.future.pms.network
 
+import com.future.pms.network.NetworkConstant.BASE
+import com.future.pms.network.NetworkConstant.PASSWORD
+import com.future.pms.network.NetworkConstant.READ_TIMEOUT
+import com.future.pms.network.NetworkConstant.USERNAME
+import com.future.pms.network.NetworkConstant.WRITE_TIMEOUT
 import okhttp3.OkHttpClient
-import retrofit2.Converter
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 class APICreator<out API>(
-  private val clazz: Class<API>,
-  private val baseUrl: String,
-  private var writeTimeout: Long = 30,
-  private var readTimeout: Long = 30,
-  private var headers: HashMap<String, String> = HashMap(),
-  private var converterFactory: Converter.Factory? = GsonConverterFactory.create()
+  private val clazz: Class<API>, private var headers: HashMap<String, String> = HashMap()
 ) {
-
-  private fun getOkHttpBuilder(writeTimeout: Long, readTimeout: Long): OkHttpClient.Builder {
+  private fun getOkHttpBuilder(): OkHttpClient.Builder {
     return OkHttpClient.Builder().addInterceptor(
-      BasicAuthInterceptor(
-        "pms-client", "pms-secret"
-      )
-    ).writeTimeout(writeTimeout, TimeUnit.SECONDS).readTimeout(readTimeout, TimeUnit.SECONDS)
+      BasicAuthInterceptor(USERNAME, PASSWORD)
+    ).writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS).readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
   }
 
   fun generate(): API {
-    val okHttpClient = getOkHttpBuilder(writeTimeout, readTimeout)
-
+    val okHttpClient = getOkHttpBuilder()
     okHttpClient.addNetworkInterceptor { chain ->
       val original = chain.request()
       val requestBuilder = original.newBuilder()
@@ -37,9 +33,9 @@ class APICreator<out API>(
       chain.proceed(request)
     }
     val client = okHttpClient.build()
-    val retrofit =
-      Retrofit.Builder().baseUrl(baseUrl).client(client).addConverterFactory(converterFactory!!)
-        .build()
+    val retrofit = Retrofit.Builder().baseUrl(BASE).client(client)
+      .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+      .addConverterFactory(GsonConverterFactory.create()).build()
     return retrofit.create(clazz)
   }
 }

@@ -1,15 +1,13 @@
 package com.future.pms.model.customerbooking
 
+import com.google.gson.annotations.SerializedName
+
 data class CustomerBooking(
-  val dateIn: Long,
-  val dateOut: Long,
-  val idBooking: String,
-  val idParkingZone: String,
-  val idSlot: String,
-  val idUser: String,
-  val parkingZoneName: String, val address: String,
-  val price: Double,
-  val slotName: String,
-  val totalTime: String,
-  val imageUrl: String
+  @SerializedName("dateIn") val dateIn: Long, @SerializedName("dateOut") val dateOut: Long,
+  @SerializedName("idBooking") val idBooking: String, @SerializedName("idParkingZone")
+  val idParkingZone: String, @SerializedName("idSlot") val idSlot: String, @SerializedName("idUser")
+  val idUser: String, @SerializedName("parkingZoneName")
+  val parkingZoneName: String, val address: String, @SerializedName("price") val price: Double,
+  @SerializedName("slotName") val slotName: String, @SerializedName("totalTime")
+  val totalTime: String, @SerializedName("imageUrl") val imageUrl: String
 )

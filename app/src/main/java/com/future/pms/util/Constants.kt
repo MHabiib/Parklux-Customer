@@ -10,14 +10,27 @@ class Constants {
     const val ONGOING_FRAGMENT = "Ongoin Fragment"
     const val BOOKING_DETAIL_FRAGMENT = "Booking Detail Fragment"
     const val TOKEN = "token"
-    const val REFRESH_TOKEN = "refresh_token"
+    const val REFRESH_TOKEN = "refreshToken"
     const val PROFILE_FRAGMENT = "ProfileFragment"
     const val ERROR = "Error"
-    const val seatSize = 100
-    const val seatGaping = 5
+    const val NULL = "null"
+    const val ID_BOOKING = "idBooking"
+
+    const val FULL_DATE_TIME_FORMAT = "HH:mm - dd MMMM yyyy "
+    const val TIME_FORMAT = "HH:mm"
+
+    const val parkSize = 100
+    const val parkGaping = 8
     const val STATUS_AVAILABLE = 1
     const val STATUS_BOOKED = 2
     const val STATUS_RESERVED = 3
+    const val STATUS_ROAD = 4
+    const val ADD_NEW_LINE = '/'
+    const val TAKEN_SLOT = 'U'
+    const val EMPTY_SLOT = 'A'
+    const val DISABLED_SLOT = 'R'
+    const val SPACING = '_'
+    const val SLOT = "Slot "
     var selectedIds = ""
   }
 }

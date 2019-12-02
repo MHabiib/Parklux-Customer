@@ -9,6 +9,10 @@ class BaseApp : Application() {
 
   lateinit var component: ApplicationComponent
 
+  companion object {
+    lateinit var instance: BaseApp private set
+  }
+
   override fun onCreate() {
     super.onCreate()
 
@@ -20,9 +24,5 @@ class BaseApp : Application() {
     component =
       DaggerApplicationComponent.builder().applicationModule(ApplicationModule(this)).build()
     component.inject(this)
-  }
-
-  companion object {
-    lateinit var instance: BaseApp private set
   }
 }

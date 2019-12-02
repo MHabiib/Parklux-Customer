@@ -24,8 +24,8 @@ object Authentication {
   fun save(context: Context, obj: Token): Boolean {
     val calendar = GregorianCalendar.getInstance()
     var expiresIn: Long = calendar.time.time
-    expiresIn += obj.expires_in * 24 * 60 * 60
-    obj.expires_in = expiresIn
+    expiresIn += obj.expiresIn * 24 * 60 * 60
+    obj.expiresIn = expiresIn
     return put(context, obj)
   }
 
@@ -34,7 +34,7 @@ object Authentication {
     if (token != null) {
       val calendar = GregorianCalendar.getInstance()
       val currentTime = calendar.time.time
-      val expiresIn = token.expires_in
+      val expiresIn = token.expiresIn
       if (expiresIn == 0L) throw WithoutAuthenticatedException()
       return currentTime > expiresIn
     } else {
@@ -49,7 +49,7 @@ object Authentication {
   fun getRefresh(context: Context): String {
     val token = get(context)
     if (token != null) {
-      return token.refresh_token
+      return token.refreshToken
     } else {
       throw WithoutAuthenticatedException()
     }
