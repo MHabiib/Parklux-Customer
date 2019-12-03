@@ -53,14 +53,14 @@ class RegisterActivity : AppCompatActivity(), RegisterContract {
   private fun loading(isLoading: Boolean) {
     if (isLoading) {
       progressBarReg.visibility = View.VISIBLE
-      register_layout.visibility = View.VISIBLE
+        txtName.text?.clear()
+        txtEmail.text?.clear()
+        txtPassword.text?.clear()
+        txtPhone.text?.clear()
+        register_layout.visibility = View.GONE
     } else {
       progressBarReg.visibility = View.GONE
-      txtName.text?.clear()
-      txtEmail.text?.clear()
-      txtPassword.text?.clear()
-      txtPhone.text?.clear()
-      register_layout.visibility = View.GONE
+        register_layout.visibility = View.VISIBLE
     }
   }
 
