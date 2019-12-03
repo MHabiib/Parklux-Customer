@@ -140,7 +140,7 @@ class ProfileFragment : Fragment(), ProfileContract {
   }
 
   override fun onFailed(e: String) {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    Timber.e(e)
   }
 
   override fun unauthorized() {

@@ -76,10 +76,6 @@ class RegisterActivity : AppCompatActivity(), RegisterContract {
     Toast.makeText(this, e, Toast.LENGTH_SHORT).show()
   }
 
-  override fun onError(e: Throwable) {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-  }
-
   private fun hideKeyboard() {
     val view = currentFocus
     view?.let {
