@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/baseWhite">
+
+        <!-- include main content -->
+        <include
+            android:id="@+id/parking_direction_content"
+            layout="@layout/fragment_bottom_sheet_content" />
+
+        <!-- include bottom sheet -->
+        <include
+            android:id="@+id/parking_direction_sheet"
+            layout="@layout/fragment_parking_direction" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>
