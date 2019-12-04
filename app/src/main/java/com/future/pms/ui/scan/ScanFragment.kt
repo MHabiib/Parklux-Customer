@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
+import android.hardware.Camera
 import android.os.Bundle
 import android.view.*
 import androidx.activity.addCallback
@@ -26,6 +27,7 @@ import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_scan.*
 import timber.log.Timber
 import java.io.IOException
+import java.lang.reflect.Field
 import javax.inject.Inject
 
 class ScanFragment : Fragment(), ScanContract {
@@ -35,6 +37,7 @@ class ScanFragment : Fragment(), ScanContract {
   private lateinit var accessToken: String
   private var mSurfaceView: SurfaceView? = null
   private lateinit var binding: FragmentScanBinding
+  private var isFlashOn = false
 
   companion object {
     private const val REQUEST_CAMERA_PERMISSION = 0
@@ -176,8 +179,40 @@ class ScanFragment : Fragment(), ScanContract {
     }
   }
 
-  fun flashToggle() {
-    //TODO
+  private fun getCamera(cameraSoure: CameraSource?): Camera? {
+    val declaredField = CameraSource::class.java.declaredFields
+
+    for (field: Field in declaredField) {
+      if (field.type == Camera::class.java) {
+        field.isAccessible = true
+        try {
+          cameraSoure?.let {
+            val camera = field.get(it) as? Camera
+            return camera
+          }
+        } catch (ex: IllegalAccessException) {
+          Timber.e(ex)
+        }
+        return null
+      }
+    }
+    return null
+  }
+
+  private fun flashToggle() {
+    val camera: Camera? = getCamera(cameraSource)
+    camera?.let {
+      val param = it.parameters
+      if (isFlashOn) {
+        toggleFlash.setImageResource(R.drawable.ic_flash_off)
+        param?.flashMode = Camera.Parameters.FLASH_MODE_OFF
+        isFlashOn = false
+      } else {
+        toggleFlash.setImageResource(R.drawable.ic_flash_on)
+        param?.flashMode = Camera.Parameters.FLASH_MODE_TORCH
+        isFlashOn = true
+      }
+    }
   }
 
   private fun injectDependency() {
