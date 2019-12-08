@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -36,7 +35,6 @@ import com.future.pms.util.Constants.Companion.TOKEN
 import com.future.pms.util.Constants.Companion.parkMargin
 import com.future.pms.util.Constants.Companion.parkPadding
 import com.future.pms.util.Constants.Companion.parkSize
-import com.future.pms.util.Constants.Companion.selectedIds
 import com.future.pms.util.Utils
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_bottom_sheet_content.*
@@ -52,7 +50,8 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
   private lateinit var layout: HorizontalScrollView
   private lateinit var binding: FragmentBookingDetailBinding
   private lateinit var bindingActivityMain: ActivityMainBinding
-  private var SLOTS = ("/\$_UUAAU_RR_UU_UU_/" + "________________/" + "_AARAU_UU_UU_UU_/" + "_UUARR_RR_UU_AR_/" + "________________/" + "_URAAU_RA_UU_UU_/" + "_RUUAU_RR_UU_UU_/" + "________________/" + "_UU_AU_RU_UR_UU_/" + "_UU_AU_RR_AR_UU_/" + "________________/" + "_UURAUARRAUUAUU_/" + "________________/" + "_URRAUARARUURUU_/" + "________________/")
+  private var SLOTS =
+    ("/_UUAAU_RR_UU_UU_/" + "________________/" + "_AARAU_UU_UU_UU_/" + "_UUARR_RR_UU_AR_/" + "________________/" + "_URAAU_RA_UU_UU_/" + "_RUUAU_RR_UU_UU_/" + "________________/" + "_UU_AU_RU_UR_UU_/" + "_UU_AU_RR_AR_UU_/" + "________________/" + "_UURAUARRAUUAUU_/" + "________________/" + "_URRAUARARUURUU_/" + "________________/")
 
   companion object {
     const val TAG: String = BOOKING_DETAIL_FRAGMENT
@@ -110,7 +109,7 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
   }
 
   override fun loadBookingSuccess(booking: CustomerBooking) {
-    showParkingLayout(layout)
+    showParkingLayout()
     with(binding) {
       parkingDirectionContent.apply {
         welcomeTo.text = String.format(getString(R.string.welcome_to), booking.parkingZoneName)
@@ -158,7 +157,7 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
     homeComponent.inject(this)
   }
 
-  private fun showParkingLayout(layout: HorizontalScrollView) {
+  private fun showParkingLayout() {
     val layoutPark = LinearLayout(context)
     var parkingLayout: LinearLayout? = null
     var count = 0
@@ -213,7 +212,6 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
       if (code != '_') {
         id = count
         text = count.toString()
-        setOnClickListener { onClick(view) }
       } else {
         text = ""
       }
@@ -224,23 +222,5 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
     }
     parkViewList.add(view)
     return view
-  }
-
-  private fun onClick(view: View) {
-    if (view.tag as Int == STATUS_AVAILABLE) {
-      if (selectedIds.contains(view.id.toString() + ",")) {
-        selectedIds = selectedIds.replace((+view.id).toString() + ",", "")
-        view.setBackgroundResource(R.drawable.ic_park)
-      } else {
-        selectedIds = selectedIds + view.id + ","
-        view.setBackgroundResource(R.drawable.ic_my_location)
-      }
-    } else if (view.tag as Int == STATUS_BOOKED) {
-      Toast.makeText(context, String.format(getString(R.string.park_is_booked), view.id),
-          Toast.LENGTH_SHORT).show()
-    } else if (view.tag as Int == STATUS_RESERVED) {
-      Toast.makeText(context, String.format(getString(R.string.park_is_reserved), view.id),
-          Toast.LENGTH_SHORT).show()
-    }
   }
 }

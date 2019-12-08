@@ -33,8 +33,8 @@ class MainPresenter @Inject constructor() {
     view.showBookingFailed()
   }
 
-  fun showParkingDirection() {
-    view.showParkingDirection()
+  fun showParkingDirection(idBooking: String) {
+    view.showParkingDirection(idBooking)
   }
 
   fun showLoginPage() {

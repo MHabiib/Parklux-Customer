@@ -7,7 +7,7 @@ import com.future.pms.ui.register.RegisterActivity
 import com.future.pms.ui.splash.SplashActivity
 import dagger.Component
 
-@Component(modules = arrayOf(ActivityModule::class)) interface ActivityComponent {
+@Component(modules = [ActivityModule::class]) interface ActivityComponent {
   fun inject(mainActivity: MainActivity)
 
   fun inject(splashActivity: SplashActivity)

@@ -36,6 +36,7 @@ class OngoingFragment : Fragment(), OngoingContract {
   @Inject lateinit var presenter: OngoingPresenter
   private lateinit var binding: FragmentOngoingBinding
   private lateinit var parkingTime: Chronometer
+  private lateinit var idBooking: String
 
   companion object {
     const val TAG: String = Constants.ONGOING_FRAGMENT
@@ -62,7 +63,7 @@ class OngoingFragment : Fragment(), OngoingContract {
     val directionLayout = binding.directionsLayout
     directionLayout.setOnClickListener {
       val activity = activity as MainActivity?
-      activity?.presenter?.showParkingDirection()
+      activity?.presenter?.showParkingDirection(idBooking)
     }
     parkingTime = binding.parkingTime
     val checkout = binding.checkoutButton
@@ -123,6 +124,7 @@ class OngoingFragment : Fragment(), OngoingContract {
 
   override fun loadCustomerOngoingSuccess(ongoing: CustomerBooking) {
     with(binding) {
+      idBooking = ongoing.idBooking
       dontHaveOngoing.visibility = View.GONE
       ongoingParkingLayout.visibility = View.VISIBLE
       parkingZoneName.text = ongoing.parkingZoneName

@@ -3,6 +3,7 @@ package com.future.pms.ui.splash
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.future.pms.R
@@ -37,9 +38,11 @@ class SplashActivity : AppCompatActivity(), SplashContract {
   }
 
   override fun onSuccess() {
-    val intent = Intent(this, MainActivity::class.java)
-    startActivity(intent)
-    finish()
+    Handler().postDelayed({
+      val intent = Intent(this, MainActivity::class.java)
+      startActivity(intent)
+      finish()
+    }, 1000)
   }
 
   override fun onLogin() {
@@ -63,9 +66,11 @@ class SplashActivity : AppCompatActivity(), SplashContract {
   }
 
   private fun showLogin() {
-    val intent = Intent(this, LoginActivity::class.java)
-    startActivity(intent)
-    finish()
+    Handler().postDelayed({
+      val intent = Intent(this, LoginActivity::class.java)
+      startActivity(intent)
+      finish()
+    }, 1000)
   }
 
   override fun onError(e: Throwable) {

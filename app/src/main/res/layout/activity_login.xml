@@ -20,8 +20,9 @@
 
 
     <ScrollView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="@dimen/zero_dp"
+        android:layout_height="@dimen/zero_dp"
+        android:overScrollMode="never"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -30,7 +31,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="24dp">
+            android:paddingBottom="@dimen/twenty_four_dp">
 
             <ProgressBar
                 android:id="@+id/progressBar"
@@ -49,14 +50,14 @@
                 style="@style/NoCaps"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="12dp"
+                android:layout_marginStart="@dimen/twelve_dp"
+                android:layout_marginTop="@dimen/twenty_four_dp"
+                android:layout_marginEnd="@dimen/twelve_dp"
                 android:fontFamily="sans-serif-light"
                 android:background="@drawable/card_layout_blue_primary"
                 android:gravity="center"
-                android:paddingStart="@dimen/margin_padding_vertical_for_card"
-                android:paddingEnd="@dimen/margin_padding_vertical_for_card"
+                android:paddingStart="@dimen/twelve_dp"
+                android:paddingEnd="@dimen/twelve_dp"
                 android:text="@string/login"
                 android:textColor="@color/white"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -65,15 +66,15 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/inputLayoutEmail"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/zero_dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="12dp"
+                android:layout_marginStart="@dimen/twelve_dp"
+                android:layout_marginTop="@dimen/twelve_dp"
+                android:layout_marginEnd="@dimen/twelve_dp"
                 android:background="@drawable/card_layout_white"
-                android:paddingStart="16dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="12dp"
+                android:paddingStart="@dimen/sixteen_dp"
+                android:paddingTop="@dimen/eight_dp"
+                android:paddingBottom="@dimen/twelve_dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -89,20 +90,20 @@
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/h2" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/inputLayoutPassword"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/zero_dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="0dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginStart="@dimen/zero_dp"
+                android:layout_marginTop="@dimen/twelve_dp"
                 android:background="@drawable/card_layout_white"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="12dp"
+                android:paddingStart="@dimen/sixteen_dp"
+                android:paddingTop="@dimen/eight_dp"
+                android:paddingEnd="@dimen/sixteen_dp"
+                android:paddingBottom="@dimen/twelve_dp"
                 app:layout_constraintEnd_toEndOf="@+id/inputLayoutEmail"
                 app:layout_constraintStart_toStartOf="@+id/inputLayoutEmail"
                 app:layout_constraintTop_toBottomOf="@+id/inputLayoutEmail"
@@ -120,7 +121,7 @@
                     android:inputType="textPassword"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/h2" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -128,7 +129,7 @@
                 android:id="@+id/dont_have_account"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="@dimen/twenty_dp"
                 android:text="@string/don_t_have_account"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -138,7 +139,7 @@
                 android:id="@+id/register"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/four_dps"
+                android:layout_marginStart="@dimen/four_dp"
                 android:text="@string/register"
                 android:textColor="@color/colorSecondary"
                 android:textStyle="bold"

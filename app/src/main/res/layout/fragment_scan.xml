@@ -27,8 +27,8 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="@dimen/zero_dp"
+            android:layout_height="@dimen/zero_dp"
             android:background="@drawable/transparent_layout"
             app:layout_constraintBottom_toTopOf="@id/bottom_transparent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -36,8 +36,8 @@
             app:layout_constraintTop_toBottomOf="@id/top_transparent" />
 
         <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="@dimen/zero_dp"
+            android:layout_height="@dimen/zero_dp"
             android:background="@drawable/transparent_layout"
             app:layout_constraintBottom_toTopOf="@id/bottom_transparent"
             app:layout_constraintLeft_toRightOf="@id/frame_qr"
@@ -47,7 +47,7 @@
         <FrameLayout
             android:id="@+id/bottom_transparent"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="@dimen/zero_dp"
             android:background="@drawable/transparent_layout"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -57,7 +57,7 @@
         <FrameLayout
             android:id="@+id/top_transparent"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="@dimen/zero_dp"
             android:background="@drawable/transparent_layout"
             app:layout_constraintBottom_toTopOf="@id/frame_qr"
             app:layout_constraintLeft_toLeftOf="parent"

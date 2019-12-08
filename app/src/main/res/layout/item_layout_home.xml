@@ -5,10 +5,10 @@
     android:id="@+id/item_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
+    android:layout_marginTop="@dimen/eight_dp"
     android:background="@drawable/card_layout_blue_primary"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="@dimen/sixteen_dp">
 
     <TextView
         android:id="@+id/item_title"
@@ -17,7 +17,7 @@
         android:ellipsize="end"
         android:maxLines="2"
         android:textColor="@color/white"
-        android:textSize="20sp"
+        android:textSize="@dimen/h_medium2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="PARKING ZONE NAME" />

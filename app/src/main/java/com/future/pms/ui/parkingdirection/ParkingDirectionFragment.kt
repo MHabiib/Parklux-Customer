@@ -1,5 +1,6 @@
 package com.future.pms.ui.parkingdirection
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.util.TypedValue
@@ -10,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -18,7 +18,9 @@ import com.future.pms.R
 import com.future.pms.databinding.FragmentParkingDirectionBinding
 import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
+import com.future.pms.model.oauth.Token
 import com.future.pms.ui.main.MainActivity
+import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.PARKING_DETAIL_FRAGMENT
 import com.future.pms.util.Constants.Companion.STATUS_AVAILABLE
 import com.future.pms.util.Constants.Companion.STATUS_BOOKED
@@ -27,7 +29,8 @@ import com.future.pms.util.Constants.Companion.STATUS_ROAD
 import com.future.pms.util.Constants.Companion.parkMargin
 import com.future.pms.util.Constants.Companion.parkPadding
 import com.future.pms.util.Constants.Companion.parkSize
-import com.future.pms.util.Constants.Companion.selectedIds
+import com.google.gson.Gson
+import kotlinx.android.synthetic.main.fragment_parking_direction.*
 import java.util.*
 import javax.inject.Inject
 
@@ -35,9 +38,8 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
   @Inject lateinit var presenter: ParkingDirectionPresenter
   private lateinit var binding: FragmentParkingDirectionBinding
   private var parkViewList: MutableList<TextView> = ArrayList()
-  private var SLOTS =
-    ("/\$_UUAAU_RR_UU_UU_/" + "___Z_____________/" + "_AARAU_UU_UU_UU_/" + "_UUARR_RR_UU_AR_/" + "________________/" + "_URAAU_RA_UU_UU_/" + "_RUUAU_RR_UU_UU_/" + "________________/" + "_UU_AU_RU_UR_UU_/" + "_UU_AU_RR_AR_UU_/" + "________________/" + "_UURAUARRAUUAUU_/" + "________________/" + "_URRAUARARUURUU_/" + "________________/")
-
+  private lateinit var layout: HorizontalScrollView
+  private lateinit var idBooking: String
   companion object {
     const val TAG: String = PARKING_DETAIL_FRAGMENT
   }
@@ -60,29 +62,37 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
   ): View? {
     binding =
       DataBindingUtil.inflate(inflater, R.layout.fragment_parking_direction, container, false)
+    val accessToken = Gson().fromJson(
+      context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
+        Constants.TOKEN, null
+      ), Token::class.java
+    ).accessToken
+    presenter.attach(this)
+    layout = binding.layoutPark
+    idBooking = this.arguments?.getString(Constants.ID_BOOKING).toString()
+    presenter.getParkingLayout(idBooking, accessToken)
     val toolbar = binding.toolbar
-    val layout = binding.layoutPark
     toolbar.setNavigationIcon(R.drawable.ic_back_white)
-    showParkingLayout(layout)
     toolbar.setNavigationOnClickListener { backToHome() }
     return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    presenter.attach(this)
     presenter.subscribe()
     initView()
   }
 
   private fun initView() {}
 
-  private fun showParkingLayout(layout: HorizontalScrollView) {
+  private fun showParkingLayout(slotsLayout: String) {
     val layoutPark = LinearLayout(context)
     var parkingLayout: LinearLayout? = null
     var count = 0
+    var totalSlot = 0
     val params = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-        ViewGroup.LayoutParams.WRAP_CONTENT)
+      ViewGroup.LayoutParams.WRAP_CONTENT
+    )
     layoutPark.apply {
       orientation = LinearLayout.VERTICAL
       layoutParams = params
@@ -90,28 +100,45 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
     }
     layout.addView(layoutPark)
 
-    for (index in 0 until SLOTS.length) {
+    for (index in 0 until slotsLayout.length) {
+      totalSlot++
+
+      if (index == 0 || totalSlot == 16) {
+        totalSlot = 0
+        parkingLayout = LinearLayout(context)
+        parkingLayout.orientation = LinearLayout.HORIZONTAL
+        layoutPark.addView(parkingLayout)
+      }
+
       when {
-        SLOTS[index] == '/' -> {
-          parkingLayout = LinearLayout(context)
-          parkingLayout.orientation = LinearLayout.HORIZONTAL
-          layoutPark.addView(parkingLayout)
-        }
-        SLOTS[index] == 'U' -> {
+        slotsLayout[index] == 'U' -> {
           count++
-          setupParkingView(count, parkingLayout, SLOTS[index], STATUS_BOOKED, R.drawable.ic_car)
+          setupParkingView(
+            count, parkingLayout, slotsLayout[index], STATUS_BOOKED, R.drawable.ic_car
+          )
         }
-        SLOTS[index] == 'A' -> {
+        slotsLayout[index] == 'A' -> {
           count++
-          setupParkingView(count, parkingLayout, SLOTS[index], STATUS_AVAILABLE, R.drawable.ic_park)
+          setupParkingView(
+            count, parkingLayout, slotsLayout[index], STATUS_AVAILABLE, R.drawable.ic_park
+          )
         }
-        SLOTS[index] == 'R' -> {
+        slotsLayout[index] == 'R' -> {
           count++
-          setupParkingView(count, parkingLayout, SLOTS[index], STATUS_RESERVED,
-              R.drawable.ic_disable)
+          setupParkingView(
+            count, parkingLayout, slotsLayout[index], STATUS_RESERVED, R.drawable.ic_disable
+          )
         }
-        SLOTS[index] == '_' -> {
-          setupParkingView(count, parkingLayout, SLOTS[index], STATUS_ROAD, R.drawable.ic_road)
+        slotsLayout[index] == '_' -> {
+          setupParkingView(
+            count, parkingLayout, slotsLayout[index], STATUS_ROAD, R.drawable.ic_road
+          )
+        }
+        slotsLayout[index] == 'V' -> {
+          count++
+          setupParkingView(
+            count, parkingLayout, slotsLayout[index], STATUS_AVAILABLE, R.drawable.ic_my_location
+          )
         }
       }
     }
@@ -132,7 +159,6 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
       if (code != '_') {
         id = count
         text = count.toString()
-        setOnClickListener { onClick(view) }
       } else {
         text = ""
       }
@@ -145,27 +171,21 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
     return view
   }
 
-  private fun onClick(view: View) {
-    if (view.tag as Int == STATUS_AVAILABLE) {
-      if (selectedIds.contains(view.id.toString() + ",")) {
-        selectedIds = selectedIds.replace((+view.id).toString() + ",", "")
-        view.setBackgroundResource(R.drawable.ic_park)
+  override fun getLayoutSuccess(slotsLayout: String) {
+    showParkingLayout(slotsLayout)
+  }
+
+  override fun getLayoutFailed() {
+    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+  }
+
+  override fun showProgress(show: Boolean) {
+    if (null != progressBar) {
+      if (show) {
+        progressBar.visibility = View.VISIBLE
       } else {
-        selectedIds = selectedIds + view.id + ","
-        view.setBackgroundResource(R.drawable.ic_my_location)
+        progressBar.visibility = View.GONE
       }
-    } else if (view.tag as Int == STATUS_BOOKED) {
-      Toast.makeText(
-        context,
-        String.format(getString(R.string.park_is_booked), view.id),
-        Toast.LENGTH_SHORT
-      ).show()
-    } else if (view.tag as Int == STATUS_RESERVED) {
-      Toast.makeText(
-        context,
-        String.format(getString(R.string.park_is_reserved), view.id),
-        Toast.LENGTH_SHORT
-      ).show()
     }
   }
 

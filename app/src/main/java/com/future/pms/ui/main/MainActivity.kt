@@ -116,11 +116,15 @@ class MainActivity : AppCompatActivity(), MainContract {
     }
   }
 
-  override fun showParkingDirection() {
+  override fun showParkingDirection(idBooking: String) {
     binding.navView.visibility = View.GONE
+    val fragment = ParkingDirectionFragment()
+    val bundle = Bundle()
+    bundle.putString(ID_BOOKING, idBooking)
+    fragment.arguments = bundle
     if (supportFragmentManager.findFragmentByTag(ParkingDirectionFragment.TAG) == null) {
       supportFragmentManager.beginTransaction().disallowAddToBackStack().replace(
-        R.id.frame, ParkingDirectionFragment().newInstance(), ParkingDirectionFragment.TAG
+        R.id.frame, fragment, ParkingDirectionFragment.TAG
       ).commit()
     }
   }
