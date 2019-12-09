@@ -106,7 +106,6 @@
                         android:gravity="center"
                         android:paddingLeft="@dimen/twelve_dp"
                         android:paddingRight="@dimen/twelve_dp"
-                        android:paddingBottom="@dimen/twelve_dp"
                         android:textColor="@color/colorPrimary"
                         android:textSize="@dimen/h2"
                         app:layout_constraintLeft_toLeftOf="parent"
@@ -148,7 +147,7 @@
                             android:id="@+id/your_parking_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/you_ve_parked_here_for"
+                            android:text="@string/duration"
                             android:textColor="@color/colorPrimary"
                             android:textSize="@dimen/h_medium2"
                             app:layout_constraintRight_toRightOf="parent"
@@ -163,6 +162,40 @@
                             app:layout_constraintRight_toRightOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/your_parking_time"
                             tools:text="00 : 00 : 02" />
+
+                        <View
+                            android:id="@+id/line1"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="@dimen/six_dp"
+                            android:background="@color/lightGrey"
+                            android:visibility="gone"
+                            app:layout_constraintTop_toBottomOf="@id/parking_time" />
+
+                        <TextView
+                            android:id="@+id/your_price_tag"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/six_dp"
+                            android:text="@string/total_price_only"
+                            android:textColor="@color/darkGrey"
+                            android:textSize="@dimen/h3"
+                            android:visibility="gone"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/line1"
+                            tools:text="Total price" />
+
+                        <TextView
+                            android:id="@+id/your_price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/six_dp"
+                            android:textColor="@color/darkGrey"
+                            android:textSize="@dimen/h3"
+                            android:visibility="gone"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/line1"
+                            tools:text="IDR 100000" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

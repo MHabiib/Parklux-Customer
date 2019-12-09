@@ -8,6 +8,7 @@ data class CustomerBooking(
   val idParkingZone: String, @SerializedName("idSlot") val idSlot: String, @SerializedName("idUser")
   val idUser: String, @SerializedName("parkingZoneName")
   val parkingZoneName: String, val address: String, @SerializedName("price") val price: Double,
-  @SerializedName("slotName") val slotName: String, @SerializedName("totalTime")
-  val totalTime: String, @SerializedName("imageUrl") val imageUrl: String
+  @SerializedName("slotName") val slotName: String, @SerializedName("levelName")
+  val levelName: String, @SerializedName("totalTime") val totalTime: String,
+  @SerializedName("imageUrl") val imageUrl: String
 )

@@ -1,7 +1,6 @@
 package com.future.pms.ui.parkingdirection
 
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.Gravity
@@ -70,6 +69,7 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
     presenter.attach(this)
     layout = binding.layoutPark
     idBooking = this.arguments?.getString(Constants.ID_BOOKING).toString()
+    binding.parkingLevelTitle.text = this.arguments?.getString(Constants.LEVEL_NAME).toString()
     presenter.getParkingLayout(idBooking, accessToken)
     val toolbar = binding.toolbar
     toolbar.setNavigationIcon(R.drawable.ic_back_white)
@@ -88,7 +88,6 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
   private fun showParkingLayout(slotsLayout: String) {
     val layoutPark = LinearLayout(context)
     var parkingLayout: LinearLayout? = null
-    var count = 0
     var totalSlot = 0
     val params = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
       ViewGroup.LayoutParams.WRAP_CONTENT
@@ -102,7 +101,6 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
 
     for (index in 0 until slotsLayout.length) {
       totalSlot++
-
       if (index == 0 || totalSlot == 16) {
         totalSlot = 0
         parkingLayout = LinearLayout(context)
@@ -111,33 +109,34 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
       }
 
       when {
-        slotsLayout[index] == 'U' -> {
-          count++
-          setupParkingView(
-            count, parkingLayout, slotsLayout[index], STATUS_BOOKED, R.drawable.ic_car
-          )
-        }
-        slotsLayout[index] == 'A' -> {
-          count++
-          setupParkingView(
-            count, parkingLayout, slotsLayout[index], STATUS_AVAILABLE, R.drawable.ic_park
-          )
-        }
-        slotsLayout[index] == 'R' -> {
-          count++
-          setupParkingView(
-            count, parkingLayout, slotsLayout[index], STATUS_RESERVED, R.drawable.ic_disable
-          )
-        }
         slotsLayout[index] == '_' -> {
           setupParkingView(
-            count, parkingLayout, slotsLayout[index], STATUS_ROAD, R.drawable.ic_road
+            index, parkingLayout, slotsLayout[index], STATUS_ROAD, R.drawable.ic_blank
+          )
+        }
+        slotsLayout[index] == 'S' || slotsLayout[index] == 'T' -> {
+          setupParkingView(
+            index, parkingLayout, slotsLayout[index], STATUS_BOOKED, R.drawable.ic_car
+          )
+        }
+        slotsLayout[index] == 'E' -> {
+          setupParkingView(
+            index, parkingLayout, slotsLayout[index], STATUS_AVAILABLE, R.drawable.ic_park
+          )
+        }
+        slotsLayout[index] == 'D' -> {
+          setupParkingView(
+            index, parkingLayout, slotsLayout[index], STATUS_RESERVED, R.drawable.ic_disable
+          )
+        }
+        slotsLayout[index] == 'R' || slotsLayout[index] == 'O' -> {
+          setupParkingView(
+            index, parkingLayout, slotsLayout[index], STATUS_ROAD, R.drawable.ic_road
           )
         }
         slotsLayout[index] == 'V' -> {
-          count++
           setupParkingView(
-            count, parkingLayout, slotsLayout[index], STATUS_AVAILABLE, R.drawable.ic_my_location
+            index, parkingLayout, slotsLayout[index], STATUS_AVAILABLE, R.drawable.ic_my_location
           )
         }
       }
@@ -154,7 +153,7 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
       setPadding(0, 0, 0, 0)
       gravity = Gravity.CENTER
       setBackgroundResource(icon)
-      setTextColor(Color.WHITE)
+      setTextColor(resources.getColor(R.color.gold))
       tag = tags
       if (code != '_') {
         id = count

@@ -1,7 +1,6 @@
 package com.future.pms.ui.bookingdetail
 
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.Gravity
@@ -37,7 +36,8 @@ import com.future.pms.util.Constants.Companion.parkPadding
 import com.future.pms.util.Constants.Companion.parkSize
 import com.future.pms.util.Utils
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.fragment_bottom_sheet_content.*
+import kotlinx.android.synthetic.main.fragment_bottom_sheet_content.progressBar
+import kotlinx.android.synthetic.main.fragment_parking_direction.*
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
@@ -50,8 +50,6 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
   private lateinit var layout: HorizontalScrollView
   private lateinit var binding: FragmentBookingDetailBinding
   private lateinit var bindingActivityMain: ActivityMainBinding
-  private var SLOTS =
-    ("/_UUAAU_RR_UU_UU_/" + "________________/" + "_AARAU_UU_UU_UU_/" + "_UUARR_RR_UU_AR_/" + "________________/" + "_URAAU_RA_UU_UU_/" + "_RUUAU_RR_UU_UU_/" + "________________/" + "_UU_AU_RU_UR_UU_/" + "_UU_AU_RR_AR_UU_/" + "________________/" + "_UURAUARRAUUAUU_/" + "________________/" + "_URRAUARARUURUU_/" + "________________/")
 
   companion object {
     const val TAG: String = BOOKING_DETAIL_FRAGMENT
@@ -93,6 +91,7 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
     presenter.subscribe()
     if (NULL != idBooking) {
       presenter.loadBooking(accessToken)
+      presenter.getParkingLayout(idBooking, accessToken)
     } else {
       showProgress(false)
       with(binding) {
@@ -108,8 +107,11 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
     }
   }
 
+  override fun getLayoutSuccess(slotsLayout: String) {
+    showParkingLayout(slotsLayout)
+  }
+
   override fun loadBookingSuccess(booking: CustomerBooking) {
-    showParkingLayout()
     with(binding) {
       parkingDirectionContent.apply {
         welcomeTo.text = String.format(getString(R.string.welcome_to), booking.parkingZoneName)
@@ -117,6 +119,7 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
         layoutBookingDetail.visibility = View.VISIBLE
         iconBookingDetail.setImageResource(R.drawable.ic_smile)
         dateIn.text = Utils.convertLongToTimeOnly(booking.dateIn)
+        parking_level_title.text = booking.levelName
       }
       parkingDirectionSheet.swipeUpIndicator.visibility = View.VISIBLE
     }
@@ -157,12 +160,13 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
     homeComponent.inject(this)
   }
 
-  private fun showParkingLayout() {
+  private fun showParkingLayout(slotsLayout: String) {
     val layoutPark = LinearLayout(context)
     var parkingLayout: LinearLayout? = null
-    var count = 0
+    var totalSlot = 0
     val params = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-        ViewGroup.LayoutParams.WRAP_CONTENT)
+      ViewGroup.LayoutParams.WRAP_CONTENT
+    )
     layoutPark.apply {
       orientation = LinearLayout.VERTICAL
       layoutParams = params
@@ -170,35 +174,53 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
     }
     layout.addView(layoutPark)
 
-    for (index in 0 until SLOTS.length) {
+    for (index in 0 until slotsLayout.length) {
+      totalSlot++
+      if (index == 0 || totalSlot == 16) {
+        totalSlot = 0
+        parkingLayout = LinearLayout(context)
+        parkingLayout.orientation = LinearLayout.HORIZONTAL
+        layoutPark.addView(parkingLayout)
+      }
+
       when {
-        SLOTS[index] == '/' -> {
-          parkingLayout = LinearLayout(context)
-          parkingLayout.orientation = LinearLayout.HORIZONTAL
-          layoutPark.addView(parkingLayout)
+        slotsLayout[index] == '_' -> {
+          setupParkingView(
+            index, parkingLayout, slotsLayout[index], STATUS_ROAD, R.drawable.ic_blank
+          )
         }
-        SLOTS[index] == 'U' -> {
-          count++
-          setupParkingView(count, parkingLayout, SLOTS[index], STATUS_BOOKED, R.drawable.ic_car)
+        slotsLayout[index] == 'S' || slotsLayout[index] == 'T' -> {
+          setupParkingView(
+            index, parkingLayout, slotsLayout[index], STATUS_BOOKED, R.drawable.ic_car
+          )
         }
-        SLOTS[index] == 'A' -> {
-          count++
-          setupParkingView(count, parkingLayout, SLOTS[index], STATUS_AVAILABLE, R.drawable.ic_park)
+        slotsLayout[index] == 'E' -> {
+          setupParkingView(
+            index, parkingLayout, slotsLayout[index], STATUS_AVAILABLE, R.drawable.ic_park
+          )
         }
-        SLOTS[index] == 'R' -> {
-          count++
-          setupParkingView(count, parkingLayout, SLOTS[index], STATUS_RESERVED,
-              R.drawable.ic_disable)
+        slotsLayout[index] == 'D' -> {
+          setupParkingView(
+            index, parkingLayout, slotsLayout[index], STATUS_RESERVED, R.drawable.ic_disable
+          )
         }
-        SLOTS[index] == '_' -> {
-          setupParkingView(count, parkingLayout, SLOTS[index], STATUS_ROAD, R.drawable.ic_road)
+        slotsLayout[index] == 'R' || slotsLayout[index] == 'O' -> {
+          setupParkingView(
+            index, parkingLayout, slotsLayout[index], STATUS_ROAD, R.drawable.ic_road
+          )
+        }
+        slotsLayout[index] == 'V' -> {
+          setupParkingView(
+            index, parkingLayout, slotsLayout[index], STATUS_AVAILABLE, R.drawable.ic_my_location
+          )
         }
       }
     }
   }
 
   private fun setupParkingView(count: Int, layout: LinearLayout?, code: Char, tags: Int,
-      icon: Int): TextView {
+    icon: Int
+  ): TextView {
     val view = TextView(context)
     view.apply {
       layoutParams = LinearLayout.LayoutParams(parkSize, parkSize).apply {
@@ -207,7 +229,7 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
       setPadding(0, 0, 0, 0)
       gravity = Gravity.CENTER
       setBackgroundResource(icon)
-      setTextColor(Color.WHITE)
+      setTextColor(resources.getColor(R.color.gold))
       tag = tags
       if (code != '_') {
         id = count

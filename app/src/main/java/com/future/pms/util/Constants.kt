@@ -15,6 +15,7 @@ class Constants {
     const val ERROR = "Error"
     const val NULL = "null"
     const val ID_BOOKING = "idBooking"
+    const val LEVEL_NAME = "levelName"
 
     const val FULL_DATE_TIME_FORMAT = "HH:mm - dd MMMM yyyy "
     const val TIME_FORMAT = "HH:mm"

@@ -1,6 +1,7 @@
 package com.future.pms.ui.home
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +16,7 @@ import com.future.pms.di.module.FragmentModule
 import com.future.pms.model.customerdetail.Customer
 import com.future.pms.model.oauth.Token
 import com.future.pms.ui.history.HistoryFragment
-import com.future.pms.ui.main.MainActivity
+import com.future.pms.ui.login.LoginActivity
 import com.future.pms.ui.ongoing.OngoingFragment
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.ERROR
@@ -43,8 +44,9 @@ class HomeFragment : Fragment(), HomeContract {
     injectDependency()
   }
 
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-      savedInstanceState: Bundle?): View? {
+  override fun onCreateView(
+    inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+  ): View? {
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
     with(binding) {
       val viewPager = viewPager as ViewPager
@@ -70,9 +72,9 @@ class HomeFragment : Fragment(), HomeContract {
 
   private fun initView() {
     val accessToken = Gson().fromJson(
-        context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
-          Constants.TOKEN, null
-        ), Token::class.java
+      context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
+        Constants.TOKEN, null
+      ), Token::class.java
     ).accessToken
     getDateNow()
     presenter.loadData(accessToken)
@@ -94,8 +96,8 @@ class HomeFragment : Fragment(), HomeContract {
   }
 
   override fun unauthorized() {
-    val activity = activity as MainActivity?
-    activity?.presenter?.showLoginPage()
+    val intent = Intent(activity, LoginActivity::class.java)
+    startActivity(intent)
   }
 
   override fun getDateNow() {

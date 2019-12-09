@@ -5,7 +5,7 @@ interface MainContract {
   fun showScanFragment()
   fun showProfileFragment()
   fun showReceipt(idBooking: String)
-  fun showParkingDirection(idBooking: String)
+  fun showParkingDirection(idBooking: String, levelName: String)
   fun showBookingDetail(idBooking: String)
   fun showBookingFailed()
   fun showLoginPage()

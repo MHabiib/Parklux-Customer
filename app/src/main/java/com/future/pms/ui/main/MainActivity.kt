@@ -17,6 +17,7 @@ import com.future.pms.ui.profile.ProfileFragment
 import com.future.pms.ui.receipt.ReceiptFragment
 import com.future.pms.ui.scan.ScanFragment
 import com.future.pms.util.Constants.Companion.ID_BOOKING
+import com.future.pms.util.Constants.Companion.LEVEL_NAME
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import javax.inject.Inject
 
@@ -116,11 +117,12 @@ class MainActivity : AppCompatActivity(), MainContract {
     }
   }
 
-  override fun showParkingDirection(idBooking: String) {
+  override fun showParkingDirection(idBooking: String, levelName: String) {
     binding.navView.visibility = View.GONE
     val fragment = ParkingDirectionFragment()
     val bundle = Bundle()
     bundle.putString(ID_BOOKING, idBooking)
+    bundle.putString(LEVEL_NAME, levelName)
     fragment.arguments = bundle
     if (supportFragmentManager.findFragmentByTag(ParkingDirectionFragment.TAG) == null) {
       supportFragmentManager.beginTransaction().disallowAddToBackStack().replace(

@@ -35,7 +35,7 @@
     <string name="auth_error">Has occurred a error on authentication!</string>
     <string name="auth_invalid">User or password could be wrong!</string>
     <string name="authenticating">Authenticating …</string>
-    <string name="you_ve_parked_here_for">You\'ve parked here for</string>
+    <string name="duration">Duration</string>
     <string name="you_dont_have_any_ongoing_order">You dont have any ongoing order</string>
     <string name="parking_completed">Parking completed</string>
     <string name="you_dont_have_any_order">You dont have any order</string>
@@ -65,4 +65,6 @@
     <string name="hours">Hours</string>
     <string name="parking_time">Parking Time</string>
     <string name="minutes">Minutes</string>
+    <string name="idr">IDR %s0</string>
+    <string name="total_price_only">Total price</string>
 </resources>

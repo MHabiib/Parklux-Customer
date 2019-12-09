@@ -31,12 +31,14 @@ import timber.log.Timber
 import java.time.LocalDateTime
 import java.time.ZoneId
 import javax.inject.Inject
+import kotlin.math.ceil
 
 class OngoingFragment : Fragment(), OngoingContract {
   @Inject lateinit var presenter: OngoingPresenter
   private lateinit var binding: FragmentOngoingBinding
   private lateinit var parkingTime: Chronometer
   private lateinit var idBooking: String
+  private lateinit var levelName: String
 
   companion object {
     const val TAG: String = Constants.ONGOING_FRAGMENT
@@ -63,7 +65,7 @@ class OngoingFragment : Fragment(), OngoingContract {
     val directionLayout = binding.directionsLayout
     directionLayout.setOnClickListener {
       val activity = activity as MainActivity?
-      activity?.presenter?.showParkingDirection(idBooking)
+      activity?.presenter?.showParkingDirection(idBooking, levelName)
     }
     parkingTime = binding.parkingTime
     val checkout = binding.checkoutButton
@@ -125,6 +127,7 @@ class OngoingFragment : Fragment(), OngoingContract {
   override fun loadCustomerOngoingSuccess(ongoing: CustomerBooking) {
     with(binding) {
       idBooking = ongoing.idBooking
+      levelName = ongoing.levelName
       dontHaveOngoing.visibility = View.GONE
       ongoingParkingLayout.visibility = View.VISIBLE
       parkingZoneName.text = ongoing.parkingZoneName
@@ -132,10 +135,20 @@ class OngoingFragment : Fragment(), OngoingContract {
       parkingSlot.text = ongoing.slotName
     }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      binding.yourPrice.visibility = View.VISIBLE
+      binding.yourPriceTag.visibility = View.VISIBLE
+      binding.line1.visibility = View.VISIBLE
       parkingTime.base =
         SystemClock.elapsedRealtime() - ((LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()) - ongoing.dateIn)
+      parkingTime.start()
+      parkingTime.setOnChronometerTickListener {
+        val elapsedMillis = SystemClock.elapsedRealtime() - it.base
+        binding.yourPrice.text = String.format(
+          getString(R.string.idr),
+          (ceil(elapsedMillis.toDouble() / 3600000) * ongoing.price).toString()
+        )
+      }
     }
-    parkingTime.start()
     loadImage(ongoing.imageUrl)
   }
 

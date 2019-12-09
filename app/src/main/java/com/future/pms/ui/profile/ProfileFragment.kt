@@ -85,7 +85,6 @@ class ProfileFragment : Fragment(), ProfileContract {
             accessToken)
       }
     }
-
   }
 
   override fun showProgress(show: Boolean) {
@@ -118,7 +117,6 @@ class ProfileFragment : Fragment(), ProfileContract {
       profilePassword.addTextChangedListener(textWatcher())
       profilePhoneNumber.addTextChangedListener(textWatcher())
     }
-
   }
 
   private fun textWatcher(): TextWatcher {
@@ -144,8 +142,8 @@ class ProfileFragment : Fragment(), ProfileContract {
   }
 
   override fun unauthorized() {
-    val activity = activity as MainActivity?
-    activity?.presenter?.showLoginPage()
+    val intent = Intent(activity, LoginActivity::class.java)
+    startActivity(intent)
   }
 
   override fun onLogout() {

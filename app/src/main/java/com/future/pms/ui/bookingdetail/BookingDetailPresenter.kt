@@ -28,6 +28,22 @@ class BookingDetailPresenter @Inject constructor() {
     }
   }
 
+  fun getParkingLayout(idBooking: String, accessToken: String) {
+    view.showProgress(true)
+    val subscribe = api.getParkingLayout(idBooking, accessToken).subscribeOn(
+      Schedulers.io()
+    ).observeOn(AndroidSchedulers.mainThread()).subscribe({
+      if (null != it) {
+        view.showProgress(false)
+        view.getLayoutSuccess(it)
+      }
+    }, {
+      it.message?.let { it1 -> view.showErrorMessage(it1) }
+    })
+    view.showProgress(false)
+    subscriptions.add(subscribe)
+  }
+
   fun subscribe() {}
 
   fun attach(view: BookingDetailContract) {
