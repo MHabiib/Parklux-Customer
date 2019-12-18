@@ -41,7 +41,7 @@
                     android:id="@+id/no_order_icon"
                     android:layout_width="240dp"
                     android:layout_height="240dp"
-                    android:src="@drawable/ic_no_order"
+                    android:src="@drawable/ic_no_ongoing"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
