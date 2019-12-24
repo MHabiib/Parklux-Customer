@@ -20,9 +20,9 @@ class Constants {
     const val FULL_DATE_TIME_FORMAT = "HH:mm - dd MMMM yyyy "
     const val TIME_FORMAT = "HH:mm"
 
-    const val parkSize = 100
-    const val parkMargin = 8
-    const val parkPadding = 4 * 8
+    const val parkSize = 88
+    const val parkMargin = 0
+    const val parkPadding = 0
     const val STATUS_AVAILABLE = 1
     const val STATUS_BOOKED = 2
     const val STATUS_RESERVED = 3

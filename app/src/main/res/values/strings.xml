@@ -67,4 +67,5 @@
     <string name="minutes">Minutes</string>
     <string name="idr">IDR %s0</string>
     <string name="total_price_only">Total price</string>
+    <string name="safety_parking">Safety is number one priority\nParking on your slot</string>
 </resources>
