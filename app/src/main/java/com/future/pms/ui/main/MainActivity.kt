@@ -1,9 +1,12 @@
 package com.future.pms.ui.main
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import com.future.pms.R
 import com.future.pms.databinding.ActivityMainBinding
@@ -18,19 +21,21 @@ import com.future.pms.ui.receipt.ReceiptFragment
 import com.future.pms.ui.scan.ScanFragment
 import com.future.pms.util.Constants.Companion.ID_BOOKING
 import com.future.pms.util.Constants.Companion.LEVEL_NAME
+import com.future.pms.util.Constants.Companion.REQUEST_CAMERA_PERMISSION
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), MainContract {
   @Inject lateinit var presenter: MainPresenter
   private lateinit var binding: ActivityMainBinding
+  private lateinit var navView: BottomNavigationView
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
     injectDependency()
     presenter.attach(this)
-    val navView: BottomNavigationView = binding.navView
+    navView = binding.navView
     navView.setOnNavigationItemSelectedListener { item ->
       when (item.itemId) {
         R.id.navigation_home -> {
@@ -58,29 +63,53 @@ class MainActivity : AppCompatActivity(), MainContract {
     if (supportFragmentManager.findFragmentByTag(HomeFragment.TAG) == null) {
       binding.navView.menu.findItem(R.id.navigation_home).isChecked = true
       supportFragmentManager.beginTransaction().disallowAddToBackStack().setCustomAnimations(
-        R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left
-      ).replace(
-        R.id.frame, HomeFragment().newInstance(), HomeFragment.TAG
-      ).commit()
+          R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right,
+          R.anim.exit_to_left).replace(R.id.frame, HomeFragment().newInstance(),
+          HomeFragment.TAG).commit()
     }
   }
 
   override fun showScanFragment() {
-    binding.navView.visibility = View.VISIBLE
-    if (supportFragmentManager.findFragmentByTag(ScanFragment.TAG) == null) {
-      supportFragmentManager.beginTransaction().disallowAddToBackStack().replace(
-        R.id.frame, ScanFragment().newInstance(), ScanFragment.TAG
-      ).commit()
+    when (this.let {
+      ActivityCompat.checkSelfPermission(it, Manifest.permission.CAMERA)
+    } != PackageManager.PERMISSION_GRANTED) {
+      true -> {
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA),
+            REQUEST_CAMERA_PERMISSION)
+      }
+      else -> {
+        binding.navView.visibility = View.VISIBLE
+        if (supportFragmentManager.findFragmentByTag(ScanFragment.TAG) == null) {
+          supportFragmentManager.beginTransaction().disallowAddToBackStack().replace(R.id.frame,
+              ScanFragment().newInstance(), ScanFragment.TAG).commit()
+        }
+      }
+    }
+  }
+
+  override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
+      grantResults: IntArray) {
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    if (requestCode == REQUEST_CAMERA_PERMISSION) {
+      if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        binding.navView.visibility = View.VISIBLE
+        if (supportFragmentManager.findFragmentByTag(ScanFragment.TAG) == null) {
+          supportFragmentManager.beginTransaction().disallowAddToBackStack().replace(R.id.frame,
+              ScanFragment().newInstance(), ScanFragment.TAG).commit()
+        }
+      } else {
+        presenter.onHomeIconClick()
+        navView.selectedItemId = R.id.navigation_home
+      }
     }
   }
 
   override fun showProfileFragment() {
     if (supportFragmentManager.findFragmentByTag(ProfileFragment.TAG) == null) {
       supportFragmentManager.beginTransaction().disallowAddToBackStack().setCustomAnimations(
-        R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right
-      ).replace(
-        R.id.frame, ProfileFragment().newInstance(), ProfileFragment.TAG
-      ).commit()
+          R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left,
+          R.anim.exit_to_right).replace(R.id.frame, ProfileFragment().newInstance(),
+          ProfileFragment.TAG).commit()
     }
   }
 
@@ -90,9 +119,8 @@ class MainActivity : AppCompatActivity(), MainContract {
     val bundle = Bundle()
     bundle.putString(ID_BOOKING, idBooking)
     fragment.arguments = bundle
-    supportFragmentManager.beginTransaction().disallowAddToBackStack().replace(
-      R.id.frame, fragment, ReceiptFragment.TAG
-    ).commit()
+    supportFragmentManager.beginTransaction().disallowAddToBackStack().replace(R.id.frame, fragment,
+        ReceiptFragment.TAG).commit()
   }
 
   override fun showBookingDetail(idBooking: String) {
@@ -102,18 +130,16 @@ class MainActivity : AppCompatActivity(), MainContract {
     bundle.putString(ID_BOOKING, idBooking)
     fragment.arguments = bundle
     if (supportFragmentManager.findFragmentByTag(ParkingDirectionFragment.TAG) == null) {
-      supportFragmentManager.beginTransaction().replace(
-        R.id.frame, fragment, BookingDetailFragment.TAG
-      ).commit()
+      supportFragmentManager.beginTransaction().replace(R.id.frame, fragment,
+          BookingDetailFragment.TAG).commit()
     }
   }
 
   override fun showBookingFailed() {
     binding.navView.visibility = View.GONE
     if (supportFragmentManager.findFragmentByTag(ParkingDirectionFragment.TAG) == null) {
-      supportFragmentManager.beginTransaction().disallowAddToBackStack().replace(
-        R.id.frame, BookingDetailFragment().newInstance(), BookingDetailFragment.TAG
-      ).commit()
+      supportFragmentManager.beginTransaction().disallowAddToBackStack().replace(R.id.frame,
+          BookingDetailFragment().newInstance(), BookingDetailFragment.TAG).commit()
     }
   }
 
@@ -125,16 +151,14 @@ class MainActivity : AppCompatActivity(), MainContract {
     bundle.putString(LEVEL_NAME, levelName)
     fragment.arguments = bundle
     if (supportFragmentManager.findFragmentByTag(ParkingDirectionFragment.TAG) == null) {
-      supportFragmentManager.beginTransaction().disallowAddToBackStack().replace(
-        R.id.frame, fragment, ParkingDirectionFragment.TAG
-      ).commit()
+      supportFragmentManager.beginTransaction().disallowAddToBackStack().replace(R.id.frame,
+          fragment, ParkingDirectionFragment.TAG).commit()
     }
   }
 
   private fun injectDependency() {
     val activityComponent = DaggerActivityComponent.builder().activityModule(
-      ActivityModule(this)
-    ).build()
+        ActivityModule(this)).build()
 
     activityComponent.inject(this)
   }

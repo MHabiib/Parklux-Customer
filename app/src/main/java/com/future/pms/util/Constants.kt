@@ -17,6 +17,8 @@ class Constants {
     const val ID_BOOKING = "idBooking"
     const val LEVEL_NAME = "levelName"
 
+    const val REQUEST_CAMERA_PERMISSION = 2020
+
     const val FULL_DATE_TIME_FORMAT = "HH:mm - dd MMMM yyyy "
     const val TIME_FORMAT = "HH:mm"
 

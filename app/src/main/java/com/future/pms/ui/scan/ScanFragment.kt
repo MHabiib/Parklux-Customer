@@ -1,14 +1,10 @@
 package com.future.pms.ui.scan
 
-import android.Manifest
-import android.app.Activity
 import android.content.Context
-import android.content.pm.PackageManager
 import android.hardware.Camera
 import android.os.Bundle
 import android.view.*
 import androidx.activity.addCallback
-import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.future.pms.R
@@ -40,7 +36,6 @@ class ScanFragment : Fragment(), ScanContract {
   private var isFlashOn = false
 
   companion object {
-    private const val REQUEST_CAMERA_PERMISSION = 0
     const val TAG: String = SCAN_FRAGMENT
   }
 
@@ -59,16 +54,12 @@ class ScanFragment : Fragment(), ScanContract {
     injectDependency()
   }
 
-  override fun onCreateView(
-    inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-  ): View? {
-    checkPermission()
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+      savedInstanceState: Bundle?): View? {
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_scan, container, false)
     accessToken = Gson().fromJson(
-      context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
-        Constants.TOKEN, null
-      ), Token::class.java
-    ).accessToken
+        context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
+            Constants.TOKEN, null), Token::class.java).accessToken
     val toggleFlash = binding.toggleFlash
     toggleFlash.setOnClickListener { flashToggle() }
     mSurfaceView = binding.surfaceView
@@ -98,9 +89,8 @@ class ScanFragment : Fragment(), ScanContract {
   private fun initialiseDetectorsAndSources() {
     barcodeDetector = BarcodeDetector.Builder(context).setBarcodeFormats(Barcode.QR_CODE).build()
 
-    cameraSource =
-      CameraSource.Builder(context, barcodeDetector).setRequestedPreviewSize(1920, 1080)
-        .setAutoFocusEnabled(true).build()
+    cameraSource = CameraSource.Builder(context, barcodeDetector).setRequestedPreviewSize(1920,
+        1080).setAutoFocusEnabled(true).build()
 
     surfaceView.holder.addCallback(object : SurfaceHolder.Callback {
       override fun surfaceCreated(holder: SurfaceHolder) {
@@ -111,9 +101,7 @@ class ScanFragment : Fragment(), ScanContract {
         }
       }
 
-      override fun surfaceChanged(
-        holder: SurfaceHolder, format: Int, width: Int, height: Int
-      ) {
+      override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
         try {
           cameraSource?.start(surfaceView.holder)
         } catch (e: IOException) {
@@ -145,22 +133,6 @@ class ScanFragment : Fragment(), ScanContract {
         }
       }
     })
-  }
-
-  private fun checkPermission() {
-    when (context?.let {
-      ActivityCompat.checkSelfPermission(it, Manifest.permission.CAMERA)
-    } != PackageManager.PERMISSION_GRANTED) {
-      true -> {
-        requestPermission()
-      }
-    }
-  }
-
-  private fun requestPermission() {
-    ActivityCompat.requestPermissions(
-      context as Activity, arrayOf(Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION
-    )
   }
 
   override fun bookingSuccess(idBooking: String) {

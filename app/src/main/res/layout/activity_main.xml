@@ -12,20 +12,29 @@
         <FrameLayout
             android:id="@+id/frame"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/zero_dp"
-            app:layout_constraintBottom_toTopOf="@id/nav_view"
+            android:layout_height="match_parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.92" />
+
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/nav_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_gravity="bottom"
             android:layout_marginStart="@dimen/zero_dp"
+            android:layout_marginLeft="@dimen/twelve_dp"
             android:layout_marginEnd="@dimen/zero_dp"
-            android:background="@color/baseWhite"
+            android:layout_marginRight="@dimen/twelve_dp"
+            android:layout_marginBottom="@dimen/four_dp"
+            android:background="@drawable/card_layout_white"
             app:itemBackground="@null"
             app:itemIconTint="@color/colorPrimary"
             app:itemTextColor="@color/colorPrimary"
@@ -33,6 +42,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guideline"
             app:menu="@menu/bottom_nav_menu" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
