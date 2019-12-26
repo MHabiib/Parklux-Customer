@@ -145,7 +145,7 @@ class OngoingFragment : Fragment(), OngoingContract {
         val elapsedMillis = SystemClock.elapsedRealtime() - it.base
         binding.yourPrice.text = String.format(
           getString(R.string.idr),
-          (ceil(elapsedMillis.toDouble() / 3600000) * ongoing.price).toString()
+          Utils.thousandSeparator((ceil(elapsedMillis.toDouble() / 3600000) * ongoing.price).toInt())
         )
       }
     }

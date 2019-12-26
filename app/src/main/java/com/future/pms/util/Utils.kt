@@ -8,6 +8,7 @@ import android.os.Build
 import com.future.pms.model.customerbooking.CustomerBooking
 import com.future.pms.util.Constants.Companion.FULL_DATE_TIME_FORMAT
 import com.future.pms.util.Constants.Companion.TIME_FORMAT
+import java.text.DecimalFormat
 import java.util.*
 
 class Utils {
@@ -43,6 +44,10 @@ class Utils {
         }
       }
       return historyParking
+    }
+
+    fun thousandSeparator(int: Int): String {
+      return DecimalFormat("#,###,###").format(int)
     }
 
     fun createNotificationChannel(notificationManager: NotificationManager) {

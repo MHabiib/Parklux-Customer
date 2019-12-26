@@ -109,21 +109,27 @@ class ReceiptFragment : Fragment(), ReceiptContract {
       parkingZoneName.text = receipt.parkingZoneName
       address.text = receipt.address
       parkingSlot.text = receipt.slotName
-      price.text = String.format(getString(R.string.price_per_hour), receipt.price.toString())
+      price.text = String.format(
+        getString(R.string.price_per_hour),
+        Utils.thousandSeparator(receipt.price.toInt())
+      )
       inDate.text = Utils.convertLongToTime(receipt.dateIn)
       outDate.text = Utils.convertLongToTime(receipt.dateOut)
       hours.text = receipt.totalHours.toString()
       minutes.text = receipt.totalMinutes.toString()
-      totalPrice.text = String.format(getString(R.string.total_price), receipt.totalPrice)
+      totalPrice.text = String.format(
+        getString(R.string.total_price),
+        Utils.thousandSeparator(receipt.totalPrice.toInt())
+      )
     }
   }
 
-  fun takeScreenshot(): Bitmap {
+  private fun takeScreenshot(): Bitmap {
     binding.root.isDrawingCacheEnabled = true
     return binding.root.drawingCache
   }
 
-  fun saveBitmap(bitmap: Bitmap) {
+  private fun saveBitmap(bitmap: Bitmap) {
     imagePath = File(String.format(getString(R.string.screenshot_png),
         Environment.getExternalStorageDirectory()))
     val fos: FileOutputStream

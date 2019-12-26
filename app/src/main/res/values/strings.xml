@@ -52,8 +52,8 @@
     <string name="park_is_booked">Park %d is Booked</string>
     <string name="park_is_reserved">Park %d is Reserved</string>
     <string name="date_now">It\'s %s</string>
-    <string name="price_per_hour">IDR %s0/hour</string>
-    <string name="total_price">IDR %s0</string>
+    <string name="price_per_hour">IDR %s/hour</string>
+    <string name="total_price">IDR %s</string>
     <string name="screenshot_png">%s/screenshot.png</string>
     <string name="phone">Phone</string>
     <string name="your_slot">Your slot</string>
@@ -65,7 +65,7 @@
     <string name="hours">Hours</string>
     <string name="parking_time">Parking Time</string>
     <string name="minutes">Minutes</string>
-    <string name="idr">IDR %s0</string>
+    <string name="idr">IDR %s</string>
     <string name="total_price_only">Total price</string>
     <string name="safety_parking">Safety is number one priority\nParking on your slot</string>
 </resources>

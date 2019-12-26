@@ -178,12 +178,12 @@ class ScanFragment : Fragment(), ScanContract {
       if (isFlashOn) {
         toggleFlash.setImageResource(R.drawable.ic_flash_off)
         param?.flashMode = Camera.Parameters.FLASH_MODE_OFF
-        isFlashOn = false
       } else {
         toggleFlash.setImageResource(R.drawable.ic_flash_on)
         param?.flashMode = Camera.Parameters.FLASH_MODE_TORCH
-        isFlashOn = true
       }
+        it.parameters = param
+        isFlashOn = isFlashOn.not()
     }
   }
 
