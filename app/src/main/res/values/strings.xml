@@ -68,4 +68,7 @@
     <string name="idr">IDR %s</string>
     <string name="total_price_only">Total price</string>
     <string name="safety_parking">Safety is number one priority\nParking on your slot</string>
+    <string name="price">Price</string>
+    <string name="price_hour">Price/hour</string>
+    <string name="picture_url">%spicture/%s</string>
 </resources>

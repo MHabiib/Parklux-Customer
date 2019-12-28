@@ -12,20 +12,23 @@ import com.future.pms.R
 import com.future.pms.databinding.FragmentHistoryBinding
 import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
-import com.future.pms.model.customerbooking.CustomerBooking
+import com.future.pms.model.history.Content
+import com.future.pms.model.history.History
 import com.future.pms.model.oauth.Token
 import com.future.pms.ui.main.MainActivity
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.ERROR
-import com.future.pms.util.Utils
+import com.future.pms.util.PaginationScrollListener
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.fragment_history.*
 import timber.log.Timber
 import javax.inject.Inject
 
 class HistoryFragment : Fragment(), HistoryContract {
   @Inject lateinit var presenter: HistoryPresenter
   private lateinit var binding: FragmentHistoryBinding
+  private lateinit var historyAdapter: HistoryAdapter
+  private var currentPage = 0
+  private var isLastPage = false
 
   fun newInstance(): HistoryFragment {
     return HistoryFragment()
@@ -38,7 +41,35 @@ class HistoryFragment : Fragment(), HistoryContract {
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
       savedInstanceState: Bundle?): View? {
+    val accessToken = Gson().fromJson(
+        context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
+            Constants.TOKEN, null), Token::class.java).accessToken
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_history, container, false)
+    val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+    binding.refreshHistory.setOnRefreshListener {
+      historyAdapter.clear()
+      historyAdapter.notifyDataSetChanged()
+      currentPage = 0
+      isLastPage = false
+      presenter.loadCustomerBooking(accessToken, currentPage)
+      binding.refreshHistory.isRefreshing = false
+    }
+    historyAdapter = HistoryAdapter()
+    binding.rvHistory.layoutManager = linearLayoutManager
+    binding.rvHistory.adapter = this.historyAdapter
+    historyAdapter.onItemClick = { history ->
+      customerBookingClick(history)
+    }
+    binding.rvHistory.addOnScrollListener(object :
+        PaginationScrollListener(linearLayoutManager, isLastPage) {
+      override fun loadMoreItems() {
+        if (!isLastPage) {
+          currentPage += 1
+          presenter.loadCustomerBooking(accessToken, currentPage)
+        }
+      }
+    })
+    presenter.loadCustomerBooking(accessToken, currentPage)
     return binding.root
   }
 
@@ -46,46 +77,37 @@ class HistoryFragment : Fragment(), HistoryContract {
     super.onViewCreated(view, savedInstanceState)
     presenter.attach(this)
     presenter.subscribe()
-    initView()
-  }
-
-  private fun initView() {
-    val accessToken = Gson().fromJson(
-        context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
-          Constants.TOKEN, null
-        ), Token::class.java
-    ).accessToken
-    presenter.loadCustomerBooking(accessToken)
-  }
-
-  override fun showProgress(show: Boolean) {
-    if (null != progressBar) {
-      if (show) {
-        progressBar.visibility = View.VISIBLE
-      } else {
-        progressBar.visibility = View.GONE
-      }
-    }
   }
 
   override fun showErrorMessage(error: String) {
     Timber.tag(ERROR).e(error)
+    isLastPage = true
+    historyAdapter.removeLoadingFooter()
   }
 
-  override fun loadCustomerBookingSuccess(list: List<CustomerBooking>) {
-    if (list.isEmpty() || list.size == 1 && 0L == list[0].dateOut) binding.dontHaveOrder.visibility =
-      View.VISIBLE
-    recyclerView.layoutManager = LinearLayoutManager(context)
-    recyclerView.setHasFixedSize(true)
-    recyclerView.adapter = HistoryAdapter(
-        Utils.getHistoryParking(list.reversed())) { booking: CustomerBooking ->
-      customerBookingClick(booking)
+  override fun loadCustomerBookingSuccess(history: History) {
+    if (currentPage != 0) {
+      if (currentPage <= history.totalPages - 1) {
+        historyAdapter.addLoadingFooter()
+        historyAdapter.addAll(history.content)
+        historyAdapter.removeLoadingFooter()
+      } else {
+        isLastPage = true
+      }
+    } else {
+      historyAdapter.addAll(history.content)
+      if (history.content.isEmpty()) {
+        binding.dontHaveOrder.visibility = View.VISIBLE
+      }
+      if (currentPage >= history.totalPages - 1) {
+        isLastPage = true
+      }
     }
   }
 
-  private fun customerBookingClick(booking: CustomerBooking) {
+  private fun customerBookingClick(history: Content) {
     val activity = activity as MainActivity?
-    activity?.presenter?.showReceipt(booking.idBooking)
+    activity?.presenter?.showReceipt(history.idBooking)
   }
 
   override fun loadCustomerBookingError() {

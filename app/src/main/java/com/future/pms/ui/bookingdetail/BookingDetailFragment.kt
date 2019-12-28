@@ -116,6 +116,8 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
       parkingDirectionContent.apply {
         welcomeTo.text = String.format(getString(R.string.welcome_to), booking.parkingZoneName)
         slotName.text = booking.slotName
+        price.text = String.format(getString(R.string.price_per_hour),
+            Utils.thousandSeparator(booking.price.toInt()))
         layoutBookingDetail.visibility = View.VISIBLE
         iconBookingDetail.setImageResource(R.drawable.ic_smile)
         dateIn.text = Utils.convertLongToTimeOnly(booking.dateIn)
@@ -165,8 +167,7 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
     var parkingLayout: LinearLayout? = null
     var totalSlot = 0
     val params = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-      ViewGroup.LayoutParams.WRAP_CONTENT
-    )
+        ViewGroup.LayoutParams.WRAP_CONTENT)
     layoutPark.apply {
       orientation = LinearLayout.VERTICAL
       layoutParams = params
@@ -185,42 +186,35 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
 
       when {
         slotsLayout[index] == '_' -> {
-          setupParkingView(
-            index, parkingLayout, slotsLayout[index], STATUS_ROAD, R.drawable.ic_blank
-          )
+          setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_ROAD,
+              R.drawable.ic_blank)
         }
         slotsLayout[index] == 'S' || slotsLayout[index] == 'T' -> {
-          setupParkingView(
-            index, parkingLayout, slotsLayout[index], STATUS_BOOKED, R.drawable.ic_car
-          )
+          setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_BOOKED,
+              R.drawable.ic_car)
         }
         slotsLayout[index] == 'E' -> {
-          setupParkingView(
-            index, parkingLayout, slotsLayout[index], STATUS_AVAILABLE, R.drawable.ic_park
-          )
+          setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_AVAILABLE,
+              R.drawable.ic_park)
         }
         slotsLayout[index] == 'D' -> {
-          setupParkingView(
-            index, parkingLayout, slotsLayout[index], STATUS_RESERVED, R.drawable.ic_disable
-          )
+          setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_RESERVED,
+              R.drawable.ic_disable)
         }
         slotsLayout[index] == 'R' || slotsLayout[index] == 'O' -> {
-          setupParkingView(
-            index, parkingLayout, slotsLayout[index], STATUS_ROAD, R.drawable.ic_road
-          )
+          setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_ROAD,
+              R.drawable.ic_road)
         }
         slotsLayout[index] == 'V' -> {
-          setupParkingView(
-            index, parkingLayout, slotsLayout[index], STATUS_AVAILABLE, R.drawable.ic_my_location
-          )
+          setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_AVAILABLE,
+              R.drawable.ic_my_location)
         }
       }
     }
   }
 
   private fun setupParkingView(count: Int, layout: LinearLayout?, code: Char, tags: Int,
-    icon: Int
-  ): TextView {
+      icon: Int): TextView {
     val view = TextView(context)
     view.apply {
       layoutParams = LinearLayout.LayoutParams(parkSize, parkSize).apply {

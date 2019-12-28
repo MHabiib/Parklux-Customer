@@ -57,9 +57,8 @@ class ReceiptFragment : Fragment(), ReceiptContract {
     injectDependency()
   }
 
-  override fun onCreateView(
-    inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-  ): View? {
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+      savedInstanceState: Bundle?): View? {
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_receipt, container, false)
     val backButton = binding.buttonBackReceipt
     val shareButton = binding.buttonShareReceipt
@@ -79,10 +78,8 @@ class ReceiptFragment : Fragment(), ReceiptContract {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     val accessToken = Gson().fromJson(
-      context?.getSharedPreferences(
-        Constants.AUTHENTCATION, Context.MODE_PRIVATE
-      )?.getString(Constants.TOKEN, null), Token::class.java
-    ).accessToken
+        context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
+            Constants.TOKEN, null), Token::class.java).accessToken
     presenter.attach(this)
     presenter.subscribe()
     idBooking.let { presenter.loadData(accessToken, it) }
@@ -109,18 +106,14 @@ class ReceiptFragment : Fragment(), ReceiptContract {
       parkingZoneName.text = receipt.parkingZoneName
       address.text = receipt.address
       parkingSlot.text = receipt.slotName
-      price.text = String.format(
-        getString(R.string.price_per_hour),
-        Utils.thousandSeparator(receipt.price.toInt())
-      )
+      price.text = String.format(getString(R.string.price_per_hour),
+          Utils.thousandSeparator(receipt.price.toInt()))
       inDate.text = Utils.convertLongToTime(receipt.dateIn)
       outDate.text = Utils.convertLongToTime(receipt.dateOut)
       hours.text = receipt.totalHours.toString()
       minutes.text = receipt.totalMinutes.toString()
-      totalPrice.text = String.format(
-        getString(R.string.total_price),
-        Utils.thousandSeparator(receipt.totalPrice.toInt())
-      )
+      totalPrice.text = String.format(getString(R.string.total_price),
+          Utils.thousandSeparator(receipt.totalPrice.toInt()))
     }
   }
 
@@ -147,9 +140,9 @@ class ReceiptFragment : Fragment(), ReceiptContract {
 
   private fun shareIt() {
     val uri = context?.let {
-      FileProvider.getUriForFile(
-        it, context?.applicationContext?.packageName + ".provider", imagePath
-        //https://stackoverflow.com/questions/38200282/android-os-fileuriexposedexception-file-storage-emulated-0-test-txt-exposed
+      FileProvider.getUriForFile(it, context?.applicationContext?.packageName + ".provider",
+          imagePath
+          //https://stackoverflow.com/questions/38200282/android-os-fileuriexposedexception-file-storage-emulated-0-test-txt-exposed
       )
     }
     val sharingIntent = Intent(Intent.ACTION_SEND)

@@ -209,6 +209,32 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
+                            android:id="@+id/price_per_hour_tag"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/six_dp"
+                            android:text="@string/price_hour"
+                            android:textColor="@color/darkGrey"
+                            android:textSize="@dimen/h3"
+                            android:visibility="gone"
+                            tools:visibility="visible"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/line1"
+                            tools:text="Total price" />
+
+                        <TextView
+                            android:id="@+id/price_per_hour"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/six_dp"
+                            android:textColor="@color/darkGrey"
+                            android:textSize="@dimen/h3"
+                            android:visibility="gone"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/line1"
+                            tools:text="IDR 100000" />
+
+                        <TextView
                             android:id="@+id/your_price_tag"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -217,8 +243,9 @@
                             android:textColor="@color/darkGrey"
                             android:textSize="@dimen/h3"
                             android:visibility="gone"
+                            tools:visibility="visible"
                             app:layout_constraintLeft_toLeftOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/line1"
+                            app:layout_constraintTop_toBottomOf="@id/price_per_hour"
                             tools:text="Total price" />
 
                         <TextView
@@ -230,7 +257,7 @@
                             android:textSize="@dimen/h3"
                             android:visibility="gone"
                             app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/line1"
+                            app:layout_constraintTop_toBottomOf="@id/price_per_hour"
                             tools:text="IDR 100000" />
 
                         <View

@@ -51,9 +51,8 @@ class ProfileFragment : Fragment(), ProfileContract {
     injectDependency()
   }
 
-  override fun onCreateView(
-    inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-  ): View? {
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+      savedInstanceState: Bundle?): View? {
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container, false)
     with(binding) {
       val logout = btnLogout
@@ -70,10 +69,8 @@ class ProfileFragment : Fragment(), ProfileContract {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     val accessToken = Gson().fromJson(
-      context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
-        Constants.TOKEN, null
-      ), Token::class.java
-    ).accessToken
+        context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
+            Constants.TOKEN, null), Token::class.java).accessToken
     presenter.attach(this)
     presenter.apply {
       subscribe()
@@ -161,8 +158,7 @@ class ProfileFragment : Fragment(), ProfileContract {
 
   private fun injectDependency() {
     val profileComponent = DaggerFragmentComponent.builder().fragmentModule(
-      FragmentModule()
-    ).build()
+        FragmentModule()).build()
     profileComponent.inject(this)
   }
 }

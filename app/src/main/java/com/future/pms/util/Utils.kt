@@ -57,8 +57,8 @@ class Utils {
         notificationChannel.enableLights(true)
         notificationChannel.lightColor = Color.RED
         notificationChannel.enableVibration(true)
-        notificationChannel.vibrationPattern =
-          longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400)
+        notificationChannel.vibrationPattern = longArrayOf(100, 200, 300, 400, 500, 400, 300, 200,
+            400)
         notificationManager.createNotificationChannel(notificationChannel)
       }
     }

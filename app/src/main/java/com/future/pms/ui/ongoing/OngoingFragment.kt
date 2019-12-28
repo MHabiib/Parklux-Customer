@@ -53,14 +53,11 @@ class OngoingFragment : Fragment(), OngoingContract {
     injectDependency()
   }
 
-  override fun onCreateView(
-    inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-  ): View? {
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+      savedInstanceState: Bundle?): View? {
     val accessToken = Gson().fromJson(
-      context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
-        Constants.TOKEN, null
-      ), Token::class.java
-    ).accessToken
+        context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
+            Constants.TOKEN, null), Token::class.java).accessToken
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_ongoing, container, false)
     val directionLayout = binding.directionsLayout
     directionLayout.setOnClickListener {
@@ -82,17 +79,16 @@ class OngoingFragment : Fragment(), OngoingContract {
 
   private fun initView() {
     val accessToken = Gson().fromJson(
-      context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
-        Constants.TOKEN, null
-      ), Token::class.java
-    ).accessToken
+        context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
+            Constants.TOKEN, null), Token::class.java).accessToken
     presenter.loadOngoingBooking(accessToken)
-    val mNotificationManager =
-      activity?.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+    val mNotificationManager = activity?.getSystemService(
+        NOTIFICATION_SERVICE) as NotificationManager
     Utils.createNotificationChannel(mNotificationManager)
-    val notification = Notification.Builder(context).setContentTitle("Check out parking success")
-      .setContentText("Thank you for using Parking Management System apps !")
-      .setSmallIcon(R.drawable.logo_blue).build()
+    val notification = Notification.Builder(context).setContentTitle(
+        "Check out parking success").setContentText(
+        "Thank you for using Parking Management System apps !").setSmallIcon(
+        R.drawable.logo_blue).build()
     mNotificationManager.notify(1, notification)
     //todo
   }
@@ -135,18 +131,22 @@ class OngoingFragment : Fragment(), OngoingContract {
       parkingSlot.text = ongoing.slotName
     }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      binding.yourPrice.visibility = View.VISIBLE
-      binding.yourPriceTag.visibility = View.VISIBLE
-      binding.line1.visibility = View.VISIBLE
-      parkingTime.base =
-        SystemClock.elapsedRealtime() - ((LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()) - ongoing.dateIn)
-      parkingTime.start()
-      parkingTime.setOnChronometerTickListener {
-        val elapsedMillis = SystemClock.elapsedRealtime() - it.base
-        binding.yourPrice.text = String.format(
-          getString(R.string.idr),
-          Utils.thousandSeparator((ceil(elapsedMillis.toDouble() / 3600000) * ongoing.price).toInt())
-        )
+      with(binding) {
+        yourPrice.visibility = View.VISIBLE
+        yourPriceTag.visibility = View.VISIBLE
+        line1.visibility = View.VISIBLE
+        pricePerHourTag.visibility = View.VISIBLE
+        pricePerHour.visibility = View.VISIBLE
+        pricePerHour.text = String.format(getString(R.string.total_price),
+            Utils.thousandSeparator(ongoing.price.toInt()))
+        parkingTime.base = SystemClock.elapsedRealtime() - ((LocalDateTime.now().atZone(
+            ZoneId.systemDefault()).toInstant().toEpochMilli()) - ongoing.dateIn)
+        parkingTime.start()
+        parkingTime.setOnChronometerTickListener {
+          val elapsedMillis = SystemClock.elapsedRealtime() - it.base
+          yourPrice.text = String.format(getString(R.string.idr), Utils.thousandSeparator(
+              (ceil(elapsedMillis.toDouble() / 3600000) * ongoing.price).toInt()))
+        }
       }
     }
     loadImage(ongoing.imageUrl)
@@ -158,10 +158,8 @@ class OngoingFragment : Fragment(), OngoingContract {
 
   private fun loadImage(imageUrl: String) {
     Glide.with(binding.root).load(imageUrl).transform(CenterCrop(), RoundedCorners(80)).placeholder(
-      R.drawable.ic_image_place_holder
-    ).error(R.drawable.ic_image_place_holder).fallback(
-      R.drawable.ic_image_place_holder
-    ).into(binding.ongoingIv)
+        R.drawable.ic_image_place_holder).error(R.drawable.ic_image_place_holder).fallback(
+        R.drawable.ic_image_place_holder).into(binding.ongoingIv)
   }
 
   private fun injectDependency() {

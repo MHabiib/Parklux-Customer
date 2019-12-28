@@ -39,6 +39,7 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
   private var parkViewList: MutableList<TextView> = ArrayList()
   private lateinit var layout: HorizontalScrollView
   private lateinit var idBooking: String
+
   companion object {
     const val TAG: String = PARKING_DETAIL_FRAGMENT
   }
@@ -56,16 +57,13 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
     injectDependency()
   }
 
-  override fun onCreateView(
-    inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-  ): View? {
-    binding =
-      DataBindingUtil.inflate(inflater, R.layout.fragment_parking_direction, container, false)
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+      savedInstanceState: Bundle?): View? {
+    binding = DataBindingUtil.inflate(inflater, R.layout.fragment_parking_direction, container,
+        false)
     val accessToken = Gson().fromJson(
-      context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
-        Constants.TOKEN, null
-      ), Token::class.java
-    ).accessToken
+        context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
+            Constants.TOKEN, null), Token::class.java).accessToken
     presenter.attach(this)
     layout = binding.layoutPark
     idBooking = this.arguments?.getString(Constants.ID_BOOKING).toString()
@@ -90,8 +88,7 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
     var parkingLayout: LinearLayout? = null
     var totalSlot = 0
     val params = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-      ViewGroup.LayoutParams.WRAP_CONTENT
-    )
+        ViewGroup.LayoutParams.WRAP_CONTENT)
     layoutPark.apply {
       orientation = LinearLayout.VERTICAL
       layoutParams = params
@@ -110,34 +107,28 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
 
       when {
         slotsLayout[index] == '_' -> {
-          setupParkingView(
-            index, parkingLayout, slotsLayout[index], STATUS_ROAD, R.drawable.ic_blank
-          )
+          setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_ROAD,
+              R.drawable.ic_blank)
         }
         slotsLayout[index] == 'S' || slotsLayout[index] == 'T' -> {
-          setupParkingView(
-            index, parkingLayout, slotsLayout[index], STATUS_BOOKED, R.drawable.ic_car
-          )
+          setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_BOOKED,
+              R.drawable.ic_car)
         }
         slotsLayout[index] == 'E' -> {
-          setupParkingView(
-            index, parkingLayout, slotsLayout[index], STATUS_AVAILABLE, R.drawable.ic_park
-          )
+          setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_AVAILABLE,
+              R.drawable.ic_park)
         }
         slotsLayout[index] == 'D' -> {
-          setupParkingView(
-            index, parkingLayout, slotsLayout[index], STATUS_RESERVED, R.drawable.ic_disable
-          )
+          setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_RESERVED,
+              R.drawable.ic_disable)
         }
         slotsLayout[index] == 'R' || slotsLayout[index] == 'O' -> {
-          setupParkingView(
-            index, parkingLayout, slotsLayout[index], STATUS_ROAD, R.drawable.ic_road
-          )
+          setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_ROAD,
+              R.drawable.ic_road)
         }
         slotsLayout[index] == 'V' -> {
-          setupParkingView(
-            index, parkingLayout, slotsLayout[index], STATUS_AVAILABLE, R.drawable.ic_my_location
-          )
+          setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_AVAILABLE,
+              R.drawable.ic_my_location)
         }
       }
     }
@@ -175,7 +166,8 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
   }
 
   override fun getLayoutFailed() {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    TODO(
+        "not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
   override fun showProgress(show: Boolean) {

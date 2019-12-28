@@ -44,9 +44,8 @@ class HomeFragment : Fragment(), HomeContract {
     injectDependency()
   }
 
-  override fun onCreateView(
-    inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-  ): View? {
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+      savedInstanceState: Bundle?): View? {
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
     with(binding) {
       val viewPager = viewPager as ViewPager
@@ -72,10 +71,8 @@ class HomeFragment : Fragment(), HomeContract {
 
   private fun initView() {
     val accessToken = Gson().fromJson(
-      context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
-        Constants.TOKEN, null
-      ), Token::class.java
-    ).accessToken
+        context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
+            Constants.TOKEN, null), Token::class.java).accessToken
     getDateNow()
     presenter.loadData(accessToken)
     val textAnnounce = binding.textAnnounceUser

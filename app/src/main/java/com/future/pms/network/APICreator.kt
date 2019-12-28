@@ -11,13 +11,12 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-class APICreator<out API>(
-  private val clazz: Class<API>, private var headers: HashMap<String, String> = HashMap()
-) {
+class APICreator<out API>(private val clazz: Class<API>,
+    private var headers: HashMap<String, String> = HashMap()) {
   private fun getOkHttpBuilder(): OkHttpClient.Builder {
     return OkHttpClient.Builder().addInterceptor(
-      BasicAuthInterceptor(USERNAME, PASSWORD)
-    ).writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS).readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
+        BasicAuthInterceptor(USERNAME, PASSWORD)).writeTimeout(WRITE_TIMEOUT,
+        TimeUnit.SECONDS).readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
   }
 
   fun generate(): API {
@@ -33,9 +32,9 @@ class APICreator<out API>(
       chain.proceed(request)
     }
     val client = okHttpClient.build()
-    val retrofit = Retrofit.Builder().baseUrl(BASE).client(client)
-      .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-      .addConverterFactory(GsonConverterFactory.create()).build()
+    val retrofit = Retrofit.Builder().baseUrl(BASE).client(client).addCallAdapterFactory(
+        RxJava2CallAdapterFactory.create()).addConverterFactory(
+            GsonConverterFactory.create()).build()
     return retrofit.create(clazz)
   }
 }

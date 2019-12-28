@@ -14,14 +14,14 @@ class ReceiptPresenter @Inject constructor() {
   private lateinit var view: ReceiptContract
 
   fun loadData(accessToken: String, idBooking: String) {
-    val subscribe = api.getBookingReceipt(idBooking, accessToken).subscribeOn(Schedulers.io())
-      .observeOn(AndroidSchedulers.mainThread()).subscribe({ receipt: Receipt ->
-        view.showProgress(false)
-        view.loadReceiptSuccess(receipt)
-      }, { error ->
-        view.showProgress(false)
-        view.showErrorMessage(error.localizedMessage)
-      })
+    val subscribe = api.getBookingReceipt(idBooking, accessToken).subscribeOn(
+        Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe({ receipt: Receipt ->
+      view.showProgress(false)
+      view.loadReceiptSuccess(receipt)
+    }, { error ->
+      view.showProgress(false)
+      view.showErrorMessage(error.localizedMessage)
+    })
     subscriptions.add(subscribe)
   }
 

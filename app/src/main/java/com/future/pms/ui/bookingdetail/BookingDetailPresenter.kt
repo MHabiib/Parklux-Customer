@@ -31,8 +31,7 @@ class BookingDetailPresenter @Inject constructor() {
   fun getParkingLayout(idBooking: String, accessToken: String) {
     view.showProgress(true)
     val subscribe = api.getParkingLayout(idBooking, accessToken).subscribeOn(
-      Schedulers.io()
-    ).observeOn(AndroidSchedulers.mainThread()).subscribe({
+        Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe({
       if (null != it) {
         view.showProgress(false)
         view.getLayoutSuccess(it)

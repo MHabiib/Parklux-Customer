@@ -55,13 +55,12 @@ class SplashActivity : AppCompatActivity(), SplashContract {
 
   override fun refreshFetcher() {
     val authFetcher = APICreator(AuthAPI::class.java).generate()
-    val subscribe =
-      authFetcher.refresh(GRANT_TYPE, Authentication.getRefresh(applicationContext)).subscribeOn(
-        Schedulers.io()
-      ).observeOn(AndroidSchedulers.mainThread()).subscribe({ token: Token ->
-        Authentication.save(applicationContext, token)
-        onSuccess()
-      }, { onLogin() })
+    val subscribe = authFetcher.refresh(GRANT_TYPE,
+        Authentication.getRefresh(applicationContext)).subscribeOn(Schedulers.io()).observeOn(
+        AndroidSchedulers.mainThread()).subscribe({ token: Token ->
+      Authentication.save(applicationContext, token)
+      onSuccess()
+    }, { onLogin() })
     subscriptions.add(subscribe)
   }
 
@@ -85,8 +84,7 @@ class SplashActivity : AppCompatActivity(), SplashContract {
 
   private fun injectDependency() {
     val activityComponent = DaggerActivityComponent.builder().activityModule(
-      ActivityModule(this)
-    ).build()
+        ActivityModule(this)).build()
     activityComponent.inject(this)
   }
 }

@@ -1,6 +1,7 @@
 package com.future.pms.ui.scan
 
 import android.content.Context
+import android.content.pm.PackageManager
 import android.hardware.Camera
 import android.os.Bundle
 import android.view.*
@@ -61,6 +62,11 @@ class ScanFragment : Fragment(), ScanContract {
         context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
             Constants.TOKEN, null), Token::class.java).accessToken
     val toggleFlash = binding.toggleFlash
+    context?.let {
+      if (!it.packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)) {
+        binding.toggleFlash.visibility = View.GONE
+      }
+    }
     toggleFlash.setOnClickListener { flashToggle() }
     mSurfaceView = binding.surfaceView
     return binding.root
@@ -182,8 +188,8 @@ class ScanFragment : Fragment(), ScanContract {
         toggleFlash.setImageResource(R.drawable.ic_flash_on)
         param?.flashMode = Camera.Parameters.FLASH_MODE_TORCH
       }
-        it.parameters = param
-        isFlashOn = isFlashOn.not()
+      it.parameters = param
+      isFlashOn = isFlashOn.not()
     }
   }
 

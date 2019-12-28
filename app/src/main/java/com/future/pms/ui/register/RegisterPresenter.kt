@@ -22,8 +22,7 @@ class RegisterPresenter @Inject constructor() {
   fun register(name: String, email: String, password: String, phoneNumber: String) {
     val customer = CustomerRequest(email, name, password, phoneNumber)
     val subscribe = api.postCreateCustomer(customer).subscribeOn(Schedulers.io()).observeOn(
-      AndroidSchedulers.mainThread()
-    ).subscribe({
+        AndroidSchedulers.mainThread()).subscribe({
       view.onSuccess()
     }, {
       view.onFailed(it.message.toString())

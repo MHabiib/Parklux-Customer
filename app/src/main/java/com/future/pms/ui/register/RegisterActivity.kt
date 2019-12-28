@@ -27,12 +27,8 @@ class RegisterActivity : AppCompatActivity(), RegisterContract {
       if (isValid()) {
         loading(true)
         hideKeyboard()
-        presenter.register(
-          txtName.text.toString(),
-          txtEmail.text.toString(),
-          txtPassword.text.toString(),
-          txtPhone.text.toString()
-        )
+        presenter.register(txtName.text.toString(), txtEmail.text.toString(),
+            txtPassword.text.toString(), txtPhone.text.toString())
       }
     }
     login.setOnClickListener {
@@ -56,7 +52,7 @@ class RegisterActivity : AppCompatActivity(), RegisterContract {
       register_layout.visibility = View.GONE
     } else {
       progressBarReg.visibility = View.GONE
-        register_layout.visibility = View.VISIBLE
+      register_layout.visibility = View.VISIBLE
     }
   }
 
@@ -76,8 +72,7 @@ class RegisterActivity : AppCompatActivity(), RegisterContract {
     val view = currentFocus
     view?.let {
       val mInputMethodManager = getSystemService(
-        Activity.INPUT_METHOD_SERVICE
-      ) as InputMethodManager
+          Activity.INPUT_METHOD_SERVICE) as InputMethodManager
       mInputMethodManager.hideSoftInputFromWindow(it.windowToken, 0)
     }
   }
@@ -91,8 +86,7 @@ class RegisterActivity : AppCompatActivity(), RegisterContract {
 
   private fun injectDependency() {
     val activityComponent = DaggerActivityComponent.builder().activityModule(
-      ActivityModule(this)
-    ).build()
+        ActivityModule(this)).build()
     activityComponent.inject(this)
   }
 }
