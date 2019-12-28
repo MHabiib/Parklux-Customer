@@ -64,7 +64,6 @@ class HistoryFragment : Fragment(), HistoryContract {
         PaginationScrollListener(linearLayoutManager, isLastPage) {
       override fun loadMoreItems() {
         if (!isLastPage) {
-          currentPage += 1
           presenter.loadCustomerBooking(accessToken, currentPage)
         }
       }
@@ -82,15 +81,13 @@ class HistoryFragment : Fragment(), HistoryContract {
   override fun showErrorMessage(error: String) {
     Timber.tag(ERROR).e(error)
     isLastPage = true
-    historyAdapter.removeLoadingFooter()
   }
 
   override fun loadCustomerBookingSuccess(history: History) {
     if (currentPage != 0) {
       if (currentPage <= history.totalPages - 1) {
-        historyAdapter.addLoadingFooter()
         historyAdapter.addAll(history.content)
-        historyAdapter.removeLoadingFooter()
+        currentPage += 1
       } else {
         isLastPage = true
       }
@@ -101,6 +98,8 @@ class HistoryFragment : Fragment(), HistoryContract {
       }
       if (currentPage >= history.totalPages - 1) {
         isLastPage = true
+      } else {
+        currentPage += 1
       }
     }
   }

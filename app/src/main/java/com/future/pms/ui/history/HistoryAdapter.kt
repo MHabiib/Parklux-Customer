@@ -68,22 +68,6 @@ class HistoryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     return if (position == historyList?.size?.minus(1) && isLoadingAdded) loading else item
   }
 
-  fun addLoadingFooter() {
-    isLoadingAdded = true
-  }
-
-  fun removeLoadingFooter() {
-    isLoadingAdded = false
-
-    val position = historyList?.size?.minus(1)
-    val result = position?.let { getItem(it) }
-
-    if (result != null) {
-      historyList?.removeAt(position)
-      notifyItemRemoved(position)
-    }
-  }
-
   fun add(booking: Content) {
     historyList?.add(booking)
     historyList?.size?.minus(1)?.let { notifyItemInserted(it) }
