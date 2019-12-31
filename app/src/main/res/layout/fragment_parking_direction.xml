@@ -25,6 +25,8 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/appBarLayout">
 
+                <include layout="@layout/numbering_left" />
+
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
@@ -47,6 +49,7 @@
                     android:id="@+id/scroll_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/sixteen_dp"
                     android:scrollbars="vertical"
                     app:layout_constraintTop_toTopOf="parent">
 

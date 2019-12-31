@@ -2,7 +2,6 @@ package com.future.pms.ui.parkingdirection
 
 import android.content.Context
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -144,15 +143,14 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
       setPadding(0, 0, 0, 0)
       gravity = Gravity.CENTER
       setBackgroundResource(icon)
-      setTextColor(resources.getColor(R.color.gold))
-      tag = tags
       if (code != '_') {
         id = count
-        text = count.toString()
-      } else {
-        text = ""
       }
-      setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9f)
+
+      if (icon == R.drawable.ic_road) {
+        setTextColor(resources.getColor(R.color.colorPrimaryDark))
+        text = ((id % 16) + 1).toString()
+      }
     }
     layout?.let {
       it.addView(view)
