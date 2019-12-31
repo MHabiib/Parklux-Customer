@@ -22,6 +22,7 @@ import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
 import com.future.pms.model.customerbooking.CustomerBooking
 import com.future.pms.model.oauth.Token
+import com.future.pms.network.NetworkConstant
 import com.future.pms.ui.main.MainActivity
 import com.future.pms.util.Constants
 import com.future.pms.util.Utils
@@ -157,9 +158,11 @@ class OngoingFragment : Fragment(), OngoingContract {
   }
 
   private fun loadImage(imageUrl: String) {
-    Glide.with(binding.root).load(imageUrl).transform(CenterCrop(), RoundedCorners(80)).placeholder(
-        R.drawable.ic_image_place_holder).error(R.drawable.ic_image_place_holder).fallback(
-        R.drawable.ic_image_place_holder).into(binding.ongoingIv)
+    Glide.with(binding.root).load(
+        getString(R.string.image_url, NetworkConstant.BASE, imageUrl)).transform(CenterCrop(),
+        RoundedCorners(80)).placeholder(R.drawable.ic_parking_zone_default).error(
+        R.drawable.ic_parking_zone_default).fallback(R.drawable.ic_parking_zone_default).into(
+        binding.ongoingIv)
   }
 
   private fun injectDependency() {

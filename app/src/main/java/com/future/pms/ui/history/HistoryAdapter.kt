@@ -12,6 +12,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.future.pms.R
 import com.future.pms.model.history.Content
+import com.future.pms.network.NetworkConstant
 import com.future.pms.util.Utils
 import java.util.*
 
@@ -49,6 +50,7 @@ class HistoryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         val historyViewHolder = holder as HistoryViewHolder
         historyViewHolder.itemTitle.text = booking?.parkingZoneName
         historyViewHolder.itemDate.text = booking?.dateIn?.let { Utils.convertLongToTime(it) }
+        booking?.imageUrl?.let { loadImage(it, historyViewHolder.imageView) }
       }
 
       loading -> {
@@ -85,24 +87,22 @@ class HistoryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     return historyList?.get(position)
   }
 
-  fun loadImage(imageName: String, imageView: ImageView) {
-    Glide.with(publicParent).load(
-        "http://192.168.18.50:8088/qr/Grand Indonesia - Level - 2 12.png").transform(CenterCrop(),
-        RoundedCorners(80)).placeholder(R.drawable.ic_image_place_holder).error(
-        R.drawable.ic_image_place_holder).fallback(R.drawable.ic_image_place_holder).into(imageView)
+  private fun loadImage(imageName: String, imageView: ImageView) {
+    Glide.with(publicParent).load(NetworkConstant.BASE + "img/" + imageName).transform(CenterCrop(),
+        RoundedCorners(80)).placeholder(R.drawable.ic_parking_zone_default).error(
+        R.drawable.ic_parking_zone_default).fallback(R.drawable.ic_parking_zone_default).into(
+        imageView)
   }
 
   inner class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val itemTitle: TextView = itemView.findViewById<View>(R.id.item_title) as TextView
     val itemDate: TextView = itemView.findViewById<View>(R.id.item_date) as TextView
-    private val imageView: ImageView = itemView.findViewById<View>(
-        R.id.iv_parking_zone_image) as ImageView
+    val imageView: ImageView = itemView.findViewById<View>(R.id.iv_parking_zone_image) as ImageView
 
     init {
       itemView.setOnClickListener {
         historyList?.get(adapterPosition)?.let { it1 -> onItemClick?.invoke(it1) }
       }
-      loadImage("feelspecial", imageView)
     }
   }
 
