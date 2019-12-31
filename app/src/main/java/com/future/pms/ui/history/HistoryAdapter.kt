@@ -29,19 +29,17 @@ class HistoryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
     publicParent = parent
-    var viewHolder: RecyclerView.ViewHolder? = null
     val inflater = LayoutInflater.from(parent.context)
-    when (viewType) {
+    return when (viewType) {
       item -> {
         val viewItem = inflater.inflate(R.layout.item_layout_home, parent, false)
-        viewHolder = HistoryViewHolder(viewItem)
+        HistoryViewHolder(viewItem)
       }
-      loading -> {
+      else -> {
         val viewLoading = inflater.inflate(R.layout.item_progress, parent, false)
-        viewHolder = LoadingViewHolder(viewLoading)
+        LoadingViewHolder(viewLoading)
       }
     }
-    return viewHolder!!
   }
 
   override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
