@@ -24,7 +24,6 @@ class ProfilePresenter @Inject constructor() {
       view.loadCustomerDetailSuccess(customer)
     }, { error ->
       view.showErrorMessage(error.localizedMessage)
-      view.unauthorized()
     })
     subscriptions.add(subscribe)
   }

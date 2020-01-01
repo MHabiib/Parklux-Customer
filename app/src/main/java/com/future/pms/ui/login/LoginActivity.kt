@@ -1,6 +1,7 @@
 package com.future.pms.ui.login
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -10,8 +11,11 @@ import androidx.appcompat.app.AppCompatActivity
 import com.future.pms.R
 import com.future.pms.di.component.DaggerActivityComponent
 import com.future.pms.di.module.ActivityModule
+import com.future.pms.model.oauth.Token
 import com.future.pms.ui.main.MainActivity
 import com.future.pms.ui.register.RegisterActivity
+import com.future.pms.util.Constants
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
 
@@ -45,6 +49,12 @@ class LoginActivity : AppCompatActivity(), LoginContract {
   }
 
   override fun onSuccess() {
+    presenter.loadData(Gson().fromJson(
+        this.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
+            Constants.TOKEN, null), Token::class.java).accessToken)
+  }
+
+  override fun onAuthorized() {
     val intent = Intent(this, MainActivity::class.java)
     startActivity(intent)
     finish()

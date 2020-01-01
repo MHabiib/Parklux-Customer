@@ -8,7 +8,6 @@ interface ProfileContract : BaseMVPView {
   fun onFailed(e: String)
   fun showProgress(show: Boolean)
   fun showErrorMessage(error: String)
-  fun unauthorized()
   fun loadCustomerDetailSuccess(customer: Customer)
   fun onLogout()
 }

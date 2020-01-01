@@ -31,7 +31,6 @@ class HomePresenter @Inject constructor() {
         loadCustomerDetailSuccess(customer)
       }, { error ->
         showErrorMessage(error.localizedMessage)
-        unauthorized()
       })
       subscriptions.add(subscribe)
     }

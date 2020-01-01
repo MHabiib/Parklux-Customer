@@ -92,11 +92,6 @@ class HomeFragment : Fragment(), HomeContract {
     Timber.tag(ERROR).e(error)
   }
 
-  override fun unauthorized() {
-    val intent = Intent(activity, LoginActivity::class.java)
-    startActivity(intent)
-  }
-
   override fun getDateNow() {
     val currentDateTimeString = DateFormat.getDateInstance(DateFormat.FULL).format(Date())
     val dateText = binding.dateNow

@@ -138,11 +138,6 @@ class ProfileFragment : Fragment(), ProfileContract {
     Timber.e(e)
   }
 
-  override fun unauthorized() {
-    val intent = Intent(activity, LoginActivity::class.java)
-    startActivity(intent)
-  }
-
   override fun onLogout() {
     val intent = Intent(activity, LoginActivity::class.java)
     startActivity(intent)
