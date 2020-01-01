@@ -1,8 +1,11 @@
 package com.future.pms.network
 
+import com.future.pms.model.activity.Booking
+import com.future.pms.model.customer.CustomerResponse
 import com.future.pms.model.customerbooking.CustomerBooking
 import com.future.pms.model.customerdetail.Customer
 import com.future.pms.model.history.History
+import com.future.pms.model.parkingzone.ParkingZone
 import com.future.pms.model.receipt.Receipt
 import com.future.pms.model.register.CustomerRequest
 import io.reactivex.Observable
@@ -35,4 +38,17 @@ interface ApiServiceInterface {
 
   @GET("api/parking-zone/{idBooking}/parking-layout") fun getParkingLayout(@Path("idBooking")
   idBooking: String, @Query("access_token") accessToken: String?): Observable<String>
+
+  //Super admin
+  @GET("api3/user/me") fun isSuperAdmin(@Query("access_token")
+  accessToken: String?): Observable<String>
+
+  @GET("api3/booking") fun loadAllBooking(@Query("access_token") accessToken: String?,
+      @Query("page") page: Int?): Observable<Booking>
+
+  @GET("api3/parking-zone") fun loadAllParkingZone(@Query("access_token") accessToken: String?,
+      @Query("page") page: Int?): Observable<ParkingZone>
+
+  @GET("api3/customer") fun loadAllCustomer(@Query("access_token") accessToken: String?,
+      @Query("page") page: Int?): Observable<CustomerResponse>
 }

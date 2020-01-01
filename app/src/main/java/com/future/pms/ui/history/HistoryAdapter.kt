@@ -11,14 +11,14 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.future.pms.R
-import com.future.pms.model.history.Content
+import com.future.pms.model.history.BookingHistory
 import com.future.pms.network.NetworkConstant
 import com.future.pms.util.Utils
 import java.util.*
 
 class HistoryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-  var onItemClick: ((Content) -> Unit)? = null
-  private var historyList: MutableList<Content>? = null
+  var onItemClick: ((BookingHistory) -> Unit)? = null
+  private var historyList: MutableList<BookingHistory>? = null
   private lateinit var publicParent: ViewGroup
   private var isLoadingAdded = false
   private val loading = 0
@@ -68,12 +68,12 @@ class HistoryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     return if (position == historyList?.size?.minus(1) && isLoadingAdded) loading else item
   }
 
-  fun add(booking: Content) {
+  fun add(booking: BookingHistory) {
     historyList?.add(booking)
     historyList?.size?.minus(1)?.let { notifyItemInserted(it) }
   }
 
-  fun addAll(bookingResult: List<Content>) {
+  fun addAll(bookingResult: List<BookingHistory>) {
     for (result in bookingResult) {
       add(result)
     }
@@ -83,7 +83,7 @@ class HistoryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     historyList?.clear()
   }
 
-  private fun getItem(position: Int): Content? {
+  private fun getItem(position: Int): BookingHistory? {
     return historyList?.get(position)
   }
 
@@ -110,5 +110,4 @@ class HistoryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     val progressBar: ProgressBar = itemView.findViewById<View>(
         R.id.loadmore_progress) as ProgressBar
   }
-
 }

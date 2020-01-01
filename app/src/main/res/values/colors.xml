@@ -14,4 +14,6 @@
     <color name="lightGrey">#F7F7F7</color>
     <color name="qr_code_reader_square">#914CD2</color>
     <color name="baseWhite">#F2F2F2</color>
+    <color name="baseBlack">#2C2C2C</color>
+    <color name="colorPrimaryBlack">#000000</color>
 </resources>

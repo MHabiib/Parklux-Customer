@@ -8,6 +8,7 @@ import com.future.pms.network.AuthAPI
 import com.future.pms.network.NetworkConstant.GRANT_TYPE
 import com.future.pms.network.RetrofitClient
 import com.future.pms.util.Authentication
+import com.future.pms.util.Constants.Companion.ROLE_ADMIN
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -27,7 +28,7 @@ class LoginPresenter @Inject constructor() : BasePresenter<LoginContract>() {
     val authFetcher = APICreator(AuthAPI::class.java).generate()
     val subscribe = authFetcher.auth(username, password, GRANT_TYPE).subscribeOn(
         Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe({ token: Token ->
-      getContext()?.let { Authentication.save(it, token) }
+      getContext()?.let { Authentication.save(it, token, ROLE_ADMIN) }
       view?.let { view -> call(view, view::onSuccess) }
     }, { view?.onError() })
     subscriptions.add(subscribe)

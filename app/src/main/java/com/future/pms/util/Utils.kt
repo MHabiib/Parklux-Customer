@@ -5,8 +5,8 @@ import android.app.NotificationManager
 import android.graphics.Color
 import android.icu.text.SimpleDateFormat
 import android.os.Build
-import com.future.pms.model.customerbooking.CustomerBooking
 import com.future.pms.util.Constants.Companion.FULL_DATE_TIME_FORMAT
+import com.future.pms.util.Constants.Companion.SHORT_MONTH_DATE_TIME_FORMAT
 import com.future.pms.util.Constants.Companion.TIME_FORMAT
 import java.text.DecimalFormat
 import java.util.*
@@ -36,14 +36,14 @@ class Utils {
       return "${format.format(date)} WIB"
     }
 
-    fun getHistoryParking(list: List<CustomerBooking>): List<CustomerBooking> {
-      val historyParking: MutableList<CustomerBooking> = mutableListOf()
-      for (customerBookingList in list) {
-        if (0L != customerBookingList.dateOut) {
-          historyParking.add(customerBookingList)
-        }
+    fun convertLongToTimeShortMonth(time: Long): String {
+      val date = Date(time)
+      val format = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        SimpleDateFormat(SHORT_MONTH_DATE_TIME_FORMAT, Locale.ENGLISH)
+      } else {
+        TODO("VERSION.SDK_INT < N")
       }
-      return historyParking
+      return format.format(date)
     }
 
     fun thousandSeparator(int: Int): String {

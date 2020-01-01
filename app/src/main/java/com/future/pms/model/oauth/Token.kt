@@ -8,4 +8,4 @@ import kotlinx.android.parcel.Parcelize
     @SerializedName("token_type") val tokenType: String, @SerializedName("expires_in")
     var expiresIn: Long, @SerializedName("refresh_token") val refreshToken: String,
     @SerializedName("id_token") val idToken: String, @SerializedName("access_token")
-    val accessToken: String) : Parcelable
+    val accessToken: String, var role: String) : Parcelable

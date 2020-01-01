@@ -21,15 +21,16 @@ object Authentication {
     return null
   }
 
-  fun save(context: Context, obj: Token): Boolean {
+  fun save(context: Context, obj: Token, role: String): Boolean {
     val calendar = GregorianCalendar.getInstance()
     var expiresIn: Long = calendar.time.time
     expiresIn += obj.expiresIn * 24 * 60 * 60
     obj.expiresIn = expiresIn
+    obj.role = role
     return put(context, obj)
   }
 
-  fun isExpired(context: Context?): Boolean {
+  private fun isExpired(context: Context?): Boolean {
     val token = get(context)
     if (token != null) {
       val calendar = GregorianCalendar.getInstance()

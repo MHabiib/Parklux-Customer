@@ -9,6 +9,10 @@ import com.future.pms.ui.parkingdirection.ParkingDirectionFragment
 import com.future.pms.ui.profile.ProfileFragment
 import com.future.pms.ui.receipt.ReceiptFragment
 import com.future.pms.ui.scan.ScanFragment
+import com.future.pms.ui.superadmin.homesuperadmin.HomeFragmentSuperAdmin
+import com.future.pms.ui.superadmin.listactivity.ListActivityFragment
+import com.future.pms.ui.superadmin.listcustomer.ListCustomerFragment
+import com.future.pms.ui.superadmin.listparkingzone.ListParkingZoneFragment
 import dagger.Component
 
 @Component(modules = [FragmentModule::class]) interface FragmentComponent {
@@ -27,4 +31,12 @@ import dagger.Component
   fun inject(ongoingFragment: OngoingFragment)
 
   fun inject(bookingDetailFragment: BookingDetailFragment)
+
+  fun inject(homeFragmentSuperAdmin: HomeFragmentSuperAdmin)
+
+  fun inject(listActivityFragment: ListActivityFragment)
+
+  fun inject(listCustomerFragment: ListCustomerFragment)
+
+  fun inject(listParkingZoneFragment: ListParkingZoneFragment)
 }

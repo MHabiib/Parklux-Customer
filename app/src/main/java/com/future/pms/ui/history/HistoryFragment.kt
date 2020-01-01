@@ -12,7 +12,7 @@ import com.future.pms.R
 import com.future.pms.databinding.FragmentHistoryBinding
 import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
-import com.future.pms.model.history.Content
+import com.future.pms.model.history.BookingHistory
 import com.future.pms.model.history.History
 import com.future.pms.model.oauth.Token
 import com.future.pms.ui.main.MainActivity
@@ -104,7 +104,7 @@ class HistoryFragment : Fragment(), HistoryContract {
     }
   }
 
-  private fun customerBookingClick(history: Content) {
+  private fun customerBookingClick(history: BookingHistory) {
     val activity = activity as MainActivity?
     activity?.presenter?.showReceipt(history.idBooking)
   }

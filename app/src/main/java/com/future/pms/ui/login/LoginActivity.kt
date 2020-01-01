@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -14,6 +15,7 @@ import com.future.pms.di.module.ActivityModule
 import com.future.pms.model.oauth.Token
 import com.future.pms.ui.main.MainActivity
 import com.future.pms.ui.register.RegisterActivity
+import com.future.pms.ui.superadmin.loginsuperadmin.LoginActivitySuperAdmin
 import com.future.pms.util.Constants
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_login.*
@@ -21,6 +23,8 @@ import javax.inject.Inject
 
 class LoginActivity : AppCompatActivity(), LoginContract {
   @Inject lateinit var presenter: LoginPresenter
+  private var count = 0
+  private var startMillis: Long = 0
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -40,6 +44,27 @@ class LoginActivity : AppCompatActivity(), LoginContract {
       startActivity(intent)
       finish()
     }
+  }
+
+  override fun onTouchEvent(event: MotionEvent): Boolean {
+    val eventaction = event.action
+    if (eventaction == MotionEvent.ACTION_UP) {
+      val time = System.currentTimeMillis()
+      if (startMillis == 0L || (time - startMillis > 3000)) {
+        startMillis = time
+        count = 1
+      } else {
+        count++
+      }
+      if (count == 5) {
+        Toast.makeText(this, "Switched to SUPER ADMIN page", Toast.LENGTH_LONG).show()
+        val intent = Intent(this, LoginActivitySuperAdmin::class.java)
+        startActivity(intent)
+        finish()
+      }
+      return true
+    }
+    return false
   }
 
   private fun isValid(): Boolean {

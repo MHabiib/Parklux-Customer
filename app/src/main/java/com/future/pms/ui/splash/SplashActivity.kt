@@ -15,7 +15,11 @@ import com.future.pms.network.AuthAPI
 import com.future.pms.network.NetworkConstant.GRANT_TYPE
 import com.future.pms.ui.login.LoginActivity
 import com.future.pms.ui.main.MainActivity
+import com.future.pms.ui.superadmin.mainsuperadmin.MainActivitySuperAdmin
 import com.future.pms.util.Authentication
+import com.future.pms.util.Constants
+import com.future.pms.util.Constants.Companion.ROLE_ADMIN
+import com.google.gson.Gson
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -38,8 +42,14 @@ class SplashActivity : AppCompatActivity(), SplashContract {
   }
 
   override fun onSuccess() {
+    val intent: Intent = if (Gson().fromJson(
+            this.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
+                Constants.TOKEN, null), Token::class.java).role == ROLE_ADMIN) {
+      Intent(this, MainActivity::class.java)
+    } else {
+      Intent(this, MainActivitySuperAdmin::class.java)
+    }
     Handler().postDelayed({
-      val intent = Intent(this, MainActivity::class.java)
       startActivity(intent)
       finish()
     }, 1000)
@@ -58,7 +68,7 @@ class SplashActivity : AppCompatActivity(), SplashContract {
     val subscribe = authFetcher.refresh(GRANT_TYPE,
         Authentication.getRefresh(applicationContext)).subscribeOn(Schedulers.io()).observeOn(
         AndroidSchedulers.mainThread()).subscribe({ token: Token ->
-      Authentication.save(applicationContext, token)
+      Authentication.save(applicationContext, token, token.role)
       onSuccess()
     }, { onLogin() })
     subscriptions.add(subscribe)
