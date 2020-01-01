@@ -28,20 +28,23 @@ class Constants {
     const val FULL_DATE_TIME_FORMAT = "HH:mm - dd MMMM yyyy "
     const val SHORT_MONTH_DATE_TIME_FORMAT = "HH:mm - dd MMM yy"
     const val TIME_FORMAT = "HH:mm"
+    const val SEC_IN_DAY = 3600000
 
     const val parkSize = 88
+    const val SLOTS_IN_ROW = 16
     const val parkMargin = 0
     const val parkPadding = 0
     const val STATUS_AVAILABLE = 1
     const val STATUS_BOOKED = 2
     const val STATUS_RESERVED = 3
     const val STATUS_ROAD = 4
-    const val ADD_NEW_LINE = '/'
-    const val TAKEN_SLOT = 'U'
-    const val EMPTY_SLOT = 'A'
+    const val SLOT_TAKEN = 'T'
+    const val SLOT_EMPTY = 'E'
+    const val SLOT_ROAD = 'R'
+    const val SLOT_NULL = '_'
+    const val SLOT_READY = 'O'
+    const val SLOT_SCAN_ME = 'S'
+    const val MY_SLOT = 'V'
     const val DISABLED_SLOT = 'R'
-    const val SPACING = '_'
-    const val SLOT = "Slot "
-    var selectedIds = ""
   }
 }

@@ -5,6 +5,14 @@ import android.app.NotificationManager
 import android.graphics.Color
 import android.icu.text.SimpleDateFormat
 import android.os.Build
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.future.pms.R
+import com.future.pms.network.NetworkConstant
 import com.future.pms.util.Constants.Companion.FULL_DATE_TIME_FORMAT
 import com.future.pms.util.Constants.Companion.SHORT_MONTH_DATE_TIME_FORMAT
 import com.future.pms.util.Constants.Companion.TIME_FORMAT
@@ -61,6 +69,20 @@ class Utils {
             400)
         notificationManager.createNotificationChannel(notificationChannel)
       }
+    }
+
+    fun imageLoader(viewGroup: ViewGroup, imageName: String, imageView: ImageView) {
+      Glide.with(viewGroup).load(NetworkConstant.BASE + "img/" + imageName).transform(CenterCrop(),
+          RoundedCorners(80)).placeholder(R.drawable.ic_parking_zone_default).error(
+          R.drawable.ic_parking_zone_default).fallback(R.drawable.ic_parking_zone_default).into(
+          imageView)
+    }
+
+    fun imageLoaderView(view: View, imageName: String, imageView: ImageView) {
+      Glide.with(view).load(NetworkConstant.BASE + "img/" + imageName).transform(CenterCrop(),
+          RoundedCorners(80)).placeholder(R.drawable.ic_parking_zone_default).error(
+          R.drawable.ic_parking_zone_default).fallback(R.drawable.ic_parking_zone_default).into(
+          imageView)
     }
   }
 }

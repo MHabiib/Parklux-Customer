@@ -13,9 +13,6 @@ import android.view.ViewGroup
 import android.widget.Chronometer
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.future.pms.R
 import com.future.pms.databinding.FragmentOngoingBinding
 import com.future.pms.di.component.DaggerFragmentComponent
@@ -25,6 +22,7 @@ import com.future.pms.model.oauth.Token
 import com.future.pms.network.NetworkConstant
 import com.future.pms.ui.main.MainActivity
 import com.future.pms.util.Constants
+import com.future.pms.util.Constants.Companion.SEC_IN_DAY
 import com.future.pms.util.Utils
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_ongoing.*
@@ -146,7 +144,7 @@ class OngoingFragment : Fragment(), OngoingContract {
         parkingTime.setOnChronometerTickListener {
           val elapsedMillis = SystemClock.elapsedRealtime() - it.base
           yourPrice.text = String.format(getString(R.string.idr), Utils.thousandSeparator(
-              (ceil(elapsedMillis.toDouble() / 3600000) * ongoing.price).toInt()))
+              (ceil(elapsedMillis.toDouble() / SEC_IN_DAY) * ongoing.price).toInt()))
         }
       }
     }
@@ -158,11 +156,8 @@ class OngoingFragment : Fragment(), OngoingContract {
   }
 
   private fun loadImage(imageUrl: String) {
-    Glide.with(binding.root).load(
-        getString(R.string.image_url, NetworkConstant.BASE, imageUrl)).transform(CenterCrop(),
-        RoundedCorners(80)).placeholder(R.drawable.ic_parking_zone_default).error(
-        R.drawable.ic_parking_zone_default).fallback(R.drawable.ic_parking_zone_default).into(
-        binding.ongoingIv)
+    Utils.imageLoaderView(binding.root,
+        getString(R.string.image_url, NetworkConstant.BASE, imageUrl), binding.ongoingIv)
   }
 
   private fun injectDependency() {

@@ -7,12 +7,8 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.future.pms.R
 import com.future.pms.model.history.BookingHistory
-import com.future.pms.network.NetworkConstant
 import com.future.pms.util.Utils
 import java.util.*
 
@@ -50,7 +46,7 @@ class HistoryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         val historyViewHolder = holder as HistoryViewHolder
         historyViewHolder.itemTitle.text = booking?.parkingZoneName
         historyViewHolder.itemDate.text = booking?.dateIn?.let { Utils.convertLongToTime(it) }
-        booking?.imageUrl?.let { loadImage(it, historyViewHolder.imageView) }
+        booking?.imageUrl?.let { loadImage(publicParent, it, historyViewHolder.imageView) }
       }
 
       loading -> {
@@ -87,11 +83,8 @@ class HistoryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     return historyList?.get(position)
   }
 
-  private fun loadImage(imageName: String, imageView: ImageView) {
-    Glide.with(publicParent).load(NetworkConstant.BASE + "img/" + imageName).transform(CenterCrop(),
-        RoundedCorners(80)).placeholder(R.drawable.ic_parking_zone_default).error(
-        R.drawable.ic_parking_zone_default).fallback(R.drawable.ic_parking_zone_default).into(
-        imageView)
+  private fun loadImage(viewGroup: ViewGroup, imageName: String, imageView: ImageView) {
+    Utils.imageLoader(viewGroup, imageName, imageView)
   }
 
   inner class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

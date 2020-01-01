@@ -23,9 +23,18 @@ import com.future.pms.model.oauth.Token
 import com.future.pms.ui.main.MainActivity
 import com.future.pms.util.Constants.Companion.AUTHENTCATION
 import com.future.pms.util.Constants.Companion.BOOKING_DETAIL_FRAGMENT
+import com.future.pms.util.Constants.Companion.DISABLED_SLOT
 import com.future.pms.util.Constants.Companion.ERROR
 import com.future.pms.util.Constants.Companion.ID_BOOKING
+import com.future.pms.util.Constants.Companion.MY_SLOT
 import com.future.pms.util.Constants.Companion.NULL
+import com.future.pms.util.Constants.Companion.SLOTS_IN_ROW
+import com.future.pms.util.Constants.Companion.SLOT_EMPTY
+import com.future.pms.util.Constants.Companion.SLOT_NULL
+import com.future.pms.util.Constants.Companion.SLOT_READY
+import com.future.pms.util.Constants.Companion.SLOT_ROAD
+import com.future.pms.util.Constants.Companion.SLOT_SCAN_ME
+import com.future.pms.util.Constants.Companion.SLOT_TAKEN
 import com.future.pms.util.Constants.Companion.STATUS_AVAILABLE
 import com.future.pms.util.Constants.Companion.STATUS_BOOKED
 import com.future.pms.util.Constants.Companion.STATUS_RESERVED
@@ -177,7 +186,7 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
 
     for (index in 0 until slotsLayout.length) {
       totalSlot++
-      if (index == 0 || totalSlot == 16) {
+      if (index == 0 || totalSlot == SLOTS_IN_ROW) {
         totalSlot = 0
         parkingLayout = LinearLayout(context)
         parkingLayout.orientation = LinearLayout.HORIZONTAL
@@ -185,27 +194,27 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
       }
 
       when {
-        slotsLayout[index] == '_' -> {
+        slotsLayout[index] == SLOT_NULL -> {
           setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_ROAD,
               R.drawable.ic_blank)
         }
-        slotsLayout[index] == 'S' || slotsLayout[index] == 'T' -> {
+        slotsLayout[index] == SLOT_SCAN_ME || slotsLayout[index] == SLOT_TAKEN -> {
           setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_BOOKED,
               R.drawable.ic_car)
         }
-        slotsLayout[index] == 'E' -> {
+        slotsLayout[index] == SLOT_EMPTY -> {
           setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_AVAILABLE,
               R.drawable.ic_park)
         }
-        slotsLayout[index] == 'D' -> {
+        slotsLayout[index] == DISABLED_SLOT -> {
           setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_RESERVED,
               R.drawable.ic_disable)
         }
-        slotsLayout[index] == 'R' || slotsLayout[index] == 'O' -> {
+        slotsLayout[index] == SLOT_ROAD || slotsLayout[index] == SLOT_READY -> {
           setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_ROAD,
               R.drawable.ic_road)
         }
-        slotsLayout[index] == 'V' -> {
+        slotsLayout[index] == MY_SLOT -> {
           setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_AVAILABLE,
               R.drawable.ic_my_location)
         }
@@ -223,13 +232,13 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
       setPadding(0, 0, 0, 0)
       gravity = Gravity.CENTER
       setBackgroundResource(icon)
-      if (code != '_') {
+      if (code != SLOT_NULL) {
         id = count
       }
 
       if (icon == R.drawable.ic_road) {
         setTextColor(resources.getColor(R.color.colorPrimaryDark))
-        text = ((id % 16) + 1).toString()
+        text = ((id % SLOTS_IN_ROW) + 1).toString()
       }
       setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9f)
     }

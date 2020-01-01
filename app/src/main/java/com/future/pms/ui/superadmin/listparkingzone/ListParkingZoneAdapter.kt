@@ -7,12 +7,9 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.future.pms.R
 import com.future.pms.model.parkingzone.ParkingZoneDetails
-import com.future.pms.network.NetworkConstant
+import com.future.pms.util.Utils
 import java.util.*
 
 class ListParkingZoneAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -50,7 +47,7 @@ class ListParkingZoneAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         parkingZoneViewHolder.itemTitle.text = parkingZone?.name
         parkingZoneViewHolder.itemEmail.text = parkingZone?.emailAdmin
         parkingZoneViewHolder.itemPhone.text = parkingZone?.phoneNumber
-        parkingZone?.imageUrl?.let { loadImage(it, parkingZoneViewHolder.imageView) }
+        parkingZone?.imageUrl?.let { loadImage(publicParent, it, parkingZoneViewHolder.imageView) }
       }
 
       loading -> {
@@ -87,11 +84,8 @@ class ListParkingZoneAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     return parkingZoneList?.get(position)
   }
 
-  private fun loadImage(imageName: String, imageView: ImageView) {
-    Glide.with(publicParent).load(NetworkConstant.BASE + "img/" + imageName).transform(CenterCrop(),
-        RoundedCorners(80)).placeholder(R.drawable.ic_parking_zone_default).error(
-        R.drawable.ic_parking_zone_default).fallback(R.drawable.ic_parking_zone_default).into(
-        imageView)
+  private fun loadImage(viewGroup: ViewGroup, imageName: String, imageView: ImageView) {
+    Utils.imageLoader(viewGroup, imageName, imageView)
   }
 
   inner class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
