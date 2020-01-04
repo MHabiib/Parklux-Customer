@@ -11,7 +11,7 @@
         android:clipToPadding="false"
         android:orientation="vertical"
         android:overScrollMode="never"
-        android:paddingBottom="@dimen/twenty_dp"
+        android:paddingBottom="@dimen/sixty_eight_dp"
         android:scrollbars="none">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -75,13 +75,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/twelve_dp"
-                    android:layout_marginBottom="@dimen/fourty_dp"
                     android:background="@drawable/card_layout_grey"
                     android:fontFamily="sans-serif-light"
                     android:text="@string/check_out"
                     android:textColor="@color/red"
                     android:textSize="@dimen/h2"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/directions_layout" />
@@ -217,10 +215,10 @@
                             android:textColor="@color/darkGrey"
                             android:textSize="@dimen/h3"
                             android:visibility="gone"
-                            tools:visibility="visible"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/line1"
-                            tools:text="Total price" />
+                            tools:text="Total price"
+                            tools:visibility="visible" />
 
                         <TextView
                             android:id="@+id/price_per_hour"
@@ -243,10 +241,10 @@
                             android:textColor="@color/darkGrey"
                             android:textSize="@dimen/h3"
                             android:visibility="gone"
-                            tools:visibility="visible"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/price_per_hour"
-                            tools:text="Total price" />
+                            tools:text="Total price"
+                            tools:visibility="visible" />
 
                         <TextView
                             android:id="@+id/your_price"

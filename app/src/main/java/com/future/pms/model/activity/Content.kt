@@ -14,4 +14,4 @@ data class Content(@SerializedName("address") val address: String? = null,
     @SerializedName("parkingZoneName") val parkingZoneName: String? = null, @SerializedName("price")
     val price: Double? = null, @SerializedName("totalPrice") val totalPrice: String? = null,
     @SerializedName("slotName") val slotName: String? = null, @SerializedName("totalTime")
-    val totalTime: String? = null)
+    val totalTime: String? = null, var position: Int? = null)

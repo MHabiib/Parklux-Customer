@@ -105,27 +105,27 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
       }
 
       when {
-        slotsLayout[index] == '_' -> {
+        slotsLayout[index] == Constants.SLOT_NULL -> {
           setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_ROAD,
               R.drawable.ic_blank)
         }
-        slotsLayout[index] == 'S' || slotsLayout[index] == 'T' -> {
+        slotsLayout[index] == Constants.SLOT_SCAN_ME || slotsLayout[index] == Constants.SLOT_TAKEN -> {
           setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_BOOKED,
               R.drawable.ic_car)
         }
-        slotsLayout[index] == 'E' -> {
+        slotsLayout[index] == Constants.SLOT_EMPTY -> {
           setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_AVAILABLE,
               R.drawable.ic_park)
         }
-        slotsLayout[index] == 'D' -> {
+        slotsLayout[index] == Constants.DISABLED_SLOT -> {
           setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_RESERVED,
               R.drawable.ic_disable)
         }
-        slotsLayout[index] == 'R' || slotsLayout[index] == 'O' -> {
+        slotsLayout[index] == Constants.SLOT_ROAD || slotsLayout[index] == Constants.SLOT_READY -> {
           setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_ROAD,
               R.drawable.ic_road)
         }
-        slotsLayout[index] == 'V' -> {
+        slotsLayout[index] == Constants.MY_SLOT -> {
           setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_AVAILABLE,
               R.drawable.ic_my_location)
         }

@@ -51,7 +51,7 @@ class LoginActivitySuperAdmin : AppCompatActivity(), LoginContractSuperAdmin {
         count++
       }
       if (count == 5) {
-        Toast.makeText(this, "Switched to ADMIN page", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, "Switched to CUSTOMER page", Toast.LENGTH_LONG).show()
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finish()

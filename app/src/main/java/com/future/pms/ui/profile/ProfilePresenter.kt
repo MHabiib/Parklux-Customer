@@ -23,7 +23,7 @@ class ProfilePresenter @Inject constructor() {
         AndroidSchedulers.mainThread()).subscribe({ customer: Customer ->
       view.loadCustomerDetailSuccess(customer)
     }, { error ->
-      view.showErrorMessage(error.localizedMessage)
+      view.showErrorMessage(error.toString())
     })
     subscriptions.add(subscribe)
   }

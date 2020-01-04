@@ -1,4 +1,4 @@
-package com.future.pms.ui.superadmin.listcustomer
+package com.future.pms.ui.superadmin.listuser
 
 import android.view.LayoutInflater
 import android.view.View
@@ -88,7 +88,10 @@ class ListCustomerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     init {
       itemView.setOnClickListener {
-        customerList?.get(adapterPosition)?.let { it1 -> onItemClick?.invoke(it1) }
+        customerList?.get(adapterPosition)?.let { it1 ->
+          it1.position = adapterPosition
+          onItemClick?.invoke(it1)
+        }
       }
     }
   }

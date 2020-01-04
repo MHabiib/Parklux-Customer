@@ -19,7 +19,6 @@ import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
 import com.future.pms.model.customerbooking.CustomerBooking
 import com.future.pms.model.oauth.Token
-import com.future.pms.network.NetworkConstant
 import com.future.pms.ui.main.MainActivity
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.SEC_IN_DAY
@@ -156,8 +155,7 @@ class OngoingFragment : Fragment(), OngoingContract {
   }
 
   private fun loadImage(imageUrl: String) {
-    Utils.imageLoaderView(binding.root,
-        getString(R.string.image_url, NetworkConstant.BASE, imageUrl), binding.ongoingIv)
+    Utils.imageLoaderView(binding.root, imageUrl, binding.ongoingIv)
   }
 
   private fun injectDependency() {

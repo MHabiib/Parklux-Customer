@@ -15,9 +15,4 @@
         android:id="@+id/navigation_customer"
         android:icon="@drawable/profile"
         android:title="@string/customer" />
-
-    <item
-        android:id="@+id/navigation_parking_zone"
-        android:icon="@drawable/ic_parking_zone"
-        android:title="@string/parking_zone" />
 </menu>

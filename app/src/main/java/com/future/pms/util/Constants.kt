@@ -17,7 +17,11 @@ class Constants {
     const val REFRESH_TOKEN = "refreshToken"
     const val PROFILE_FRAGMENT = "ProfileFragment"
     const val ROLE_SUPER_ADMIN = "ROLE_SUPER_ADMIN"
+    const val ROLE_CUSTOMER = "ROLE_CUSTOMER"
+    const val UPDATE_SUPER_ADMIN = "UPDATE_SUPER_ADMIN"
     const val ROLE_ADMIN = "ROLE_ADMIN"
+    const val ROLE = "role"
+    const val ID_USER = "idUser"
     const val ERROR = "Error"
     const val NULL = "null"
     const val ID_BOOKING = "idBooking"
@@ -25,10 +29,15 @@ class Constants {
 
     const val REQUEST_CAMERA_PERMISSION = 2020
 
+    const val NOT_FOUND_CODE = "404"
+    const val NO_CONNECTION = "Failed to connect to"
+
     const val FULL_DATE_TIME_FORMAT = "HH:mm - dd MMMM yyyy "
     const val SHORT_MONTH_DATE_TIME_FORMAT = "HH:mm - dd MMM yy"
     const val TIME_FORMAT = "HH:mm"
     const val SEC_IN_DAY = 3600000
+
+    const val STATUS_ONGOING = "Ongoing"
 
     const val parkSize = 88
     const val SLOTS_IN_ROW = 16
@@ -45,6 +54,6 @@ class Constants {
     const val SLOT_READY = 'O'
     const val SLOT_SCAN_ME = 'S'
     const val MY_SLOT = 'V'
-    const val DISABLED_SLOT = 'R'
+    const val DISABLED_SLOT = 'D'
   }
 }

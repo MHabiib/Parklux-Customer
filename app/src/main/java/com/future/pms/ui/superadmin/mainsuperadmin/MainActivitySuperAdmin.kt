@@ -11,8 +11,7 @@ import com.future.pms.di.module.ActivityModule
 import com.future.pms.ui.login.LoginActivity
 import com.future.pms.ui.superadmin.homesuperadmin.HomeFragmentSuperAdmin
 import com.future.pms.ui.superadmin.listactivity.ListActivityFragment
-import com.future.pms.ui.superadmin.listcustomer.ListCustomerFragment
-import com.future.pms.ui.superadmin.listparkingzone.ListParkingZoneFragment
+import com.future.pms.ui.superadmin.listuser.ListUserFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import javax.inject.Inject
 
@@ -37,9 +36,6 @@ class MainActivitySuperAdmin : AppCompatActivity(), MainContractSuperAdmin {
         }
         R.id.navigation_customer -> {
           presenter.onCustomerClick()
-        }
-        R.id.navigation_parking_zone -> {
-          presenter.onParkingZoneClick()
         }
       }
       return@setOnNavigationItemSelectedListener true
@@ -69,18 +65,10 @@ class MainActivitySuperAdmin : AppCompatActivity(), MainContractSuperAdmin {
   }
 
   override fun showListCustomerFragment() {
-    if (supportFragmentManager.findFragmentByTag(ListCustomerFragment.TAG) == null) {
+    if (supportFragmentManager.findFragmentByTag(ListUserFragment.TAG) == null) {
       binding.navView.menu.findItem(R.id.navigation_customer).isChecked = true
       supportFragmentManager.beginTransaction().disallowAddToBackStack().replace(R.id.frame,
-          ListCustomerFragment().newInstance(), ListCustomerFragment.TAG).commit()
-    }
-  }
-
-  override fun showListParkingZoneFragment() {
-    if (supportFragmentManager.findFragmentByTag(ListParkingZoneFragment.TAG) == null) {
-      binding.navView.menu.findItem(R.id.navigation_parking_zone).isChecked = true
-      supportFragmentManager.beginTransaction().disallowAddToBackStack().replace(R.id.frame,
-          ListParkingZoneFragment().newInstance(), ListParkingZoneFragment.TAG).commit()
+          ListUserFragment().newInstance(), ListUserFragment.TAG).commit()
     }
   }
 

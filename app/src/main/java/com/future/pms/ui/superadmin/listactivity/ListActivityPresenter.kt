@@ -24,6 +24,18 @@ class ListActivityPresenter @Inject constructor() {
     subscriptions.add(subscribe)
   }
 
+  fun findBookingById(idBooking: String, accessToken: String) {
+    val subscribe = api.findBookingById(idBooking, accessToken).subscribeOn(
+        Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe({
+      if (null != it) {
+        view.findBookingByIdSuccess(it)
+      }
+    }, {
+      it.message?.let { it1 -> view.onFailed(it1) }
+    })
+    subscriptions.add(subscribe)
+  }
+
   fun attach(view: ListActivityContract) {
     this.view = view
   }

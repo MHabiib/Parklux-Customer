@@ -1,4 +1,4 @@
-package com.future.pms.model.parkingzone
+package com.future.pms.model.superadmin
 
 import com.google.gson.annotations.SerializedName
 

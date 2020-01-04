@@ -1,4 +1,4 @@
-package com.future.pms.ui.superadmin.listparkingzone
+package com.future.pms.ui.superadmin.listuser
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,13 +8,13 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.future.pms.R
-import com.future.pms.model.parkingzone.ParkingZoneDetails
+import com.future.pms.model.admin.AdminDetails
 import com.future.pms.util.Utils
 import java.util.*
 
-class ListParkingZoneAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-  var onItemClick: ((ParkingZoneDetails) -> Unit)? = null
-  private var parkingZoneList: MutableList<ParkingZoneDetails>? = null
+class ListAdminAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+  var onItemClick: ((AdminDetails) -> Unit)? = null
+  private var parkingZoneList: MutableList<AdminDetails>? = null
   private lateinit var publicParent: ViewGroup
   private var isLoadingAdded = false
   private val loading = 0
@@ -65,12 +65,12 @@ class ListParkingZoneAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     return if (position == parkingZoneList?.size?.minus(1) && isLoadingAdded) loading else item
   }
 
-  fun add(parkingZone: ParkingZoneDetails) {
+  fun add(parkingZone: AdminDetails) {
     parkingZoneList?.add(parkingZone)
     parkingZoneList?.size?.minus(1)?.let { notifyItemInserted(it) }
   }
 
-  fun addAll(bookingResult: List<ParkingZoneDetails>) {
+  fun addAll(bookingResult: List<AdminDetails>) {
     for (result in bookingResult) {
       add(result)
     }
@@ -80,7 +80,7 @@ class ListParkingZoneAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     parkingZoneList?.clear()
   }
 
-  private fun getItem(position: Int): ParkingZoneDetails? {
+  private fun getItem(position: Int): AdminDetails? {
     return parkingZoneList?.get(position)
   }
 

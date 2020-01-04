@@ -25,8 +25,4 @@ class MainPresenterSuperAdmin @Inject constructor() {
   fun onCustomerClick() {
     view.showListCustomerFragment()
   }
-
-  fun onParkingZoneClick() {
-    view.showListParkingZoneFragment()
-  }
 }

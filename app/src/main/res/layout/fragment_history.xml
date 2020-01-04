@@ -46,8 +46,8 @@
             android:layout_height="0dp"
             android:layout_marginLeft="@dimen/twelve_dp"
             android:layout_marginRight="@dimen/twelve_dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/guideline">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_history"
@@ -55,17 +55,9 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/twelve_dp"
                 android:layout_marginRight="@dimen/twelve_dp"
-                android:layout_marginBottom="32dp"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintVertical_bias="1.0" />
+                android:clipToPadding="false"
+                android:paddingBottom="@dimen/sixty_eight_dp" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.94" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

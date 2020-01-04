@@ -1,13 +1,18 @@
 package com.future.pms.network
 
 import com.future.pms.model.activity.Booking
+import com.future.pms.model.activity.Content
+import com.future.pms.model.admin.Admin
+import com.future.pms.model.admin.nonPage.AdminResponse
 import com.future.pms.model.customer.CustomerResponse
 import com.future.pms.model.customerbooking.CustomerBooking
 import com.future.pms.model.customerdetail.Customer
 import com.future.pms.model.history.History
-import com.future.pms.model.parkingzone.ParkingZone
 import com.future.pms.model.receipt.Receipt
 import com.future.pms.model.register.CustomerRequest
+import com.future.pms.model.superadmin.SuperAdminResponse
+import com.future.pms.model.user.User
+import com.future.pms.model.user.UserResponse
 import io.reactivex.Observable
 import retrofit2.http.*
 
@@ -47,8 +52,38 @@ interface ApiServiceInterface {
       @Query("page") page: Int?): Observable<Booking>
 
   @GET("api3/parking-zone") fun loadAllParkingZone(@Query("access_token") accessToken: String?,
-      @Query("page") page: Int?): Observable<ParkingZone>
+      @Query("page") page: Int?): Observable<Admin>
 
   @GET("api3/customer") fun loadAllCustomer(@Query("access_token") accessToken: String?,
       @Query("page") page: Int?): Observable<CustomerResponse>
+
+  @GET("api3/user") fun loadAllSuperAdmin(@Query("access_token") accessToken: String?,
+      @Query("page") page: Int?): Observable<SuperAdminResponse>
+
+  @POST("api3/user") fun createUser(@Query("access_token") accessToken: String?, @Body
+  user: User): Observable<String>
+
+  @PUT("api3/user") fun updateUser(@Query("access_token") accessToken: String?, @Body
+  user: User): Observable<String>
+
+  @GET("api3/user/email") fun getEmail(@Query("access_token")
+  accessToken: String?): Observable<String>
+
+  @GET("api3/booking/{id}/receipt") fun bookingReceiptSA(@Path("id") idBooking: String,
+      @Query("access_token") accessToken: String?): Observable<Receipt>
+
+  @GET("api3/booking/{id}") fun findBookingById(@Path("id") idBooking: String,
+      @Query("access_token") accessToken: String?): Observable<Content>
+
+  @POST("api3/booking/{id}/checkout") fun checkoutBookingSA(@Path("id") idBooking: String,
+      @Query("access_token") accessToken: String?): Observable<Receipt>
+
+  @GET("api3/customer/{id}/detail") fun getCustomerDetailSA(@Path("id") idBooking: String,
+      @Query("access_token") accessToken: String?): Observable<Customer>
+
+  @GET("api3/{id}/parking-zone") fun getAdminDetailSA(@Path("id") idBooking: String,
+      @Query("access_token") accessToken: String?): Observable<AdminResponse>
+
+  @GET("api3/{id}/user/") fun getUserDetailSA(@Path("id") idBooking: String, @Query("access_token")
+  accessToken: String?): Observable<UserResponse>
 }

@@ -25,7 +25,9 @@
             android:id="@+id/refresh_activity"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:padding="@dimen/twelve_dp"
+            android:paddingLeft="@dimen/twelve_dp"
+            android:paddingTop="@dimen/twelve_dp"
+            android:paddingRight="@dimen/twelve_dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/name">
 
@@ -37,7 +39,7 @@
                 android:layout_marginRight="@dimen/twelve_dp"
                 android:layout_marginBottom="32dp"
                 android:clipToPadding="false"
-                android:paddingBottom="@dimen/sixty_dp" />
+                android:paddingBottom="@dimen/sixty_eight_dp" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

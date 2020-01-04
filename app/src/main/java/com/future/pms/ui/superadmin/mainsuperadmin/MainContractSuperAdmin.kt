@@ -5,5 +5,4 @@ interface MainContractSuperAdmin {
   fun showLoginPage()
   fun showListActivityFragment()
   fun showListCustomerFragment()
-  fun showListParkingZoneFragment()
 }

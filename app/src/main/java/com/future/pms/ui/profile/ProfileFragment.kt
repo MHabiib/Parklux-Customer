@@ -95,6 +95,12 @@ class ProfileFragment : Fragment(), ProfileContract {
   }
 
   override fun showErrorMessage(error: String) {
+    if (error.contains(Constants.NO_CONNECTION)) {
+      Toast.makeText(context, getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show()
+    } else {
+      presenter.signOut()
+      onLogout()
+    }
     Timber.tag(Constants.ERROR).e(error)
   }
 

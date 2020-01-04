@@ -46,6 +46,7 @@ class ListActivityAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         bookingViewHolder.customerName.text = history?.customerName
         bookingViewHolder.customerPhone.text = history?.customerPhone
         bookingViewHolder.slot.text = history?.slotName
+        bookingViewHolder.parkingZone.text = history?.parkingZoneName
         bookingViewHolder.totalPrice.text = String.format("IDR %s",
             history?.totalPrice?.toInt()?.let {
               Utils.thousandSeparator(it)
@@ -88,6 +89,14 @@ class ListActivityAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
   }
 
+  fun addAt(position: Int, booking: Content) {
+    bookingList?.add(position, booking)
+  }
+
+  fun remove(position: Int) {
+    bookingList?.removeAt(position)
+  }
+
   fun clear() {
     bookingList?.clear()
   }
@@ -102,12 +111,16 @@ class ListActivityAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     val slot: TextView = itemView.findViewById<View>(R.id.tv_slot) as TextView
     val totalPrice: TextView = itemView.findViewById<View>(R.id.tv_total_price) as TextView
     val timeRang: TextView = itemView.findViewById<View>(R.id.tv_time_range) as TextView
+    val parkingZone: TextView = itemView.findViewById<View>(R.id.tv_parking_zone_name) as TextView
     val status: TextView = itemView.findViewById<View>(R.id.status) as TextView
-    val line: View = itemView.findViewById<View>(R.id.line) as View
+    val line: View = itemView.findViewById(R.id.line) as View
 
     init {
       itemView.setOnClickListener {
-        bookingList?.get(adapterPosition)?.let { it1 -> onItemClick?.invoke(it1) }
+        bookingList?.get(adapterPosition)?.let { it ->
+          it.position = adapterPosition
+          onItemClick?.invoke(it)
+        }
       }
     }
   }
