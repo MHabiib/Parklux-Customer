@@ -1,6 +1,7 @@
 package com.future.pms.ui.history
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,9 +16,10 @@ import com.future.pms.di.module.FragmentModule
 import com.future.pms.model.history.BookingHistory
 import com.future.pms.model.history.History
 import com.future.pms.model.oauth.Token
-import com.future.pms.ui.main.MainActivity
+import com.future.pms.ui.receipt.ReceiptFragment
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.ERROR
+import com.future.pms.util.Constants.Companion.HISTORY_FRAGMENT
 import com.future.pms.util.PaginationScrollListener
 import com.google.gson.Gson
 import timber.log.Timber
@@ -29,6 +31,11 @@ class HistoryFragment : Fragment(), HistoryContract {
   private lateinit var historyAdapter: HistoryAdapter
   private var currentPage = 0
   private var isLastPage = false
+  private lateinit var accessToken: String
+
+  companion object {
+    const val TAG = HISTORY_FRAGMENT
+  }
 
   fun newInstance(): HistoryFragment {
     return HistoryFragment()
@@ -41,7 +48,7 @@ class HistoryFragment : Fragment(), HistoryContract {
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
       savedInstanceState: Bundle?): View? {
-    val accessToken = Gson().fromJson(
+    accessToken = Gson().fromJson(
         context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
             Constants.TOKEN, null), Token::class.java).accessToken
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_history, container, false)
@@ -105,12 +112,27 @@ class HistoryFragment : Fragment(), HistoryContract {
   }
 
   private fun customerBookingClick(history: BookingHistory) {
-    val activity = activity as MainActivity?
-    activity?.presenter?.showReceipt(history.idBooking)
+    val fragment = ReceiptFragment()
+    val bundle = Bundle()
+    bundle.putString(Constants.ID_BOOKING, history.idBooking)
+    fragment.arguments = bundle
+    activity?.supportFragmentManager?.let { it1 ->
+      if (!fragment.isAdded) {
+        fragment.show(it1, fragment.tag)
+      }
+    }
   }
 
   override fun loadCustomerBookingError() {
     binding.dontHaveOrder.visibility = View.VISIBLE
+  }
+
+  fun refreshPage() {
+    val ft = fragmentManager?.beginTransaction()
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      ft?.setReorderingAllowed(false)
+    }
+    ft?.detach(this)?.attach(this)?.commit()
   }
 
   private fun injectDependency() {

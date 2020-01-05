@@ -1,28 +1,35 @@
 package com.future.pms.ui.receipt
 
+import android.Manifest
+import android.app.Activity
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.Environment
 import android.os.StrictMode
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.addCallback
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import com.future.pms.R
 import com.future.pms.databinding.FragmentReceiptBinding
 import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
 import com.future.pms.model.oauth.Token
 import com.future.pms.model.receipt.Receipt
-import com.future.pms.ui.main.MainActivity
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.RECEIPT_FRAGMENT
 import com.future.pms.util.Utils
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_receipt.*
 import timber.log.Timber
@@ -32,13 +39,14 @@ import java.io.FileOutputStream
 import java.io.IOException
 import javax.inject.Inject
 
-class ReceiptFragment : Fragment(), ReceiptContract {
+class ReceiptFragment : BottomSheetDialogFragment(), ReceiptContract {
   @Inject lateinit var presenter: ReceiptPresenter
   private lateinit var binding: FragmentReceiptBinding
   private lateinit var idBooking: String
   private lateinit var imagePath: File
 
   companion object {
+    const val PERMISSION_REQUEST_CODE = 707
     const val TAG: String = RECEIPT_FRAGMENT
   }
 
@@ -46,12 +54,25 @@ class ReceiptFragment : Fragment(), ReceiptContract {
     return ReceiptFragment()
   }
 
+  override fun setupDialog(dialog: Dialog, style: Int) {
+    super.setupDialog(dialog, style)
+    val inflatedView = View.inflate(context, R.layout.fragment_receipt, null)
+    dialog.setContentView(inflatedView)
+    val params = (inflatedView.parent as View).layoutParams as CoordinatorLayout.LayoutParams
+    params.behavior
+    val parent = inflatedView.parent as View
+    parent.fitsSystemWindows = true
+    inflatedView.measure(0, 0)
+    val displaymetrics = DisplayMetrics()
+    activity?.windowManager?.defaultDisplay?.getMetrics(displaymetrics)
+    val screenHeight = displaymetrics.heightPixels
+    BottomSheetBehavior.from(parent).peekHeight = screenHeight
+    params.height = screenHeight
+    parent.layoutParams = params
+  }
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    requireActivity().onBackPressedDispatcher.addCallback(this) {
-      val activity = activity as MainActivity?
-      activity?.presenter?.onHomeIconClick()
-    }
     val builder = StrictMode.VmPolicy.Builder()
     StrictMode.setVmPolicy(builder.build())
     injectDependency()
@@ -60,16 +81,15 @@ class ReceiptFragment : Fragment(), ReceiptContract {
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
       savedInstanceState: Bundle?): View? {
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_receipt, container, false)
-    val backButton = binding.buttonBackReceipt
     val shareButton = binding.buttonShareReceipt
-    backButton.setOnClickListener {
-      val activity = activity as MainActivity?
-      activity?.presenter?.onHomeIconClick()
-    }
     shareButton.setOnClickListener {
-      val bitmap = takeScreenshot()
-      saveBitmap(bitmap)
-      shareIt()
+      if (checkPermission()) {
+        val bitmap = takeScreenshot()
+        saveBitmap(bitmap)
+        shareIt()
+      } else {
+        requestPermission()
+      }
     }
     idBooking = this.arguments?.getString("idBooking").toString()
     return binding.root
@@ -154,6 +174,32 @@ class ReceiptFragment : Fragment(), ReceiptContract {
       putExtra(Intent.EXTRA_STREAM, uri)
 
       startActivity(Intent.createChooser(sharingIntent, "Share via"))
+    }
+  }
+
+  private fun checkPermission(): Boolean {
+    val result = context?.let {
+      ContextCompat.checkSelfPermission(it, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    }
+    return result == PackageManager.PERMISSION_GRANTED
+  }
+
+  private fun requestPermission() {
+    if (ActivityCompat.shouldShowRequestPermissionRationale(context as Activity,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+      requestAppPermissions()
+    } else {
+      activity?.let {
+        ActivityCompat.requestPermissions(it, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+            PERMISSION_REQUEST_CODE)
+      }
+    }
+  }
+
+  private fun requestAppPermissions() {
+    activity?.let {
+      ActivityCompat.requestPermissions(it, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,
+          Manifest.permission.WRITE_EXTERNAL_STORAGE), PERMISSION_REQUEST_CODE)
     }
   }
 

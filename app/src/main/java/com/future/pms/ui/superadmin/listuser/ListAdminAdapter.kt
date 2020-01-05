@@ -76,6 +76,16 @@ class ListAdminAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
   }
 
+  fun addAt(position: Int, adminDetails: AdminDetails) {
+    parkingZoneList?.add(position, adminDetails)
+  }
+
+  fun remove(position: Int) {
+    parkingZoneList?.removeAt(position)
+    notifyItemRemoved(position)
+    parkingZoneList?.size?.let { notifyItemRangeChanged(position, it) }
+  }
+
   fun clear() {
     parkingZoneList?.clear()
   }
@@ -96,7 +106,10 @@ class ListAdminAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     init {
       itemView.setOnClickListener {
-        parkingZoneList?.get(adapterPosition)?.let { it1 -> onItemClick?.invoke(it1) }
+        parkingZoneList?.get(adapterPosition)?.let { it1 ->
+          it1.position = adapterPosition
+          onItemClick?.invoke(it1)
+        }
       }
     }
   }

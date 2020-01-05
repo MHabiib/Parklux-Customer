@@ -1,8 +1,5 @@
 package com.future.pms.util
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.graphics.Color
 import android.icu.text.SimpleDateFormat
 import android.os.Build
 import android.view.View
@@ -56,19 +53,6 @@ class Utils {
 
     fun thousandSeparator(int: Int): String {
       return DecimalFormat("#,###,###").format(int)
-    }
-
-    fun createNotificationChannel(notificationManager: NotificationManager) {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        val importance = NotificationManager.IMPORTANCE_DEFAULT
-        val notificationChannel = NotificationChannel(DEFAULT_CHANNEL_ID, CHANNEL_NAME, importance)
-        notificationChannel.enableLights(true)
-        notificationChannel.lightColor = Color.RED
-        notificationChannel.enableVibration(true)
-        notificationChannel.vibrationPattern = longArrayOf(100, 200, 300, 400, 500, 400, 300, 200,
-            400)
-        notificationManager.createNotificationChannel(notificationChannel)
-      }
     }
 
     fun imageLoader(viewGroup: ViewGroup, imageName: String, imageView: ImageView) {

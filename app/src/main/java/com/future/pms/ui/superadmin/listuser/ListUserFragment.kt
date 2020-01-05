@@ -16,13 +16,19 @@ import com.future.pms.databinding.FragmentListUserBinding
 import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
 import com.future.pms.model.admin.Admin
+import com.future.pms.model.admin.AdminDetails
+import com.future.pms.model.admin.nonPage.AdminResponse
+import com.future.pms.model.customer.CustomerDetails
 import com.future.pms.model.customer.CustomerResponse
+import com.future.pms.model.customerdetail.Customer
 import com.future.pms.model.oauth.Token
+import com.future.pms.model.superadmin.SuperAdminDetails
 import com.future.pms.model.superadmin.SuperAdminResponse
+import com.future.pms.model.user.UserDetails
 import com.future.pms.ui.superadmin.userdetails.UserDetailsFragment
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.ID_USER
-import com.future.pms.util.Constants.Companion.LIST_CUSTOMER_FRAGMENT
+import com.future.pms.util.Constants.Companion.LIST_USER_FRAGMENT
 import com.future.pms.util.Constants.Companion.ROLE
 import com.future.pms.util.Constants.Companion.ROLE_ADMIN
 import com.future.pms.util.Constants.Companion.ROLE_CUSTOMER
@@ -49,7 +55,7 @@ class ListUserFragment : Fragment(), ListUserContract {
   private val bottomSheetFragment = UserDetailsFragment()
 
   companion object {
-    const val TAG: String = LIST_CUSTOMER_FRAGMENT
+    const val TAG: String = LIST_USER_FRAGMENT
   }
 
   fun newInstance(): ListUserFragment {
@@ -116,7 +122,9 @@ class ListUserFragment : Fragment(), ListUserContract {
         bundle.putString(ID_USER, it.idCustomer)
         bottomSheetFragment.arguments = bundle
         activity?.supportFragmentManager?.let { it1 ->
-          bottomSheetFragment.show(it1, bottomSheetFragment.tag)
+          if (!bottomSheetFragment.isAdded) {
+            bottomSheetFragment.show(it1, bottomSheetFragment.tag)
+          }
         }
       }
       listAdminAdapter.onItemClick = {
@@ -127,7 +135,9 @@ class ListUserFragment : Fragment(), ListUserContract {
         bundle.putString(ID_USER, it.idParkingZone)
         bottomSheetFragment.arguments = bundle
         activity?.supportFragmentManager?.let { it1 ->
-          bottomSheetFragment.show(it1, bottomSheetFragment.tag)
+          if (!bottomSheetFragment.isAdded) {
+            bottomSheetFragment.show(it1, bottomSheetFragment.tag)
+          }
         }
       }
       listSuperAdminAdapter.onItemClick = {
@@ -138,7 +148,9 @@ class ListUserFragment : Fragment(), ListUserContract {
         bundle.putString(ID_USER, it.idUser)
         bottomSheetFragment.arguments = bundle
         activity?.supportFragmentManager?.let { it1 ->
-          bottomSheetFragment.show(it1, bottomSheetFragment.tag)
+          if (!bottomSheetFragment.isAdded) {
+            bottomSheetFragment.show(it1, bottomSheetFragment.tag)
+          }
         }
       }
 
@@ -174,7 +186,7 @@ class ListUserFragment : Fragment(), ListUserContract {
       adapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
       spinnerItems.add(getString(R.string.customer))
       spinnerItems.add(getString(R.string.admin))
-      spinnerItems.add(getString(R.string.super_admin))
+      spinnerItems.add(getString(R.string.other_super_admin))
       name.adapter = adapter
       name.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
         override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -289,6 +301,56 @@ class ListUserFragment : Fragment(), ListUserContract {
       }
     }
     isLoading = false
+  }
+
+  fun updateCustomerSuccess(customer: Customer) {
+    bottomSheetFragment.dismiss()
+    itemPosition?.let {
+      listCustomerAdapter.remove(it)
+      customer.body.let { customerDetails ->
+        val details = CustomerDetails(name = customerDetails.name, email = customerDetails.email,
+            idCustomer = customerDetails.idCustomer, phoneNumber = customerDetails.phoneNumber,
+            position = 0)
+        listCustomerAdapter.addAt(it, details)
+      }
+      listCustomerAdapter.notifyItemChanged(it)
+    }
+  }
+
+  fun updateAdminSuccess(adminResponse: AdminResponse) {
+    bottomSheetFragment.dismiss()
+    itemPosition?.let {
+      listAdminAdapter.remove(it)
+      adminResponse.body.let { adminDetails ->
+        val details = AdminDetails(address = adminDetails.address,
+            emailAdmin = adminDetails.emailAdmin, idParkingZone = adminDetails.idParkingZone,
+            imageUrl = adminDetails.imageUrl, name = adminDetails.name,
+            openHour = adminDetails.openHour, phoneNumber = adminDetails.phoneNumber,
+            price = adminDetails.price, position = 0)
+        listAdminAdapter.addAt(it, details)
+      }
+      listAdminAdapter.notifyItemChanged(it)
+    }
+  }
+
+  fun updateSuperAdminSuccess(user: UserDetails) {
+    bottomSheetFragment.dismiss()
+    itemPosition?.let {
+      listSuperAdminAdapter.remove(it)
+      val superAdmin = user.idUser?.let { it1 ->
+        SuperAdminDetails(user.email, it1, ROLE_SUPER_ADMIN, 0)
+      }
+      superAdmin?.let { it1 -> listSuperAdminAdapter.addAt(it, it1) }
+      listSuperAdminAdapter.notifyItemChanged(it)
+    }
+  }
+
+  fun deleteSuperAdminSuccess() {
+    bottomSheetFragment.dismiss()
+    itemPosition?.let {
+      listSuperAdminAdapter.remove(it)
+      listSuperAdminAdapter.notifyItemChanged(it)
+    }
   }
 
   private fun onSpinnerChange() {

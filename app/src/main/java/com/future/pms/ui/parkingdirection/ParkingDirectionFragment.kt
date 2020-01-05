@@ -2,6 +2,7 @@ package com.future.pms.ui.parkingdirection
 
 import android.content.Context
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -151,6 +152,7 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
         setTextColor(resources.getColor(R.color.colorPrimaryDark))
         text = ((id % 16) + 1).toString()
       }
+      setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9f)
     }
     layout?.let {
       it.addView(view)

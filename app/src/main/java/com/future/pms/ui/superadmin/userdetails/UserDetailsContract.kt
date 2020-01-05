@@ -9,5 +9,12 @@ interface UserDetailsContract {
   fun loadDataSuperAdminSuccess(userResponse: UserResponse)
   fun loadDataAdminSuccess(adminResponse: AdminResponse?)
   fun onFailed(e: String)
+  fun deleteSuperAdminSuccess(response: String?)
+  fun updateSuperAdminSuccess()
+  fun getUpdatedSuperAdminSuccess(userResponse: UserResponse)
+  fun updateCustomerSuccess()
+  fun getUpdatedCustomerSuccess(customer: Customer?)
+  fun updateAdminSuccess()
+  fun getUpdatedAdminSuccess(adminResponse: AdminResponse?)
 
 }

@@ -105,4 +105,7 @@
     <string name="update_super_admin">Update super admin</string>
     <string name="delete_super_admin">Delete super admin</string>
     <string name="idr_price">IDR %s</string>
+    <string name="other_super_admin">Another Super Admin</string>
+    <string name="permit">Permit customer</string>
+    <string name="range2">%s - %s</string>
 </resources>

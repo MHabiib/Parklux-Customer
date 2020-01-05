@@ -1,9 +1,6 @@
 package com.future.pms.ui.ongoing
 
-import android.app.Notification
-import android.app.NotificationManager
 import android.content.Context
-import android.content.Context.NOTIFICATION_SERVICE
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
@@ -20,6 +17,7 @@ import com.future.pms.di.module.FragmentModule
 import com.future.pms.model.customerbooking.CustomerBooking
 import com.future.pms.model.oauth.Token
 import com.future.pms.ui.main.MainActivity
+import com.future.pms.ui.receipt.ReceiptFragment
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.SEC_IN_DAY
 import com.future.pms.util.Utils
@@ -80,15 +78,6 @@ class OngoingFragment : Fragment(), OngoingContract {
         context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
             Constants.TOKEN, null), Token::class.java).accessToken
     presenter.loadOngoingBooking(accessToken)
-    val mNotificationManager = activity?.getSystemService(
-        NOTIFICATION_SERVICE) as NotificationManager
-    Utils.createNotificationChannel(mNotificationManager)
-    val notification = Notification.Builder(context).setContentTitle(
-        "Check out parking success").setContentText(
-        "Thank you for using Parking Management System apps !").setSmallIcon(
-        R.drawable.logo_blue).build()
-    mNotificationManager.notify(1, notification)
-    //todo
   }
 
   override fun showProgress(show: Boolean) {
@@ -110,8 +99,15 @@ class OngoingFragment : Fragment(), OngoingContract {
   }
 
   override fun checkoutSuccess(idBooking: String) {
-    val activity = activity as MainActivity?
-    activity?.presenter?.showReceipt(idBooking)
+    val fragment = ReceiptFragment()
+    val bundle = Bundle()
+    bundle.putString(Constants.ID_BOOKING, idBooking)
+    fragment.arguments = bundle
+    activity?.supportFragmentManager?.let { bottomSheetFragment ->
+      if (!fragment.isAdded) {
+        fragment.show(bottomSheetFragment, fragment.tag)
+      }
+    }
   }
 
   override fun showErrorMessage(error: String) {

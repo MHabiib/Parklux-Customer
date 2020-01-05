@@ -3,6 +3,7 @@ package com.future.pms.ui.home
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.viewpager.widget.PagerAdapter
 
 class ViewPagerAdapter(supportFragmentManager: FragmentManager) :
     FragmentStatePagerAdapter(supportFragmentManager) {
@@ -20,5 +21,9 @@ class ViewPagerAdapter(supportFragmentManager: FragmentManager) :
   fun addFragment(fragment: Fragment, title: String) {
     mFragmentList.add(fragment)
     mFragmentTitleList.add(title)
+  }
+
+  override fun getItemPosition(`object`: Any): Int {
+    return PagerAdapter.POSITION_NONE
   }
 }

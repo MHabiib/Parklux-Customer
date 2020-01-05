@@ -6,8 +6,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/twelve_dp"
-        android:background="@color/baseWhite">
+        android:background="@color/baseWhite"
+        android:paddingTop="@dimen/twelve_dp">
 
         <TextView
             android:id="@+id/user_name"

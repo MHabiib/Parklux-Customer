@@ -164,8 +164,7 @@ class HomeFragmentSuperAdmin : Fragment(), HomeContractSuperAdmin {
     if (e.contains(NO_CONNECTION)) {
       Toast.makeText(context, getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show()
     } else {
-      presenter.signOut()
-      onLogout()
+      Toast.makeText(context, e, Toast.LENGTH_SHORT).show()
     }
     Timber.e(e)
   }

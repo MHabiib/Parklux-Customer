@@ -95,6 +95,8 @@ class ListActivityAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
   fun remove(position: Int) {
     bookingList?.removeAt(position)
+    notifyItemRemoved(position)
+    bookingList?.size?.let { notifyItemRangeChanged(position, it) }
   }
 
   fun clear() {

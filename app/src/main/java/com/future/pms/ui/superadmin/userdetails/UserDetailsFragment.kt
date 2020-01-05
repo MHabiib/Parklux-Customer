@@ -21,8 +21,10 @@ import com.future.pms.model.admin.nonPage.AdminResponse
 import com.future.pms.model.customerdetail.Customer
 import com.future.pms.model.oauth.Token
 import com.future.pms.model.user.UserResponse
+import com.future.pms.ui.superadmin.listuser.ListUserFragment
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.ID_USER
+import com.future.pms.util.Constants.Companion.LIST_USER_FRAGMENT
 import com.future.pms.util.Constants.Companion.ROLE
 import com.future.pms.util.Constants.Companion.ROLE_ADMIN
 import com.future.pms.util.Constants.Companion.ROLE_CUSTOMER
@@ -40,7 +42,6 @@ class UserDetailsFragment : BottomSheetDialogFragment(), UserDetailsContract {
   private lateinit var binding: FragmentBottomSheetUserDetailsBinding
   private lateinit var accessToken: String
   private lateinit var id: String
-
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     injectDependency()
@@ -52,8 +53,50 @@ class UserDetailsFragment : BottomSheetDialogFragment(), UserDetailsContract {
         container, false)
     presenter.attach(this)
     setStyle(DialogFragment.STYLE_NO_FRAME, R.style.AppBottomSheetDialogTheme)
+    with(binding) {
+      btnEditProfileCustomer.setOnClickListener {
+        presenter.updateCustomer(this@UserDetailsFragment.id, profileNameCustomer.text.toString(),
+            profileEmailCustomer.text.toString(), profilePasswordCustomer.text.toString(),
+            profilePhoneNumberCustomer.text.toString(), accessToken)
+      }
+      btnBanProfileCustomer.setOnClickListener {
+        presenter.banCustomer(this@UserDetailsFragment.id, accessToken)
+      }
 
-    return binding.root
+      openHourAdmin.setOnClickListener {
+        context?.let { context ->
+          getDate(openHourAdmin, context)
+        }
+      }
+      openHour2Admin.setOnClickListener {
+        context?.let { context ->
+          getDate(openHour2Admin, context)
+        }
+      }
+      btnSaveAdmin.setOnClickListener {
+        presenter.updateAdmin(this@UserDetailsFragment.id, binding.profileNameAdmin.text.toString(),
+            binding.profileEmailAdmin.text.toString(),
+            binding.profilePhoneNumberAdmin.text.toString(), binding.priceAdmin.text.toString(),
+            String.format(getString(R.string.range2), binding.openHourAdmin.text.toString(),
+                binding.openHour2Admin.text.toString()), binding.addressAdmin.text.toString(),
+            binding.passwordAdmin.text.toString(), accessToken)
+      }
+
+      btnDeleteProfileSuperAdmin.setOnClickListener {
+        presenter.deleteSuperAdmin(this@UserDetailsFragment.id, accessToken)
+      }
+      btnEditProfileSuperAdmin.setOnClickListener {
+        if (isValid(Constants.UPDATE_SUPER_ADMIN)) {
+          presenter.updateSuperAdmin(this@UserDetailsFragment.id, accessToken,
+              emailSuperAdmin.text.toString(), passwordSuperAdmin.text.toString(), ROLE_SUPER_ADMIN)
+          passwordSuperAdmin.text?.clear()
+        } else {
+          Toast.makeText(context, getString(R.string.fill_all_the_entries),
+              Toast.LENGTH_LONG).show()
+        }
+      }
+      return root
+    }
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -86,6 +129,11 @@ class UserDetailsFragment : BottomSheetDialogFragment(), UserDetailsContract {
       profileEmailCustomer.setText(customer.body.email)
       profilePasswordCustomer.hint = getString(R.string.password_hint)
       profilePhoneNumberCustomer.setText(customer.body.phoneNumber)
+      if (customer.body.name.contains(" (BANNED)")) {
+        btnBanProfileCustomer.text = getString(R.string.permit)
+        btnBanProfileCustomer.setTextColor(resources.getColor(R.color.colorAccent))
+        profileNameCustomer.isEnabled = false
+      }
     }
   }
 
@@ -104,16 +152,6 @@ class UserDetailsFragment : BottomSheetDialogFragment(), UserDetailsContract {
         openHour2Admin.hint = it.openHour.substring(7, 13)
         addressAdmin.setText(it.address)
         passwordAdmin.hint = getString(R.string.password_hint)
-      }
-      openHourAdmin.setOnClickListener {
-        context?.let { context ->
-          getDate(openHourAdmin, context)
-        }
-      }
-      openHour2Admin.setOnClickListener {
-        context?.let { context ->
-          getDate(openHour2Admin, context)
-        }
       }
     }
   }
@@ -138,6 +176,61 @@ class UserDetailsFragment : BottomSheetDialogFragment(), UserDetailsContract {
     textView.setOnClickListener {
       TimePickerDialog(context, dateSetListener, cal.get(Calendar.HOUR_OF_DAY),
           cal.get(Calendar.MINUTE), true).show()
+    }
+  }
+
+  override fun updateCustomerSuccess() {
+    presenter.getUpdatedCustomer(id, accessToken)
+  }
+
+  override fun updateAdminSuccess() {
+    presenter.getUpdatedAdmin(id, accessToken)
+  }
+
+  override fun updateSuperAdminSuccess() {
+    presenter.getUpdatedSuperAdmin(id, accessToken)
+  }
+
+  override fun getUpdatedCustomerSuccess(customer: Customer?) {
+    val listUserFragment = fragmentManager?.findFragmentByTag(
+        LIST_USER_FRAGMENT) as ListUserFragment
+    customer?.let { listUserFragment.updateCustomerSuccess(it) }
+  }
+
+  override fun getUpdatedAdminSuccess(adminResponse: AdminResponse?) {
+    val listUserFragment = fragmentManager?.findFragmentByTag(
+        LIST_USER_FRAGMENT) as ListUserFragment
+    adminResponse?.let { listUserFragment.updateAdminSuccess(it) }
+  }
+
+  override fun getUpdatedSuperAdminSuccess(userResponse: UserResponse) {
+    val listUserFragment = fragmentManager?.findFragmentByTag(
+        LIST_USER_FRAGMENT) as ListUserFragment
+    listUserFragment.updateSuperAdminSuccess(userResponse.user)
+  }
+
+  override fun deleteSuperAdminSuccess(response: String?) {
+    Toast.makeText(context, response, Toast.LENGTH_LONG).show()
+    val listUserFragment = fragmentManager?.findFragmentByTag(
+        LIST_USER_FRAGMENT) as ListUserFragment
+    listUserFragment.deleteSuperAdminSuccess()
+  }
+
+  private fun isValid(role: String): Boolean {
+    when (role) {
+      ROLE_ADMIN -> {
+
+        return true
+      }
+      ROLE_SUPER_ADMIN -> {
+        if (binding.emailSuperAdmin.toString().isEmpty()) return false
+        if (binding.passwordSuperAdmin.toString().isEmpty()) return false
+        return true
+      }
+      else -> {
+
+        return true
+      }
     }
   }
 

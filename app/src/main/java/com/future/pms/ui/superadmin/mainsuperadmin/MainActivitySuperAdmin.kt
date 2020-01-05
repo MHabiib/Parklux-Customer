@@ -51,7 +51,8 @@ class MainActivitySuperAdmin : AppCompatActivity(), MainContractSuperAdmin {
   override fun showHomeFragment() {
     if (supportFragmentManager.findFragmentByTag(HomeFragmentSuperAdmin.TAG) == null) {
       binding.navView.menu.findItem(R.id.navigation_home).isChecked = true
-      supportFragmentManager.beginTransaction().disallowAddToBackStack().replace(R.id.frame,
+      supportFragmentManager.beginTransaction().disallowAddToBackStack().setCustomAnimations(
+          R.animator.fade_in, R.animator.fade_out).replace(R.id.frame,
           HomeFragmentSuperAdmin().newInstance(), HomeFragmentSuperAdmin.TAG).commit()
     }
   }
@@ -59,7 +60,8 @@ class MainActivitySuperAdmin : AppCompatActivity(), MainContractSuperAdmin {
   override fun showListActivityFragment() {
     if (supportFragmentManager.findFragmentByTag(ListActivityFragment.TAG) == null) {
       binding.navView.menu.findItem(R.id.navigation_activity).isChecked = true
-      supportFragmentManager.beginTransaction().disallowAddToBackStack().replace(R.id.frame,
+      supportFragmentManager.beginTransaction().disallowAddToBackStack().setCustomAnimations(
+          R.animator.fade_in, R.animator.fade_out).replace(R.id.frame,
           ListActivityFragment().newInstance(), ListActivityFragment.TAG).commit()
     }
   }
@@ -67,7 +69,8 @@ class MainActivitySuperAdmin : AppCompatActivity(), MainContractSuperAdmin {
   override fun showListCustomerFragment() {
     if (supportFragmentManager.findFragmentByTag(ListUserFragment.TAG) == null) {
       binding.navView.menu.findItem(R.id.navigation_customer).isChecked = true
-      supportFragmentManager.beginTransaction().disallowAddToBackStack().replace(R.id.frame,
+      supportFragmentManager.beginTransaction().disallowAddToBackStack().setCustomAnimations(
+          R.animator.fade_in, R.animator.fade_out).replace(R.id.frame,
           ListUserFragment().newInstance(), ListUserFragment.TAG).commit()
     }
   }

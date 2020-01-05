@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.future.pms.R
 import com.future.pms.model.customer.CustomerDetails
@@ -45,6 +46,14 @@ class ListCustomerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         historyViewHolder.itemTitle.text = customer?.name
         historyViewHolder.itemEmail.text = customer?.email
         historyViewHolder.itemPhone.text = customer?.phoneNumber
+        customer?.name?.let {
+          if (!it.contains(" (BANNED)")) {
+            historyViewHolder.itemLayout.setBackgroundResource(
+                R.drawable.card_layout_dark_dark_grey)
+          } else {
+            historyViewHolder.itemLayout.setBackgroundResource(R.drawable.card_layout_dark_red)
+          }
+        }
       }
 
       loading -> {
@@ -73,6 +82,16 @@ class ListCustomerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
   }
 
+  fun addAt(position: Int, customer: CustomerDetails) {
+    customerList?.add(position, customer)
+  }
+
+  fun remove(position: Int) {
+    customerList?.removeAt(position)
+    notifyItemRemoved(position)
+    customerList?.size?.let { notifyItemRangeChanged(position, it) }
+  }
+
   fun clear() {
     customerList?.clear()
   }
@@ -85,6 +104,8 @@ class ListCustomerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     val itemTitle: TextView = itemView.findViewById<View>(R.id.item_title) as TextView
     val itemEmail: TextView = itemView.findViewById<View>(R.id.item_email) as TextView
     val itemPhone: TextView = itemView.findViewById<View>(R.id.item_phone) as TextView
+    val itemLayout: ConstraintLayout = itemView.findViewById<View>(
+        R.id.item_layout) as ConstraintLayout
 
     init {
       itemView.setOnClickListener {

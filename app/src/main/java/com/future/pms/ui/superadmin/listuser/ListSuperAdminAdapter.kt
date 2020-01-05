@@ -72,6 +72,16 @@ class ListSuperAdminAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
   }
 
+  fun addAt(position: Int, superAdminDetails: SuperAdminDetails) {
+    superAdminList?.add(position, superAdminDetails)
+  }
+
+  fun remove(position: Int) {
+    superAdminList?.removeAt(position)
+    notifyItemRemoved(position)
+    superAdminList?.size?.let { notifyItemRangeChanged(position, it) }
+  }
+
   fun clear() {
     superAdminList?.clear()
   }
@@ -86,7 +96,10 @@ class ListSuperAdminAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     init {
       itemView.setOnClickListener {
-        superAdminList?.get(adapterPosition)?.let { it1 -> onItemClick?.invoke(it1) }
+        superAdminList?.get(adapterPosition)?.let { it1 ->
+          it1.position = adapterPosition
+          onItemClick?.invoke(it1)
+        }
       }
     }
   }

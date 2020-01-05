@@ -3,6 +3,7 @@ package com.future.pms.network
 import com.future.pms.model.activity.Booking
 import com.future.pms.model.activity.Content
 import com.future.pms.model.admin.Admin
+import com.future.pms.model.admin.ParkingZoneResponse
 import com.future.pms.model.admin.nonPage.AdminResponse
 import com.future.pms.model.customer.CustomerResponse
 import com.future.pms.model.customerbooking.CustomerBooking
@@ -86,4 +87,21 @@ interface ApiServiceInterface {
 
   @GET("api3/{id}/user/") fun getUserDetailSA(@Path("id") idBooking: String, @Query("access_token")
   accessToken: String?): Observable<UserResponse>
+
+  @Multipart @PUT("api3/customer/{id}/update") fun updateCustomer(@Path("id") idBooking: String,
+      @Query("access_token") accessToken: String?, @Part("customer")
+      customer: CustomerRequest): Observable<CustomerRequest>
+
+  @Multipart @PUT("api3/parking-zone/{id}/update-zone") fun updateAdmin(@Path("id")
+  idBooking: String, @Query("access_token") accessToken: String?, @Part("parkingZone")
+  parkingZone: ParkingZoneResponse): Observable<ParkingZoneResponse>
+
+  @PUT("api3/{id}/user") fun updateUserFromList(@Path("id") idBooking: String,
+      @Query("access_token") accessToken: String?, @Body user: User): Observable<String>
+
+  @POST("api3/{id}/customer/ban/") fun banCustomer(@Path("id") idBooking: String,
+      @Query("access_token") accessToken: String?): Observable<String>
+
+  @DELETE("api3/{id}/user/") fun deleteSuperAdmin(@Path("id") idBooking: String,
+      @Query("access_token") accessToken: String?): Observable<String>
 }
