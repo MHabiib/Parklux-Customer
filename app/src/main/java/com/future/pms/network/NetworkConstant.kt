@@ -1,7 +1,7 @@
 package com.future.pms.network
 
 object NetworkConstant {
-  const val BASE = "http://192.168.18.207:8088/"
+  const val BASE = "https://pms-future.herokuapp.com/"
   const val USERNAME = "pms-client"
   const val PASSWORD = "pms-secret"
   const val GRANT_TYPE = "password"
