@@ -11,13 +11,14 @@
         android:clipToPadding="false"
         android:orientation="vertical"
         android:overScrollMode="never"
-        android:paddingBottom="@dimen/sixty_eight_dp"
+        android:paddingBottom="@dimen/hundred_margin"
         android:scrollbars="none">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/zero_dp"
-            android:layout_margin="@dimen/twelve_dp"
+            android:layout_marginLeft="@dimen/twelve_dp"
+            android:layout_marginRight="@dimen/twelve_dp"
             android:clipChildren="false"
             android:clipToPadding="false">
 

@@ -50,7 +50,6 @@ class MainActivitySuperAdmin : AppCompatActivity(), MainContractSuperAdmin {
 
   override fun showHomeFragment() {
     if (supportFragmentManager.findFragmentByTag(HomeFragmentSuperAdmin.TAG) == null) {
-      binding.navView.menu.findItem(R.id.navigation_home).isChecked = true
       supportFragmentManager.beginTransaction().disallowAddToBackStack().setCustomAnimations(
           R.animator.fade_in, R.animator.fade_out).replace(R.id.frame,
           HomeFragmentSuperAdmin().newInstance(), HomeFragmentSuperAdmin.TAG).commit()

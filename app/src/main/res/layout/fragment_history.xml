@@ -8,6 +8,7 @@
         android:layout_height="match_parent"
         android:background="@color/baseWhite"
         android:gravity="center"
+        android:layout_marginTop="@dimen/twelve_dp"
         android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -56,7 +57,7 @@
                 android:layout_marginLeft="@dimen/twelve_dp"
                 android:layout_marginRight="@dimen/twelve_dp"
                 android:clipToPadding="false"
-                android:paddingBottom="@dimen/sixty_eight_dp" />
+                android:paddingBottom="@dimen/hundred_margin" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,4 +6,6 @@ interface HomeContract {
   fun showErrorMessage(error: String)
   fun loadCustomerDetailSuccess(customer: Customer)
   fun getDateNow()
+  fun showOngoingFragment()
+  fun showHistoryFragment()
 }

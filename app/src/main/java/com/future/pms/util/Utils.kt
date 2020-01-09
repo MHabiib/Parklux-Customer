@@ -56,14 +56,14 @@ class Utils {
     }
 
     fun imageLoader(viewGroup: ViewGroup, imageName: String, imageView: ImageView) {
-      Glide.with(viewGroup).load(NetworkConstant.BASE + "img/" + imageName).transform(CenterCrop(),
+      Glide.with(viewGroup).load(imageName).transform(CenterCrop(),
           RoundedCorners(80)).placeholder(R.drawable.ic_parking_zone_default).error(
           R.drawable.ic_parking_zone_default).fallback(R.drawable.ic_parking_zone_default).into(
           imageView)
     }
 
     fun imageLoaderView(view: View, imageName: String, imageView: ImageView) {
-      Glide.with(view).load(NetworkConstant.BASE + "img/" + imageName).transform(CenterCrop(),
+      Glide.with(view).load(imageName).transform(CenterCrop(),
           RoundedCorners(80)).placeholder(R.drawable.ic_parking_zone_default).error(
           R.drawable.ic_parking_zone_default).fallback(R.drawable.ic_parking_zone_default).into(
           imageView)

@@ -1,14 +1,12 @@
 package com.future.pms.ui.home
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.viewpager.widget.ViewPager
 import com.future.pms.R
 import com.future.pms.databinding.FragmentHomeBinding
 import com.future.pms.di.component.DaggerFragmentComponent
@@ -16,7 +14,6 @@ import com.future.pms.di.module.FragmentModule
 import com.future.pms.model.customerdetail.Customer
 import com.future.pms.model.oauth.Token
 import com.future.pms.ui.history.HistoryFragment
-import com.future.pms.ui.login.LoginActivity
 import com.future.pms.ui.ongoing.OngoingFragment
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.ERROR
@@ -47,25 +44,26 @@ class HomeFragment : Fragment(), HomeContract {
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
       savedInstanceState: Bundle?): View? {
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
-    with(binding) {
-      val viewPager = viewPager as ViewPager
-      val adapter = ViewPagerAdapter(childFragmentManager)
-      adapter.addFragment(OngoingFragment(), "Your Ongoing Parking")
-      adapter.addFragment(HistoryFragment(), "History")
-      viewPager.adapter = adapter
-      tabs.setupWithViewPager(viewPager)
-      for (i in 0 until tabs.tabCount) {
-        if (i == 0) tabs.getTabAt(i)?.setIcon(R.drawable.ic_parking)
-        else tabs.getTabAt(i)?.setIcon(R.drawable.ic_history)
-      }
-      return root
-    }
+    return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     presenter.attach(this)
     presenter.subscribe()
+    presenter.onOngoingIconClick()
+    with(binding) {
+      ongoing.setOnClickListener {
+        presenter.onOngoingIconClick()
+        ongoingIndicator.visibility = View.VISIBLE
+        historyIndicator.visibility = View.GONE
+      }
+      history.setOnClickListener {
+        presenter.onHistoryIconClic()
+        ongoingIndicator.visibility = View.GONE
+        historyIndicator.visibility = View.VISIBLE
+      }
+    }
     initView()
   }
 
@@ -77,6 +75,26 @@ class HomeFragment : Fragment(), HomeContract {
     presenter.loadData(accessToken)
     val textAnnounce = binding.textAnnounceUser
     textAnnounce.text = presenter.getTextAnnounce()
+  }
+
+  override fun showOngoingFragment() {
+    activity?.let {
+      if (it.supportFragmentManager.findFragmentByTag(OngoingFragment.TAG) == null) {
+        it.supportFragmentManager.beginTransaction().setCustomAnimations(R.animator.fade_in,
+            R.animator.fade_out).disallowAddToBackStack().replace(R.id.frame_home,
+            OngoingFragment().newInstance(), OngoingFragment.TAG).commit()
+      }
+    }
+  }
+
+  override fun showHistoryFragment() {
+    activity?.let {
+      if (it.supportFragmentManager.findFragmentByTag(HistoryFragment.TAG) == null) {
+        it.supportFragmentManager.beginTransaction().disallowAddToBackStack().setCustomAnimations(
+            R.animator.fade_in, R.animator.fade_out).replace(R.id.frame_home,
+            HistoryFragment().newInstance(), HistoryFragment.TAG).commit()
+      }
+    }
   }
 
   override fun onDestroyView() {
