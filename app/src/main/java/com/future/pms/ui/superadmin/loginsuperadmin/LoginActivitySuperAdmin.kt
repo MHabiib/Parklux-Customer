@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Patterns
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -62,7 +63,8 @@ class LoginActivitySuperAdmin : AppCompatActivity(), LoginContractSuperAdmin {
   }
 
   private fun isValid(): Boolean {
-    if (txtEmail?.text.toString().isEmpty()) return false
+    if (txtEmail?.text.toString().isEmpty() && Patterns.EMAIL_ADDRESS.matcher(
+            txtEmail?.text.toString()).matches()) return false
     if (txtPassword?.text.toString().isNullOrEmpty()) return false
     return true
   }

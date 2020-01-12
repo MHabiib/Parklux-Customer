@@ -16,4 +16,5 @@
     <color name="baseWhite">#F2F2F2</color>
     <color name="baseBlack">#2C2C2C</color>
     <color name="colorPrimaryBlack">#000000</color>
+    <color name="transparent">#00000000</color>
 </resources>

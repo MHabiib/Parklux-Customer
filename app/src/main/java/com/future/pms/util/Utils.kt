@@ -6,6 +6,8 @@ import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.signature.ObjectKey
 import com.future.pms.R
 import com.future.pms.util.Constants.Companion.FULL_DATE_TIME_FORMAT
 import com.future.pms.util.Constants.Companion.SHORT_MONTH_DATE_TIME_FORMAT
@@ -34,13 +36,15 @@ class Utils {
     }
 
     fun imageLoader(viewGroup: ViewGroup, imageName: String, imageView: ImageView) {
-      Glide.with(viewGroup).load(imageName).transform(CenterCrop(), RoundedCorners(80)).placeholder(
+      Glide.with(viewGroup).load(imageName).transform(CenterCrop(), RoundedCorners(80)).apply(
+          RequestOptions().signature(ObjectKey(System.currentTimeMillis()))).placeholder(
           R.drawable.ic_parking_zone_default).error(R.drawable.ic_parking_zone_default).fallback(
           R.drawable.ic_parking_zone_default).into(imageView)
     }
 
     fun imageLoaderView(view: View, imageName: String, imageView: ImageView) {
-      Glide.with(view).load(imageName).transform(CenterCrop(), RoundedCorners(80)).placeholder(
+      Glide.with(view).load(imageName).transform(CenterCrop(), RoundedCorners(80)).apply(
+          RequestOptions().signature(ObjectKey(System.currentTimeMillis()))).placeholder(
           R.drawable.ic_parking_zone_default).error(R.drawable.ic_parking_zone_default).fallback(
           R.drawable.ic_parking_zone_default).into(imageView)
     }

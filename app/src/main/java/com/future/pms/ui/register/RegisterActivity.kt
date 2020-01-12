@@ -3,6 +3,7 @@ package com.future.pms.ui.register
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Patterns
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -40,7 +41,8 @@ class RegisterActivity : AppCompatActivity(), RegisterContract {
 
   private fun isValid(): Boolean {
     if (txtName?.text.toString().isEmpty()) return false
-    if (txtEmail?.text.toString().isEmpty()) return false
+    if (txtEmail?.text.toString().isEmpty() && Patterns.EMAIL_ADDRESS.matcher(
+            txtEmail?.text.toString()).matches()) return false
     if (txtPassword?.text.toString().isEmpty()) return false
     if (txtPhone?.text.toString().isEmpty()) return false
     return true

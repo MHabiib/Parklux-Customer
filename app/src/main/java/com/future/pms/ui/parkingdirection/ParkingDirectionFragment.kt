@@ -1,8 +1,8 @@
 package com.future.pms.ui.parkingdirection
 
 import android.content.Context
+import android.graphics.Typeface
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -22,8 +22,17 @@ import com.future.pms.ui.main.MainActivity
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.PARKING_DETAIL_FRAGMENT
 import com.future.pms.util.Constants.Companion.SLOTS_IN_ROW
+import com.future.pms.util.Constants.Companion.SLOT_BLOCK
+import com.future.pms.util.Constants.Companion.SLOT_IN
+import com.future.pms.util.Constants.Companion.SLOT_NULL
+import com.future.pms.util.Constants.Companion.SLOT_OUT
+import com.future.pms.util.Constants.Companion.SLOT_READY
+import com.future.pms.util.Constants.Companion.SLOT_ROAD
 import com.future.pms.util.Constants.Companion.STATUS_AVAILABLE
+import com.future.pms.util.Constants.Companion.STATUS_BLOCK
 import com.future.pms.util.Constants.Companion.STATUS_BOOKED
+import com.future.pms.util.Constants.Companion.STATUS_IN
+import com.future.pms.util.Constants.Companion.STATUS_OUT
 import com.future.pms.util.Constants.Companion.STATUS_RESERVED
 import com.future.pms.util.Constants.Companion.STATUS_ROAD
 import com.future.pms.util.Constants.Companion.parkMargin
@@ -123,8 +132,18 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
           setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_RESERVED,
               R.drawable.ic_disable)
         }
-        slotsLayout[index] == Constants.SLOT_ROAD || slotsLayout[index] == Constants.SLOT_READY -> {
+        slotsLayout[index] == SLOT_ROAD || slotsLayout[index] == SLOT_READY -> {
           setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_ROAD,
+              R.color.transparent)
+        }
+        slotsLayout[index] == SLOT_IN -> {
+          setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_IN, R.drawable.ic_in)
+        }
+        slotsLayout[index] == SLOT_OUT -> {
+          setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_OUT, R.drawable.ic_out)
+        }
+        slotsLayout[index] == SLOT_BLOCK -> {
+          setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_BLOCK,
               R.drawable.ic_road)
         }
         slotsLayout[index] == Constants.MY_SLOT -> {
@@ -145,15 +164,15 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
       setPadding(0, 0, 0, 0)
       gravity = Gravity.CENTER
       setBackgroundResource(icon)
-      if (code != '_') {
+      if (code != SLOT_NULL) {
         id = count
       }
 
-      if (icon == R.drawable.ic_road) {
-        setTextColor(resources.getColor(R.color.colorPrimaryDark))
+      if (icon == R.drawable.ic_park || icon == R.drawable.ic_disable || icon == R.drawable.ic_car) {
+        setTextColor(resources.getColor(R.color.darkGrey))
         text = ((id % SLOTS_IN_ROW) + 1).toString()
+        setTypeface(this.typeface, Typeface.BOLD)
       }
-      setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9f)
     }
     layout?.let {
       it.addView(view)
