@@ -27,32 +27,17 @@ class HistoryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
     publicParent = parent
     val inflater = LayoutInflater.from(parent.context)
-    return when (viewType) {
-      item -> {
-        val viewItem = inflater.inflate(R.layout.item_layout_home, parent, false)
-        HistoryViewHolder(viewItem)
-      }
-      else -> {
-        val viewLoading = inflater.inflate(R.layout.item_progress, parent, false)
-        LoadingViewHolder(viewLoading)
-      }
-    }
+    val viewItem = inflater.inflate(R.layout.item_layout_home, parent, false)
+    return HistoryViewHolder(viewItem)
   }
 
   override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
     val booking = historyList?.get(position)
-    when (getItemViewType(position)) {
-      item -> {
-        val historyViewHolder = holder as HistoryViewHolder
-        historyViewHolder.itemTitle.text = booking?.parkingZoneName
-        historyViewHolder.itemDate.text = booking?.dateIn?.let { Utils.convertLongToTime(it) }
-        booking?.imageUrl?.let { loadImage(publicParent, it, historyViewHolder.imageView) }
-      }
-
-      loading -> {
-        val loadingViewHolder = holder as LoadingViewHolder
-        loadingViewHolder.progressBar.visibility = View.VISIBLE
-      }
+    if (getItemViewType(position) == item) {
+      val historyViewHolder = holder as HistoryViewHolder
+      historyViewHolder.itemTitle.text = booking?.parkingZoneName
+      historyViewHolder.itemDate.text = booking?.dateIn?.let { Utils.convertLongToTime(it) }
+      booking?.imageUrl?.let { loadImage(publicParent, it, historyViewHolder.imageView) }
     }
   }
 
@@ -79,10 +64,6 @@ class HistoryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     historyList?.clear()
   }
 
-  private fun getItem(position: Int): BookingHistory? {
-    return historyList?.get(position)
-  }
-
   private fun loadImage(viewGroup: ViewGroup, imageName: String, imageView: ImageView) {
     Utils.imageLoader(viewGroup, imageName, imageView)
   }
@@ -99,8 +80,4 @@ class HistoryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
   }
 
-  inner class LoadingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    val progressBar: ProgressBar = itemView.findViewById<View>(
-        R.id.loadmore_progress) as ProgressBar
-  }
 }

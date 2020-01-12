@@ -21,6 +21,27 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/name"
+            android:id="@+id/shimmer_activity">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/item_layout_activity_shimmer"/>
+                <include layout="@layout/item_layout_activity_shimmer"/>
+                <include layout="@layout/item_layout_activity_shimmer"/>
+                <include layout="@layout/item_layout_activity_shimmer"/>
+            </LinearLayout>
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/refresh_activity"
             android:layout_width="match_parent"

@@ -23,6 +23,7 @@ import com.google.gson.Gson
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
 
 class SplashActivity : AppCompatActivity(), SplashContract {
@@ -31,10 +32,29 @@ class SplashActivity : AppCompatActivity(), SplashContract {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_splash)
-    injectDependency()
-    presenter.attach(this)
-    initView()
+    val settings = getSharedPreferences("prefs", 0)
+    val firstRun = settings.getBoolean("firstRun", false)
+    if (!firstRun) {
+      setContentView(R.layout.activity_splash)
+      injectDependency()
+      presenter.attach(this)
+      initView()
+    } else {
+      val a = Intent(this, Dispatchers.Main::class.java)
+      startActivity(a)
+    }
+  }
+
+  override fun onResume() {
+    super.onResume()
+    val settings = getSharedPreferences("prefs", 0)
+    val firstRun = settings.getBoolean("firstRun", false)
+    if (!firstRun) {
+      setContentView(R.layout.activity_splash)
+      injectDependency()
+      presenter.attach(this)
+      initView()
+    }
   }
 
   private fun initView() {

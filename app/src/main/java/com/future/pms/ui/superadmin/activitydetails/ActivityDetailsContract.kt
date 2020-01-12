@@ -6,5 +6,5 @@ interface ActivityDetailsContract {
   fun showErrorMessage(error: String)
   fun bookingReceiptSASuccess(receipt: Receipt)
   fun checkoutBookingSASuccess(receipt: Receipt?)
-
+  fun showProgress(show: Boolean)
 }

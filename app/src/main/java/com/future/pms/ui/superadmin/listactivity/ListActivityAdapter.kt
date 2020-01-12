@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.future.pms.R
@@ -25,47 +24,32 @@ class ListActivityAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
     val inflater = LayoutInflater.from(parent.context)
-    return when (viewType) {
-      item -> {
-        val viewItem = inflater.inflate(R.layout.item_layout_activity, parent, false)
-        BookingViewHolder(viewItem)
-      }
-      else -> {
-        val viewLoading = inflater.inflate(R.layout.item_progress, parent, false)
-        LoadingViewHolder(viewLoading)
-      }
-    }
+    val viewItem = inflater.inflate(R.layout.item_layout_activity, parent, false)
+    return BookingViewHolder(viewItem)
   }
 
   @SuppressLint("SetTextI18n") override fun onBindViewHolder(holder: RecyclerView.ViewHolder,
       position: Int) {
     val history = bookingList?.get(position)
-    when (getItemViewType(position)) {
-      item -> {
-        val bookingViewHolder = holder as BookingViewHolder
-        bookingViewHolder.customerName.text = history?.customerName
-        bookingViewHolder.customerPhone.text = history?.customerPhone
-        bookingViewHolder.slot.text = history?.slotName
-        bookingViewHolder.parkingZone.text = history?.parkingZoneName
-        bookingViewHolder.totalPrice.text = String.format("IDR %s",
-            history?.totalPrice?.toInt()?.let {
-              Utils.thousandSeparator(it)
-            })
-        bookingViewHolder.timeRang.text = String.format("%s\n%s",
-            history?.dateIn?.let { Utils.convertLongToTimeShortMonth(it) },
-            history?.dateOut?.let { Utils.convertLongToTimeShortMonth(it) })
-        if (history?.dateOut == null) {
-          bookingViewHolder.line.setBackgroundResource(R.color.red)
-          bookingViewHolder.status.text = "Ongoing"
-        } else {
-          bookingViewHolder.line.setBackgroundResource(R.color.gold)
-          bookingViewHolder.status.text = "Completed"
-        }
-      }
-
-      loading -> {
-        val loadingViewHolder = holder as LoadingViewHolder
-        loadingViewHolder.progressBar.visibility = View.VISIBLE
+    if (getItemViewType(position) == item) {
+      val bookingViewHolder = holder as BookingViewHolder
+      bookingViewHolder.customerName.text = history?.customerName
+      bookingViewHolder.customerPhone.text = history?.customerPhone
+      bookingViewHolder.slot.text = history?.slotName
+      bookingViewHolder.parkingZone.text = history?.parkingZoneName
+      bookingViewHolder.totalPrice.text = String.format("IDR %s",
+          history?.totalPrice?.toInt()?.let {
+            Utils.thousandSeparator(it)
+          })
+      bookingViewHolder.timeRang.text = String.format("%s\n%s",
+          history?.dateIn?.let { Utils.convertLongToTimeShortMonth(it) },
+          history?.dateOut?.let { Utils.convertLongToTimeShortMonth(it) })
+      if (history?.dateOut == null) {
+        bookingViewHolder.line.setBackgroundResource(R.color.red)
+        bookingViewHolder.status.text = "Ongoing"
+      } else {
+        bookingViewHolder.line.setBackgroundResource(R.color.gold)
+        bookingViewHolder.status.text = "Completed"
       }
     }
   }
@@ -103,10 +87,6 @@ class ListActivityAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     bookingList?.clear()
   }
 
-  private fun getItem(position: Int): Content? {
-    return bookingList?.get(position)
-  }
-
   inner class BookingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val customerName: TextView = itemView.findViewById<View>(R.id.tv_customer_name) as TextView
     val customerPhone: TextView = itemView.findViewById<View>(R.id.tv_customer_phone) as TextView
@@ -125,10 +105,5 @@ class ListActivityAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
       }
     }
-  }
-
-  inner class LoadingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    val progressBar: ProgressBar = itemView.findViewById<View>(
-        R.id.loadmore_progress) as ProgressBar
   }
 }

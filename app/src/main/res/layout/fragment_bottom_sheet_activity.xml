@@ -26,17 +26,16 @@
             android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/total_price_layout" />
 
-        <TextView
-            android:id="@+id/tv_customer_Name"
-            android:layout_width="match_parent"
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/twelve_dp"
-            android:gravity="center"
-            android:maxLines="2"
-            android:textColor="@color/white"
-            android:textSize="@dimen/h_medium2"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Nama" />
+            android:indeterminateDrawable="@drawable/custom_progressbar_dark"
+            android:visibility="gone"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_customer_Name" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -60,6 +59,18 @@
             app:layout_constraintTop_toBottomOf="@id/tv_customer_Name"
             tools:ignore="RtlSymmetry"
             tools:text="FCY15345454532" />
+
+        <TextView
+            android:id="@+id/tv_customer_Name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/twelve_dp"
+            android:gravity="center"
+            android:maxLines="2"
+            android:textColor="@color/white"
+            android:textSize="@dimen/h_medium2"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Nama" />
 
         <TextView
             android:id="@+id/swipe_up_indicator"

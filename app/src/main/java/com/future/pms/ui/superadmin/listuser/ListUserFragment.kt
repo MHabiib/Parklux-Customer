@@ -79,7 +79,10 @@ class ListUserFragment : Fragment(), ListUserContract {
         false)
 
     with(binding) {
+      shimmerUser.startShimmerAnimation()
       refreshCustomer.setOnRefreshListener {
+        shimmerUser.startShimmerAnimation()
+        shimmerUser.visibility = View.VISIBLE
         listCustomerAdapter.clear()
         listCustomerAdapter.notifyDataSetChanged()
         currentPage = 0
@@ -88,6 +91,8 @@ class ListUserFragment : Fragment(), ListUserContract {
         refreshCustomer.isRefreshing = false
       }
       refreshAdmin.setOnRefreshListener {
+        shimmerUser.startShimmerAnimation()
+        shimmerUser.visibility = View.VISIBLE
         listAdminAdapter.clear()
         listAdminAdapter.notifyDataSetChanged()
         currentPage = 0
@@ -96,6 +101,8 @@ class ListUserFragment : Fragment(), ListUserContract {
         refreshAdmin.isRefreshing = false
       }
       refreshSuperAdmin.setOnRefreshListener {
+        shimmerUser.startShimmerAnimation()
+        shimmerUser.visibility = View.VISIBLE
         listSuperAdminAdapter.clear()
         listSuperAdminAdapter.notifyDataSetChanged()
         currentPage = 0
@@ -195,6 +202,8 @@ class ListUserFragment : Fragment(), ListUserContract {
 
         override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
           (p0?.getChildAt(0) as TextView).setTextColor(resources.getColor(R.color.white))
+          shimmerUser.startShimmerAnimation()
+          shimmerUser.visibility = View.VISIBLE
           when (p2) {
             0 -> {
               onSpinnerChange()
@@ -238,6 +247,8 @@ class ListUserFragment : Fragment(), ListUserContract {
   }
 
   override fun loadAllCustomerSuccess(customer: CustomerResponse) {
+    binding.shimmerUser.stopShimmerAnimation()
+    binding.shimmerUser.visibility = View.GONE
     if (currentPage != 0) {
       if (currentPage <= customer.body.totalPages - 1) {
         listCustomerAdapter.addAll(customer.body.content)
@@ -260,6 +271,8 @@ class ListUserFragment : Fragment(), ListUserContract {
   }
 
   override fun loadAllAdminSuccess(admin: Admin) {
+    binding.shimmerUser.stopShimmerAnimation()
+    binding.shimmerUser.visibility = View.GONE
     if (currentPage != 0) {
       if (currentPage <= admin.totalPages - 1) {
         listAdminAdapter.addAll(admin.content)
@@ -282,6 +295,8 @@ class ListUserFragment : Fragment(), ListUserContract {
   }
 
   override fun loadAllSuperAdminSuccess(superAdmin: SuperAdminResponse) {
+    binding.shimmerUser.stopShimmerAnimation()
+    binding.shimmerUser.visibility = View.GONE
     if (currentPage != 0) {
       if (currentPage <= superAdmin.body.totalPages - 1) {
         listSuperAdminAdapter.addAll(superAdmin.body.content)

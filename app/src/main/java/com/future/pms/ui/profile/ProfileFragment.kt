@@ -32,6 +32,7 @@ import javax.inject.Inject
 class ProfileFragment : Fragment(), ProfileContract {
   @Inject lateinit var presenter: ProfilePresenter
   private lateinit var binding: FragmentProfileBinding
+  private lateinit var accessToken: String
   private var update: Button? = null
 
   companion object {
@@ -68,11 +69,12 @@ class ProfileFragment : Fragment(), ProfileContract {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    val accessToken = Gson().fromJson(
+    accessToken = Gson().fromJson(
         context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
             Constants.TOKEN, null), Token::class.java).accessToken
     presenter.attach(this)
     presenter.apply {
+      showProgress(true)
       subscribe()
       loadData(accessToken)
       update?.setOnClickListener {
@@ -97,15 +99,19 @@ class ProfileFragment : Fragment(), ProfileContract {
   override fun showErrorMessage(error: String) {
     if (error.contains(Constants.NO_CONNECTION)) {
       Toast.makeText(context, getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show()
-    } else {
-      presenter.signOut()
-      onLogout()
     }
     Timber.tag(Constants.ERROR).e(error)
+    binding.ibRefresh.visibility = View.VISIBLE
+    binding.ibRefresh.setOnClickListener {
+      showProgress(true)
+      presenter.loadData(accessToken)
+    }
+    showProgress(false)
   }
 
   override fun loadCustomerDetailSuccess(customer: Customer) {
     with(binding) {
+      ibRefresh.visibility = View.GONE
       profileNameDisplay.text = customer.body.name
       profileName.setText(customer.body.name)
       profileEmail.setText(customer.body.email)
@@ -120,6 +126,7 @@ class ProfileFragment : Fragment(), ProfileContract {
       profilePassword.addTextChangedListener(textWatcher())
       profilePhoneNumber.addTextChangedListener(textWatcher())
     }
+    showProgress(false)
   }
 
   private fun textWatcher(): TextWatcher {

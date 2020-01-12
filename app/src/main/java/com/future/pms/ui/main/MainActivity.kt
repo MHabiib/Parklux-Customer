@@ -87,6 +87,7 @@ class MainActivity : AppCompatActivity(), MainContract {
   }
 
   override fun showScanFragment() {
+    navigationBarVisibility(View.VISIBLE)
     buttonIndicator(View.GONE, View.GONE)
     when (this.let {
       ActivityCompat.checkSelfPermission(it, Manifest.permission.CAMERA)
@@ -97,8 +98,18 @@ class MainActivity : AppCompatActivity(), MainContract {
       }
       else -> {
         if (supportFragmentManager.findFragmentByTag(ScanFragment.TAG) == null) {
-          supportFragmentManager.beginTransaction().disallowAddToBackStack().replace(R.id.frame,
-              ScanFragment().newInstance(), ScanFragment.TAG).commit()
+          supportFragmentManager.beginTransaction().add(R.id.frame, ScanFragment().newInstance(),
+              ScanFragment.TAG).commit()
+        } else {
+          supportFragmentManager.run { findFragmentByTag(ScanFragment.TAG) }?.let {
+            supportFragmentManager.beginTransaction().setCustomAnimations(R.animator.fade_in,
+                R.animator.fade_out).show(it).commit()
+          }
+        }
+        if (supportFragmentManager.findFragmentByTag(BookingDetailFragment.TAG) != null) {
+          supportFragmentManager.run { findFragmentByTag(BookingDetailFragment.TAG) }?.let {
+            supportFragmentManager.beginTransaction().remove(it).commit()
+          }
         }
       }
     }
@@ -160,16 +171,37 @@ class MainActivity : AppCompatActivity(), MainContract {
     bundle.putString(ID_BOOKING, idBooking)
     fragment.arguments = bundle
     if (supportFragmentManager.findFragmentByTag(BookingDetailFragment.TAG) == null) {
-      supportFragmentManager.beginTransaction().replace(R.id.frame, fragment,
-          BookingDetailFragment.TAG).commit()
+      supportFragmentManager.beginTransaction().setCustomAnimations(R.animator.fade_in,
+          R.animator.fade_out).add(R.id.frame, fragment, BookingDetailFragment.TAG).commit()
+    } else {
+      supportFragmentManager.run { findFragmentByTag(BookingDetailFragment.TAG) }?.let {
+        supportFragmentManager.beginTransaction().setCustomAnimations(R.animator.fade_in,
+            R.animator.fade_out).show(it).commit()
+      }
+    }
+    if (supportFragmentManager.findFragmentByTag(ScanFragment.TAG) != null) {
+      supportFragmentManager.run { findFragmentByTag(ScanFragment.TAG) }?.let {
+        supportFragmentManager.beginTransaction().remove(it).commit()
+      }
     }
   }
 
   override fun showBookingFailed() {
     navigationBarVisibility(View.GONE)
     if (supportFragmentManager.findFragmentByTag(BookingDetailFragment.TAG) == null) {
-      supportFragmentManager.beginTransaction().disallowAddToBackStack().replace(R.id.frame,
-          BookingDetailFragment().newInstance(), BookingDetailFragment.TAG).commit()
+      supportFragmentManager.beginTransaction().setCustomAnimations(R.animator.fade_in,
+          R.animator.fade_out).add(R.id.frame, BookingDetailFragment().newInstance(),
+          BookingDetailFragment.TAG).commit()
+    } else {
+      supportFragmentManager.run { findFragmentByTag(BookingDetailFragment.TAG) }?.let {
+        supportFragmentManager.beginTransaction().setCustomAnimations(R.animator.fade_in,
+            R.animator.fade_out).show(it).commit()
+      }
+    }
+    if (supportFragmentManager.findFragmentByTag(ScanFragment.TAG) != null) {
+      supportFragmentManager.run { findFragmentByTag(ScanFragment.TAG) }?.let {
+        supportFragmentManager.beginTransaction().remove(it).commit()
+      }
     }
   }
 

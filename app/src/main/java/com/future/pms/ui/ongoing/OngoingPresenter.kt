@@ -14,12 +14,17 @@ class OngoingPresenter @Inject constructor() {
   private lateinit var view: OngoingContract
 
   fun loadOngoingBooking(accessToken: String) {
+    view.showProgress(true)
     val subscribe = api.getOngoingBooking(accessToken).subscribeOn(Schedulers.io()).observeOn(
         AndroidSchedulers.mainThread()).subscribe({ ongoing: CustomerBooking ->
+      view.showProgress(false)
       view.loadCustomerOngoingSuccess(ongoing)
     }, { error ->
-      view.loadCustomerOngoingFailed()
-      view.showErrorMessage(error.localizedMessage)
+      view.showProgress(false)
+      error.message?.let {
+        view.loadCustomerOngoingFailed(it)
+        view.showErrorMessage(it)
+      }
     })
     subscriptions.add(subscribe)
   }
@@ -32,6 +37,7 @@ class OngoingPresenter @Inject constructor() {
         showProgress(false)
         checkoutSuccess(it.idBooking)
       }, {
+        view.showProgress(false)
         showErrorMessage(it.message.toString())
       })
       subscriptions.add(subscribe)

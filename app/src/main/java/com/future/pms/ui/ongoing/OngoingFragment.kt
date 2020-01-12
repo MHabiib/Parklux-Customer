@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Chronometer
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.future.pms.R
@@ -16,6 +17,8 @@ import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
 import com.future.pms.model.customerbooking.CustomerBooking
 import com.future.pms.model.oauth.Token
+import com.future.pms.ui.history.HistoryFragment
+import com.future.pms.ui.home.HomeFragment
 import com.future.pms.ui.main.MainActivity
 import com.future.pms.ui.receipt.ReceiptFragment
 import com.future.pms.util.Constants
@@ -35,6 +38,7 @@ class OngoingFragment : Fragment(), OngoingContract {
   private lateinit var parkingTime: Chronometer
   private lateinit var idBooking: String
   private lateinit var levelName: String
+  private lateinit var accessToken: String
 
   companion object {
     const val TAG: String = Constants.ONGOING_FRAGMENT
@@ -51,7 +55,7 @@ class OngoingFragment : Fragment(), OngoingContract {
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
       savedInstanceState: Bundle?): View? {
-    val accessToken = Gson().fromJson(
+    accessToken = Gson().fromJson(
         context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
             Constants.TOKEN, null), Token::class.java).accessToken
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_ongoing, container, false)
@@ -70,13 +74,6 @@ class OngoingFragment : Fragment(), OngoingContract {
     super.onViewCreated(view, savedInstanceState)
     presenter.attach(this)
     presenter.subscribe()
-    initView()
-  }
-
-  private fun initView() {
-    val accessToken = Gson().fromJson(
-        context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
-            Constants.TOKEN, null), Token::class.java).accessToken
     presenter.loadOngoingBooking(accessToken)
   }
 
@@ -108,6 +105,8 @@ class OngoingFragment : Fragment(), OngoingContract {
         fragment.show(bottomSheetFragment, fragment.tag)
       }
     }
+    val historyFragment = fragmentManager?.findFragmentByTag(HistoryFragment.TAG) as HistoryFragment
+    historyFragment.refreshPage()
   }
 
   override fun showErrorMessage(error: String) {
@@ -146,12 +145,32 @@ class OngoingFragment : Fragment(), OngoingContract {
     loadImage(ongoing.imageUrl)
   }
 
-  override fun loadCustomerOngoingFailed() {
+  override fun loadCustomerOngoingFailed(error: String) {
+    if (error.contains(Constants.NO_CONNECTION)) {
+      Toast.makeText(context, getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show()
+      binding.ibRefresh.visibility = View.VISIBLE
+      binding.ibRefresh.setOnClickListener {
+        presenter.loadOngoingBooking(accessToken)
+        binding.ibRefresh.visibility = View.GONE
+        binding.dontHaveOngoing.visibility = View.GONE
+        val homeFragment = fragmentManager?.findFragmentByTag(HomeFragment.TAG) as HomeFragment
+        homeFragment.presenter.loadData(accessToken)
+      }
+    }
+    Timber.tag(Constants.ERROR).e(error)
     binding.dontHaveOngoing.visibility = View.VISIBLE
   }
 
   private fun loadImage(imageUrl: String) {
     Utils.imageLoaderView(binding.root, imageUrl, binding.ongoingIv)
+  }
+
+  fun refreshPage() {
+    val ft = fragmentManager?.beginTransaction()
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      ft?.setReorderingAllowed(false)
+    }
+    ft?.detach(this)?.attach(this)?.commit()
   }
 
   private fun injectDependency() {

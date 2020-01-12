@@ -22,6 +22,7 @@ import com.future.pms.util.Constants.Companion.ERROR
 import com.future.pms.util.Constants.Companion.HISTORY_FRAGMENT
 import com.future.pms.util.PaginationScrollListener
 import com.google.gson.Gson
+import kotlinx.android.synthetic.main.fragment_history.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -53,7 +54,10 @@ class HistoryFragment : Fragment(), HistoryContract {
             Constants.TOKEN, null), Token::class.java).accessToken
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_history, container, false)
     val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+    binding.shimmerHistory.startShimmerAnimation()
     binding.refreshHistory.setOnRefreshListener {
+      shimmer_history.visibility = View.VISIBLE
+      shimmer_history.startShimmerAnimation()
       historyAdapter.clear()
       historyAdapter.notifyDataSetChanged()
       currentPage = 0
@@ -91,6 +95,8 @@ class HistoryFragment : Fragment(), HistoryContract {
   }
 
   override fun loadCustomerBookingSuccess(history: History) {
+    shimmer_history.visibility = View.GONE
+    shimmer_history.stopShimmerAnimation()
     if (currentPage != 0) {
       if (currentPage <= history.totalPages - 1) {
         historyAdapter.addAll(history.content)

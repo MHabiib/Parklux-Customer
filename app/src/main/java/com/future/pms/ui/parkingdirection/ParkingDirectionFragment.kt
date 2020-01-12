@@ -21,6 +21,7 @@ import com.future.pms.model.oauth.Token
 import com.future.pms.ui.main.MainActivity
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.PARKING_DETAIL_FRAGMENT
+import com.future.pms.util.Constants.Companion.SLOTS_IN_ROW
 import com.future.pms.util.Constants.Companion.STATUS_AVAILABLE
 import com.future.pms.util.Constants.Companion.STATUS_BOOKED
 import com.future.pms.util.Constants.Companion.STATUS_RESERVED
@@ -98,7 +99,7 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
 
     for (index in 0 until slotsLayout.length) {
       totalSlot++
-      if (index == 0 || totalSlot == 16) {
+      if (index == 0 || totalSlot == SLOTS_IN_ROW) {
         totalSlot = 0
         parkingLayout = LinearLayout(context)
         parkingLayout.orientation = LinearLayout.HORIZONTAL
@@ -150,7 +151,7 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
 
       if (icon == R.drawable.ic_road) {
         setTextColor(resources.getColor(R.color.colorPrimaryDark))
-        text = ((id % 16) + 1).toString()
+        text = ((id % SLOTS_IN_ROW) + 1).toString()
       }
       setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9f)
     }

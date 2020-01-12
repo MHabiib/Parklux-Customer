@@ -31,7 +31,7 @@ class Constants {
     const val REQUEST_CAMERA_PERMISSION = 2020
 
     const val NOT_FOUND_CODE = "404"
-    const val NO_CONNECTION = "Failed to connect to"
+    const val NO_CONNECTION = "No address associated with hostname"
 
     const val FULL_DATE_TIME_FORMAT = "HH:mm - dd MMMM yyyy "
     const val SHORT_MONTH_DATE_TIME_FORMAT = "HH:mm - dd MMM yy"

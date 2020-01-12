@@ -6,14 +6,15 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/twelve_dp"
-        android:background="@color/baseWhite"
+        android:padding="@dimen/twelve_dp"
+        android:background="@color/colorPrimary"
         android:orientation="vertical">
 
         <Button
             android:id="@+id/button_scan_again"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="@style/NoCaps"
             android:layout_marginTop="@dimen/fourty_dp"
             android:background="@drawable/card_layout_grey"
             android:fontFamily="sans-serif-light"
@@ -29,8 +30,9 @@
             android:id="@+id/back_booking_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/baseWhite"
+            android:background="@color/colorPrimary"
             android:src="@drawable/ic_back"
+            android:tint="@color/white"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -59,7 +61,7 @@
             android:fontFamily="sans-serif-medium"
             android:gravity="center"
             android:paddingBottom="@dimen/twenty_dp"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/white"
             android:textSize="@dimen/h1"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -72,7 +74,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:paddingBottom="@dimen/twenty_dp"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/white"
             android:textSize="@dimen/h2"
             android:visibility="gone"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -83,7 +85,7 @@
             android:id="@+id/title_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/white"
             android:textSize="@dimen/h1"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

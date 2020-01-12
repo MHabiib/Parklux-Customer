@@ -3,7 +3,6 @@ package com.future.pms.ui.superadmin.listuser
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.future.pms.R
@@ -25,31 +24,16 @@ class ListSuperAdminAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
     publicParent = parent
     val inflater = LayoutInflater.from(parent.context)
-    return when (viewType) {
-      item -> {
-        val viewItem = inflater.inflate(R.layout.item_layout_super_admin, parent, false)
-        HistoryViewHolder(viewItem)
-      }
-      else -> {
-        val viewLoading = inflater.inflate(R.layout.item_progress, parent, false)
-        LoadingViewHolder(viewLoading)
-      }
-    }
+    val viewItem = inflater.inflate(R.layout.item_layout_super_admin, parent, false)
+    return HistoryViewHolder(viewItem)
   }
 
   override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
     val superAdminDetails = superAdminList?.get(position)
-    when (getItemViewType(position)) {
-      item -> {
-        val historyViewHolder = holder as HistoryViewHolder
-        historyViewHolder.itemTitle.text = superAdminDetails?.idUser
-        historyViewHolder.itemEmail.text = superAdminDetails?.email
-      }
-
-      loading -> {
-        val loadingViewHolder = holder as LoadingViewHolder
-        loadingViewHolder.progressBar.visibility = View.VISIBLE
-      }
+    if (getItemViewType(position) == item) {
+      val historyViewHolder = holder as HistoryViewHolder
+      historyViewHolder.itemTitle.text = superAdminDetails?.idUser
+      historyViewHolder.itemEmail.text = superAdminDetails?.email
     }
   }
 
@@ -103,10 +87,4 @@ class ListSuperAdminAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
       }
     }
   }
-
-  inner class LoadingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    val progressBar: ProgressBar = itemView.findViewById<View>(
-        R.id.loadmore_progress) as ProgressBar
-  }
-
 }

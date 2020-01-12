@@ -165,8 +165,7 @@ class ScanFragment : Fragment(), ScanContract {
         field.isAccessible = true
         try {
           cameraSoure?.let {
-            val camera = field.get(it) as? Camera
-            return camera
+            return field.get(it) as? Camera
           }
         } catch (ex: IllegalAccessException) {
           Timber.e(ex)

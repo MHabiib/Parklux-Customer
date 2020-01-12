@@ -14,20 +14,26 @@ class ActivityDetailsPresenter @Inject constructor() {
   private lateinit var view: ActivityDetailsContract
 
   fun bookingReceiptSA(idBooking: String, accessToken: String) {
+    view.showProgress(true)
     val subscribe = api.bookingReceiptSA(idBooking, accessToken).subscribeOn(
         Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe({ receipt: Receipt ->
+      view.showProgress(false)
       view.bookingReceiptSASuccess(receipt)
     }, { error ->
+      view.showProgress(false)
       view.showErrorMessage(error.toString())
     })
     subscriptions.add(subscribe)
   }
 
   fun checkoutBookingSA(idBooking: String, accessToken: String) {
+    view.showProgress(true)
     val subscribe = api.checkoutBookingSA(idBooking, accessToken).subscribeOn(
         Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe({
+      view.showProgress(false)
       view.checkoutBookingSASuccess(it)
     }, { error ->
+      view.showProgress(false)
       view.showErrorMessage(error.toString())
     })
     subscriptions.add(subscribe)

@@ -252,6 +252,16 @@ class UserDetailsFragment : BottomSheetDialogFragment(), UserDetailsContract {
     Timber.e(e)
   }
 
+  override fun showProgress(show: Boolean) {
+    if (null != binding.progressBar) {
+      if (show) {
+        binding.progressBar.visibility = View.VISIBLE
+      } else {
+        binding.progressBar.visibility = View.GONE
+      }
+    }
+  }
+
   private fun injectDependency() {
     val profileComponent = DaggerFragmentComponent.builder().fragmentModule(
         FragmentModule()).build()

@@ -78,11 +78,22 @@ class HomeFragment : Fragment(), HomeContract {
   }
 
   override fun showOngoingFragment() {
-    activity?.let {
+    activity?.let { it ->
       if (it.supportFragmentManager.findFragmentByTag(OngoingFragment.TAG) == null) {
         it.supportFragmentManager.beginTransaction().setCustomAnimations(R.animator.fade_in,
-            R.animator.fade_out).disallowAddToBackStack().replace(R.id.frame_home,
-            OngoingFragment().newInstance(), OngoingFragment.TAG).commit()
+            R.animator.fade_out).add(R.id.frame_home, OngoingFragment().newInstance(),
+            OngoingFragment.TAG).commit()
+      } else {
+        it.supportFragmentManager.run { findFragmentByTag(OngoingFragment.TAG) }?.let { fragment ->
+          it.supportFragmentManager.beginTransaction().setCustomAnimations(R.animator.fade_in,
+              R.animator.fade_out).show(fragment).commit()
+        }
+      }
+      if (it.supportFragmentManager.findFragmentByTag(HistoryFragment.TAG) != null) {
+        it.supportFragmentManager.run { findFragmentByTag(HistoryFragment.TAG) }?.let { fragment ->
+          it.supportFragmentManager.beginTransaction().setCustomAnimations(R.animator.fade_in,
+              R.animator.fade_out).hide(fragment).commit()
+        }
       }
     }
   }
@@ -90,16 +101,22 @@ class HomeFragment : Fragment(), HomeContract {
   override fun showHistoryFragment() {
     activity?.let {
       if (it.supportFragmentManager.findFragmentByTag(HistoryFragment.TAG) == null) {
-        it.supportFragmentManager.beginTransaction().disallowAddToBackStack().setCustomAnimations(
-            R.animator.fade_in, R.animator.fade_out).replace(R.id.frame_home,
-            HistoryFragment().newInstance(), HistoryFragment.TAG).commit()
+        it.supportFragmentManager.beginTransaction().setCustomAnimations(R.animator.fade_in,
+            R.animator.fade_out).add(R.id.frame_home, HistoryFragment().newInstance(),
+            HistoryFragment.TAG).commit()
+      } else {
+        it.supportFragmentManager.run { findFragmentByTag(HistoryFragment.TAG) }?.let { fragment ->
+          it.supportFragmentManager.beginTransaction().setCustomAnimations(R.animator.fade_in,
+              R.animator.fade_out).show(fragment).commit()
+        }
+      }
+      if (it.supportFragmentManager.findFragmentByTag(OngoingFragment.TAG) != null) {
+        it.supportFragmentManager.run { findFragmentByTag(OngoingFragment.TAG) }?.let { fragment ->
+          it.supportFragmentManager.beginTransaction().setCustomAnimations(R.animator.fade_in,
+              R.animator.fade_out).hide(fragment).commit()
+        }
       }
     }
-  }
-
-  override fun onDestroyView() {
-    super.onDestroyView()
-    presenter.unsubscribe()
   }
 
   override fun loadCustomerDetailSuccess(customer: Customer) {

@@ -22,6 +22,7 @@ import com.future.pms.util.Constants.Companion.STATUS_ONGOING
 import com.future.pms.util.Utils
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.gson.Gson
+import kotlinx.android.synthetic.main.fragment_receipt.*
 import javax.inject.Inject
 
 class ActivityDetailsFragment : BottomSheetDialogFragment(), ActivityDetailsContract {
@@ -54,6 +55,7 @@ class ActivityDetailsFragment : BottomSheetDialogFragment(), ActivityDetailsCont
             Constants.TOKEN, null), Token::class.java).accessToken
     idBooking = this.arguments?.getString(ID_BOOKING).toString()
     presenter.bookingReceiptSA(idBooking, accessToken)
+
   }
 
   override fun showErrorMessage(error: String) {
@@ -85,6 +87,16 @@ class ActivityDetailsFragment : BottomSheetDialogFragment(), ActivityDetailsCont
     val listActivityFragment = fragmentManager?.findFragmentByTag(
         LIST_ACTIVITY_FRAGMENT) as ListActivityFragment
     listActivityFragment.updatedList()
+  }
+
+  override fun showProgress(show: Boolean) {
+    if (null != progressBar) {
+      if (show) {
+        progressBar.visibility = View.VISIBLE
+      } else {
+        progressBar.visibility = View.GONE
+      }
+    }
   }
 
   private fun injectDependency() {

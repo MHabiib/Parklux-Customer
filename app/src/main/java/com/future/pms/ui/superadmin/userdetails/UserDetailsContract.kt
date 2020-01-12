@@ -16,5 +16,5 @@ interface UserDetailsContract {
   fun getUpdatedCustomerSuccess(customer: Customer?)
   fun updateAdminSuccess()
   fun getUpdatedAdminSuccess(adminResponse: AdminResponse?)
-
+  fun showProgress(show: Boolean)
 }

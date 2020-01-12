@@ -3,7 +3,6 @@ package com.future.pms.ui.superadmin.listuser
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
@@ -26,39 +25,23 @@ class ListCustomerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
     publicParent = parent
     val inflater = LayoutInflater.from(parent.context)
-    return when (viewType) {
-      item -> {
-        val viewItem = inflater.inflate(R.layout.item_layout_customer, parent, false)
-        HistoryViewHolder(viewItem)
-      }
-      else -> {
-        val viewLoading = inflater.inflate(R.layout.item_progress, parent, false)
-        LoadingViewHolder(viewLoading)
-      }
-    }
+    val viewItem = inflater.inflate(R.layout.item_layout_customer, parent, false)
+    return HistoryViewHolder(viewItem)
   }
 
   override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
     val customer = customerList?.get(position)
-    when (getItemViewType(position)) {
-      item -> {
-        val historyViewHolder = holder as HistoryViewHolder
-        historyViewHolder.itemTitle.text = customer?.name
-        historyViewHolder.itemEmail.text = customer?.email
-        historyViewHolder.itemPhone.text = customer?.phoneNumber
-        customer?.name?.let {
-          if (!it.contains(" (BANNED)")) {
-            historyViewHolder.itemLayout.setBackgroundResource(
-                R.drawable.card_layout_dark_dark_grey)
-          } else {
-            historyViewHolder.itemLayout.setBackgroundResource(R.drawable.card_layout_dark_red)
-          }
+    if (getItemViewType(position) == item) {
+      val historyViewHolder = holder as HistoryViewHolder
+      historyViewHolder.itemTitle.text = customer?.name
+      historyViewHolder.itemEmail.text = customer?.email
+      historyViewHolder.itemPhone.text = customer?.phoneNumber
+      customer?.name?.let {
+        if (!it.contains(" (BANNED)")) {
+          historyViewHolder.itemLayout.setBackgroundResource(R.drawable.card_layout_dark_dark_grey)
+        } else {
+          historyViewHolder.itemLayout.setBackgroundResource(R.drawable.card_layout_dark_red)
         }
-      }
-
-      loading -> {
-        val loadingViewHolder = holder as LoadingViewHolder
-        loadingViewHolder.progressBar.visibility = View.VISIBLE
       }
     }
   }
@@ -96,10 +79,6 @@ class ListCustomerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     customerList?.clear()
   }
 
-  private fun getItem(position: Int): CustomerDetails? {
-    return customerList?.get(position)
-  }
-
   inner class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val itemTitle: TextView = itemView.findViewById<View>(R.id.item_title) as TextView
     val itemEmail: TextView = itemView.findViewById<View>(R.id.item_email) as TextView
@@ -116,10 +95,4 @@ class ListCustomerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
       }
     }
   }
-
-  inner class LoadingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    val progressBar: ProgressBar = itemView.findViewById<View>(
-        R.id.loadmore_progress) as ProgressBar
-  }
-
 }

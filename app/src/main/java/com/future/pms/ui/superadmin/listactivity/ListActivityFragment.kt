@@ -55,7 +55,10 @@ class ListActivityFragment : Fragment(), ListActivityContract {
     presenter.attach(this)
     val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
     with(binding) {
+      shimmerActivity.startShimmerAnimation()
       refreshActivity.setOnRefreshListener {
+        shimmerActivity.startShimmerAnimation()
+        binding.shimmerActivity.visibility = View.VISIBLE
         listActivityAdapter.clear()
         listActivityAdapter.notifyDataSetChanged()
         currentPage = 0
@@ -73,7 +76,9 @@ class ListActivityFragment : Fragment(), ListActivityContract {
         bundle.putString(ID_BOOKING, it.idBooking)
         bottomSheetFragment.arguments = bundle
         activity?.supportFragmentManager?.let { it1 ->
-          bottomSheetFragment.show(it1, bottomSheetFragment.tag)
+          if (!bottomSheetFragment.isAdded) {
+            bottomSheetFragment.show(it1, bottomSheetFragment.tag)
+          }
         }
       }
       rvActivity.addOnScrollListener(object :
@@ -101,6 +106,8 @@ class ListActivityFragment : Fragment(), ListActivityContract {
   }
 
   override fun loadAllBookingSuccess(booking: Booking) {
+    binding.shimmerActivity.stopShimmerAnimation()
+    binding.shimmerActivity.visibility = View.GONE
     if (currentPage != 0) {
       if (currentPage <= booking.totalPages - 1) {
         listActivityAdapter.addAll(booking.content)
