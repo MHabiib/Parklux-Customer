@@ -80,9 +80,9 @@ class ListSuperAdminAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     init {
       itemView.setOnClickListener {
-        superAdminList?.get(adapterPosition)?.let { it1 ->
-          it1.position = adapterPosition
-          onItemClick?.invoke(it1)
+        superAdminList?.get(adapterPosition)?.let { superAdminDetails ->
+          superAdminDetails.position = adapterPosition
+          onItemClick?.invoke(superAdminDetails)
         }
       }
     }

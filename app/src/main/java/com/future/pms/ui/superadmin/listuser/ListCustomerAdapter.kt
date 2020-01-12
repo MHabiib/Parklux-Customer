@@ -88,9 +88,9 @@ class ListCustomerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     init {
       itemView.setOnClickListener {
-        customerList?.get(adapterPosition)?.let { it1 ->
-          it1.position = adapterPosition
-          onItemClick?.invoke(it1)
+        customerList?.get(adapterPosition)?.let { customerDetails ->
+          customerDetails.position = adapterPosition
+          onItemClick?.invoke(customerDetails)
         }
       }
     }

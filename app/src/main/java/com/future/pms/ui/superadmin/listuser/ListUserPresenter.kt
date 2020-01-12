@@ -19,7 +19,7 @@ class ListUserPresenter @Inject constructor() {
         view.loadAllCustomerSuccess(it)
       }
     }, {
-      it.message?.let { it1 -> view.onFailed(it1) }
+      it.message?.let { throwable -> view.onFailed(throwable) }
     })
     subscriptions.add(subscribe)
   }
@@ -31,7 +31,7 @@ class ListUserPresenter @Inject constructor() {
         view.loadAllSuperAdminSuccess(it)
       }
     }, {
-      it.message?.let { it1 -> view.onFailed(it1) }
+      it.message?.let { throwable -> view.onFailed(throwable) }
     })
     subscriptions.add(subscribe)
   }
@@ -43,7 +43,7 @@ class ListUserPresenter @Inject constructor() {
         view.loadAllAdminSuccess(it)
       }
     }, {
-      it.message?.let { it1 -> view.onFailed(it1) }
+      it.message?.let { throwable -> view.onFailed(throwable) }
     })
     subscriptions.add(subscribe)
   }

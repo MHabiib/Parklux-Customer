@@ -86,9 +86,9 @@ class ListAdminAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     init {
       itemView.setOnClickListener {
-        parkingZoneList?.get(adapterPosition)?.let { it1 ->
-          it1.position = adapterPosition
-          onItemClick?.invoke(it1)
+        parkingZoneList?.get(adapterPosition)?.let { adminDetails ->
+          adminDetails.position = adapterPosition
+          onItemClick?.invoke(adminDetails)
         }
       }
     }

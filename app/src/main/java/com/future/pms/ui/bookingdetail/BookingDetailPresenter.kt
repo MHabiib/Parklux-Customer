@@ -37,7 +37,7 @@ class BookingDetailPresenter @Inject constructor() {
         view.getLayoutSuccess(it)
       }
     }, {
-      it.message?.let { it1 -> view.showErrorMessage(it1) }
+      it.message?.let { throwable -> view.showErrorMessage(throwable) }
     })
     view.showProgress(false)
     subscriptions.add(subscribe)

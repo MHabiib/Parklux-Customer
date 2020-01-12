@@ -75,9 +75,9 @@ class ListActivityFragment : Fragment(), ListActivityContract {
         val bundle = Bundle()
         bundle.putString(ID_BOOKING, it.idBooking)
         bottomSheetFragment.arguments = bundle
-        activity?.supportFragmentManager?.let { it1 ->
+        activity?.supportFragmentManager?.let { fragmentManager ->
           if (!bottomSheetFragment.isAdded) {
-            bottomSheetFragment.show(it1, bottomSheetFragment.tag)
+            bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
           }
         }
       }

@@ -75,7 +75,7 @@ class HistoryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     init {
       itemView.setOnClickListener {
-        historyList?.get(adapterPosition)?.let { it1 -> onItemClick?.invoke(it1) }
+        historyList?.get(adapterPosition)?.let { bookingHistory -> onItemClick?.invoke(bookingHistory) }
       }
     }
   }

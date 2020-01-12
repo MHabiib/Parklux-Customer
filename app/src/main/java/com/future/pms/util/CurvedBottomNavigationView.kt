@@ -126,6 +126,6 @@ class CurvedBottomNavigationView : BottomNavigationView {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        mPaint?.let { mPath?.let { it1 -> canvas.drawPath(it1, it) } }
+        mPaint?.let { mPath?.let { path -> canvas.drawPath(path, it) } }
     }
 }

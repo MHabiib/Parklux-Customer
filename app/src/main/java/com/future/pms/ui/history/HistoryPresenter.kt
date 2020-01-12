@@ -19,7 +19,7 @@ class HistoryPresenter @Inject constructor() {
         view.loadCustomerBookingSuccess(it)
       }
     }, {
-      it.message?.let { it1 -> view.showErrorMessage(it1) }
+      it.message?.let { throwable -> view.showErrorMessage(throwable) }
     })
     subscriptions.add(subscribe)
   }

@@ -128,9 +128,9 @@ class ListUserFragment : Fragment(), ListUserContract {
         bundle.putString(ROLE, ROLE_CUSTOMER)
         bundle.putString(ID_USER, it.idCustomer)
         bottomSheetFragment.arguments = bundle
-        activity?.supportFragmentManager?.let { it1 ->
+        activity?.supportFragmentManager?.let { fragmentManager ->
           if (!bottomSheetFragment.isAdded) {
-            bottomSheetFragment.show(it1, bottomSheetFragment.tag)
+            bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
           }
         }
       }
@@ -141,9 +141,9 @@ class ListUserFragment : Fragment(), ListUserContract {
         bundle.putString(ROLE, ROLE_ADMIN)
         bundle.putString(ID_USER, it.idParkingZone)
         bottomSheetFragment.arguments = bundle
-        activity?.supportFragmentManager?.let { it1 ->
+        activity?.supportFragmentManager?.let { fragmentManager ->
           if (!bottomSheetFragment.isAdded) {
-            bottomSheetFragment.show(it1, bottomSheetFragment.tag)
+            bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
           }
         }
       }
@@ -154,9 +154,9 @@ class ListUserFragment : Fragment(), ListUserContract {
         bundle.putString(ROLE, ROLE_SUPER_ADMIN)
         bundle.putString(ID_USER, it.idUser)
         bottomSheetFragment.arguments = bundle
-        activity?.supportFragmentManager?.let { it1 ->
+        activity?.supportFragmentManager?.let { fragmentManager ->
           if (!bottomSheetFragment.isAdded) {
-            bottomSheetFragment.show(it1, bottomSheetFragment.tag)
+            bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
           }
         }
       }
@@ -352,10 +352,10 @@ class ListUserFragment : Fragment(), ListUserContract {
     bottomSheetFragment.dismiss()
     itemPosition?.let {
       listSuperAdminAdapter.remove(it)
-      val superAdmin = user.idUser?.let { it1 ->
-        SuperAdminDetails(user.email, it1, ROLE_SUPER_ADMIN, 0)
+      val superAdmin = user.idUser?.let { idUser ->
+        SuperAdminDetails(user.email, idUser, ROLE_SUPER_ADMIN, 0)
       }
-      superAdmin?.let { it1 -> listSuperAdminAdapter.addAt(it, it1) }
+      superAdmin?.let { superAdminDetails -> listSuperAdminAdapter.addAt(it, superAdminDetails) }
       listSuperAdminAdapter.notifyItemChanged(it)
     }
   }

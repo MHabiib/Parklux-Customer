@@ -122,9 +122,9 @@ class HistoryFragment : Fragment(), HistoryContract {
     val bundle = Bundle()
     bundle.putString(Constants.ID_BOOKING, history.idBooking)
     fragment.arguments = bundle
-    activity?.supportFragmentManager?.let { it1 ->
+    activity?.supportFragmentManager?.let { fragmentManager ->
       if (!fragment.isAdded) {
-        fragment.show(it1, fragment.tag)
+        fragment.show(fragmentManager, fragment.tag)
       }
     }
   }

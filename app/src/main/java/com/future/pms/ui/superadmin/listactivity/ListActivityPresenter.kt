@@ -19,7 +19,7 @@ class ListActivityPresenter @Inject constructor() {
         view.loadAllBookingSuccess(it)
       }
     }, {
-      it.message?.let { it1 -> view.onFailed(it1) }
+      it.message?.let { throwable -> view.onFailed(throwable) }
     })
     subscriptions.add(subscribe)
   }
@@ -31,7 +31,7 @@ class ListActivityPresenter @Inject constructor() {
         view.findBookingByIdSuccess(it)
       }
     }, {
-      it.message?.let { it1 -> view.onFailed(it1) }
+      it.message?.let { throwable -> view.onFailed(throwable) }
     })
     subscriptions.add(subscribe)
   }
