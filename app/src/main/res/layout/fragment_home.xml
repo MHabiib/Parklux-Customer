@@ -110,6 +110,7 @@
                     android:layout_width="@dimen/twenty_four_dp"
                     android:layout_height="match_parent"
                     android:src="@drawable/ic_parking"
+                    android:tint="@color/colorPrimary"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
