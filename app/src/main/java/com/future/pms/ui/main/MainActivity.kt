@@ -4,7 +4,9 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
@@ -41,6 +43,20 @@ class MainActivity : AppCompatActivity(), MainContract {
     binding.fabScan.setOnClickListener {
       presenter.onScanIconClick()
     }
+  }
+
+  private var doubleBackToExitPressedOnce = false
+
+  override fun onBackPressed() {
+    if (doubleBackToExitPressedOnce) {
+      finishAffinity()
+      return
+    }
+
+    this.doubleBackToExitPressedOnce = true
+    Toast.makeText(this, "Please click back again to exit", Toast.LENGTH_SHORT).show()
+
+    Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
   }
 
   override fun showLoginPage() {

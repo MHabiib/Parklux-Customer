@@ -258,10 +258,12 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
         setTypeface(this.typeface, Typeface.BOLD)
       }
     }
-    layout?.let {
-      it.addView(view)
-    }
+    layout?.addView(view)
     parkViewList.add(view)
     return view
+  }
+
+  override fun onFailed(message: String) {
+    Timber.tag("e").e(message)
   }
 }

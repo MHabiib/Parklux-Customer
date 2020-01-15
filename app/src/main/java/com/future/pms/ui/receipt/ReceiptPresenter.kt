@@ -20,7 +20,7 @@ class ReceiptPresenter @Inject constructor() {
       view.loadReceiptSuccess(receipt)
     }, { error ->
       view.showProgress(false)
-      view.showErrorMessage(error.localizedMessage)
+      view.onFailed(error.message.toString())
     })
     subscriptions.add(subscribe)
   }

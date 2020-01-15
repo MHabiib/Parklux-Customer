@@ -123,8 +123,8 @@ class HomeFragment : Fragment(), HomeContract {
     binding.userName.text = customer.body.name
   }
 
-  override fun showErrorMessage(error: String) {
-    Timber.tag(ERROR).e(error)
+  override fun onFailed(message: String) {
+    Timber.tag(ERROR).e(message)
   }
 
   override fun getDateNow() {

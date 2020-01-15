@@ -2,6 +2,8 @@ package com.future.pms.ui.superadmin.mainsuperadmin
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.future.pms.R
@@ -40,6 +42,19 @@ class MainActivitySuperAdmin : AppCompatActivity(), MainContractSuperAdmin {
       }
       return@setOnNavigationItemSelectedListener true
     }
+  }
+
+  private var doubleBackToExitPressedOnce = false
+  override fun onBackPressed() {
+    if (doubleBackToExitPressedOnce) {
+      finishAffinity()
+      return
+    }
+
+    this.doubleBackToExitPressedOnce = true
+    Toast.makeText(this, "Please click back again to exit", Toast.LENGTH_SHORT).show()
+
+    Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
   }
 
   override fun showLoginPage() {

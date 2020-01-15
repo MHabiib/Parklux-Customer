@@ -55,11 +55,12 @@ class ActivityDetailsFragment : BottomSheetDialogFragment(), ActivityDetailsCont
             Constants.TOKEN, null), Token::class.java).accessToken
     idBooking = this.arguments?.getString(ID_BOOKING).toString()
     presenter.bookingReceiptSA(idBooking, accessToken)
-
   }
 
-  override fun showErrorMessage(error: String) {
-    Toast.makeText(context, "Error", Toast.LENGTH_LONG).show()
+  override fun onFailed(message: String) {
+    context?.let {
+      Toast.makeText(it, "Error", Toast.LENGTH_LONG).show()
+    }
   }
 
   override fun bookingReceiptSASuccess(receipt: Receipt) {

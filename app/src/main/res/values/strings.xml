@@ -85,7 +85,7 @@
     <string name="activity">Activity</string>
     <string name="parking_zone">Parking Zone</string>
     <string name="update"><u>Update</u></string>
-    <string name="update_account_warning">If you update this account email you need to relogin</string>
+    <string name="update_account_warning">If you update this account email you need to re-login</string>
     <string name="no_network_connection">No network connection</string>
     <string name="success">Success</string>
     <string name="update_account_success">Update account success</string>

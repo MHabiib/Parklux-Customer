@@ -1,13 +1,11 @@
 package com.future.pms.ui.profile
 
-import com.future.pms.di.base.BaseMVPView
+import com.future.pms.di.base.BaseView
 import com.future.pms.model.customerdetail.Customer
 
-interface ProfileContract : BaseMVPView {
+interface ProfileContract : BaseView {
   fun onSuccess()
-  fun onFailed(e: String)
   fun showProgress(show: Boolean)
-  fun showErrorMessage(error: String)
   fun loadCustomerDetailSuccess(customer: Customer)
   fun onLogout()
 }

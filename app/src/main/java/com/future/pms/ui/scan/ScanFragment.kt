@@ -78,10 +78,6 @@ class ScanFragment : Fragment(), ScanContract {
     initialiseDetectorsAndSources()
   }
 
-  override fun showErrorMessage(error: String) {
-    Timber.tag(Constants.ERROR).e(error)
-  }
-
   override fun showProgress(show: Boolean) {
     if (null != progressBar) {
       if (show) {
@@ -146,7 +142,7 @@ class ScanFragment : Fragment(), ScanContract {
     activity?.presenter?.showBookingDetail(idBooking)
   }
 
-  override fun bookingFailed() {
+  override fun onFailed(message: String) {
     val activity = activity as MainActivity?
     activity?.presenter?.showBookingFailed()
   }

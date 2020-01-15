@@ -1,36 +1,24 @@
 package com.future.pms.ui.home
 
+import com.future.pms.di.base.BasePresenter
 import com.future.pms.model.customerdetail.Customer
-import com.future.pms.network.ApiServiceInterface
-import com.future.pms.network.RetrofitClient
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 import javax.inject.Inject
 
-class HomePresenter @Inject constructor() {
-  private val subscriptions = CompositeDisposable()
-  private val api: ApiServiceInterface = RetrofitClient.create()
-  private lateinit var view: HomeContract
-
-  fun subscribe() {}
-
-  fun unsubscribe() {
-    subscriptions.clear()
-  }
-
+class HomePresenter @Inject constructor() : BasePresenter<HomeContract>() {
   fun attach(view: HomeContract) {
     this.view = view
   }
 
   fun loadData(accessToken: String) {
-    with(view) {
+    view?.apply {
       val subscribe = api.getCustomerDetail(accessToken).subscribeOn(Schedulers.io()).observeOn(
           AndroidSchedulers.mainThread()).subscribe({ customer: Customer ->
         loadCustomerDetailSuccess(customer)
       }, { error ->
-        showErrorMessage(error.localizedMessage)
+        onFailed(error.message.toString())
       })
       subscriptions.add(subscribe)
     }
@@ -50,10 +38,10 @@ class HomePresenter @Inject constructor() {
   }
 
   fun onOngoingIconClick() {
-    view.showOngoingFragment()
+    view?.showOngoingFragment()
   }
 
   fun onHistoryIconClic() {
-    view.showHistoryFragment()
+    view?.showHistoryFragment()
   }
 }

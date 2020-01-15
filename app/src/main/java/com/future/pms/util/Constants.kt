@@ -31,6 +31,8 @@ class Constants {
     const val REQUEST_CAMERA_PERMISSION = 2020
 
     const val NOT_FOUND_CODE = "404"
+    const val UNAUTHORIZED_CODE = "401"
+    const val BAD_REQUEST_CODE = "400"
     const val NO_CONNECTION = "No address associated with hostname"
 
     const val FULL_DATE_TIME_FORMAT = "HH:mm - dd MMMM yyyy "

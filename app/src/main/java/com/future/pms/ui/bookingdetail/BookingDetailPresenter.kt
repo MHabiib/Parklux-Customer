@@ -1,20 +1,19 @@
 package com.future.pms.ui.bookingdetail
 
+import com.future.pms.di.base.BasePresenter
 import com.future.pms.model.customerbooking.CustomerBooking
-import com.future.pms.network.ApiServiceInterface
-import com.future.pms.network.RetrofitClient
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class BookingDetailPresenter @Inject constructor() {
-  private val api: ApiServiceInterface = RetrofitClient.create()
-  private val subscriptions = CompositeDisposable()
-  private lateinit var view: BookingDetailContract
+class BookingDetailPresenter @Inject constructor() : BasePresenter<BookingDetailContract>() {
+
+  fun attach(view: BookingDetailContract) {
+    this.view = view
+  }
 
   fun loadBooking(accessToken: String) {
-    with(view) {
+    view?.apply {
       showProgress(true)
       val subscribe = api.getOngoingBooking(accessToken).subscribeOn(Schedulers.io()).observeOn(
           AndroidSchedulers.mainThread()).subscribe({ booking: CustomerBooking ->
@@ -22,30 +21,26 @@ class BookingDetailPresenter @Inject constructor() {
         loadBookingSuccess(booking)
       }, { error ->
         showProgress(false)
-        showErrorMessage(error.localizedMessage)
+        showErrorMessage(error.message.toString())
       })
       subscriptions.add(subscribe)
     }
   }
 
   fun getParkingLayout(idBooking: String, accessToken: String) {
-    view.showProgress(true)
-    val subscribe = api.getParkingLayout(idBooking, accessToken).subscribeOn(
-        Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe({
-      if (null != it) {
-        view.showProgress(false)
-        view.getLayoutSuccess(it)
-      }
-    }, {
-      it.message?.let { throwable -> view.showErrorMessage(throwable) }
-    })
-    view.showProgress(false)
-    subscriptions.add(subscribe)
-  }
-
-  fun subscribe() {}
-
-  fun attach(view: BookingDetailContract) {
-    this.view = view
+    view?.apply {
+      showProgress(true)
+      val subscribe = api.getParkingLayout(idBooking, accessToken).subscribeOn(
+          Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe({
+        if (null != it) {
+          showProgress(false)
+          getLayoutSuccess(it)
+        }
+      }, {
+        it.message?.let { throwable -> this.showErrorMessage(throwable) }
+      })
+      showProgress(false)
+      subscriptions.add(subscribe)
+    }
   }
 }

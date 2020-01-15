@@ -1,8 +1,7 @@
 package com.future.pms.ui.register
 
-import com.future.pms.di.base.BaseMVPView
+import com.future.pms.di.base.BaseView
 
-interface RegisterContract : BaseMVPView {
+interface RegisterContract : BaseView {
   fun onSuccess()
-  fun onFailed(e: String)
 }

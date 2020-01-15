@@ -1,7 +1,8 @@
 package com.future.pms.ui.parkingdirection
 
-interface ParkingDirectionContract {
+import com.future.pms.di.base.BaseView
+
+interface ParkingDirectionContract : BaseView {
   fun showProgress(show: Boolean)
   fun getLayoutSuccess(slotsLayout: String)
-  fun getLayoutFailed()
 }

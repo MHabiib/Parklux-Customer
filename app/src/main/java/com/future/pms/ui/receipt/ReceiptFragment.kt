@@ -115,25 +115,24 @@ class ReceiptFragment : BottomSheetDialogFragment(), ReceiptContract {
     }
   }
 
-  override fun showErrorMessage(error: String) {
-    Timber.tag(Constants.ERROR).e(error)
+  override fun onFailed(message: String) {
+    Timber.tag(Constants.ERROR).e(message)
   }
 
   override fun loadReceiptSuccess(receipt: Receipt) {
     println(receipt)
     with(binding) {
+      buttonShareReceipt.visibility = View.VISIBLE
       bookingId.text = receipt.idBooking
       parkingZoneName.text = receipt.parkingZoneName
       address.text = receipt.address
       parkingSlot.text = receipt.slotName
-      price.text = String.format(getString(R.string.price_per_hour),
-          Utils.thousandSeparator(receipt.price.toInt()))
+      price.text = String.format(getString(R.string.price_per_hour), Utils.thousandSeparator(receipt.price.toInt()))
       inDate.text = Utils.convertLongToTime(receipt.dateIn)
       outDate.text = Utils.convertLongToTime(receipt.dateOut)
       hours.text = receipt.totalHours.toString()
       minutes.text = receipt.totalMinutes.toString()
-      totalPrice.text = String.format(getString(R.string.total_price),
-          Utils.thousandSeparator(receipt.totalPrice.toInt()))
+      totalPrice.text = String.format(getString(R.string.total_price), Utils.thousandSeparator(receipt.totalPrice.toInt()))
     }
   }
 

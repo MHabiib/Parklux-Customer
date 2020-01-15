@@ -106,11 +106,11 @@ class OngoingFragment : Fragment(), OngoingContract {
       }
     }
     val historyFragment = fragmentManager?.findFragmentByTag(HistoryFragment.TAG) as HistoryFragment
-    historyFragment.refreshPage()
+    historyFragment.refreshListHistory()
   }
 
-  override fun showErrorMessage(error: String) {
-    Timber.tag(Constants.ERROR).e(error)
+  override fun onFailed(message: String) {
+    Timber.tag(Constants.ERROR).e(message)
   }
 
   override fun loadCustomerOngoingSuccess(ongoing: CustomerBooking) {

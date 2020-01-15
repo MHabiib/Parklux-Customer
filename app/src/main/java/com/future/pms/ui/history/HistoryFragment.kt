@@ -1,7 +1,6 @@
 package com.future.pms.ui.history
 
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -56,14 +55,7 @@ class HistoryFragment : Fragment(), HistoryContract {
     val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
     binding.shimmerHistory.startShimmerAnimation()
     binding.refreshHistory.setOnRefreshListener {
-      shimmer_history.visibility = View.VISIBLE
-      shimmer_history.startShimmerAnimation()
-      historyAdapter.clear()
-      historyAdapter.notifyDataSetChanged()
-      currentPage = 0
-      isLastPage = false
-      presenter.loadCustomerBooking(accessToken, currentPage)
-      binding.refreshHistory.isRefreshing = false
+      refreshListHistory()
     }
     historyAdapter = HistoryAdapter()
     binding.rvHistory.layoutManager = linearLayoutManager
@@ -83,14 +75,25 @@ class HistoryFragment : Fragment(), HistoryContract {
     return binding.root
   }
 
+  fun refreshListHistory() {
+    shimmer_history.visibility = View.VISIBLE
+    shimmer_history.startShimmerAnimation()
+    historyAdapter.clear()
+    historyAdapter.notifyDataSetChanged()
+    currentPage = 0
+    isLastPage = false
+    presenter.loadCustomerBooking(accessToken, currentPage)
+    binding.refreshHistory.isRefreshing = false
+  }
+
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     presenter.attach(this)
     presenter.subscribe()
   }
 
-  override fun showErrorMessage(error: String) {
-    Timber.tag(ERROR).e(error)
+  override fun onFailed(message: String) {
+    Timber.tag(ERROR).e(message)
     isLastPage = true
   }
 
@@ -131,14 +134,6 @@ class HistoryFragment : Fragment(), HistoryContract {
 
   override fun loadCustomerBookingError() {
     binding.dontHaveOrder.visibility = View.VISIBLE
-  }
-
-  fun refreshPage() {
-    val ft = fragmentManager?.beginTransaction()
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      ft?.setReorderingAllowed(false)
-    }
-    ft?.detach(this)?.attach(this)?.commit()
   }
 
   private fun injectDependency() {

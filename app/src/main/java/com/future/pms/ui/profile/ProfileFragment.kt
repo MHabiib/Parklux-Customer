@@ -23,6 +23,7 @@ import com.future.pms.model.oauth.Token
 import com.future.pms.ui.login.LoginActivity
 import com.future.pms.ui.main.MainActivity
 import com.future.pms.util.Constants
+import com.future.pms.util.Constants.Companion.BAD_REQUEST_CODE
 import com.future.pms.util.Constants.Companion.PROFILE_FRAGMENT
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_profile.*
@@ -96,19 +97,6 @@ class ProfileFragment : Fragment(), ProfileContract {
     }
   }
 
-  override fun showErrorMessage(error: String) {
-    if (error.contains(Constants.NO_CONNECTION)) {
-      Toast.makeText(context, getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show()
-    }
-    Timber.tag(Constants.ERROR).e(error)
-    binding.ibRefresh.visibility = View.VISIBLE
-    binding.ibRefresh.setOnClickListener {
-      showProgress(true)
-      presenter.loadData(accessToken)
-    }
-    showProgress(false)
-  }
-
   override fun loadCustomerDetailSuccess(customer: Customer) {
     with(binding) {
       ibRefresh.visibility = View.GONE
@@ -147,8 +135,21 @@ class ProfileFragment : Fragment(), ProfileContract {
     refreshPage()
   }
 
-  override fun onFailed(e: String) {
-    Timber.e(e)
+  override fun onFailed(message: String) {
+    if (message.contains(Constants.NO_CONNECTION)) {
+      Toast.makeText(context, getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show()
+    } else if (message.contains(BAD_REQUEST_CODE)) {
+      Toast.makeText(context, "Failed to update profile, email already used !",
+          Toast.LENGTH_SHORT).show()
+    }
+    Timber.tag(Constants.ERROR).e(message)
+    binding.ibRefresh.visibility = View.VISIBLE
+    binding.ibRefresh.setOnClickListener {
+      showProgress(true)
+      presenter.loadData(accessToken)
+    }
+    showProgress(false)
+    Timber.e(message)
   }
 
   override fun onLogout() {

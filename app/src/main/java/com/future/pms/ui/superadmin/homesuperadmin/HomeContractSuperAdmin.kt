@@ -1,9 +1,8 @@
 package com.future.pms.ui.superadmin.homesuperadmin
 
-import com.future.pms.di.base.BaseMVPView
+import com.future.pms.di.base.BaseView
 
-interface HomeContractSuperAdmin : BaseMVPView {
-  fun onFailed(e: String)
+interface HomeContractSuperAdmin : BaseView {
   fun onLogout()
   fun createUserSuccess()
   fun updateUserSuccess()

@@ -40,6 +40,7 @@ import com.future.pms.util.Constants.Companion.parkPadding
 import com.future.pms.util.Constants.Companion.parkSize
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_parking_direction.*
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
@@ -174,9 +175,7 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
         setTypeface(this.typeface, Typeface.BOLD)
       }
     }
-    layout?.let {
-      it.addView(view)
-    }
+    layout?.addView(view)
     parkViewList.add(view)
     return view
   }
@@ -185,9 +184,8 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
     showParkingLayout(slotsLayout)
   }
 
-  override fun getLayoutFailed() {
-    TODO(
-        "not implemented") //To change body of created functions use File | Settings | File Templates.
+  override fun onFailed(message: String) {
+    Timber.tag(Constants.ERROR).e(message)
   }
 
   override fun showProgress(show: Boolean) {

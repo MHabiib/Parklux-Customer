@@ -110,11 +110,6 @@ class LoginActivitySuperAdmin : AppCompatActivity(), LoginContractSuperAdmin {
     Toast.makeText(this, e, Toast.LENGTH_LONG).show()
   }
 
-  override fun onError() {
-    loading(false)
-    Toast.makeText(this, getString(R.string.email_password_incorect), Toast.LENGTH_LONG).show()
-  }
-
   override fun onBackPressed() {
     super.onBackPressed()
     this.finishAffinity()
