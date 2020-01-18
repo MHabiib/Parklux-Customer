@@ -20,7 +20,7 @@ import com.future.pms.di.module.FragmentModule
 import com.future.pms.model.admin.nonPage.AdminResponse
 import com.future.pms.model.customerdetail.Customer
 import com.future.pms.model.oauth.Token
-import com.future.pms.model.user.UserResponse
+import com.future.pms.model.user.UserDetails
 import com.future.pms.ui.superadmin.listuser.ListUserFragment
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.ID_USER
@@ -156,11 +156,11 @@ class UserDetailsFragment : BottomSheetDialogFragment(), UserDetailsContract {
     }
   }
 
-  override fun loadDataSuperAdminSuccess(userResponse: UserResponse) {
+  override fun loadDataSuperAdminSuccess(userDetails: UserDetails) {
     with(binding) {
-      tvName.text = userResponse.user.email
-      id.text = userResponse.user.idUser
-      emailSuperAdmin.setText(userResponse.user.email)
+      tvName.text = userDetails.email
+      id.text = userDetails.idUser
+      emailSuperAdmin.setText(userDetails.email)
       passwordSuperAdmin.hint = getString(R.string.password_hint)
     }
   }
@@ -203,10 +203,10 @@ class UserDetailsFragment : BottomSheetDialogFragment(), UserDetailsContract {
     adminResponse?.let { listUserFragment.updateAdminSuccess(it) }
   }
 
-  override fun getUpdatedSuperAdminSuccess(userResponse: UserResponse) {
+  override fun getUpdatedSuperAdminSuccess(userDetails: UserDetails) {
     val listUserFragment = fragmentManager?.findFragmentByTag(
         LIST_USER_FRAGMENT) as ListUserFragment
-    listUserFragment.updateSuperAdminSuccess(userResponse.user)
+    listUserFragment.updateSuperAdminSuccess(userDetails)
   }
 
   override fun deleteSuperAdminSuccess(response: String?) {

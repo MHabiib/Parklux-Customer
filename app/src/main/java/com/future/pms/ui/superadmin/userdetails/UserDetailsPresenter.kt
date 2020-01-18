@@ -5,7 +5,7 @@ import com.future.pms.model.admin.ParkingZoneResponse
 import com.future.pms.model.customerdetail.Customer
 import com.future.pms.model.register.CustomerRequest
 import com.future.pms.model.user.User
-import com.future.pms.model.user.UserResponse
+import com.future.pms.model.user.UserDetails
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -47,9 +47,9 @@ class UserDetailsPresenter @Inject constructor() : BasePresenter<UserDetailsCont
     view?.apply {
       showProgress(true)
       val subscribe = api.getUserDetailSA(id, accessToken).subscribeOn(Schedulers.io()).observeOn(
-          AndroidSchedulers.mainThread()).subscribe({ userResponse: UserResponse ->
+          AndroidSchedulers.mainThread()).subscribe({ userDetails: UserDetails ->
         showProgress(false)
-        loadDataSuperAdminSuccess(userResponse)
+        loadDataSuperAdminSuccess(userDetails)
       }, { error ->
         showProgress(false)
         onFailed(error.toString())
@@ -80,8 +80,8 @@ class UserDetailsPresenter @Inject constructor() : BasePresenter<UserDetailsCont
 
   fun getUpdatedSuperAdmin(id: String, accessToken: String) {
     val subscribe = api.getUserDetailSA(id, accessToken).subscribeOn(Schedulers.io()).observeOn(
-        AndroidSchedulers.mainThread()).subscribe({ userResponse: UserResponse ->
-      view?.getUpdatedSuperAdminSuccess(userResponse)
+        AndroidSchedulers.mainThread()).subscribe({ userDetails: UserDetails ->
+      view?.getUpdatedSuperAdminSuccess(userDetails)
     }, { error ->
       view?.onFailed(error.toString())
     })

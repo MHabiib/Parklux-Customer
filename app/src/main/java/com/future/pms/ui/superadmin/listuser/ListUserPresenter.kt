@@ -20,8 +20,8 @@ class ListUserPresenter @Inject constructor() : BasePresenter<ListUserContract>(
     subscriptions.add(subscribe)
   }
 
-  fun loadAllSuperAdmin(accessToken: String, page: Int, email: String) {
-    val subscribe = api.loadAllSuperAdmin(accessToken, page, email).subscribeOn(
+  fun loadAllSuperAdmin(accessToken: String, page: Int) {
+    val subscribe = api.loadAllSuperAdmin(accessToken, page).subscribeOn(
         Schedulers.io()).observeOn(
         AndroidSchedulers.mainThread()).subscribe({
       if (null != it) {

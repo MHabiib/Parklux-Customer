@@ -113,7 +113,7 @@ class ListUserFragment : Fragment(), ListUserContract {
         listSuperAdminAdapter.notifyDataSetChanged()
         currentPage = 0
         isLastPage = false
-        presenter.loadAllSuperAdmin(accessToken, currentPage, searchByName)
+        presenter.loadAllSuperAdmin(accessToken, currentPage)
         refreshSuperAdmin.isRefreshing = false
       }
       listCustomerAdapter = ListCustomerAdapter()
@@ -190,7 +190,7 @@ class ListUserFragment : Fragment(), ListUserContract {
         override fun loadMoreItems() {
           if (!isLoading && !isLastPage) {
             isLoading = true
-            presenter.loadAllSuperAdmin(accessToken, currentPage, searchByName)
+            presenter.loadAllSuperAdmin(accessToken, currentPage)
           }
         }
       })
@@ -218,6 +218,7 @@ class ListUserFragment : Fragment(), ListUserContract {
               refreshCustomer.visibility = View.VISIBLE
               presenter.loadAllCustomer(accessToken, currentPage, searchByName)
               refreshCustomer.isRefreshing = false
+              searchName.visibility = View.VISIBLE
             }
             1 -> {
               onSpinnerChange()
@@ -226,14 +227,16 @@ class ListUserFragment : Fragment(), ListUserContract {
               refreshAdmin.visibility = View.VISIBLE
               presenter.loadAllAdmin(accessToken, currentPage, searchByName)
               refreshAdmin.isRefreshing = false
+              searchName.visibility = View.VISIBLE
             }
             else -> {
               onSpinnerChange()
               refreshCustomer.visibility = View.GONE
               refreshAdmin.visibility = View.GONE
               refreshSuperAdmin.visibility = View.VISIBLE
-              presenter.loadAllSuperAdmin(accessToken, currentPage, searchByName)
+              presenter.loadAllSuperAdmin(accessToken, currentPage)
               refreshSuperAdmin.isRefreshing = false
+              searchName.visibility = View.GONE
             }
           }
         }
@@ -262,16 +265,6 @@ class ListUserFragment : Fragment(), ListUserContract {
               isLastPage = false
               presenter.loadAllAdmin(accessToken, currentPage, searchByName)
               refreshAdmin.isRefreshing = false
-            }
-            else -> {
-              shimmerUser.startShimmerAnimation()
-              shimmerUser.visibility = View.VISIBLE
-              listSuperAdminAdapter.clear()
-              listSuperAdminAdapter.notifyDataSetChanged()
-              currentPage = 0
-              isLastPage = false
-              presenter.loadAllSuperAdmin(accessToken, currentPage, searchByName)
-              refreshSuperAdmin.isRefreshing = false
             }
           }
         }
