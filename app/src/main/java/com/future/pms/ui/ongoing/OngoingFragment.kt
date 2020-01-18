@@ -56,7 +56,7 @@ class OngoingFragment : Fragment(), OngoingContract {
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
       savedInstanceState: Bundle?): View? {
     accessToken = Gson().fromJson(
-        context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
+        context?.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
             Constants.TOKEN, null), Token::class.java).accessToken
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_ongoing, container, false)
     val directionLayout = binding.directionsLayout
@@ -174,7 +174,8 @@ class OngoingFragment : Fragment(), OngoingContract {
   }
 
   private fun injectDependency() {
-    val homeComponent = DaggerFragmentComponent.builder().fragmentModule(FragmentModule()).build()
+    val homeComponent = DaggerFragmentComponent.builder().fragmentModule(
+        FragmentModule(this)).build()
     homeComponent.inject(this)
   }
 }

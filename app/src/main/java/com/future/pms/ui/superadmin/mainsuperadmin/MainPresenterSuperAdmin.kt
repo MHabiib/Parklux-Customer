@@ -1,8 +1,6 @@
 package com.future.pms.ui.superadmin.mainsuperadmin
 
-import javax.inject.Inject
-
-class MainPresenterSuperAdmin @Inject constructor() {
+class MainPresenterSuperAdmin {
   private lateinit var view: MainContractSuperAdmin
 
   fun subscribe() {

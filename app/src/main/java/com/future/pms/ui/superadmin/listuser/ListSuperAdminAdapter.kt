@@ -70,10 +70,6 @@ class ListSuperAdminAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     superAdminList?.clear()
   }
 
-  private fun getItem(position: Int): SuperAdminDetails? {
-    return superAdminList?.get(position)
-  }
-
   inner class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val itemTitle: TextView = itemView.findViewById<View>(R.id.item_title) as TextView
     val itemEmail: TextView = itemView.findViewById<View>(R.id.item_email) as TextView

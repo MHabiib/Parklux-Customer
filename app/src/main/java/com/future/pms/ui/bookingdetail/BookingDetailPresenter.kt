@@ -4,9 +4,8 @@ import com.future.pms.di.base.BasePresenter
 import com.future.pms.model.customerbooking.CustomerBooking
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import javax.inject.Inject
 
-class BookingDetailPresenter @Inject constructor() : BasePresenter<BookingDetailContract>() {
+class BookingDetailPresenter : BasePresenter<BookingDetailContract>() {
 
   fun attach(view: BookingDetailContract) {
     this.view = view

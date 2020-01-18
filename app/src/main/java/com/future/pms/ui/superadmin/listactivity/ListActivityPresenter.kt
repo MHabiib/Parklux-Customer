@@ -3,9 +3,8 @@ package com.future.pms.ui.superadmin.listactivity
 import com.future.pms.di.base.BasePresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import javax.inject.Inject
 
-class ListActivityPresenter @Inject constructor() : BasePresenter<ListActivityContract>() {
+class ListActivityPresenter : BasePresenter<ListActivityContract>() {
 
   fun loadAllBooking(accessToken: String, page: Int, filter: String) {
     val subscribe = api.loadAllBooking(accessToken, page, filter).subscribeOn(

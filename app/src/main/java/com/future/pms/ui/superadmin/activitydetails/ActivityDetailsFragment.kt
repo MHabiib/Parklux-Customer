@@ -51,7 +51,7 @@ class ActivityDetailsFragment : BottomSheetDialogFragment(), ActivityDetailsCont
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     accessToken = Gson().fromJson(
-        context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
+        context?.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
             Constants.TOKEN, null), Token::class.java).accessToken
     idBooking = this.arguments?.getString(ID_BOOKING).toString()
     presenter.bookingReceiptSA(idBooking, accessToken)
@@ -102,7 +102,7 @@ class ActivityDetailsFragment : BottomSheetDialogFragment(), ActivityDetailsCont
 
   private fun injectDependency() {
     val profileComponent = DaggerFragmentComponent.builder().fragmentModule(
-        FragmentModule()).build()
+        FragmentModule(this)).build()
     profileComponent.inject(this)
   }
 }

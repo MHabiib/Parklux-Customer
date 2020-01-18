@@ -9,6 +9,7 @@ import com.future.pms.model.customer.CustomerResponse
 import com.future.pms.model.customerbooking.CustomerBooking
 import com.future.pms.model.customerdetail.Customer
 import com.future.pms.model.history.History
+import com.future.pms.model.oauth.Token
 import com.future.pms.model.receipt.Receipt
 import com.future.pms.model.register.CustomerRequest
 import com.future.pms.model.superadmin.SuperAdminResponse
@@ -18,6 +19,13 @@ import io.reactivex.Observable
 import retrofit2.http.*
 
 interface ApiServiceInterface {
+  @FormUrlEncoded @POST("oauth/token") fun auth(@Field("username") username: String,
+      @Field("password") password: String, @Field("grant_type")
+      grantType: String): Observable<Token>
+
+  @FormUrlEncoded @POST("oauth/token") fun refresh(@Field("grant_type") grantType: String,
+      @Field("refresh_token") refreshAuth: String): Observable<Token>
+
   @GET("api/customer/detail") fun getCustomerDetail(@Query("access_token")
   accessToken: String?): Observable<com.future.pms.model.customerdetail.Body>
 
@@ -37,7 +45,7 @@ interface ApiServiceInterface {
   accessToken: String?): Observable<Receipt>
 
   @POST("customer/create") fun postCreateCustomer(@Body
-  customerReques: CustomerRequest): Observable<String>
+  customerRequest: CustomerRequest): Observable<String>
 
   @Multipart @PUT("api/customer/update") fun putUpdateCustomer(@Query("access_token")
   accessToken: String?, @Part("customer") customer: CustomerRequest): Observable<CustomerRequest>

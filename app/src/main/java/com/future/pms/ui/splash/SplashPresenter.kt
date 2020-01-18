@@ -2,9 +2,8 @@ package com.future.pms.ui.splash
 
 import com.future.pms.di.base.BasePresenter
 import com.future.pms.util.Authentication
-import javax.inject.Inject
 
-class SplashPresenter @Inject constructor() : BasePresenter<SplashContract>() {
+class SplashPresenter : BasePresenter<SplashContract>() {
 
   fun attach(view: SplashContract) {
     this.view = view

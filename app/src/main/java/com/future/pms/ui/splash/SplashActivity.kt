@@ -43,7 +43,7 @@ class SplashActivity : AppCompatActivity(), SplashContract {
 
   override fun onSuccess() {
     val intent: Intent = if (Gson().fromJson(
-            this.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
+            this.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
                 Constants.TOKEN, null), Token::class.java).role == ROLE_CUSTOMER) {
       Intent(this, MainActivity::class.java)
     } else {

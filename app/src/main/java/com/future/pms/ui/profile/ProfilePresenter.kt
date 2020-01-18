@@ -7,9 +7,8 @@ import com.future.pms.util.Authentication
 import com.future.pms.util.Constants
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import javax.inject.Inject
 
-class ProfilePresenter @Inject constructor() : BasePresenter<ProfileContract>() {
+class ProfilePresenter : BasePresenter<ProfileContract>() {
 
   fun loadData(accessToken: String) {
     val subscribe = api.getCustomerDetail(accessToken).subscribeOn(Schedulers.io()).observeOn(

@@ -1,8 +1,6 @@
 package com.future.pms.ui.main
 
-import javax.inject.Inject
-
-class MainPresenter @Inject constructor() {
+class MainPresenter {
   private lateinit var view: MainContract
 
   fun subscribe() {
@@ -31,10 +29,6 @@ class MainPresenter @Inject constructor() {
 
   fun showParkingDirection(idBooking: String, levelName: String) {
     view.showParkingDirection(idBooking, levelName)
-  }
-
-  fun showLoginPage() {
-    view.showLoginPage()
   }
 
   fun attach(view: MainContract) {

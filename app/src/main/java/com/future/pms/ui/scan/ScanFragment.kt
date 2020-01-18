@@ -59,7 +59,7 @@ class ScanFragment : Fragment(), ScanContract {
       savedInstanceState: Bundle?): View? {
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_scan, container, false)
     accessToken = Gson().fromJson(
-        context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
+        context?.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
             Constants.TOKEN, null), Token::class.java).accessToken
     val toggleFlash = binding.toggleFlash
     context?.let {
@@ -121,13 +121,13 @@ class ScanFragment : Fragment(), ScanContract {
       }
 
       override fun receiveDetections(detections: Detector.Detections<Barcode>) {
-        val barcodes = detections.detectedItems
-        if (barcodes.size() != 0) {
+        val barcode = detections.detectedItems
+        if (barcode.size() != 0) {
           txtBarcodeValue.post {
-            if (barcodes.valueAt(0).displayValue.startsWith("QR")) {
+            if (barcode.valueAt(0).displayValue.startsWith("QR")) {
               stopCamera()
               showProgress(true)
-              intentData = barcodes.valueAt(0).displayValue
+              intentData = barcode.valueAt(0).displayValue
               val idSlot = intentData.substringAfter("idSlot=").substringBefore(')')
               presenter.createBooking(idSlot, accessToken)
             }
@@ -153,14 +153,14 @@ class ScanFragment : Fragment(), ScanContract {
     }
   }
 
-  private fun getCamera(cameraSoure: CameraSource?): Camera? {
+  private fun getCamera(cameraSource: CameraSource?): Camera? {
     val declaredField = CameraSource::class.java.declaredFields
 
     for (field: Field in declaredField) {
       if (field.type == Camera::class.java) {
         field.isAccessible = true
         try {
-          cameraSoure?.let {
+          cameraSource?.let {
             return field.get(it) as? Camera
           }
         } catch (ex: IllegalAccessException) {
@@ -189,7 +189,8 @@ class ScanFragment : Fragment(), ScanContract {
   }
 
   private fun injectDependency() {
-    val scanComponent = DaggerFragmentComponent.builder().fragmentModule(FragmentModule()).build()
+    val scanComponent = DaggerFragmentComponent.builder().fragmentModule(
+        FragmentModule(this)).build()
     scanComponent.inject(this)
   }
 }

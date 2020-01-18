@@ -4,9 +4,8 @@ import com.future.pms.di.base.BasePresenter
 import com.future.pms.model.register.CustomerRequest
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import javax.inject.Inject
 
-class RegisterPresenter @Inject constructor() : BasePresenter<RegisterContract>() {
+class RegisterPresenter : BasePresenter<RegisterContract>() {
 
   fun attach(view: RegisterContract) {
     this.view = view

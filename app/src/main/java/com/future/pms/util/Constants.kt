@@ -2,20 +2,27 @@ package com.future.pms.util
 
 class Constants {
   companion object {
-    const val AUTHENTCATION = "authentication"
+    const val BASE = "https://pms-future.herokuapp.com/"
+    const val USERNAME = "pms-client"
+    const val PASSWORD = "pms-secret"
+    const val GRANT_TYPE = "password"
+    const val GRANT_TYPE_REFRESH = "refresh_token"
+    const val AUTHORIZATION = "Authorization"
+    const val WRITE_TIMEOUT = 30L
+    const val READ_TIMEOUT = 30L
+
+    const val AUTHENTICATION = "authentication"
     const val HOME_FRAGMENT = "Home Fragment"
     const val SCAN_FRAGMENT = "Scan Fragment"
     const val HISTORY_FRAGMENT = "History Fragment"
     const val PARKING_DETAIL_FRAGMENT = "Parking Detail Fragment"
     const val RECEIPT_FRAGMENT = "Receipt Fragment"
-    const val ONGOING_FRAGMENT = "Ongoin Fragment"
+    const val ONGOING_FRAGMENT = "Ongoing Fragment"
     const val LIST_ACTIVITY_FRAGMENT = "List Activity Fragment"
     const val LIST_USER_FRAGMENT = "List User Fragment"
-    const val LIST_PARKING_ZONE_FRAGMENT = "List Parking Zone Fragment"
     const val BOOKING_DETAIL_FRAGMENT = "Booking Detail Fragment"
     const val HOME_FRAGMENT_SUPER_ADMIN = "Home Fragment Super Admin"
     const val TOKEN = "token"
-    const val REFRESH_TOKEN = "refreshToken"
     const val PROFILE_FRAGMENT = "Profile Fragment"
     const val ROLE_SUPER_ADMIN = "ROLE_SUPER_ADMIN"
     const val ROLE_CUSTOMER = "ROLE_CUSTOMER"

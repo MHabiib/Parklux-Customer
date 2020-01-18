@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.app.TimePickerDialog
 import android.content.Context
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -101,8 +99,8 @@ class UserDetailsFragment : BottomSheetDialogFragment(), UserDetailsContract {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    accessToken = Gson().fromJson(
-        context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
+    accessToken = Gson().fromJson(context?.getSharedPreferences(Constants.AUTHENTICATION,
+            Context.MODE_PRIVATE)?.getString(
             Constants.TOKEN, null), Token::class.java).accessToken
     id = this.arguments?.getString(ID_USER).toString()
     when (this.arguments?.getString(ROLE).toString()) {
@@ -234,17 +232,6 @@ class UserDetailsFragment : BottomSheetDialogFragment(), UserDetailsContract {
     }
   }
 
-  private fun textWatcher(): TextWatcher {
-    return object : TextWatcher {
-      override fun afterTextChanged(s: Editable?) {}
-      override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-        //todo
-      }
-
-      override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-    }
-  }
-
   override fun onFailed(e: String) {
     if (e.contains(Constants.NO_CONNECTION)) {
       Toast.makeText(context, getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show()
@@ -264,7 +251,7 @@ class UserDetailsFragment : BottomSheetDialogFragment(), UserDetailsContract {
 
   private fun injectDependency() {
     val profileComponent = DaggerFragmentComponent.builder().fragmentModule(
-        FragmentModule()).build()
+            FragmentModule(this)).build()
     profileComponent.inject(this)
   }
 }

@@ -3,9 +3,8 @@ package com.future.pms.ui.scan
 import com.future.pms.di.base.BasePresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import javax.inject.Inject
 
-class ScanPresenter @Inject constructor() : BasePresenter<ScanContract>() {
+class ScanPresenter : BasePresenter<ScanContract>() {
 
   fun createBooking(idSlot: String, accessToken: String) {
     view?.apply {

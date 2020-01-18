@@ -8,9 +8,8 @@ import com.future.pms.model.user.User
 import com.future.pms.model.user.UserDetails
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import javax.inject.Inject
 
-class UserDetailsPresenter @Inject constructor() : BasePresenter<UserDetailsContract>() {
+class UserDetailsPresenter : BasePresenter<UserDetailsContract>() {
 
   fun loadDataCustomer(idCustomer: String, accessToken: String) {
     view?.apply {

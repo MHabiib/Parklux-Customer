@@ -42,8 +42,8 @@ class LoginActivitySuperAdmin : AppCompatActivity(), LoginContractSuperAdmin {
   }
 
   override fun onTouchEvent(event: MotionEvent): Boolean {
-    val eventaction = event.action
-    if (eventaction == MotionEvent.ACTION_UP) {
+    val eventAction = event.action
+    if (eventAction == MotionEvent.ACTION_UP) {
       val time = System.currentTimeMillis()
       if (startMillis == 0L || (time - startMillis > 3000)) {
         startMillis = time
@@ -65,13 +65,13 @@ class LoginActivitySuperAdmin : AppCompatActivity(), LoginContractSuperAdmin {
   private fun isValid(): Boolean {
     if (txtEmail?.text.toString().isEmpty() && Patterns.EMAIL_ADDRESS.matcher(
             txtEmail?.text.toString()).matches()) return false
-    if (txtPassword?.text.toString().isNullOrEmpty()) return false
+    if (txtPassword?.text.toString().isEmpty()) return false
     return true
   }
 
   override fun onSuccess() {
     presenter.isSuperAdmin(Gson().fromJson(
-        this.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
+        this.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
             Constants.TOKEN, null), Token::class.java).accessToken)
   }
 

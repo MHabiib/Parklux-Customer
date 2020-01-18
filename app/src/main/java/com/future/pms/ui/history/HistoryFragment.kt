@@ -48,8 +48,8 @@ class HistoryFragment : Fragment(), HistoryContract {
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
       savedInstanceState: Bundle?): View? {
-    accessToken = Gson().fromJson(
-        context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
+    accessToken = Gson().fromJson(context?.getSharedPreferences(Constants.AUTHENTICATION,
+            Context.MODE_PRIVATE)?.getString(
             Constants.TOKEN, null), Token::class.java).accessToken
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_history, container, false)
     val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -137,7 +137,8 @@ class HistoryFragment : Fragment(), HistoryContract {
   }
 
   private fun injectDependency() {
-    val homeComponent = DaggerFragmentComponent.builder().fragmentModule(FragmentModule()).build()
+    val homeComponent = DaggerFragmentComponent.builder().fragmentModule(
+            FragmentModule(this)).build()
 
     homeComponent.inject(this)
   }

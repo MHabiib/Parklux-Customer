@@ -58,7 +58,7 @@ class HomeFragment : Fragment(), HomeContract {
         historyIndicator.visibility = View.GONE
       }
       history.setOnClickListener {
-        presenter.onHistoryIconClic()
+        presenter.onHistoryIconClick()
         ongoingIndicator.visibility = View.GONE
         historyIndicator.visibility = View.VISIBLE
       }
@@ -68,7 +68,7 @@ class HomeFragment : Fragment(), HomeContract {
 
   private fun initView() {
     val accessToken = Gson().fromJson(
-        context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
+        context?.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
             Constants.TOKEN, null), Token::class.java).accessToken
     getDateNow()
     presenter.loadData(accessToken)
@@ -133,7 +133,8 @@ class HomeFragment : Fragment(), HomeContract {
   }
 
   private fun injectDependency() {
-    val homeComponent = DaggerFragmentComponent.builder().fragmentModule(FragmentModule()).build()
+    val homeComponent = DaggerFragmentComponent.builder().fragmentModule(
+        FragmentModule(this)).build()
     homeComponent.inject(this)
   }
 }

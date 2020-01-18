@@ -98,7 +98,7 @@ class ReceiptFragment : BottomSheetDialogFragment(), ReceiptContract {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     val accessToken = Gson().fromJson(
-        context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
+        context?.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
             Constants.TOKEN, null), Token::class.java).accessToken
     presenter.attach(this)
     presenter.subscribe()
@@ -203,7 +203,8 @@ class ReceiptFragment : BottomSheetDialogFragment(), ReceiptContract {
   }
 
   private fun injectDependency() {
-    val homeComponent = DaggerFragmentComponent.builder().fragmentModule(FragmentModule()).build()
+    val homeComponent = DaggerFragmentComponent.builder().fragmentModule(
+        FragmentModule(this)).build()
     homeComponent.inject(this)
   }
 }

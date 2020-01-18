@@ -73,7 +73,7 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_parking_direction, container,
         false)
     val accessToken = Gson().fromJson(
-        context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
+        context?.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
             Constants.TOKEN, null), Token::class.java).accessToken
     presenter.attach(this)
     layout = binding.layoutPark
@@ -117,7 +117,7 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
       }
 
       when {
-        slotsLayout[index] == Constants.SLOT_NULL -> {
+        slotsLayout[index] == SLOT_NULL -> {
           setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_ROAD,
               R.drawable.ic_blank)
         }
@@ -204,7 +204,8 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
   }
 
   private fun injectDependency() {
-    val homeComponent = DaggerFragmentComponent.builder().fragmentModule(FragmentModule()).build()
+    val homeComponent = DaggerFragmentComponent.builder().fragmentModule(
+        FragmentModule(this)).build()
 
     homeComponent.inject(this)
   }

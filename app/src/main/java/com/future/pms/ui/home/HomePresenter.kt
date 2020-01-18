@@ -5,9 +5,8 @@ import com.future.pms.model.customerdetail.Body
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.util.*
-import javax.inject.Inject
 
-class HomePresenter @Inject constructor() : BasePresenter<HomeContract>() {
+class HomePresenter : BasePresenter<HomeContract>() {
   fun attach(view: HomeContract) {
     this.view = view
   }
@@ -41,7 +40,7 @@ class HomePresenter @Inject constructor() : BasePresenter<HomeContract>() {
     view?.showOngoingFragment()
   }
 
-  fun onHistoryIconClic() {
+  fun onHistoryIconClick() {
     view?.showHistoryFragment()
   }
 }

@@ -22,7 +22,7 @@ import com.future.pms.model.customerbooking.CustomerBooking
 import com.future.pms.model.oauth.Token
 import com.future.pms.ui.main.MainActivity
 import com.future.pms.ui.ongoing.OngoingFragment
-import com.future.pms.util.Constants.Companion.AUTHENTCATION
+import com.future.pms.util.Constants.Companion.AUTHENTICATION
 import com.future.pms.util.Constants.Companion.BOOKING_DETAIL_FRAGMENT
 import com.future.pms.util.Constants.Companion.DISABLED_SLOT
 import com.future.pms.util.Constants.Companion.ERROR
@@ -93,7 +93,7 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
     bindingActivityMain = DataBindingUtil.inflate(inflater, R.layout.activity_main, null, false)
 
     accessToken = Gson().fromJson(
-        context?.getSharedPreferences(AUTHENTCATION, Context.MODE_PRIVATE)?.getString(TOKEN, null),
+        context?.getSharedPreferences(AUTHENTICATION, Context.MODE_PRIVATE)?.getString(TOKEN, null),
         Token::class.java).accessToken
     idBooking = this.arguments?.getString(ID_BOOKING).toString()
     with(binding) {
@@ -148,9 +148,9 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
 
   private fun backToHome() {
     val activity = activity as MainActivity?
+    activity?.presenter?.onHomeIconClick()
     val ongoingFragment = fragmentManager?.findFragmentByTag(OngoingFragment.TAG) as OngoingFragment
     ongoingFragment.refreshPage()
-    activity?.presenter?.onHomeIconClick()
   }
 
   private fun scanAgain() {
@@ -170,11 +170,6 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
 
   override fun showErrorMessage(error: String) {
     Timber.tag(ERROR).e(error)
-  }
-
-  private fun injectDependency() {
-    val homeComponent = DaggerFragmentComponent.builder().fragmentModule(FragmentModule()).build()
-    homeComponent.inject(this)
   }
 
   private fun showParkingLayout(slotsLayout: String) {
@@ -265,5 +260,11 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
 
   override fun onFailed(message: String) {
     Timber.tag("e").e(message)
+  }
+
+  private fun injectDependency() {
+    val homeComponent = DaggerFragmentComponent.builder().fragmentModule(
+        FragmentModule(this)).build()
+    homeComponent.inject(this)
   }
 }

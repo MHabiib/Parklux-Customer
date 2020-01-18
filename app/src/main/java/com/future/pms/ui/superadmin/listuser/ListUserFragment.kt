@@ -56,8 +56,8 @@ class ListUserFragment : Fragment(), ListUserContract {
   private lateinit var accessToken: String
   private var searchByName = ""
   private val spinnerItems = ArrayList<String>()
-  var handler = Handler(Looper.getMainLooper() /*UI thread*/)
-  var workRunnable: Runnable? = null
+  private var handler = Handler(Looper.getMainLooper() /*UI thread*/)
+  private var workRunnable: Runnable? = null
   private val bottomSheetFragment = UserDetailsFragment()
 
   companion object {
@@ -277,7 +277,7 @@ class ListUserFragment : Fragment(), ListUserContract {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     accessToken = Gson().fromJson(
-        context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
+        context?.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
             Constants.TOKEN, null), Token::class.java).accessToken
     presenter.apply {
       subscribe()
@@ -296,9 +296,6 @@ class ListUserFragment : Fragment(), ListUserContract {
       }
     } else {
       listCustomerAdapter.addAll(customer.body.content)
-      if (customer.body.content.isEmpty()) {
-        //todo dont have parking zone
-      }
       if (currentPage >= customer.body.totalPages - 1) {
         isLastPage = true
       } else {
@@ -320,9 +317,6 @@ class ListUserFragment : Fragment(), ListUserContract {
       }
     } else {
       listAdminAdapter.addAll(admin.content)
-      if (admin.content.isEmpty()) {
-        //todo dont have parking zone
-      }
       if (currentPage >= admin.totalPages - 1) {
         isLastPage = true
       } else {
@@ -344,9 +338,6 @@ class ListUserFragment : Fragment(), ListUserContract {
       }
     } else {
       listSuperAdminAdapter.addAll(superAdmin.body.content)
-      if (superAdmin.body.content.isEmpty()) {
-        //todo dont have parking zone
-      }
       if (currentPage >= superAdmin.body.totalPages - 1) {
         isLastPage = true
       } else {
@@ -423,7 +414,7 @@ class ListUserFragment : Fragment(), ListUserContract {
 
   private fun injectDependency() {
     val profileComponent = DaggerFragmentComponent.builder().fragmentModule(
-        FragmentModule()).build()
+        FragmentModule(this)).build()
     profileComponent.inject(this)
   }
 }

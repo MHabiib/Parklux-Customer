@@ -5,9 +5,8 @@ import com.future.pms.model.user.User
 import com.future.pms.util.Authentication
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import javax.inject.Inject
 
-class HomePresenterSuperAdmin @Inject constructor() : BasePresenter<HomeContractSuperAdmin>() {
+class HomePresenterSuperAdmin : BasePresenter<HomeContractSuperAdmin>() {
 
   fun createUser(accessToken: String, email: String, password: String, role: String) {
     val user = User(email, password, role)

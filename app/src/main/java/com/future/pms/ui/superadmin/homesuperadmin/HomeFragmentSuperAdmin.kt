@@ -136,8 +136,8 @@ class HomeFragmentSuperAdmin : Fragment(), HomeContractSuperAdmin {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    accessToken = Gson().fromJson(
-        context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
+    accessToken = Gson().fromJson(context?.getSharedPreferences(Constants.AUTHENTICATION,
+            Context.MODE_PRIVATE)?.getString(
             Constants.TOKEN, null), Token::class.java).accessToken
     presenter.apply {
       getEmail(accessToken)
@@ -205,7 +205,7 @@ class HomeFragmentSuperAdmin : Fragment(), HomeContractSuperAdmin {
 
   private fun injectDependency() {
     val profileComponent = DaggerFragmentComponent.builder().fragmentModule(
-        FragmentModule()).build()
+            FragmentModule(this)).build()
     profileComponent.inject(this)
   }
 }

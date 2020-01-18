@@ -1,21 +1,16 @@
 package com.future.pms.util
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Path
-import android.graphics.Point
+import android.graphics.*
 import android.util.AttributeSet
-
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class CurvedBottomNavigationView : BottomNavigationView {
     private var mPath: Path? = null
     private var mPaint: Paint? = null
 
-    /** the CURVE_CIRCLE_RADIUS represent the radius of the fab button  */
-    private val CURVE_CIRCLE_RADIUS = 188 / 2
+  /** the curveCircleRadius represent the radius of the fab button  */
+  private val curveCircleRadius = 188 / 2
     // the coordinates of the first curve
     private val mFirstCurveStartPoint = Point()
     private val mFirstCurveEndPoint = Point()
@@ -54,11 +49,6 @@ class CurvedBottomNavigationView : BottomNavigationView {
         setBackgroundColor(Color.TRANSPARENT)
     }
 
-    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
-        super.onLayout(changed, left, top, right, bottom)
-
-    }
-
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         // get width and height of navigation bar
@@ -67,38 +57,37 @@ class CurvedBottomNavigationView : BottomNavigationView {
         mNavigationBarHeight = height
         // the coordinates (x,y) of the start point before curve
         mFirstCurveStartPoint.set(
-            mNavigationBarWidth / 2 - CURVE_CIRCLE_RADIUS * 2 - CURVE_CIRCLE_RADIUS / 3,
+            mNavigationBarWidth / 2 - curveCircleRadius * 2 - curveCircleRadius / 3,
             0
         )
         // the coordinates (x,y) of the end point after curve
         mFirstCurveEndPoint.set(
-            mNavigationBarWidth / 2,
-            CURVE_CIRCLE_RADIUS + CURVE_CIRCLE_RADIUS / 2
+            mNavigationBarWidth / 2, curveCircleRadius + curveCircleRadius / 2
         )
         // same thing for the second curve
         mSecondCurveStartPoint = mFirstCurveEndPoint
         mSecondCurveEndPoint.set(
-            mNavigationBarWidth / 2 + CURVE_CIRCLE_RADIUS * 2 + CURVE_CIRCLE_RADIUS / 3,
+            mNavigationBarWidth / 2 + curveCircleRadius * 2 + curveCircleRadius / 3,
             0
         )
 
         // the coordinates (x,y)  of the 1st control point on a cubic curve
         mFirstCurveControlPoint1.set(
-            mFirstCurveStartPoint.x + CURVE_CIRCLE_RADIUS + CURVE_CIRCLE_RADIUS / 4,
+            mFirstCurveStartPoint.x + curveCircleRadius + curveCircleRadius / 4,
             mFirstCurveStartPoint.y
         )
         // the coordinates (x,y)  of the 2nd control point on a cubic curve
         mFirstCurveControlPoint2.set(
-            mFirstCurveEndPoint.x - CURVE_CIRCLE_RADIUS * 2 + CURVE_CIRCLE_RADIUS,
+            mFirstCurveEndPoint.x - curveCircleRadius * 2 + curveCircleRadius,
             mFirstCurveEndPoint.y
         )
 
         mSecondCurveControlPoint1.set(
-            mSecondCurveStartPoint.x + CURVE_CIRCLE_RADIUS * 2 - CURVE_CIRCLE_RADIUS,
+            mSecondCurveStartPoint.x + curveCircleRadius * 2 - curveCircleRadius,
             mSecondCurveStartPoint.y
         )
         mSecondCurveControlPoint2.set(
-            mSecondCurveEndPoint.x - (CURVE_CIRCLE_RADIUS + CURVE_CIRCLE_RADIUS / 4),
+            mSecondCurveEndPoint.x - (curveCircleRadius + curveCircleRadius / 4),
             mSecondCurveEndPoint.y
         )
 

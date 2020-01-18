@@ -148,7 +148,7 @@ class ListActivityFragment : Fragment(), ListActivityContract {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     accessToken = Gson().fromJson(
-        context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
+        context?.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
             Constants.TOKEN, null), Token::class.java).accessToken
     presenter.apply {
       subscribe()
@@ -167,9 +167,6 @@ class ListActivityFragment : Fragment(), ListActivityContract {
       }
     } else {
       listActivityAdapter.addAll(booking.content)
-      if (booking.content.isEmpty()) {
-        //gaada parkingzone
-      }
       if (currentPage >= booking.totalPages - 1) {
         isLastPage = true
       } else {
@@ -198,7 +195,7 @@ class ListActivityFragment : Fragment(), ListActivityContract {
 
   private fun injectDependency() {
     val profileComponent = DaggerFragmentComponent.builder().fragmentModule(
-        FragmentModule()).build()
+        FragmentModule(this)).build()
     profileComponent.inject(this)
   }
 }

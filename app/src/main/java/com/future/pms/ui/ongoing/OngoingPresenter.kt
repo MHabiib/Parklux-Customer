@@ -4,9 +4,8 @@ import com.future.pms.di.base.BasePresenter
 import com.future.pms.model.customerbooking.CustomerBooking
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import javax.inject.Inject
 
-class OngoingPresenter @Inject constructor() : BasePresenter<OngoingContract>() {
+class OngoingPresenter : BasePresenter<OngoingContract>() {
   fun loadOngoingBooking(accessToken: String) {
     view?.apply {
       showProgress(true)

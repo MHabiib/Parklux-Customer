@@ -46,12 +46,12 @@ android {
 
 dependencies {
     api 'com.google.dagger:dagger-android:2.24'
-    api 'com.google.android.material:material:1.2.0-alpha01'
-    implementation 'com.google.android.material:material:1.2.0-alpha01'
+    api 'com.google.android.material:material:1.2.0-alpha03'
+    implementation 'com.google.android.material:material:1.2.0-alpha03'
     implementation 'com.android.support:multidex:1.0.3'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.0.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
@@ -73,7 +73,7 @@ dependencies {
     implementation "com.google.dagger:dagger-android-support:$dagger2_version"
     kapt "com.google.dagger:dagger-compiler:$dagger2_version"
     kapt "com.google.dagger:dagger-android-processor:$dagger2_version"
-    kapt 'com.android.databinding:compiler:3.0.1'
+    kapt 'com.android.databinding:compiler:3.1.4'
     compileOnly 'javax.annotation:jsr250-api:1.0'
     implementation 'javax.inject:javax.inject:1'
 
@@ -95,13 +95,13 @@ dependencies {
     api 'com.google.android.gms:play-services-vision:19.0.0'
 
     // RecyclerView
-    implementation "androidx.recyclerview:recyclerview:1.0.0"
+    implementation "androidx.recyclerview:recyclerview:1.1.0"
 
     //image viewer
-    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    implementation 'com.github.bumptech.glide:glide:4.10.0'
 
     //paging
-    implementation 'androidx.paging:paging-runtime:2.1.0'
+    implementation 'androidx.paging:paging-runtime:2.1.1'
 
     //shimmer loading
     implementation 'com.facebook.shimmer:shimmer:0.1.0@aar'

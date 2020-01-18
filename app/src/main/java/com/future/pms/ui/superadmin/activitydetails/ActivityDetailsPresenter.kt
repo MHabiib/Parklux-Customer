@@ -4,9 +4,8 @@ import com.future.pms.di.base.BasePresenter
 import com.future.pms.model.receipt.Receipt
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import javax.inject.Inject
 
-class ActivityDetailsPresenter @Inject constructor() : BasePresenter<ActivityDetailsContract>() {
+class ActivityDetailsPresenter : BasePresenter<ActivityDetailsContract>() {
 
   fun bookingReceiptSA(idBooking: String, accessToken: String) {
     view?.apply {

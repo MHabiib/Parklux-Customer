@@ -3,9 +3,8 @@ package com.future.pms.ui.parkingdirection
 import com.future.pms.di.base.BasePresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import javax.inject.Inject
 
-class ParkingDirectionPresenter @Inject constructor() : BasePresenter<ParkingDirectionContract>() {
+class ParkingDirectionPresenter : BasePresenter<ParkingDirectionContract>() {
 
   fun getParkingLayout(idBooking: String, accessToken: String) {
     view?.apply {

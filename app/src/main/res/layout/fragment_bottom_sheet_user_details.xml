@@ -193,7 +193,7 @@
                 android:background="@drawable/card_layout_white_dark"
                 android:fontFamily="sans-serif-light"
                 android:padding="@dimen/sixteen_dp"
-                android:text="Ban customer"
+                android:text="@string/ban_customer"
                 android:textColor="@color/red"
                 app:layout_constraintTop_toBottomOf="@id/btn_edit_profile_customer" />
 
