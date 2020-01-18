@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -20,32 +21,6 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.facebook.shimmer.ShimmerFrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:paddingLeft="@dimen/twelve_dp"
-            android:paddingTop="@dimen/twelve_dp"
-            android:paddingRight="@dimen/twelve_dp"
-            android:id="@+id/shimmer_user"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/name">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <include layout="@layout/item_layout_customer_shimmer"/>
-                <include layout="@layout/item_layout_customer_shimmer"/>
-                <include layout="@layout/item_layout_customer_shimmer"/>
-                <include layout="@layout/item_layout_customer_shimmer"/>
-                <include layout="@layout/item_layout_customer_shimmer"/>
-                <include layout="@layout/item_layout_customer_shimmer"/>
-            </LinearLayout>
-
-        </com.facebook.shimmer.ShimmerFrameLayout>
-
-
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/refresh_customer"
             android:layout_width="match_parent"
@@ -54,7 +29,7 @@
             android:paddingTop="@dimen/twelve_dp"
             android:paddingRight="@dimen/twelve_dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/name">
+            app:layout_constraintTop_toBottomOf="@id/search_name">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_customer"
@@ -75,7 +50,7 @@
             android:paddingRight="@dimen/twelve_dp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/name">
+            app:layout_constraintTop_toBottomOf="@id/search_name">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_admin"
@@ -87,6 +62,7 @@
                 android:paddingBottom="@dimen/sixty_eight_dp" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/refresh_super_admin"
             android:layout_width="match_parent"
@@ -96,7 +72,7 @@
             android:paddingRight="@dimen/twelve_dp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/name">
+            app:layout_constraintTop_toBottomOf="@id/search_name">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_super_admin"
@@ -107,5 +83,66 @@
                 android:clipToPadding="false"
                 android:paddingBottom="@dimen/sixty_eight_dp" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmer_user"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:paddingLeft="@dimen/twelve_dp"
+            android:paddingTop="@dimen/twelve_dp"
+            android:paddingRight="@dimen/twelve_dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/search_name">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/item_layout_customer_shimmer" />
+
+                <include layout="@layout/item_layout_customer_shimmer" />
+
+                <include layout="@layout/item_layout_customer_shimmer" />
+
+                <include layout="@layout/item_layout_customer_shimmer" />
+
+                <include layout="@layout/item_layout_customer_shimmer" />
+
+                <include layout="@layout/item_layout_customer_shimmer" />
+            </LinearLayout>
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/search_name"
+            android:layout_width="@dimen/zero_dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/twelve_dp"
+            android:layout_marginTop="@dimen/twelve_dp"
+            android:layout_marginRight="@dimen/twelve_dp"
+            android:background="@drawable/card_layout_white_dark"
+            android:paddingLeft="@dimen/twenty_four_dp"
+            android:paddingTop="@dimen/eight_dp"
+            android:paddingRight="@dimen/twenty_four_dp"
+            android:paddingBottom="@dimen/twelve_dp"
+            android:textColorHint="@color/darkGrey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/name"
+            tools:ignore="RtlSymmetry">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/input_search_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:hint="@string/search"
+                android:inputType="textPersonName"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textSize="@dimen/h2" />
+        </com.google.android.material.textfield.TextInputLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

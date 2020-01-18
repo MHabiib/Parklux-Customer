@@ -48,7 +48,7 @@
     <string name="is_reserved">is Reserved</string>
     <string name="slot_name">Slot name</string>
     <string name="scan_again">Scan again</string>
-    <string name="email_password_incorect">The email or password is incorrect.</string>
+    <string name="email_password_incorrect">The email or password is incorrect.</string>
     <string name="park_is_booked">Park %d is Booked</string>
     <string name="park_is_reserved">Park %d is Reserved</string>
     <string name="date_now">It\'s %s</string>
@@ -108,4 +108,8 @@
     <string name="other_super_admin">Another Super Admin</string>
     <string name="permit">Permit customer</string>
     <string name="range2">%s - %s</string>
+    <string name="all">All</string>
+    <string name="ongoing">Ongoing</string>
+    <string name="completed">Completed</string>
+    <string name="search">Search</string>
 </resources>

@@ -55,28 +55,44 @@ class HomeFragmentSuperAdmin : Fragment(), HomeContractSuperAdmin {
         presenter.signOut()
         onLogout()
       }
+
+      var isOpen = ""
       btnAddAdmin.setOnClickListener {
         if (btnAddAdmin.text == getString(R.string.plus)) {
+          if (isOpen == ROLE_SUPER_ADMIN) {
+            inputLayoutSuperAdmin.visibility = View.GONE
+            btnSaveSuperAdmin.visibility = View.GONE
+            btnAddSuperAdmin.text = getString(R.string.plus)
+          }
           inputLayoutAdmin.visibility = View.VISIBLE
           btnSaveAdmin.visibility = View.VISIBLE
           btnAddAdmin.text = getString(R.string.minus)
+          isOpen = ROLE_ADMIN
         } else {
           inputLayoutAdmin.visibility = View.GONE
           btnSaveAdmin.visibility = View.GONE
           btnAddAdmin.text = getString(R.string.plus)
           hideKeyboard()
+          isOpen = ""
         }
       }
       btnAddSuperAdmin.setOnClickListener {
         if (btnAddSuperAdmin.text == getString(R.string.plus)) {
+          if (isOpen == ROLE_ADMIN) {
+            inputLayoutAdmin.visibility = View.GONE
+            btnSaveAdmin.visibility = View.GONE
+            btnAddAdmin.text = getString(R.string.plus)
+          }
           inputLayoutSuperAdmin.visibility = View.VISIBLE
           btnSaveSuperAdmin.visibility = View.VISIBLE
           btnAddSuperAdmin.text = getString(R.string.minus)
+          isOpen = ROLE_SUPER_ADMIN
         } else {
           inputLayoutSuperAdmin.visibility = View.GONE
           btnSaveSuperAdmin.visibility = View.GONE
           btnAddSuperAdmin.text = getString(R.string.plus)
           hideKeyboard()
+          isOpen = ""
         }
       }
       btnSaveAdmin.setOnClickListener {
@@ -154,19 +170,28 @@ class HomeFragmentSuperAdmin : Fragment(), HomeContractSuperAdmin {
 
   override fun updateUserSuccess() {
     Toast.makeText(context, getString(R.string.update_account_success), Toast.LENGTH_LONG).show()
-    presenter.signOut()
     presenter.getEmail(accessToken)
   }
 
   override fun getEmailSuccess(email: String) = binding.txtEmail.setText(email)
 
-  override fun onFailed(e: String) {
-    if (e.contains(NO_CONNECTION)) {
-      Toast.makeText(context, getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show()
-    } else {
-      Toast.makeText(context, e, Toast.LENGTH_SHORT).show()
+  override fun onFailed(message: String) {
+    when {
+      message.contains(NO_CONNECTION) -> Toast.makeText(context,
+          getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show()
+      message.contains(Constants.BAD_REQUEST_CODE) -> Toast.makeText(context,
+          "Failed to update profile, email already used !", Toast.LENGTH_SHORT).show()
+      message.contains(Constants.UNAUTHORIZED_CODE) -> {
+        presenter.signOut()
+        onLogout()
+      }
     }
-    Timber.e(e)
+    Timber.tag(Constants.ERROR).e(message)
+    binding.ibRefresh.visibility = View.VISIBLE
+    binding.ibRefresh.setOnClickListener {
+      presenter.getEmail(accessToken)
+    }
+    Timber.e(message)
   }
 
   private fun hideKeyboard() = activity?.window?.setSoftInputMode(
@@ -175,6 +200,7 @@ class HomeFragmentSuperAdmin : Fragment(), HomeContractSuperAdmin {
   override fun onLogout() {
     val intent = Intent(activity, LoginActivitySuperAdmin::class.java)
     startActivity(intent)
+    activity?.finish()
   }
 
   private fun injectDependency() {

@@ -7,8 +7,9 @@ import javax.inject.Inject
 
 class ListActivityPresenter @Inject constructor() : BasePresenter<ListActivityContract>() {
 
-  fun loadAllBooking(accessToken: String, page: Int) {
-    val subscribe = api.loadAllBooking(accessToken, page).subscribeOn(Schedulers.io()).observeOn(
+  fun loadAllBooking(accessToken: String, page: Int, filter: String) {
+    val subscribe = api.loadAllBooking(accessToken, page, filter).subscribeOn(
+        Schedulers.io()).observeOn(
         AndroidSchedulers.mainThread()).subscribe({
       if (null != it) {
         view?.loadAllBookingSuccess(it)

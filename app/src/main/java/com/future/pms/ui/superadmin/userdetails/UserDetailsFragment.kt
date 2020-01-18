@@ -148,8 +148,8 @@ class UserDetailsFragment : BottomSheetDialogFragment(), UserDetailsContract {
         priceAdmin.text = null
         priceAdmin.hint = (String.format(getString(R.string.idr_price),
             Utils.thousandSeparator(it.price.toInt())))
-        openHourAdmin.hint = it.openHour.substring(0, 5)
-        openHour2Admin.hint = it.openHour.substring(7, 13)
+        openHourAdmin.text = it.openHour.substring(0, 5)
+        openHour2Admin.text = it.openHour.substring(8, 13)
         addressAdmin.setText(it.address)
         passwordAdmin.hint = getString(R.string.password_hint)
       }

@@ -7,8 +7,9 @@ import javax.inject.Inject
 
 class ListUserPresenter @Inject constructor() : BasePresenter<ListUserContract>() {
 
-  fun loadAllCustomer(accessToken: String, page: Int) {
-    val subscribe = api.loadAllCustomer(accessToken, page).subscribeOn(Schedulers.io()).observeOn(
+  fun loadAllCustomer(accessToken: String, page: Int, name: String) {
+    val subscribe = api.loadAllCustomer(accessToken, page, name).subscribeOn(
+        Schedulers.io()).observeOn(
         AndroidSchedulers.mainThread()).subscribe({
       if (null != it) {
         view?.loadAllCustomerSuccess(it)
@@ -19,8 +20,9 @@ class ListUserPresenter @Inject constructor() : BasePresenter<ListUserContract>(
     subscriptions.add(subscribe)
   }
 
-  fun loadAllSuperAdmin(accessToken: String, page: Int) {
-    val subscribe = api.loadAllSuperAdmin(accessToken, page).subscribeOn(Schedulers.io()).observeOn(
+  fun loadAllSuperAdmin(accessToken: String, page: Int, email: String) {
+    val subscribe = api.loadAllSuperAdmin(accessToken, page, email).subscribeOn(
+        Schedulers.io()).observeOn(
         AndroidSchedulers.mainThread()).subscribe({
       if (null != it) {
         view?.loadAllSuperAdminSuccess(it)
@@ -31,8 +33,8 @@ class ListUserPresenter @Inject constructor() : BasePresenter<ListUserContract>(
     subscriptions.add(subscribe)
   }
 
-  fun loadAllAdmin(accessToken: String, page: Int) {
-    val subscribe = api.loadAllParkingZone(accessToken, page).subscribeOn(
+  fun loadAllAdmin(accessToken: String, page: Int, name: String) {
+    val subscribe = api.loadAllParkingZone(accessToken, page, name).subscribeOn(
         Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe({
       if (null != it) {
         view?.loadAllAdminSuccess(it)

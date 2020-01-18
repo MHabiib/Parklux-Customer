@@ -40,6 +40,10 @@ class Constants {
     const val TIME_FORMAT = "HH:mm"
     const val SEC_IN_DAY = 3600000
 
+    const val ALL = "all"
+    const val ONGOING = "ongoing"
+    const val PAST = "past"
+
     const val STATUS_ONGOING = "Ongoing"
 
     const val parkSize = 88

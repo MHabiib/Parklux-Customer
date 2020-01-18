@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,11 +20,15 @@ import com.future.pms.model.activity.Content
 import com.future.pms.model.oauth.Token
 import com.future.pms.ui.superadmin.activitydetails.ActivityDetailsFragment
 import com.future.pms.util.Constants
+import com.future.pms.util.Constants.Companion.ALL
 import com.future.pms.util.Constants.Companion.ID_BOOKING
 import com.future.pms.util.Constants.Companion.LIST_ACTIVITY_FRAGMENT
+import com.future.pms.util.Constants.Companion.ONGOING
+import com.future.pms.util.Constants.Companion.PAST
 import com.future.pms.util.PaginationScrollListener
 import com.google.gson.Gson
 import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
 
 class ListActivityFragment : Fragment(), ListActivityContract {
@@ -34,6 +41,8 @@ class ListActivityFragment : Fragment(), ListActivityContract {
   private var itemPosition: Int? = 0
   private lateinit var idItem: String
   private lateinit var accessToken: String
+  private lateinit var filterBy: String
+  private val spinnerItems = ArrayList<String>()
   private val bottomSheetFragment = ActivityDetailsFragment()
 
   companion object {
@@ -57,13 +66,8 @@ class ListActivityFragment : Fragment(), ListActivityContract {
     with(binding) {
       shimmerActivity.startShimmerAnimation()
       refreshActivity.setOnRefreshListener {
-        shimmerActivity.startShimmerAnimation()
-        binding.shimmerActivity.visibility = View.VISIBLE
-        listActivityAdapter.clear()
-        listActivityAdapter.notifyDataSetChanged()
-        currentPage = 0
-        isLastPage = false
-        presenter.loadAllBooking(accessToken, currentPage)
+        refreshList()
+        presenter.loadAllBooking(accessToken, currentPage, filterBy)
         refreshActivity.isRefreshing = false
       }
       listActivityAdapter = ListActivityAdapter()
@@ -86,12 +90,59 @@ class ListActivityFragment : Fragment(), ListActivityContract {
         override fun loadMoreItems() {
           if (!isLoading && !isLastPage) {
             isLoading = true
-            presenter.loadAllBooking(accessToken, currentPage)
+            presenter.loadAllBooking(accessToken, currentPage, filterBy)
           }
         }
       })
+
+      val adapter = context?.let {
+        ArrayAdapter(it, R.layout.spinner_style_small_text, spinnerItems)
+      }
+      adapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+      spinnerItems.add(getString(R.string.all))
+      spinnerItems.add(getString(R.string.ongoing))
+      spinnerItems.add(getString(R.string.completed))
+      filter.adapter = adapter
+      filter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        override fun onNothingSelected(p0: AdapterView<*>?) {
+          //No implementation needed
+        }
+
+        override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+          (p0?.getChildAt(0) as TextView).setTextColor(resources.getColor(R.color.white))
+          when (p2) {
+            0 -> {
+              filterBy = ALL
+              refreshList()
+              presenter.loadAllBooking(accessToken, currentPage, ALL)
+              refreshActivity.isRefreshing = false
+            }
+            1 -> {
+              filterBy = ONGOING
+              refreshList()
+              presenter.loadAllBooking(accessToken, currentPage, ONGOING)
+              refreshActivity.isRefreshing = false
+            }
+            else -> {
+              filterBy = PAST
+              refreshList()
+              presenter.loadAllBooking(accessToken, currentPage, PAST)
+              refreshActivity.isRefreshing = false
+            }
+          }
+        }
+      }
       return root
     }
+  }
+
+  private fun FragmentListActivityBinding.refreshList() {
+    shimmerActivity.startShimmerAnimation()
+    binding.shimmerActivity.visibility = View.VISIBLE
+    listActivityAdapter.clear()
+    listActivityAdapter.notifyDataSetChanged()
+    currentPage = 0
+    isLastPage = false
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -100,7 +151,6 @@ class ListActivityFragment : Fragment(), ListActivityContract {
         context?.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
             Constants.TOKEN, null), Token::class.java).accessToken
     presenter.apply {
-      loadAllBooking(accessToken, currentPage)
       subscribe()
     }
   }

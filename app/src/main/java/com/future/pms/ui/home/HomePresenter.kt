@@ -1,7 +1,7 @@
 package com.future.pms.ui.home
 
 import com.future.pms.di.base.BasePresenter
-import com.future.pms.model.customerdetail.Customer
+import com.future.pms.model.customerdetail.Body
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.util.*
@@ -15,7 +15,7 @@ class HomePresenter @Inject constructor() : BasePresenter<HomeContract>() {
   fun loadData(accessToken: String) {
     view?.apply {
       val subscribe = api.getCustomerDetail(accessToken).subscribeOn(Schedulers.io()).observeOn(
-          AndroidSchedulers.mainThread()).subscribe({ customer: Customer ->
+          AndroidSchedulers.mainThread()).subscribe({ customer: Body ->
         loadCustomerDetailSuccess(customer)
       }, { error ->
         onFailed(error.message.toString())

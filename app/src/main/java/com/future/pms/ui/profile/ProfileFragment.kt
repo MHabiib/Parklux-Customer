@@ -18,12 +18,14 @@ import com.future.pms.R
 import com.future.pms.databinding.FragmentProfileBinding
 import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
-import com.future.pms.model.customerdetail.Customer
+import com.future.pms.model.customerdetail.Body
 import com.future.pms.model.oauth.Token
 import com.future.pms.ui.login.LoginActivity
 import com.future.pms.ui.main.MainActivity
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.BAD_REQUEST_CODE
+import com.future.pms.util.Constants.Companion.NOT_FOUND_CODE
+import com.future.pms.util.Constants.Companion.NO_CONNECTION
 import com.future.pms.util.Constants.Companion.PROFILE_FRAGMENT
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_profile.*
@@ -97,17 +99,17 @@ class ProfileFragment : Fragment(), ProfileContract {
     }
   }
 
-  override fun loadCustomerDetailSuccess(customer: Customer) {
+  override fun loadCustomerDetailSuccess(customer: Body) {
     with(binding) {
       ibRefresh.visibility = View.GONE
-      profileNameDisplay.text = customer.body.name
-      profileName.setText(customer.body.name)
-      profileEmail.setText(customer.body.email)
+      profileNameDisplay.text = customer.name
+      profileName.setText(customer.name)
+      profileEmail.setText(customer.email)
       profilePassword.hint = "********"
-      if (customer.body.phoneNumber == "") {
+      if (customer.phoneNumber == "") {
         profilePhoneNumber.hint = "You haven't enter your phone number yet !"
       } else {
-        profilePhoneNumber.setText(customer.body.phoneNumber)
+        profilePhoneNumber.setText(customer.phoneNumber)
       }
       profileName.addTextChangedListener(textWatcher())
       profileEmail.addTextChangedListener(textWatcher())
@@ -136,11 +138,15 @@ class ProfileFragment : Fragment(), ProfileContract {
   }
 
   override fun onFailed(message: String) {
-    if (message.contains(Constants.NO_CONNECTION)) {
-      Toast.makeText(context, getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show()
-    } else if (message.contains(BAD_REQUEST_CODE)) {
-      Toast.makeText(context, "Failed to update profile, email already used !",
-          Toast.LENGTH_SHORT).show()
+    when {
+      message.contains(NO_CONNECTION) -> Toast.makeText(context,
+          getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show()
+      message.contains(BAD_REQUEST_CODE) -> Toast.makeText(context,
+          "Failed to update profile, email already used !", Toast.LENGTH_SHORT).show()
+      message.contains(NOT_FOUND_CODE) -> {
+        presenter.signOut()
+        onLogout()
+      }
     }
     Timber.tag(Constants.ERROR).e(message)
     binding.ibRefresh.visibility = View.VISIBLE
@@ -155,6 +161,7 @@ class ProfileFragment : Fragment(), ProfileContract {
   override fun onLogout() {
     val intent = Intent(activity, LoginActivity::class.java)
     startActivity(intent)
+    activity?.finish()
   }
 
   private fun refreshPage() {

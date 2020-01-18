@@ -14,7 +14,7 @@ import com.future.pms.ui.login.LoginActivity
 import com.future.pms.ui.main.MainActivity
 import com.future.pms.ui.superadmin.mainsuperadmin.MainActivitySuperAdmin
 import com.future.pms.util.Constants
-import com.future.pms.util.Constants.Companion.ROLE_ADMIN
+import com.future.pms.util.Constants.Companion.ROLE_CUSTOMER
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
@@ -44,7 +44,7 @@ class SplashActivity : AppCompatActivity(), SplashContract {
   override fun onSuccess() {
     val intent: Intent = if (Gson().fromJson(
             this.getSharedPreferences(Constants.AUTHENTCATION, Context.MODE_PRIVATE)?.getString(
-                Constants.TOKEN, null), Token::class.java).role == ROLE_ADMIN) {
+                Constants.TOKEN, null), Token::class.java).role == ROLE_CUSTOMER) {
       Intent(this, MainActivity::class.java)
     } else {
       Intent(this, MainActivitySuperAdmin::class.java)
@@ -69,10 +69,6 @@ class SplashActivity : AppCompatActivity(), SplashContract {
       startActivity(intent)
       finish()
     }, 500)
-  }
-
-  override fun refreshFetcher() {
-    presenter.refreshFetcher(applicationContext)
   }
 
   override fun onFailed(message: String) {

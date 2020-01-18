@@ -11,7 +11,7 @@ import com.future.pms.R
 import com.future.pms.databinding.FragmentHomeBinding
 import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
-import com.future.pms.model.customerdetail.Customer
+import com.future.pms.model.customerdetail.Body
 import com.future.pms.model.oauth.Token
 import com.future.pms.ui.history.HistoryFragment
 import com.future.pms.ui.ongoing.OngoingFragment
@@ -50,7 +50,6 @@ class HomeFragment : Fragment(), HomeContract {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     presenter.attach(this)
-    presenter.subscribe()
     presenter.onOngoingIconClick()
     with(binding) {
       ongoing.setOnClickListener {
@@ -119,8 +118,8 @@ class HomeFragment : Fragment(), HomeContract {
     }
   }
 
-  override fun loadCustomerDetailSuccess(customer: Customer) {
-    binding.userName.text = customer.body.name
+  override fun loadCustomerDetailSuccess(customer: Body) {
+    binding.userName.text = customer.name
   }
 
   override fun onFailed(message: String) {

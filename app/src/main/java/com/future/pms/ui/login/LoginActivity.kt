@@ -117,7 +117,7 @@ class LoginActivity : AppCompatActivity(), LoginContract {
 
   override fun onFailed(message: String) {
     loading(false)
-    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+    Toast.makeText(this, R.string.email_password_incorrect, Toast.LENGTH_LONG).show()
   }
 
   override fun onBackPressed() {

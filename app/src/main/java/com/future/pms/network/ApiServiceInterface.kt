@@ -19,7 +19,7 @@ import retrofit2.http.*
 
 interface ApiServiceInterface {
   @GET("api/customer/detail") fun getCustomerDetail(@Query("access_token")
-  accessToken: String?): Observable<Customer>
+  accessToken: String?): Observable<com.future.pms.model.customerdetail.Body>
 
   @GET("api/booking/customer") fun getCustomerBooking(@Query("access_token") accessToken: String?,
       @Query("page") page: Int?): Observable<History>
@@ -50,16 +50,16 @@ interface ApiServiceInterface {
   accessToken: String?): Observable<String>
 
   @GET("api3/booking") fun loadAllBooking(@Query("access_token") accessToken: String?,
-      @Query("page") page: Int?): Observable<Booking>
+      @Query("page") page: Int?, @Query("filter") filter: String?): Observable<Booking>
 
   @GET("api3/parking-zone") fun loadAllParkingZone(@Query("access_token") accessToken: String?,
-      @Query("page") page: Int?): Observable<Admin>
+      @Query("page") page: Int?, @Query("name") name: String): Observable<Admin>
 
   @GET("api3/customer") fun loadAllCustomer(@Query("access_token") accessToken: String?,
-      @Query("page") page: Int?): Observable<CustomerResponse>
+      @Query("page") page: Int?, @Query("name") name: String): Observable<CustomerResponse>
 
   @GET("api3/user") fun loadAllSuperAdmin(@Query("access_token") accessToken: String?,
-      @Query("page") page: Int?): Observable<SuperAdminResponse>
+      @Query("page") page: Int?, @Query("email") email: String): Observable<SuperAdminResponse>
 
   @POST("api3/user") fun createUser(@Query("access_token") accessToken: String?, @Body
   user: User): Observable<String>

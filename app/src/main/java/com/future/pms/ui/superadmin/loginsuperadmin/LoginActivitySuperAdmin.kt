@@ -107,7 +107,7 @@ class LoginActivitySuperAdmin : AppCompatActivity(), LoginContractSuperAdmin {
 
   override fun onFailed(e: String) {
     loading(false)
-    Toast.makeText(this, e, Toast.LENGTH_LONG).show()
+    Toast.makeText(this, R.string.email_password_incorrect, Toast.LENGTH_LONG).show()
   }
 
   override fun onBackPressed() {

@@ -7,5 +7,4 @@ interface SplashContract : BaseView {
   fun onSuccess()
   fun onLogin()
   fun isAuthenticated(): Context?
-  fun refreshFetcher()
 }

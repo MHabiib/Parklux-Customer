@@ -2,12 +2,15 @@ package com.future.pms.ui.superadmin.listuser
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -51,7 +54,10 @@ class ListUserFragment : Fragment(), ListUserContract {
   private var itemPosition: Int? = 0
   private lateinit var idItem: String
   private lateinit var accessToken: String
+  private var searchByName = ""
   private val spinnerItems = ArrayList<String>()
+  var handler = Handler(Looper.getMainLooper() /*UI thread*/)
+  var workRunnable: Runnable? = null
   private val bottomSheetFragment = UserDetailsFragment()
 
   companion object {
@@ -87,7 +93,7 @@ class ListUserFragment : Fragment(), ListUserContract {
         listCustomerAdapter.notifyDataSetChanged()
         currentPage = 0
         isLastPage = false
-        presenter.loadAllCustomer(accessToken, currentPage)
+        presenter.loadAllCustomer(accessToken, currentPage, searchByName)
         refreshCustomer.isRefreshing = false
       }
       refreshAdmin.setOnRefreshListener {
@@ -97,7 +103,7 @@ class ListUserFragment : Fragment(), ListUserContract {
         listAdminAdapter.notifyDataSetChanged()
         currentPage = 0
         isLastPage = false
-        presenter.loadAllAdmin(accessToken, currentPage)
+        presenter.loadAllAdmin(accessToken, currentPage, searchByName)
         refreshAdmin.isRefreshing = false
       }
       refreshSuperAdmin.setOnRefreshListener {
@@ -107,7 +113,7 @@ class ListUserFragment : Fragment(), ListUserContract {
         listSuperAdminAdapter.notifyDataSetChanged()
         currentPage = 0
         isLastPage = false
-        presenter.loadAllSuperAdmin(accessToken, currentPage)
+        presenter.loadAllSuperAdmin(accessToken, currentPage, searchByName)
         refreshSuperAdmin.isRefreshing = false
       }
       listCustomerAdapter = ListCustomerAdapter()
@@ -166,7 +172,7 @@ class ListUserFragment : Fragment(), ListUserContract {
         override fun loadMoreItems() {
           if (!isLoading && !isLastPage) {
             isLoading = true
-            presenter.loadAllCustomer(accessToken, currentPage)
+            presenter.loadAllCustomer(accessToken, currentPage, searchByName)
           }
         }
       })
@@ -175,7 +181,7 @@ class ListUserFragment : Fragment(), ListUserContract {
         override fun loadMoreItems() {
           if (!isLoading && !isLastPage) {
             isLoading = true
-            presenter.loadAllAdmin(accessToken, currentPage)
+            presenter.loadAllAdmin(accessToken, currentPage, searchByName)
           }
         }
       })
@@ -184,7 +190,7 @@ class ListUserFragment : Fragment(), ListUserContract {
         override fun loadMoreItems() {
           if (!isLoading && !isLastPage) {
             isLoading = true
-            presenter.loadAllSuperAdmin(accessToken, currentPage)
+            presenter.loadAllSuperAdmin(accessToken, currentPage, searchByName)
           }
         }
       })
@@ -210,7 +216,7 @@ class ListUserFragment : Fragment(), ListUserContract {
               refreshAdmin.visibility = View.GONE
               refreshSuperAdmin.visibility = View.GONE
               refreshCustomer.visibility = View.VISIBLE
-              presenter.loadAllCustomer(accessToken, currentPage)
+              presenter.loadAllCustomer(accessToken, currentPage, searchByName)
               refreshCustomer.isRefreshing = false
             }
             1 -> {
@@ -218,7 +224,7 @@ class ListUserFragment : Fragment(), ListUserContract {
               refreshCustomer.visibility = View.GONE
               refreshSuperAdmin.visibility = View.GONE
               refreshAdmin.visibility = View.VISIBLE
-              presenter.loadAllAdmin(accessToken, currentPage)
+              presenter.loadAllAdmin(accessToken, currentPage, searchByName)
               refreshAdmin.isRefreshing = false
             }
             else -> {
@@ -226,11 +232,50 @@ class ListUserFragment : Fragment(), ListUserContract {
               refreshCustomer.visibility = View.GONE
               refreshAdmin.visibility = View.GONE
               refreshSuperAdmin.visibility = View.VISIBLE
-              presenter.loadAllSuperAdmin(accessToken, currentPage)
+              presenter.loadAllSuperAdmin(accessToken, currentPage, searchByName)
               refreshSuperAdmin.isRefreshing = false
             }
           }
         }
+      }
+      inputSearchName.addTextChangedListener {
+        handler.removeCallbacks(workRunnable)
+        searchByName = inputSearchName.text.toString()
+        workRunnable = Runnable {
+          when {
+            name.selectedItem == getString(R.string.customer) -> {
+              shimmerUser.startShimmerAnimation()
+              shimmerUser.visibility = View.VISIBLE
+              listCustomerAdapter.clear()
+              listCustomerAdapter.notifyDataSetChanged()
+              currentPage = 0
+              isLastPage = false
+              presenter.loadAllCustomer(accessToken, currentPage, searchByName)
+              refreshCustomer.isRefreshing = false
+            }
+            name.selectedItem == getString(R.string.admin) -> {
+              shimmerUser.startShimmerAnimation()
+              shimmerUser.visibility = View.VISIBLE
+              listAdminAdapter.clear()
+              listAdminAdapter.notifyDataSetChanged()
+              currentPage = 0
+              isLastPage = false
+              presenter.loadAllAdmin(accessToken, currentPage, searchByName)
+              refreshAdmin.isRefreshing = false
+            }
+            else -> {
+              shimmerUser.startShimmerAnimation()
+              shimmerUser.visibility = View.VISIBLE
+              listSuperAdminAdapter.clear()
+              listSuperAdminAdapter.notifyDataSetChanged()
+              currentPage = 0
+              isLastPage = false
+              presenter.loadAllSuperAdmin(accessToken, currentPage, searchByName)
+              refreshSuperAdmin.isRefreshing = false
+            }
+          }
+        }
+        handler.postDelayed(workRunnable, 500 /*delay*/)
       }
       return root
     }
