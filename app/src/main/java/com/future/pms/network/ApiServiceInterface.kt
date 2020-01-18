@@ -13,7 +13,7 @@ import com.future.pms.model.receipt.Receipt
 import com.future.pms.model.register.CustomerRequest
 import com.future.pms.model.superadmin.SuperAdminResponse
 import com.future.pms.model.user.User
-import com.future.pms.model.user.UserResponse
+import com.future.pms.model.user.UserDetails
 import io.reactivex.Observable
 import retrofit2.http.*
 
@@ -59,7 +59,7 @@ interface ApiServiceInterface {
       @Query("page") page: Int?, @Query("name") name: String): Observable<CustomerResponse>
 
   @GET("api3/user") fun loadAllSuperAdmin(@Query("access_token") accessToken: String?,
-      @Query("page") page: Int?, @Query("email") email: String): Observable<SuperAdminResponse>
+      @Query("page") page: Int?): Observable<SuperAdminResponse>
 
   @POST("api3/user") fun createUser(@Query("access_token") accessToken: String?, @Body
   user: User): Observable<String>
@@ -86,7 +86,7 @@ interface ApiServiceInterface {
       @Query("access_token") accessToken: String?): Observable<AdminResponse>
 
   @GET("api3/{id}/user/") fun getUserDetailSA(@Path("id") idBooking: String, @Query("access_token")
-  accessToken: String?): Observable<UserResponse>
+  accessToken: String?): Observable<UserDetails>
 
   @Multipart @PUT("api3/customer/{id}/update") fun updateCustomer(@Path("id") idBooking: String,
       @Query("access_token") accessToken: String?, @Part("customer")
