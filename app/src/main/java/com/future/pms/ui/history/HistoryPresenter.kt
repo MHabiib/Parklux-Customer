@@ -1,6 +1,6 @@
 package com.future.pms.ui.history
 
-import com.future.pms.di.base.BasePresenter
+import com.future.pms.ui.base.BasePresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -15,9 +15,5 @@ class HistoryPresenter : BasePresenter<HistoryContract>() {
       it.message?.let { throwable -> view?.onFailed(throwable) }
     })
     subscriptions.add(subscribe)
-  }
-
-  fun attach(view: HistoryContract) {
-    this.view = view
   }
 }

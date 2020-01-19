@@ -9,7 +9,6 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.future.pms.R
 import com.future.pms.databinding.FragmentListActivityBinding
@@ -18,6 +17,7 @@ import com.future.pms.di.module.FragmentModule
 import com.future.pms.model.activity.Booking
 import com.future.pms.model.activity.Content
 import com.future.pms.model.oauth.Token
+import com.future.pms.ui.base.BaseFragment
 import com.future.pms.ui.superadmin.activitydetails.ActivityDetailsFragment
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.ALL
@@ -31,7 +31,7 @@ import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
-class ListActivityFragment : Fragment(), ListActivityContract {
+class ListActivityFragment : BaseFragment(), ListActivityContract {
   @Inject lateinit var presenter: ListActivityPresenter
   private lateinit var binding: FragmentListActivityBinding
   private lateinit var listActivityAdapter: ListActivityAdapter

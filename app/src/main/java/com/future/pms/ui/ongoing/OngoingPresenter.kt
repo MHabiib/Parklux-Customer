@@ -1,11 +1,12 @@
 package com.future.pms.ui.ongoing
 
-import com.future.pms.di.base.BasePresenter
 import com.future.pms.model.customerbooking.CustomerBooking
+import com.future.pms.ui.base.BasePresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 class OngoingPresenter : BasePresenter<OngoingContract>() {
+
   fun loadOngoingBooking(accessToken: String) {
     view?.apply {
       showProgress(true)
@@ -38,9 +39,5 @@ class OngoingPresenter : BasePresenter<OngoingContract>() {
       subscriptions.add(subscribe)
       refreshHome()
     }
-  }
-
-  fun attach(view: OngoingContract) {
-    this.view = view
   }
 }

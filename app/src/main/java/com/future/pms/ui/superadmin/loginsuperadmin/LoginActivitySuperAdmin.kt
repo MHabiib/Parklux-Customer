@@ -9,11 +9,11 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.future.pms.R
 import com.future.pms.di.component.DaggerActivityComponent
 import com.future.pms.di.module.ActivityModule
 import com.future.pms.model.oauth.Token
+import com.future.pms.ui.base.BaseActivity
 import com.future.pms.ui.login.LoginActivity
 import com.future.pms.ui.superadmin.mainsuperadmin.MainActivitySuperAdmin
 import com.future.pms.util.Constants
@@ -21,7 +21,7 @@ import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
 
-class LoginActivitySuperAdmin : AppCompatActivity(), LoginContractSuperAdmin {
+class LoginActivitySuperAdmin : BaseActivity(), LoginContractSuperAdmin {
   @Inject lateinit var presenter: LoginPresenterSuperAdmin
   private var count = 0
   private var startMillis: Long = 0

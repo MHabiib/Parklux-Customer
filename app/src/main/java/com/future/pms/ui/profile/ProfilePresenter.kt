@@ -1,8 +1,8 @@
 package com.future.pms.ui.profile
 
-import com.future.pms.di.base.BasePresenter
 import com.future.pms.model.customerdetail.Body
 import com.future.pms.model.register.CustomerRequest
+import com.future.pms.ui.base.BasePresenter
 import com.future.pms.util.Authentication
 import com.future.pms.util.Constants
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -41,9 +41,5 @@ class ProfilePresenter : BasePresenter<ProfileContract>() {
 
   fun signOut() {
     getContext()?.let { Authentication.delete(it) }
-  }
-
-  fun attach(view: ProfileContract) {
-    this.view = view
   }
 }

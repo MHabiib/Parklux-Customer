@@ -1,7 +1,7 @@
 package com.future.pms.ui.receipt
 
-import com.future.pms.di.base.BasePresenter
 import com.future.pms.model.receipt.Receipt
+import com.future.pms.ui.base.BasePresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -19,9 +19,5 @@ class ReceiptPresenter : BasePresenter<ReceiptContract>() {
       })
       subscriptions.add(subscribe)
     }
-  }
-
-  fun attach(view: ReceiptContract) {
-    this.view = view
   }
 }

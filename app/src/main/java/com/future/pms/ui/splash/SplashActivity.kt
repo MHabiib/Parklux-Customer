@@ -5,11 +5,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.future.pms.R
 import com.future.pms.di.component.DaggerActivityComponent
 import com.future.pms.di.module.ActivityModule
 import com.future.pms.model.oauth.Token
+import com.future.pms.ui.base.BaseActivity
 import com.future.pms.ui.login.LoginActivity
 import com.future.pms.ui.main.MainActivity
 import com.future.pms.ui.superadmin.mainsuperadmin.MainActivitySuperAdmin
@@ -19,7 +19,7 @@ import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
 
-class SplashActivity : AppCompatActivity(), SplashContract {
+class SplashActivity : BaseActivity(), SplashContract {
   @Inject lateinit var presenter: SplashPresenter
 
   override fun onCreate(savedInstanceState: Bundle?) {

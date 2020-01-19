@@ -1,7 +1,7 @@
 package com.future.pms.ui.superadmin.homesuperadmin
 
-import com.future.pms.di.base.BasePresenter
 import com.future.pms.model.user.User
+import com.future.pms.ui.base.BasePresenter
 import com.future.pms.util.Authentication
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -42,9 +42,5 @@ class HomePresenterSuperAdmin : BasePresenter<HomeContractSuperAdmin>() {
 
   fun signOut() {
     getContext()?.let { Authentication.delete(it) }
-  }
-
-  fun attach(view: HomeContractSuperAdmin) {
-    this.view = view
   }
 }

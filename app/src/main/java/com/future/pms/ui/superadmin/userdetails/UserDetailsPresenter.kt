@@ -1,11 +1,11 @@
 package com.future.pms.ui.superadmin.userdetails
 
-import com.future.pms.di.base.BasePresenter
 import com.future.pms.model.admin.ParkingZoneResponse
 import com.future.pms.model.customerdetail.Customer
 import com.future.pms.model.register.CustomerRequest
 import com.future.pms.model.user.User
 import com.future.pms.model.user.UserDetails
+import com.future.pms.ui.base.BasePresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -162,9 +162,5 @@ class UserDetailsPresenter : BasePresenter<UserDetailsContract>() {
       view?.onFailed(it.toString())
     })
     subscriptions.add(subscribe)
-  }
-
-  fun attach(view: UserDetailsContract) {
-    this.view = view
   }
 }

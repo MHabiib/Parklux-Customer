@@ -100,6 +100,11 @@ class ActivityDetailsFragment : BottomSheetDialogFragment(), ActivityDetailsCont
     }
   }
 
+  override fun onDestroyView() {
+    presenter.detach()
+    super.onDestroyView()
+  }
+
   private fun injectDependency() {
     val profileComponent = DaggerFragmentComponent.builder().fragmentModule(
         FragmentModule(this)).build()

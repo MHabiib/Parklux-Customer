@@ -12,7 +12,6 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.future.pms.R
 import com.future.pms.databinding.FragmentListUserBinding
@@ -28,6 +27,7 @@ import com.future.pms.model.oauth.Token
 import com.future.pms.model.superadmin.SuperAdminDetails
 import com.future.pms.model.superadmin.SuperAdminResponse
 import com.future.pms.model.user.UserDetails
+import com.future.pms.ui.base.BaseFragment
 import com.future.pms.ui.superadmin.userdetails.UserDetailsFragment
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.ID_USER
@@ -42,7 +42,7 @@ import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
-class ListUserFragment : Fragment(), ListUserContract {
+class ListUserFragment : BaseFragment(), ListUserContract {
   @Inject lateinit var presenter: ListUserPresenter
   private lateinit var binding: FragmentListUserBinding
   private lateinit var listCustomerAdapter: ListCustomerAdapter
@@ -410,6 +410,11 @@ class ListUserFragment : Fragment(), ListUserContract {
 
   override fun onFailed(e: String) {
     Timber.e(e)
+  }
+
+  override fun onDestroyView() {
+    presenter.detach()
+    super.onDestroyView()
   }
 
   private fun injectDependency() {

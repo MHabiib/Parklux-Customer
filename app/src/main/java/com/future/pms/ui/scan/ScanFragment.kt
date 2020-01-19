@@ -28,6 +28,7 @@ import java.lang.reflect.Field
 import javax.inject.Inject
 
 class ScanFragment : Fragment(), ScanContract {
+  @Inject lateinit var presenter: ScanPresenter
   private var barcodeDetector: BarcodeDetector? = null
   private var cameraSource: CameraSource? = null
   private lateinit var intentData: String
@@ -39,8 +40,6 @@ class ScanFragment : Fragment(), ScanContract {
   companion object {
     const val TAG: String = SCAN_FRAGMENT
   }
-
-  @Inject lateinit var presenter: ScanPresenter
 
   fun newInstance(): ScanFragment {
     return ScanFragment()
@@ -186,6 +185,11 @@ class ScanFragment : Fragment(), ScanContract {
       it.parameters = param
       isFlashOn = isFlashOn.not()
     }
+  }
+
+  override fun onDestroyView() {
+    presenter.detach()
+    super.onDestroyView()
   }
 
   private fun injectDependency() {

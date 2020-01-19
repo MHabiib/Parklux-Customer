@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.future.pms.R
 import com.future.pms.databinding.FragmentHistoryBinding
@@ -15,6 +14,7 @@ import com.future.pms.di.module.FragmentModule
 import com.future.pms.model.history.BookingHistory
 import com.future.pms.model.history.History
 import com.future.pms.model.oauth.Token
+import com.future.pms.ui.base.BaseFragment
 import com.future.pms.ui.receipt.ReceiptFragment
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.ERROR
@@ -25,7 +25,7 @@ import kotlinx.android.synthetic.main.fragment_history.*
 import timber.log.Timber
 import javax.inject.Inject
 
-class HistoryFragment : Fragment(), HistoryContract {
+class HistoryFragment : BaseFragment(), HistoryContract {
   @Inject lateinit var presenter: HistoryPresenter
   private lateinit var binding: FragmentHistoryBinding
   private lateinit var historyAdapter: HistoryAdapter
@@ -134,6 +134,11 @@ class HistoryFragment : Fragment(), HistoryContract {
 
   override fun loadCustomerBookingError() {
     binding.dontHaveOrder.visibility = View.VISIBLE
+  }
+
+  override fun onDestroyView() {
+    presenter.detach()
+    super.onDestroyView()
   }
 
   private fun injectDependency() {

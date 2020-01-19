@@ -10,13 +10,13 @@ import android.view.ViewGroup
 import android.widget.Chronometer
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import com.future.pms.R
 import com.future.pms.databinding.FragmentOngoingBinding
 import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
 import com.future.pms.model.customerbooking.CustomerBooking
 import com.future.pms.model.oauth.Token
+import com.future.pms.ui.base.BaseFragment
 import com.future.pms.ui.history.HistoryFragment
 import com.future.pms.ui.home.HomeFragment
 import com.future.pms.ui.main.MainActivity
@@ -32,7 +32,7 @@ import java.time.ZoneId
 import javax.inject.Inject
 import kotlin.math.ceil
 
-class OngoingFragment : Fragment(), OngoingContract {
+class OngoingFragment : BaseFragment(), OngoingContract {
   @Inject lateinit var presenter: OngoingPresenter
   private lateinit var binding: FragmentOngoingBinding
   private lateinit var parkingTime: Chronometer
@@ -171,6 +171,11 @@ class OngoingFragment : Fragment(), OngoingContract {
       ft?.setReorderingAllowed(false)
     }
     ft?.detach(this)?.attach(this)?.commit()
+  }
+
+  override fun onDestroyView() {
+    presenter.detach()
+    super.onDestroyView()
   }
 
   private fun injectDependency() {

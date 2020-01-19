@@ -1,6 +1,6 @@
 package com.future.pms.ui.scan
 
-import com.future.pms.di.base.BasePresenter
+import com.future.pms.ui.base.BasePresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -20,9 +20,5 @@ class ScanPresenter : BasePresenter<ScanContract>() {
       showProgress(false)
       subscriptions.add(subscribe)
     }
-  }
-
-  fun attach(view: ScanContract) {
-    this.view = view
   }
 }

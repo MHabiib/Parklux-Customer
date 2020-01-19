@@ -1,15 +1,11 @@
 package com.future.pms.ui.register
 
-import com.future.pms.di.base.BasePresenter
 import com.future.pms.model.register.CustomerRequest
+import com.future.pms.ui.base.BasePresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 class RegisterPresenter : BasePresenter<RegisterContract>() {
-
-  fun attach(view: RegisterContract) {
-    this.view = view
-  }
 
   fun register(name: String, email: String, password: String, phoneNumber: String) {
     val customer = CustomerRequest(email, name, password, phoneNumber)

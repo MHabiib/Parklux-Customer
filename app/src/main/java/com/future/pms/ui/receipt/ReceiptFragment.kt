@@ -202,6 +202,11 @@ class ReceiptFragment : BottomSheetDialogFragment(), ReceiptContract {
     }
   }
 
+  override fun onDestroyView() {
+    presenter.detach()
+    super.onDestroyView()
+  }
+
   private fun injectDependency() {
     val homeComponent = DaggerFragmentComponent.builder().fragmentModule(
         FragmentModule(this)).build()

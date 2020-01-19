@@ -9,12 +9,12 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import com.future.pms.R
 import com.future.pms.databinding.FragmentHomeSuperAdminBinding
 import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
 import com.future.pms.model.oauth.Token
+import com.future.pms.ui.base.BaseFragment
 import com.future.pms.ui.superadmin.loginsuperadmin.LoginActivitySuperAdmin
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.HOME_FRAGMENT_SUPER_ADMIN
@@ -25,7 +25,7 @@ import com.google.gson.Gson
 import timber.log.Timber
 import javax.inject.Inject
 
-class HomeFragmentSuperAdmin : Fragment(), HomeContractSuperAdmin {
+class HomeFragmentSuperAdmin : BaseFragment(), HomeContractSuperAdmin {
   @Inject lateinit var presenter: HomePresenterSuperAdmin
   private lateinit var binding: FragmentHomeSuperAdminBinding
   private lateinit var accessToken: String
@@ -201,6 +201,11 @@ class HomeFragmentSuperAdmin : Fragment(), HomeContractSuperAdmin {
     val intent = Intent(activity, LoginActivitySuperAdmin::class.java)
     startActivity(intent)
     activity?.finish()
+  }
+
+  override fun onDestroyView() {
+    presenter.detach()
+    super.onDestroyView()
   }
 
   private fun injectDependency() {

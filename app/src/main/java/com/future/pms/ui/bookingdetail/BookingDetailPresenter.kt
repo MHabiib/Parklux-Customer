@@ -1,7 +1,7 @@
 package com.future.pms.ui.bookingdetail
 
-import com.future.pms.di.base.BasePresenter
 import com.future.pms.model.customerbooking.CustomerBooking
+import com.future.pms.ui.base.BasePresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 

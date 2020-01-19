@@ -1,6 +1,6 @@
 package com.future.pms.ui.scan
 
-import com.future.pms.di.base.BaseView
+import com.future.pms.ui.base.BaseView
 
 interface ScanContract : BaseView {
   fun showProgress(show: Boolean)

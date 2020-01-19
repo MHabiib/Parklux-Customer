@@ -1,13 +1,9 @@
 package com.future.pms.ui.splash
 
-import com.future.pms.di.base.BasePresenter
+import com.future.pms.ui.base.BasePresenter
 import com.future.pms.util.Authentication
 
 class SplashPresenter : BasePresenter<SplashContract>() {
-
-  fun attach(view: SplashContract) {
-    this.view = view
-  }
 
   fun isAuthenticated() {
     try {

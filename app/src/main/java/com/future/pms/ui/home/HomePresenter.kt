@@ -1,16 +1,12 @@
 package com.future.pms.ui.home
 
-import com.future.pms.di.base.BasePresenter
 import com.future.pms.model.customerdetail.Body
+import com.future.pms.ui.base.BasePresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 
 class HomePresenter : BasePresenter<HomeContract>() {
-  fun attach(view: HomeContract) {
-    this.view = view
-  }
-
   fun loadData(accessToken: String) {
     view?.apply {
       val subscribe = api.getCustomerDetail(accessToken).subscribeOn(Schedulers.io()).observeOn(

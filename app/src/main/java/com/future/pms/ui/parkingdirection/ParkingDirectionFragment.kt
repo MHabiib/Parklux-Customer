@@ -203,6 +203,11 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
     activity?.presenter?.onHomeIconClick()
   }
 
+  override fun onDestroyView() {
+    presenter.detach()
+    super.onDestroyView()
+  }
+
   private fun injectDependency() {
     val homeComponent = DaggerFragmentComponent.builder().fragmentModule(
         FragmentModule(this)).build()

@@ -1,7 +1,7 @@
 package com.future.pms.ui.superadmin.activitydetails
 
-import com.future.pms.di.base.BasePresenter
 import com.future.pms.model.receipt.Receipt
+import com.future.pms.ui.base.BasePresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -35,9 +35,5 @@ class ActivityDetailsPresenter : BasePresenter<ActivityDetailsContract>() {
       })
       subscriptions.add(subscribe)
     }
-  }
-
-  fun attach(view: ActivityDetailsContract) {
-    this.view = view
   }
 }

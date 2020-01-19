@@ -40,6 +40,7 @@ class UserDetailsFragment : BottomSheetDialogFragment(), UserDetailsContract {
   private lateinit var binding: FragmentBottomSheetUserDetailsBinding
   private lateinit var accessToken: String
   private lateinit var id: String
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     injectDependency()
@@ -247,6 +248,11 @@ class UserDetailsFragment : BottomSheetDialogFragment(), UserDetailsContract {
         binding.progressBar.visibility = View.GONE
       }
     }
+  }
+
+  override fun onDestroyView() {
+    presenter.detach()
+    super.onDestroyView()
   }
 
   private fun injectDependency() {

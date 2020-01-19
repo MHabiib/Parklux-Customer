@@ -1,9 +1,9 @@
 package com.future.pms.ui.login
 
-import com.future.pms.di.base.BasePresenter
+import com.future.pms.di.module.APICreator
 import com.future.pms.model.oauth.Token
-import com.future.pms.network.APICreator
 import com.future.pms.network.ApiServiceInterface
+import com.future.pms.ui.base.BasePresenter
 import com.future.pms.util.Authentication
 import com.future.pms.util.Constants.Companion.GRANT_TYPE
 import com.future.pms.util.Constants.Companion.ROLE_CUSTOMER
@@ -12,10 +12,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 class LoginPresenter : BasePresenter<LoginContract>() {
-
-  fun attach(view: LoginContract) {
-    this.view = view
-  }
 
   fun login(username: String, password: String) {
     val authFetcher = APICreator(ApiServiceInterface::class.java).generate()

@@ -12,7 +12,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import com.future.pms.R
 import com.future.pms.databinding.ActivityMainBinding
 import com.future.pms.databinding.FragmentBookingDetailBinding
@@ -20,6 +19,7 @@ import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
 import com.future.pms.model.customerbooking.CustomerBooking
 import com.future.pms.model.oauth.Token
+import com.future.pms.ui.base.BaseFragment
 import com.future.pms.ui.main.MainActivity
 import com.future.pms.ui.ongoing.OngoingFragment
 import com.future.pms.util.Constants.Companion.AUTHENTICATION
@@ -39,33 +39,25 @@ import com.future.pms.util.Constants.Companion.SLOT_READY
 import com.future.pms.util.Constants.Companion.SLOT_ROAD
 import com.future.pms.util.Constants.Companion.SLOT_SCAN_ME
 import com.future.pms.util.Constants.Companion.SLOT_TAKEN
-import com.future.pms.util.Constants.Companion.STATUS_AVAILABLE
-import com.future.pms.util.Constants.Companion.STATUS_BLOCK
-import com.future.pms.util.Constants.Companion.STATUS_BOOKED
-import com.future.pms.util.Constants.Companion.STATUS_IN
-import com.future.pms.util.Constants.Companion.STATUS_OUT
-import com.future.pms.util.Constants.Companion.STATUS_RESERVED
-import com.future.pms.util.Constants.Companion.STATUS_ROAD
 import com.future.pms.util.Constants.Companion.TOKEN
 import com.future.pms.util.Constants.Companion.parkMargin
 import com.future.pms.util.Constants.Companion.parkPadding
 import com.future.pms.util.Constants.Companion.parkSize
 import com.future.pms.util.Utils
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.fragment_bottom_sheet_content.progressBar
 import kotlinx.android.synthetic.main.fragment_parking_direction.*
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
-class BookingDetailFragment : Fragment(), BookingDetailContract {
-  private var parkViewList: MutableList<TextView> = ArrayList()
+class BookingDetailFragment : BaseFragment(), BookingDetailContract {
   @Inject lateinit var presenter: BookingDetailPresenter
   private lateinit var idBooking: String
   private lateinit var accessToken: String
   private lateinit var layout: HorizontalScrollView
   private lateinit var binding: FragmentBookingDetailBinding
   private lateinit var bindingActivityMain: ActivityMainBinding
+  private var parkViewList: MutableList<TextView> = ArrayList()
 
   companion object {
     const val TAG: String = BOOKING_DETAIL_FRAGMENT
@@ -112,7 +104,6 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
       presenter.loadBooking(accessToken)
       presenter.getParkingLayout(idBooking, accessToken)
     } else {
-      showProgress(false)
       with(binding) {
         parkingDirectionContent.apply {
           errorText.visibility = View.VISIBLE
@@ -196,45 +187,37 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
 
       when {
         slotsLayout[index] == SLOT_NULL -> {
-          setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_ROAD,
-              R.drawable.ic_blank)
+          setupParkingView(index, parkingLayout, slotsLayout[index], R.drawable.ic_blank)
         }
         slotsLayout[index] == SLOT_SCAN_ME || slotsLayout[index] == SLOT_TAKEN -> {
-          setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_BOOKED,
-              R.drawable.ic_car)
+          setupParkingView(index, parkingLayout, slotsLayout[index], R.drawable.ic_car)
         }
         slotsLayout[index] == SLOT_EMPTY -> {
-          setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_AVAILABLE,
-              R.drawable.ic_park)
+          setupParkingView(index, parkingLayout, slotsLayout[index], R.drawable.ic_park)
         }
         slotsLayout[index] == DISABLED_SLOT -> {
-          setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_RESERVED,
-              R.drawable.ic_disable)
+          setupParkingView(index, parkingLayout, slotsLayout[index], R.drawable.ic_disable)
         }
         slotsLayout[index] == SLOT_ROAD || slotsLayout[index] == SLOT_READY -> {
-          setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_ROAD,
-              R.color.transparent)
+          setupParkingView(index, parkingLayout, slotsLayout[index], R.color.transparent)
         }
         slotsLayout[index] == SLOT_IN -> {
-          setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_IN, R.drawable.ic_in)
+          setupParkingView(index, parkingLayout, slotsLayout[index], R.drawable.ic_in)
         }
         slotsLayout[index] == SLOT_OUT -> {
-          setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_OUT, R.drawable.ic_out)
+          setupParkingView(index, parkingLayout, slotsLayout[index], R.drawable.ic_out)
         }
         slotsLayout[index] == SLOT_BLOCK -> {
-          setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_BLOCK,
-              R.drawable.ic_road)
+          setupParkingView(index, parkingLayout, slotsLayout[index], R.drawable.ic_road)
         }
         slotsLayout[index] == MY_SLOT -> {
-          setupParkingView(index, parkingLayout, slotsLayout[index], STATUS_AVAILABLE,
-              R.drawable.ic_my_location)
+          setupParkingView(index, parkingLayout, slotsLayout[index], R.drawable.ic_my_location)
         }
       }
     }
   }
 
-  private fun setupParkingView(count: Int, layout: LinearLayout?, code: Char, tags: Int,
-      icon: Int): TextView {
+  private fun setupParkingView(count: Int, layout: LinearLayout?, code: Char, icon: Int): TextView {
     val view = TextView(context)
     view.apply {
       layoutParams = LinearLayout.LayoutParams(parkSize, parkSize).apply {
@@ -260,6 +243,11 @@ class BookingDetailFragment : Fragment(), BookingDetailContract {
 
   override fun onFailed(message: String) {
     Timber.tag("e").e(message)
+  }
+
+  override fun onDestroyView() {
+    presenter.detach()
+    super.onDestroyView()
   }
 
   private fun injectDependency() {

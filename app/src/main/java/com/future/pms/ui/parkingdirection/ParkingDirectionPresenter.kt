@@ -1,6 +1,6 @@
 package com.future.pms.ui.parkingdirection
 
-import com.future.pms.di.base.BasePresenter
+import com.future.pms.ui.base.BasePresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -21,9 +21,5 @@ class ParkingDirectionPresenter : BasePresenter<ParkingDirectionContract>() {
       showProgress(false)
       subscriptions.add(subscribe)
     }
-  }
-
-  fun attach(view: ParkingDirectionContract) {
-    this.view = view
   }
 }

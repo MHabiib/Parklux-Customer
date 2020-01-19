@@ -1,6 +1,6 @@
 package com.future.pms.ui.superadmin.listactivity
 
-import com.future.pms.di.base.BasePresenter
+import com.future.pms.ui.base.BasePresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -29,9 +29,5 @@ class ListActivityPresenter : BasePresenter<ListActivityContract>() {
       it.message?.let { throwable -> view?.onFailed(throwable) }
     })
     subscriptions.add(subscribe)
-  }
-
-  fun attach(view: ListActivityContract) {
-    this.view = view
   }
 }

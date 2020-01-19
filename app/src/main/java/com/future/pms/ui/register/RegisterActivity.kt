@@ -7,15 +7,15 @@ import android.util.Patterns
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.future.pms.R
 import com.future.pms.di.component.DaggerActivityComponent
 import com.future.pms.di.module.ActivityModule
+import com.future.pms.ui.base.BaseActivity
 import com.future.pms.ui.login.LoginActivity
 import kotlinx.android.synthetic.main.activity_register.*
 import javax.inject.Inject
 
-class RegisterActivity : AppCompatActivity(), RegisterContract {
+class RegisterActivity : BaseActivity(), RegisterContract {
   @Inject lateinit var presenter: RegisterPresenter
 
   override fun onCreate(savedInstanceState: Bundle?) {

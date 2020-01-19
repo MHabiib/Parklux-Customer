@@ -4,6 +4,9 @@ import android.app.Application
 import com.future.pms.di.component.ApplicationComponent
 import com.future.pms.di.component.DaggerApplicationComponent
 import com.future.pms.di.module.ApplicationModule
+import timber.log.Timber
+
+
 
 class BaseApp : Application() {
 
@@ -18,6 +21,10 @@ class BaseApp : Application() {
 
     instance = this
     setup()
+
+    if (BuildConfig.DEBUG) {
+      Timber.plant(Timber.DebugTree())
+    }
   }
 
   private fun setup() {

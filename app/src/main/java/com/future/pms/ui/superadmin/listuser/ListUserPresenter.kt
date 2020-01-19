@@ -1,6 +1,6 @@
 package com.future.pms.ui.superadmin.listuser
 
-import com.future.pms.di.base.BasePresenter
+import com.future.pms.ui.base.BasePresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -42,9 +42,5 @@ class ListUserPresenter : BasePresenter<ListUserContract>() {
       it.message?.let { throwable -> view?.onFailed(throwable) }
     })
     subscriptions.add(subscribe)
-  }
-
-  fun attach(view: ListUserContract) {
-    this.view = view
   }
 }

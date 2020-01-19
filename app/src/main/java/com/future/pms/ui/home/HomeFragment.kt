@@ -6,13 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import com.future.pms.R
 import com.future.pms.databinding.FragmentHomeBinding
 import com.future.pms.di.component.DaggerFragmentComponent
 import com.future.pms.di.module.FragmentModule
 import com.future.pms.model.customerdetail.Body
 import com.future.pms.model.oauth.Token
+import com.future.pms.ui.base.BaseFragment
 import com.future.pms.ui.history.HistoryFragment
 import com.future.pms.ui.ongoing.OngoingFragment
 import com.future.pms.util.Constants
@@ -24,7 +24,7 @@ import java.text.DateFormat
 import java.util.*
 import javax.inject.Inject
 
-class HomeFragment : Fragment(), HomeContract {
+class HomeFragment : BaseFragment(), HomeContract {
   @Inject lateinit var presenter: HomePresenter
   private lateinit var binding: FragmentHomeBinding
 
@@ -130,6 +130,11 @@ class HomeFragment : Fragment(), HomeContract {
     val currentDateTimeString = DateFormat.getDateInstance(DateFormat.FULL).format(Date())
     val dateText = binding.dateNow
     dateText.text = String.format(getString(R.string.date_now), currentDateTimeString)
+  }
+
+  override fun onDestroyView() {
+    presenter.detach()
+    super.onDestroyView()
   }
 
   private fun injectDependency() {
