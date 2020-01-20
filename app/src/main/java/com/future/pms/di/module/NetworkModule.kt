@@ -1,5 +1,6 @@
 package com.future.pms.di.module
 
+import com.future.pms.di.scope.PerApplication
 import com.future.pms.network.ApiServiceInterface
 import com.future.pms.network.BasicAuthInterceptor
 import com.future.pms.util.Constants
@@ -20,6 +21,11 @@ import javax.inject.Singleton
     return Retrofit.Builder().baseUrl(BASE).addCallAdapterFactory(
         RxJava2CallAdapterFactory.create()).addConverterFactory(
         GsonConverterFactory.create(GsonBuilder().setLenient().create())).build()
+  }
+
+  @Provides internal fun provideAnalyticsService(@PerApplication
+  retrofit: Retrofit): ApiServiceInterface {
+    return retrofit.create(ApiServiceInterface::class.java)
   }
 }
 
