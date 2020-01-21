@@ -1,7 +1,10 @@
 package com.future.pms.ui.home
 
+import com.future.pms.model.customerdetail.Body
 import com.future.pms.network.ApiServiceInterface
 import com.future.pms.ui.base.BasePresenter
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import java.util.*
 import javax.inject.Inject
 
@@ -21,7 +24,15 @@ class HomePresenter @Inject constructor(private val apiServiceInterface: ApiServ
   }*/
 
   fun loadData(accessToken: String) {
-
+      addDisposable(
+          apiServiceInterface.getCustomerDetail(accessToken).subscribeOn(Schedulers.io()).observeOn(
+              AndroidSchedulers.mainThread()
+          ).subscribe({ customer: Body ->
+              view?.loadCustomerDetailSuccess(customer)
+          }, { error ->
+              view?.onFailed(error.message.toString())
+          })
+      )
   }
 
   fun getTextAnnounce(): String {
