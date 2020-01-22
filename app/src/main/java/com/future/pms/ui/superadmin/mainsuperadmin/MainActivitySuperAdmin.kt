@@ -10,7 +10,7 @@ import com.future.pms.R
 import com.future.pms.databinding.ActivityMainSuperAdminBinding
 import com.future.pms.di.component.DaggerActivityComponent
 import com.future.pms.di.module.ActivityModule
-import com.future.pms.ui.login.LoginActivity
+import com.future.pms.ui.login.view.LoginActivity
 import com.future.pms.ui.superadmin.homesuperadmin.HomeFragmentSuperAdmin
 import com.future.pms.ui.superadmin.listactivity.ListActivityFragment
 import com.future.pms.ui.superadmin.listuser.ListUserFragment

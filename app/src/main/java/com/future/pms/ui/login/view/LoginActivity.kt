@@ -1,4 +1,4 @@
-package com.future.pms.ui.superadmin.loginsuperadmin
+package com.future.pms.ui.login.view
 
 import android.app.Activity
 import android.content.Context
@@ -9,27 +9,36 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import com.future.pms.BaseApp
 import com.future.pms.R
-import com.future.pms.di.component.DaggerActivityComponent
-import com.future.pms.di.module.ActivityModule
 import com.future.pms.model.oauth.Token
 import com.future.pms.ui.base.BaseActivity
-import com.future.pms.ui.login.view.LoginActivity
-import com.future.pms.ui.superadmin.mainsuperadmin.MainActivitySuperAdmin
+import com.future.pms.ui.login.injection.DaggerLoginComponent
+import com.future.pms.ui.login.injection.LoginComponent
+import com.future.pms.ui.login.presenter.LoginPresenter
+import com.future.pms.ui.main.view.MainActivity
+import com.future.pms.ui.register.view.RegisterActivity
+import com.future.pms.ui.superadmin.loginsuperadmin.LoginActivitySuperAdmin
 import com.future.pms.util.Constants
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
 
-class LoginActivitySuperAdmin : BaseActivity(), LoginContractSuperAdmin {
-  @Inject lateinit var presenter: LoginPresenterSuperAdmin
+class LoginActivity : BaseActivity(), LoginContract {
+  private var daggerBuild: LoginComponent = DaggerLoginComponent.builder().baseComponent(
+      BaseApp.instance.baseComponent).build()
+
+  init {
+    daggerBuild.inject(this)
+  }
+
+  @Inject lateinit var presenter: LoginPresenter
   private var count = 0
   private var startMillis: Long = 0
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_login_super_admin)
-    injectDependency()
+    setContentView(R.layout.activity_login)
     presenter.attach(this)
     presenter.subscribe()
     btnSign.setOnClickListener {
@@ -38,6 +47,11 @@ class LoginActivitySuperAdmin : BaseActivity(), LoginContractSuperAdmin {
         hideKeyboard()
         presenter.login(txtEmail.text.toString(), txtPassword.text.toString())
       }
+    }
+    register.setOnClickListener {
+      val intent = Intent(this, RegisterActivity::class.java)
+      startActivity(intent)
+      finish()
     }
   }
 
@@ -52,8 +66,8 @@ class LoginActivitySuperAdmin : BaseActivity(), LoginContractSuperAdmin {
         count++
       }
       if (count == 5) {
-        Toast.makeText(this, "Switched to CUSTOMER page", Toast.LENGTH_LONG).show()
-        val intent = Intent(this, LoginActivity::class.java)
+        Toast.makeText(this, "Switched to SUPER ADMIN page", Toast.LENGTH_LONG).show()
+        val intent = Intent(this, LoginActivitySuperAdmin::class.java)
         startActivity(intent)
         finish()
       }
@@ -70,13 +84,13 @@ class LoginActivitySuperAdmin : BaseActivity(), LoginContractSuperAdmin {
   }
 
   override fun onSuccess() {
-    presenter.isSuperAdmin(Gson().fromJson(
+    presenter.loadData(Gson().fromJson(
         this.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
             Constants.TOKEN, null), Token::class.java).accessToken)
   }
 
   override fun onAuthorized() {
-    val intent = Intent(this, MainActivitySuperAdmin::class.java)
+    val intent = Intent(this, MainActivity::class.java)
     startActivity(intent)
     finish()
   }
@@ -96,16 +110,20 @@ class LoginActivitySuperAdmin : BaseActivity(), LoginContractSuperAdmin {
       progressBar.visibility = View.VISIBLE
       inputLayoutPassword.visibility = View.GONE
       btnSign.visibility = View.GONE
+      dont_have_account.visibility = View.GONE
+      register.visibility = View.GONE
     } else {
       txtPassword.text?.clear()
       progressBar.visibility = View.GONE
       inputLayoutEmail.visibility = View.VISIBLE
       inputLayoutPassword.visibility = View.VISIBLE
       btnSign.visibility = View.VISIBLE
+      dont_have_account.visibility = View.VISIBLE
+      register.visibility = View.VISIBLE
     }
   }
 
-  override fun onFailed(e: String) {
+  override fun onFailed(message: String) {
     loading(false)
     Toast.makeText(this, R.string.email_password_incorrect, Toast.LENGTH_LONG).show()
   }
@@ -115,9 +133,8 @@ class LoginActivitySuperAdmin : BaseActivity(), LoginContractSuperAdmin {
     this.finishAffinity()
   }
 
-  private fun injectDependency() {
-    val activityComponent = DaggerActivityComponent.builder().activityModule(
-        ActivityModule(this)).build()
-    activityComponent.inject(this)
+  override fun onDestroy() {
+    presenter.detach()
+    super.onDestroy()
   }
 }

@@ -8,5 +8,4 @@ import retrofit2.http.Query
 interface HomeApi {
   @GET("api/customer/detail") fun getCustomerDetail(@Query("access_token")
   accessToken: String?): Observable<Body>
-
 }

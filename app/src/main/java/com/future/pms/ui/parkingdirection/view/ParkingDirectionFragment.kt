@@ -17,7 +17,7 @@ import com.future.pms.BaseApp
 import com.future.pms.R
 import com.future.pms.databinding.FragmentParkingDirectionBinding
 import com.future.pms.model.oauth.Token
-import com.future.pms.ui.main.MainActivity
+import com.future.pms.ui.main.view.MainActivity
 import com.future.pms.ui.parkingdirection.injection.DaggerParkingDirectionComponent
 import com.future.pms.ui.parkingdirection.injection.ParkingDirectionComponent
 import com.future.pms.ui.parkingdirection.presenter.ParkingDirectionPresenter

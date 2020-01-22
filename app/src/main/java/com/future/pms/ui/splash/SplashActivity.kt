@@ -10,8 +10,8 @@ import com.future.pms.di.component.DaggerActivityComponent
 import com.future.pms.di.module.ActivityModule
 import com.future.pms.model.oauth.Token
 import com.future.pms.ui.base.BaseActivity
-import com.future.pms.ui.login.LoginActivity
-import com.future.pms.ui.main.MainActivity
+import com.future.pms.ui.login.view.LoginActivity
+import com.future.pms.ui.main.view.MainActivity
 import com.future.pms.ui.superadmin.mainsuperadmin.MainActivitySuperAdmin
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.ROLE_CUSTOMER

@@ -18,11 +18,11 @@ import com.future.pms.model.oauth.Token
 import com.future.pms.ui.base.BaseFragment
 import com.future.pms.ui.history.view.HistoryFragment
 import com.future.pms.ui.home.view.HomeFragment
-import com.future.pms.ui.main.MainActivity
+import com.future.pms.ui.main.view.MainActivity
 import com.future.pms.ui.ongoing.injection.DaggerOngoingComponent
 import com.future.pms.ui.ongoing.injection.OngoingComponent
 import com.future.pms.ui.ongoing.presenter.OngoingPresenter
-import com.future.pms.ui.receipt.ReceiptFragment
+import com.future.pms.ui.receipt.view.ReceiptFragment
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.SEC_IN_DAY
 import com.future.pms.util.Utils

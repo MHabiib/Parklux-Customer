@@ -6,7 +6,6 @@ import com.future.pms.model.admin.Admin
 import com.future.pms.model.admin.ParkingZoneResponse
 import com.future.pms.model.admin.nonPage.AdminResponse
 import com.future.pms.model.customer.CustomerResponse
-import com.future.pms.model.customerbooking.CustomerBooking
 import com.future.pms.model.customerdetail.Customer
 import com.future.pms.model.oauth.Token
 import com.future.pms.model.receipt.Receipt
@@ -18,24 +17,8 @@ import io.reactivex.Observable
 import retrofit2.http.*
 
 interface ApiServiceInterface {
-  @FormUrlEncoded @POST("oauth/token") fun auth(@Field("username") username: String,
-      @Field("password") password: String, @Field("grant_type")
-      grantType: String): Observable<Token>
-
-  @FormUrlEncoded @POST("oauth/token") fun refresh(@Field("grant_type") grantType: String,
+ @FormUrlEncoded @POST("oauth/token") fun refresh(@Field("grant_type") grantType: String,
       @Field("refresh_token") refreshAuth: String): Observable<Token>
-
-  @GET("api/booking/{id}/receipt") fun getBookingReceipt(@Path("id") idReceipt: String,
-      @Query("access_token") accessToken: String?): Observable<Receipt>
-
-  @POST("api/booking") fun postCreateBooking(@Body idSlot: String?, @Query("access_token")
-  accessToken: String?): Observable<CustomerBooking>
-
-  @POST("customer/create") fun postCreateCustomer(@Body
-  customerRequest: CustomerRequest): Observable<String>
-
-  @Multipart @PUT("api/customer/update") fun putUpdateCustomer(@Query("access_token")
-  accessToken: String?, @Part("customer") customer: CustomerRequest): Observable<CustomerRequest>
 
   //Super admin
   @GET("api3/user/me") fun isSuperAdmin(@Query("access_token")

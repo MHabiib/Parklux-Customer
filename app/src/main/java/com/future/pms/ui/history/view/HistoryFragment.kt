@@ -18,7 +18,7 @@ import com.future.pms.ui.history.adapter.HistoryAdapter
 import com.future.pms.ui.history.injection.DaggerHistoryComponent
 import com.future.pms.ui.history.injection.HistoryComponent
 import com.future.pms.ui.history.presenter.HistoryPresenter
-import com.future.pms.ui.receipt.ReceiptFragment
+import com.future.pms.ui.receipt.view.ReceiptFragment
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.ERROR
 import com.future.pms.util.Constants.Companion.HISTORY_FRAGMENT
