@@ -1,9 +1,9 @@
 package com.future.pms.di.module
 
 import android.app.Activity
-import com.future.pms.ui.splash.SplashPresenter
-import com.future.pms.ui.superadmin.loginsuperadmin.LoginPresenterSuperAdmin
-import com.future.pms.ui.superadmin.mainsuperadmin.MainPresenterSuperAdmin
+import com.future.pms.ui.splash.presenter.SplashPresenter
+import com.future.pms.ui.superadmin.loginsuperadmin.presenter.LoginPresenterSuperAdmin
+import com.future.pms.ui.superadmin.mainsuperadmin.presenter.MainPresenterSuperAdmin
 import dagger.Module
 import dagger.Provides
 

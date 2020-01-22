@@ -1,11 +1,11 @@
 package com.future.pms.di.module
 
 import androidx.fragment.app.Fragment
-import com.future.pms.ui.superadmin.activitydetails.ActivityDetailsPresenter
-import com.future.pms.ui.superadmin.homesuperadmin.HomePresenterSuperAdmin
-import com.future.pms.ui.superadmin.listactivity.ListActivityPresenter
-import com.future.pms.ui.superadmin.listuser.ListUserPresenter
-import com.future.pms.ui.superadmin.userdetails.UserDetailsPresenter
+import com.future.pms.ui.superadmin.activitydetails.presenter.ActivityDetailsPresenter
+import com.future.pms.ui.superadmin.homesuperadmin.presenter.HomePresenterSuperAdmin
+import com.future.pms.ui.superadmin.listactivity.presenter.ListActivityPresenter
+import com.future.pms.ui.superadmin.listuser.presenter.ListUserPresenter
+import com.future.pms.ui.superadmin.userdetails.presenter.UserDetailsPresenter
 import dagger.Module
 import dagger.Provides
 

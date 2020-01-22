@@ -10,6 +10,9 @@ interface LoginApi {
       @Field("password") password: String, @Field("grant_type")
       grantType: String): Observable<Token>
 
+  @FormUrlEncoded @POST("oauth/token") fun refresh(@Field("grant_type") grantType: String,
+      @Field("refresh_token") refreshAuth: String): Observable<Token>
+
   @GET("api/customer/detail") fun getCustomerDetail(@Query("access_token")
   accessToken: String?): Observable<Body>
 }

@@ -1,13 +1,16 @@
 package com.future.pms.ui.login.presenter
 
+import android.content.Context
 import com.future.pms.model.oauth.Token
 import com.future.pms.ui.base.BasePresenter
 import com.future.pms.ui.login.network.LoginApi
 import com.future.pms.ui.login.view.LoginContract
 import com.future.pms.util.Authentication
+import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.GRANT_TYPE
 import com.future.pms.util.Constants.Companion.ROLE_CUSTOMER
 import com.future.pms.util.Constants.Companion.UNAUTHORIZED_CODE
+import com.google.gson.Gson
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -31,7 +34,23 @@ class LoginPresenter @Inject constructor() : BasePresenter<LoginContract>() {
           view?.onAuthorized()
         }, {
           if (it.message.toString().contains(UNAUTHORIZED_CODE)) {
-            refreshFetcher({ loadData(accessToken) }, { view?.onFailed(it.message.toString()) })
+            getContext()?.let { Authentication.getRefresh(it) }?.let {
+              loginApi.refresh(Constants.GRANT_TYPE_REFRESH, it).subscribeOn(
+                  Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
+                  { token: Token ->
+                    getContext()?.let { context ->
+                      Authentication.save(context, token, Gson().fromJson(
+                          context.getSharedPreferences(Constants.AUTHENTICATION,
+                              Context.MODE_PRIVATE)?.getString(Constants.TOKEN, null),
+                          Token::class.java).role)
+                    }
+                    loadData(accessToken)
+                  }, { throwable ->
+                view?.onFailed(throwable.message.toString())
+              })
+            }?.let {
+              subscriptions.add(it)
+            }
           } else {
             getContext()?.let { context -> Authentication.delete(context) }
             view?.onFailed(it.message.toString())

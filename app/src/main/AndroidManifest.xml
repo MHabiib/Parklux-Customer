@@ -13,7 +13,7 @@
         android:largeHeap="true"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".ui.splash.SplashActivity"
+            android:name=".ui.splash.view.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWhite">
             <intent-filter>
@@ -32,13 +32,13 @@
             android:theme="@style/AppTheme" />
 
         <activity
-            android:name=".ui.superadmin.loginsuperadmin.LoginActivitySuperAdmin"
+            android:name=".ui.superadmin.loginsuperadmin.view.LoginActivitySuperAdmin"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".ui.superadmin.mainsuperadmin.MainActivitySuperAdmin"
+            android:name=".ui.superadmin.mainsuperadmin.view.MainActivitySuperAdmin"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeDark"
             android:windowSoftInputMode="adjustPan" />

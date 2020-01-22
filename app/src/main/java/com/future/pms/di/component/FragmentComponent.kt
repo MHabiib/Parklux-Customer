@@ -1,11 +1,11 @@
 package com.future.pms.di.component
 
 import com.future.pms.di.module.FragmentModule
-import com.future.pms.ui.superadmin.activitydetails.ActivityDetailsFragment
-import com.future.pms.ui.superadmin.homesuperadmin.HomeFragmentSuperAdmin
-import com.future.pms.ui.superadmin.listactivity.ListActivityFragment
-import com.future.pms.ui.superadmin.listuser.ListUserFragment
-import com.future.pms.ui.superadmin.userdetails.UserDetailsFragment
+import com.future.pms.ui.superadmin.activitydetails.view.ActivityDetailsFragment
+import com.future.pms.ui.superadmin.homesuperadmin.view.HomeFragmentSuperAdmin
+import com.future.pms.ui.superadmin.listactivity.view.ListActivityFragment
+import com.future.pms.ui.superadmin.listuser.view.ListUserFragment
+import com.future.pms.ui.superadmin.userdetails.view.UserDetailsFragment
 import dagger.Component
 
 @Component(modules = [FragmentModule::class]) interface FragmentComponent {

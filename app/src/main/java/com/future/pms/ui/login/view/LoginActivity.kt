@@ -18,7 +18,7 @@ import com.future.pms.ui.login.injection.LoginComponent
 import com.future.pms.ui.login.presenter.LoginPresenter
 import com.future.pms.ui.main.view.MainActivity
 import com.future.pms.ui.register.view.RegisterActivity
-import com.future.pms.ui.superadmin.loginsuperadmin.LoginActivitySuperAdmin
+import com.future.pms.ui.superadmin.loginsuperadmin.view.LoginActivitySuperAdmin
 import com.future.pms.util.Constants
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_login.*
