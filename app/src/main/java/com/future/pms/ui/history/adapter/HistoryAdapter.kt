@@ -1,4 +1,4 @@
-package com.future.pms.ui.history
+package com.future.pms.ui.history.adapter
 
 import android.view.LayoutInflater
 import android.view.View

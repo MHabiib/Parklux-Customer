@@ -2,8 +2,6 @@ package com.future.pms.di.module
 
 import androidx.fragment.app.Fragment
 import com.future.pms.ui.bookingdetail.BookingDetailPresenter
-import com.future.pms.ui.history.HistoryPresenter
-import com.future.pms.ui.home.presenter.HomePresenter
 import com.future.pms.ui.ongoing.OngoingPresenter
 import com.future.pms.ui.parkingdirection.ParkingDirectionPresenter
 import com.future.pms.ui.profile.ProfilePresenter
@@ -24,14 +22,6 @@ import dagger.Provides
 
   @Provides fun provideBookingDetailPresenter(): BookingDetailPresenter {
     return BookingDetailPresenter()
-  }
-
-  @Provides fun provideHistoryPresenter(): HistoryPresenter {
-    return HistoryPresenter()
-  }
-
-  @Provides fun provideHomePresenter(): HomePresenter {
-    return HomePresenter()
   }
 
   @Provides fun provideOngoingPresenter(): OngoingPresenter {

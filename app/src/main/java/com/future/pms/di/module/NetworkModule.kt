@@ -1,6 +1,6 @@
 package com.future.pms.di.module
 
-import com.future.pms.di.scope.PerApplication
+import com.future.pms.di.qualifier.Base
 import com.future.pms.network.ApiServiceInterface
 import com.future.pms.network.BasicAuthInterceptor
 import com.future.pms.util.Constants
@@ -23,8 +23,7 @@ import javax.inject.Singleton
         GsonConverterFactory.create(GsonBuilder().setLenient().create())).build()
   }
 
-  @Provides internal fun provideAnalyticsService(@PerApplication
-  retrofit: Retrofit): ApiServiceInterface {
+  @Base @Provides internal fun provideAnalyticsService(retrofit: Retrofit): ApiServiceInterface {
     return retrofit.create(ApiServiceInterface::class.java)
   }
 }

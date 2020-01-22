@@ -4,7 +4,7 @@ import com.future.pms.model.customerdetail.Body
 import com.future.pms.model.register.CustomerRequest
 import com.future.pms.network.ApiServiceInterface
 import com.future.pms.ui.base.BasePresenter
-import com.future.pms.ui.home.network.IHomeApi
+import com.future.pms.ui.home.network.HomeApi
 import com.future.pms.util.Authentication
 import com.future.pms.util.Constants
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -13,10 +13,10 @@ import javax.inject.Inject
 
 class ProfilePresenter : BasePresenter<ProfileContract>() {
   @Inject lateinit var apiServiceInterface: ApiServiceInterface
-  @Inject lateinit var mIHomeApi: IHomeApi
+  @Inject lateinit var mHomeApi: HomeApi
 
   fun loadData(accessToken: String) {
-    val subscribe = mIHomeApi.getCustomerDetail(accessToken).subscribeOn(Schedulers.io()).observeOn(
+    val subscribe = mHomeApi.getCustomerDetail(accessToken).subscribeOn(Schedulers.io()).observeOn(
         AndroidSchedulers.mainThread()).subscribe({ customer: Body ->
       view?.loadCustomerDetailSuccess(customer)
     }, {

@@ -1,4 +1,4 @@
-package com.future.pms.ui.history
+package com.future.pms.ui.history.view
 
 import android.content.Context
 import android.os.Bundle
@@ -7,14 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.future.pms.BaseApp
 import com.future.pms.R
 import com.future.pms.databinding.FragmentHistoryBinding
-import com.future.pms.di.component.DaggerFragmentComponent
-import com.future.pms.di.module.FragmentModule
 import com.future.pms.model.history.BookingHistory
 import com.future.pms.model.history.History
 import com.future.pms.model.oauth.Token
 import com.future.pms.ui.base.BaseFragment
+import com.future.pms.ui.history.adapter.HistoryAdapter
+import com.future.pms.ui.history.injection.DaggerHistoryComponent
+import com.future.pms.ui.history.injection.HistoryComponent
+import com.future.pms.ui.history.presenter.HistoryPresenter
 import com.future.pms.ui.receipt.ReceiptFragment
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.ERROR
@@ -26,6 +29,13 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class HistoryFragment : BaseFragment(), HistoryContract {
+  private var daggerBuild: HistoryComponent = DaggerHistoryComponent.builder().baseComponent(
+      BaseApp.instance.baseComponent).build()
+
+  init {
+    daggerBuild.inject(this)
+  }
+
   @Inject lateinit var presenter: HistoryPresenter
   private lateinit var binding: FragmentHistoryBinding
   private lateinit var historyAdapter: HistoryAdapter
@@ -39,11 +49,6 @@ class HistoryFragment : BaseFragment(), HistoryContract {
 
   fun newInstance(): HistoryFragment {
     return HistoryFragment()
-  }
-
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    injectDependency()
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -139,12 +144,5 @@ class HistoryFragment : BaseFragment(), HistoryContract {
   override fun onDestroyView() {
     presenter.detach()
     super.onDestroyView()
-  }
-
-  private fun injectDependency() {
-    val homeComponent = DaggerFragmentComponent.builder().fragmentModule(
-            FragmentModule(this)).build()
-
-    homeComponent.inject(this)
   }
 }

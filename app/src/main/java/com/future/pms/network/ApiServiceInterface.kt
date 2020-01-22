@@ -8,7 +8,6 @@ import com.future.pms.model.admin.nonPage.AdminResponse
 import com.future.pms.model.customer.CustomerResponse
 import com.future.pms.model.customerbooking.CustomerBooking
 import com.future.pms.model.customerdetail.Customer
-import com.future.pms.model.history.History
 import com.future.pms.model.oauth.Token
 import com.future.pms.model.receipt.Receipt
 import com.future.pms.model.register.CustomerRequest
@@ -25,9 +24,6 @@ interface ApiServiceInterface {
 
   @FormUrlEncoded @POST("oauth/token") fun refresh(@Field("grant_type") grantType: String,
       @Field("refresh_token") refreshAuth: String): Observable<Token>
-
-  @GET("api/booking/customer") fun getCustomerBooking(@Query("access_token") accessToken: String?,
-      @Query("page") page: Int?): Observable<History>
 
   @GET("api/booking/{id}/receipt") fun getBookingReceipt(@Path("id") idReceipt: String,
       @Query("access_token") accessToken: String?): Observable<Receipt>

@@ -7,5 +7,4 @@ import dagger.Component
 @Component(dependencies = [BaseComponent::class], modules = [HomeModule::class])
 interface HomeComponent {
   fun inject(homeFragment: HomeFragment)
-
 }

@@ -2,7 +2,7 @@ package com.future.pms.ui.home.presenter
 
 import com.future.pms.model.customerdetail.Body
 import com.future.pms.ui.base.BasePresenter
-import com.future.pms.ui.home.network.IHomeApi
+import com.future.pms.ui.home.network.HomeApi
 import com.future.pms.ui.home.view.HomeContract
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -10,12 +10,12 @@ import java.util.*
 import javax.inject.Inject
 
 class HomePresenter @Inject constructor() : BasePresenter<HomeContract>() {
-  @Inject lateinit var mIHomeApi: IHomeApi
+  @Inject lateinit var mHomeApi: HomeApi
 
   fun loadData(accessToken: String) {
     view?.apply {
       subscriptions.add(
-          mIHomeApi.getCustomerDetail(accessToken).subscribeOn(Schedulers.io()).observeOn(
+          mHomeApi.getCustomerDetail(accessToken).subscribeOn(Schedulers.io()).observeOn(
           AndroidSchedulers.mainThread()).subscribe({ customer: Body ->
         loadCustomerDetailSuccess(customer)
       }, { error ->
