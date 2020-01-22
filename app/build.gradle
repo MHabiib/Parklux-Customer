@@ -76,6 +76,7 @@ dependencies {
     kapt 'com.android.databinding:compiler:3.1.4'
     compileOnly 'javax.annotation:jsr250-api:1.0'
     implementation 'javax.inject:javax.inject:1'
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
 
     //ui
     implementation 'androidx.appcompat:appcompat:1.1.0'

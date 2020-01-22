@@ -15,7 +15,7 @@ import com.future.pms.databinding.ActivityMainBinding
 import com.future.pms.di.component.DaggerActivityComponent
 import com.future.pms.di.module.ActivityModule
 import com.future.pms.ui.bookingdetail.BookingDetailFragment
-import com.future.pms.ui.home.HomeFragment
+import com.future.pms.ui.home.view.HomeFragment
 import com.future.pms.ui.login.LoginActivity
 import com.future.pms.ui.parkingdirection.ParkingDirectionFragment
 import com.future.pms.ui.profile.ProfileFragment

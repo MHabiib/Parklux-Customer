@@ -18,7 +18,7 @@ import com.future.pms.model.customerbooking.CustomerBooking
 import com.future.pms.model.oauth.Token
 import com.future.pms.ui.base.BaseFragment
 import com.future.pms.ui.history.HistoryFragment
-import com.future.pms.ui.home.HomeFragment
+import com.future.pms.ui.home.view.HomeFragment
 import com.future.pms.ui.main.MainActivity
 import com.future.pms.ui.receipt.ReceiptFragment
 import com.future.pms.util.Constants

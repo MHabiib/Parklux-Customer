@@ -26,9 +26,6 @@ interface ApiServiceInterface {
   @FormUrlEncoded @POST("oauth/token") fun refresh(@Field("grant_type") grantType: String,
       @Field("refresh_token") refreshAuth: String): Observable<Token>
 
-  @GET("api/customer/detail") fun getCustomerDetail(@Query("access_token")
-  accessToken: String?): Observable<com.future.pms.model.customerdetail.Body>
-
   @GET("api/booking/customer") fun getCustomerBooking(@Query("access_token") accessToken: String?,
       @Query("page") page: Int?): Observable<History>
 

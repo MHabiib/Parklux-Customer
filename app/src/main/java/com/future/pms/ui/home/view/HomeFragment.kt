@@ -1,4 +1,4 @@
-package com.future.pms.ui.home
+package com.future.pms.ui.home.view
 
 import android.content.Context
 import android.os.Bundle
@@ -6,14 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import com.future.pms.BaseApp
 import com.future.pms.R
 import com.future.pms.databinding.FragmentHomeBinding
-import com.future.pms.di.component.DaggerFragmentComponent
-import com.future.pms.di.module.FragmentModule
 import com.future.pms.model.customerdetail.Body
 import com.future.pms.model.oauth.Token
 import com.future.pms.ui.base.BaseFragment
 import com.future.pms.ui.history.HistoryFragment
+import com.future.pms.ui.home.DaggerHomeComponent
+import com.future.pms.ui.home.injection.HomeComponent
+import com.future.pms.ui.home.presenter.HomePresenter
 import com.future.pms.ui.ongoing.OngoingFragment
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.ERROR
@@ -25,6 +27,13 @@ import java.util.*
 import javax.inject.Inject
 
 class HomeFragment : BaseFragment(), HomeContract {
+  private var daggerBuild: HomeComponent = DaggerHomeComponent.builder().baseComponent(
+      BaseApp.instance.baseComponent).build()
+
+  init {
+    daggerBuild.inject(this)
+  }
+
   @Inject lateinit var presenter: HomePresenter
   private lateinit var binding: FragmentHomeBinding
 
@@ -34,11 +43,6 @@ class HomeFragment : BaseFragment(), HomeContract {
 
   fun newInstance(): HomeFragment {
     return HomeFragment()
-  }
-
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    injectDependency()
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -135,11 +139,5 @@ class HomeFragment : BaseFragment(), HomeContract {
   override fun onDestroyView() {
     presenter.detach()
     super.onDestroyView()
-  }
-
-  private fun injectDependency() {
-    val homeComponent = DaggerFragmentComponent.builder().fragmentModule(
-        FragmentModule(this)).build()
-    homeComponent.inject(this)
   }
 }

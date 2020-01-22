@@ -4,14 +4,17 @@ import com.future.pms.di.module.APICreator
 import com.future.pms.model.oauth.Token
 import com.future.pms.network.ApiServiceInterface
 import com.future.pms.ui.base.BasePresenter
+import com.future.pms.ui.home.network.IHomeApi
 import com.future.pms.util.Authentication
 import com.future.pms.util.Constants.Companion.GRANT_TYPE
 import com.future.pms.util.Constants.Companion.ROLE_CUSTOMER
 import com.future.pms.util.Constants.Companion.UNAUTHORIZED_CODE
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
 class LoginPresenter : BasePresenter<LoginContract>() {
+  @Inject lateinit var mIHomeApi: IHomeApi
 
   fun login(username: String, password: String) {
     val authFetcher = APICreator(ApiServiceInterface::class.java).generate()
@@ -24,7 +27,7 @@ class LoginPresenter : BasePresenter<LoginContract>() {
   }
 
   fun loadData(accessToken: String) {
-    val subscribe = api.getCustomerDetail(accessToken).subscribeOn(Schedulers.io()).observeOn(
+    val subscribe = mIHomeApi.getCustomerDetail(accessToken).subscribeOn(Schedulers.io()).observeOn(
         AndroidSchedulers.mainThread()).subscribe({
       view?.onAuthorized()
     }, {
