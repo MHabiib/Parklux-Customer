@@ -3,7 +3,6 @@ package com.future.pms.di.component
 import com.future.pms.di.module.FragmentModule
 import com.future.pms.ui.bookingdetail.BookingDetailFragment
 import com.future.pms.ui.history.HistoryFragment
-import com.future.pms.ui.home.view.HomeFragment
 import com.future.pms.ui.ongoing.OngoingFragment
 import com.future.pms.ui.parkingdirection.ParkingDirectionFragment
 import com.future.pms.ui.profile.ProfileFragment
@@ -17,7 +16,6 @@ import com.future.pms.ui.superadmin.userdetails.UserDetailsFragment
 import dagger.Component
 
 @Component(modules = [FragmentModule::class]) interface FragmentComponent {
-  fun inject(homeFragment: HomeFragment)
 
   fun inject(scanFragment: ScanFragment)
 
