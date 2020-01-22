@@ -1,4 +1,4 @@
-package com.future.pms.ui.parkingdirection
+package com.future.pms.ui.parkingdirection.view
 
 import android.content.Context
 import android.graphics.Typeface
@@ -13,12 +13,14 @@ import android.widget.TextView
 import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import com.future.pms.BaseApp
 import com.future.pms.R
 import com.future.pms.databinding.FragmentParkingDirectionBinding
-import com.future.pms.di.component.DaggerFragmentComponent
-import com.future.pms.di.module.FragmentModule
 import com.future.pms.model.oauth.Token
 import com.future.pms.ui.main.MainActivity
+import com.future.pms.ui.parkingdirection.injection.DaggerParkingDirectionComponent
+import com.future.pms.ui.parkingdirection.injection.ParkingDirectionComponent
+import com.future.pms.ui.parkingdirection.presenter.ParkingDirectionPresenter
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.PARKING_DETAIL_FRAGMENT
 import com.future.pms.util.Constants.Companion.SLOTS_IN_ROW
@@ -45,6 +47,13 @@ import java.util.*
 import javax.inject.Inject
 
 class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
+  private var daggerBuild: ParkingDirectionComponent = DaggerParkingDirectionComponent.builder().baseComponent(
+      BaseApp.instance.baseComponent).build()
+
+  init {
+    daggerBuild.inject(this)
+  }
+
   @Inject lateinit var presenter: ParkingDirectionPresenter
   private lateinit var binding: FragmentParkingDirectionBinding
   private var parkViewList: MutableList<TextView> = ArrayList()
@@ -65,7 +74,6 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
       val activity = activity as MainActivity?
       activity?.presenter?.onHomeIconClick()
     }
-    injectDependency()
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -206,12 +214,5 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
   override fun onDestroyView() {
     presenter.detach()
     super.onDestroyView()
-  }
-
-  private fun injectDependency() {
-    val homeComponent = DaggerFragmentComponent.builder().fragmentModule(
-        FragmentModule(this)).build()
-
-    homeComponent.inject(this)
   }
 }

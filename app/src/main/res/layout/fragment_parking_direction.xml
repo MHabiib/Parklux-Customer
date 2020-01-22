@@ -9,7 +9,7 @@
         android:background="@color/baseWhite"
         app:behavior_peekHeight="120dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-        tools:context=".ui.parkingdirection.ParkingDirectionFragment">
+        tools:context=".ui.parkingdirection.view.ParkingDirectionFragment">
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"

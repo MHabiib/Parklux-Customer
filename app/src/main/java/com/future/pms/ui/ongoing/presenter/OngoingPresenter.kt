@@ -2,8 +2,8 @@ package com.future.pms.ui.ongoing.presenter
 
 import com.future.pms.model.customerbooking.CustomerBooking
 import com.future.pms.ui.base.BasePresenter
-import com.future.pms.ui.ongoing.OngoingContract
 import com.future.pms.ui.ongoing.network.OngoingApi
+import com.future.pms.ui.ongoing.view.OngoingContract
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject

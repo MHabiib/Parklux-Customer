@@ -16,7 +16,7 @@ import com.future.pms.ui.history.view.HistoryFragment
 import com.future.pms.ui.home.injection.DaggerHomeComponent
 import com.future.pms.ui.home.injection.HomeComponent
 import com.future.pms.ui.home.presenter.HomePresenter
-import com.future.pms.ui.ongoing.OngoingFragment
+import com.future.pms.ui.ongoing.view.OngoingFragment
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.ERROR
 import com.future.pms.util.Constants.Companion.HOME_FRAGMENT
@@ -87,7 +87,9 @@ class HomeFragment : BaseFragment(), HomeContract {
             R.animator.fade_out).add(R.id.frame_home, OngoingFragment().newInstance(),
             OngoingFragment.TAG).commit()
       } else {
-        it.supportFragmentManager.run { findFragmentByTag(OngoingFragment.TAG) }?.let { fragment ->
+        it.supportFragmentManager.run {
+          findFragmentByTag(OngoingFragment.TAG)
+        }?.let { fragment ->
           it.supportFragmentManager.beginTransaction().setCustomAnimations(R.animator.fade_in,
               R.animator.fade_out).show(fragment).commit()
         }
@@ -118,7 +120,9 @@ class HomeFragment : BaseFragment(), HomeContract {
         }
       }
       if (it.supportFragmentManager.findFragmentByTag(OngoingFragment.TAG) != null) {
-        it.supportFragmentManager.run { findFragmentByTag(OngoingFragment.TAG) }?.let { fragment ->
+        it.supportFragmentManager.run {
+          findFragmentByTag(OngoingFragment.TAG)
+        }?.let { fragment ->
           it.supportFragmentManager.beginTransaction().setCustomAnimations(R.animator.fade_in,
               R.animator.fade_out).hide(fragment).commit()
         }

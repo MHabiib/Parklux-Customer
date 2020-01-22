@@ -1,18 +1,19 @@
-package com.future.pms.ui.parkingdirection
+package com.future.pms.ui.parkingdirection.presenter
 
 import com.future.pms.ui.base.BasePresenter
-import com.future.pms.ui.bookingdetail.network.BookingDetailApi
+import com.future.pms.ui.parkingdirection.network.ParkingDirectionApi
+import com.future.pms.ui.parkingdirection.view.ParkingDirectionContract
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class ParkingDirectionPresenter : BasePresenter<ParkingDirectionContract>() {
-  @Inject lateinit var bookingDetailApi: BookingDetailApi
+class ParkingDirectionPresenter @Inject constructor() : BasePresenter<ParkingDirectionContract>() {
+  @Inject lateinit var parkingDirectionApi: ParkingDirectionApi
 
   fun getParkingLayout(idBooking: String, accessToken: String) {
     view?.apply {
       showProgress(true)
-      val subscribe = bookingDetailApi.getParkingLayout(idBooking, accessToken).subscribeOn(
+      val subscribe = parkingDirectionApi.getParkingLayout(idBooking, accessToken).subscribeOn(
           Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe({
         if (null != it) {
           showProgress(false)

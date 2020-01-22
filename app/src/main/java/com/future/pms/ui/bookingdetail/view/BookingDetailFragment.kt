@@ -23,7 +23,7 @@ import com.future.pms.ui.bookingdetail.injection.BookingDetailComponent
 import com.future.pms.ui.bookingdetail.injection.DaggerBookingDetailComponent
 import com.future.pms.ui.bookingdetail.presenter.BookingDetailPresenter
 import com.future.pms.ui.main.MainActivity
-import com.future.pms.ui.ongoing.OngoingFragment
+import com.future.pms.ui.ongoing.view.OngoingFragment
 import com.future.pms.util.Constants.Companion.AUTHENTICATION
 import com.future.pms.util.Constants.Companion.BOOKING_DETAIL_FRAGMENT
 import com.future.pms.util.Constants.Companion.DISABLED_SLOT

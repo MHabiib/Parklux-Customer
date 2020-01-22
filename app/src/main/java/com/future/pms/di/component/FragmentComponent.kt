@@ -1,7 +1,7 @@
 package com.future.pms.di.component
 
 import com.future.pms.di.module.FragmentModule
-import com.future.pms.ui.parkingdirection.ParkingDirectionFragment
+import com.future.pms.ui.parkingdirection.view.ParkingDirectionFragment
 import com.future.pms.ui.profile.ProfileFragment
 import com.future.pms.ui.receipt.ReceiptFragment
 import com.future.pms.ui.scan.ScanFragment

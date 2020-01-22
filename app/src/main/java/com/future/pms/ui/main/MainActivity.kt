@@ -17,7 +17,7 @@ import com.future.pms.di.module.ActivityModule
 import com.future.pms.ui.bookingdetail.view.BookingDetailFragment
 import com.future.pms.ui.home.view.HomeFragment
 import com.future.pms.ui.login.LoginActivity
-import com.future.pms.ui.parkingdirection.ParkingDirectionFragment
+import com.future.pms.ui.parkingdirection.view.ParkingDirectionFragment
 import com.future.pms.ui.profile.ProfileFragment
 import com.future.pms.ui.scan.ScanFragment
 import com.future.pms.util.Constants.Companion.ID_BOOKING
@@ -86,7 +86,9 @@ class MainActivity : AppCompatActivity(), MainContract {
       }
     }
     if (supportFragmentManager.findFragmentByTag(ParkingDirectionFragment.TAG) != null) {
-      supportFragmentManager.run { findFragmentByTag(ParkingDirectionFragment.TAG) }?.let {
+      supportFragmentManager.run {
+        findFragmentByTag(ParkingDirectionFragment.TAG)
+      }?.let {
         supportFragmentManager.beginTransaction().hide(it).commit()
       }
     }
@@ -173,7 +175,9 @@ class MainActivity : AppCompatActivity(), MainContract {
       }
     }
     if (supportFragmentManager.findFragmentByTag(ParkingDirectionFragment.TAG) != null) {
-      supportFragmentManager.run { findFragmentByTag(ParkingDirectionFragment.TAG) }?.let {
+      supportFragmentManager.run {
+        findFragmentByTag(ParkingDirectionFragment.TAG)
+      }?.let {
         supportFragmentManager.beginTransaction().hide(it).commit()
       }
     }
@@ -242,7 +246,9 @@ class MainActivity : AppCompatActivity(), MainContract {
       supportFragmentManager.beginTransaction().setCustomAnimations(R.animator.fade_in,
           R.animator.fade_out).add(R.id.frame, fragment, ParkingDirectionFragment.TAG).commit()
     } else {
-      supportFragmentManager.run { findFragmentByTag(ParkingDirectionFragment.TAG) }?.let {
+      supportFragmentManager.run {
+        findFragmentByTag(ParkingDirectionFragment.TAG)
+      }?.let {
         supportFragmentManager.beginTransaction().setCustomAnimations(R.animator.fade_in,
             R.animator.fade_out).show(it).commit()
       }

@@ -1,7 +1,7 @@
 package com.future.pms.di.module
 
 import androidx.fragment.app.Fragment
-import com.future.pms.ui.parkingdirection.ParkingDirectionPresenter
+import com.future.pms.ui.parkingdirection.presenter.ParkingDirectionPresenter
 import com.future.pms.ui.profile.ProfilePresenter
 import com.future.pms.ui.receipt.ReceiptPresenter
 import com.future.pms.ui.scan.ScanPresenter

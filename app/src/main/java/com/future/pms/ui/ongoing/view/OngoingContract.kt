@@ -1,4 +1,4 @@
-package com.future.pms.ui.ongoing
+package com.future.pms.ui.ongoing.view
 
 import com.future.pms.model.customerbooking.CustomerBooking
 import com.future.pms.ui.base.BaseView

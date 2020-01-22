@@ -1,4 +1,4 @@
-package com.future.pms.ui.ongoing
+package com.future.pms.ui.ongoing.view
 
 import android.content.Context
 import android.os.Build
