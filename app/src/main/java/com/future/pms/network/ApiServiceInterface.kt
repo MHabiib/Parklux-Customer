@@ -28,23 +28,14 @@ interface ApiServiceInterface {
   @GET("api/booking/{id}/receipt") fun getBookingReceipt(@Path("id") idReceipt: String,
       @Query("access_token") accessToken: String?): Observable<Receipt>
 
-  @GET("api/booking/customer/ongoing") fun getOngoingBooking(@Query("access_token")
-  accessToken: String?): Observable<CustomerBooking>
-
   @POST("api/booking") fun postCreateBooking(@Body idSlot: String?, @Query("access_token")
   accessToken: String?): Observable<CustomerBooking>
-
-  @POST("api/booking/checkout") fun postBookingCheckout(@Query("access_token")
-  accessToken: String?): Observable<Receipt>
 
   @POST("customer/create") fun postCreateCustomer(@Body
   customerRequest: CustomerRequest): Observable<String>
 
   @Multipart @PUT("api/customer/update") fun putUpdateCustomer(@Query("access_token")
   accessToken: String?, @Part("customer") customer: CustomerRequest): Observable<CustomerRequest>
-
-  @GET("api/parking-zone/{idBooking}/parking-layout") fun getParkingLayout(@Path("idBooking")
-  idBooking: String, @Query("access_token") accessToken: String?): Observable<String>
 
   //Super admin
   @GET("api3/user/me") fun isSuperAdmin(@Query("access_token")

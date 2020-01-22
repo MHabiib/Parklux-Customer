@@ -14,7 +14,7 @@ import com.future.pms.R
 import com.future.pms.databinding.ActivityMainBinding
 import com.future.pms.di.component.DaggerActivityComponent
 import com.future.pms.di.module.ActivityModule
-import com.future.pms.ui.bookingdetail.BookingDetailFragment
+import com.future.pms.ui.bookingdetail.view.BookingDetailFragment
 import com.future.pms.ui.home.view.HomeFragment
 import com.future.pms.ui.login.LoginActivity
 import com.future.pms.ui.parkingdirection.ParkingDirectionFragment
@@ -96,7 +96,9 @@ class MainActivity : AppCompatActivity(), MainContract {
       }
     }
     if (supportFragmentManager.findFragmentByTag(BookingDetailFragment.TAG) != null) {
-      supportFragmentManager.run { findFragmentByTag(BookingDetailFragment.TAG) }?.let {
+      supportFragmentManager.run {
+        findFragmentByTag(BookingDetailFragment.TAG)
+      }?.let {
         supportFragmentManager.beginTransaction().remove(it).commit()
       }
     }
@@ -123,7 +125,9 @@ class MainActivity : AppCompatActivity(), MainContract {
           }
         }
         if (supportFragmentManager.findFragmentByTag(BookingDetailFragment.TAG) != null) {
-          supportFragmentManager.run { findFragmentByTag(BookingDetailFragment.TAG) }?.let {
+          supportFragmentManager.run {
+            findFragmentByTag(BookingDetailFragment.TAG)
+          }?.let {
             supportFragmentManager.beginTransaction().remove(it).commit()
           }
         }
@@ -174,7 +178,9 @@ class MainActivity : AppCompatActivity(), MainContract {
       }
     }
     if (supportFragmentManager.findFragmentByTag(BookingDetailFragment.TAG) != null) {
-      supportFragmentManager.run { findFragmentByTag(BookingDetailFragment.TAG) }?.let {
+      supportFragmentManager.run {
+        findFragmentByTag(BookingDetailFragment.TAG)
+      }?.let {
         supportFragmentManager.beginTransaction().remove(it).commit()
       }
     }
@@ -190,7 +196,9 @@ class MainActivity : AppCompatActivity(), MainContract {
       supportFragmentManager.beginTransaction().setCustomAnimations(R.animator.fade_in,
           R.animator.fade_out).add(R.id.frame, fragment, BookingDetailFragment.TAG).commit()
     } else {
-      supportFragmentManager.run { findFragmentByTag(BookingDetailFragment.TAG) }?.let {
+      supportFragmentManager.run {
+        findFragmentByTag(BookingDetailFragment.TAG)
+      }?.let {
         supportFragmentManager.beginTransaction().setCustomAnimations(R.animator.fade_in,
             R.animator.fade_out).show(it).commit()
       }
@@ -209,7 +217,9 @@ class MainActivity : AppCompatActivity(), MainContract {
           R.animator.fade_out).add(R.id.frame, BookingDetailFragment().newInstance(),
           BookingDetailFragment.TAG).commit()
     } else {
-      supportFragmentManager.run { findFragmentByTag(BookingDetailFragment.TAG) }?.let {
+      supportFragmentManager.run {
+        findFragmentByTag(BookingDetailFragment.TAG)
+      }?.let {
         supportFragmentManager.beginTransaction().setCustomAnimations(R.animator.fade_in,
             R.animator.fade_out).show(it).commit()
       }

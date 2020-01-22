@@ -1,4 +1,4 @@
-package com.future.pms.ui.bookingdetail
+package com.future.pms.ui.bookingdetail.view
 
 import android.content.Context
 import android.graphics.Typeface
@@ -12,14 +12,16 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
+import com.future.pms.BaseApp
 import com.future.pms.R
 import com.future.pms.databinding.ActivityMainBinding
 import com.future.pms.databinding.FragmentBookingDetailBinding
-import com.future.pms.di.component.DaggerFragmentComponent
-import com.future.pms.di.module.FragmentModule
 import com.future.pms.model.customerbooking.CustomerBooking
 import com.future.pms.model.oauth.Token
 import com.future.pms.ui.base.BaseFragment
+import com.future.pms.ui.bookingdetail.injection.BookingDetailComponent
+import com.future.pms.ui.bookingdetail.injection.DaggerBookingDetailComponent
+import com.future.pms.ui.bookingdetail.presenter.BookingDetailPresenter
 import com.future.pms.ui.main.MainActivity
 import com.future.pms.ui.ongoing.OngoingFragment
 import com.future.pms.util.Constants.Companion.AUTHENTICATION
@@ -51,6 +53,13 @@ import java.util.*
 import javax.inject.Inject
 
 class BookingDetailFragment : BaseFragment(), BookingDetailContract {
+  private var daggerBuild: BookingDetailComponent = DaggerBookingDetailComponent.builder().baseComponent(
+      BaseApp.instance.baseComponent).build()
+
+  init {
+    daggerBuild.inject(this)
+  }
+
   @Inject lateinit var presenter: BookingDetailPresenter
   private lateinit var idBooking: String
   private lateinit var accessToken: String
@@ -76,7 +85,6 @@ class BookingDetailFragment : BaseFragment(), BookingDetailContract {
       val activity = activity as MainActivity?
       activity?.presenter?.onHomeIconClick()
     }
-    injectDependency()
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -248,11 +256,5 @@ class BookingDetailFragment : BaseFragment(), BookingDetailContract {
   override fun onDestroyView() {
     presenter.detach()
     super.onDestroyView()
-  }
-
-  private fun injectDependency() {
-    val homeComponent = DaggerFragmentComponent.builder().fragmentModule(
-        FragmentModule(this)).build()
-    homeComponent.inject(this)
   }
 }

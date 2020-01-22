@@ -10,16 +10,18 @@ import android.view.ViewGroup
 import android.widget.Chronometer
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import com.future.pms.BaseApp
 import com.future.pms.R
 import com.future.pms.databinding.FragmentOngoingBinding
-import com.future.pms.di.component.DaggerFragmentComponent
-import com.future.pms.di.module.FragmentModule
 import com.future.pms.model.customerbooking.CustomerBooking
 import com.future.pms.model.oauth.Token
 import com.future.pms.ui.base.BaseFragment
 import com.future.pms.ui.history.view.HistoryFragment
 import com.future.pms.ui.home.view.HomeFragment
 import com.future.pms.ui.main.MainActivity
+import com.future.pms.ui.ongoing.injection.DaggerOngoingComponent
+import com.future.pms.ui.ongoing.injection.OngoingComponent
+import com.future.pms.ui.ongoing.presenter.OngoingPresenter
 import com.future.pms.ui.receipt.ReceiptFragment
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.SEC_IN_DAY
@@ -33,6 +35,13 @@ import javax.inject.Inject
 import kotlin.math.ceil
 
 class OngoingFragment : BaseFragment(), OngoingContract {
+  private var daggerBuild: OngoingComponent = DaggerOngoingComponent.builder().baseComponent(
+      BaseApp.instance.baseComponent).build()
+
+  init {
+    daggerBuild.inject(this)
+  }
+
   @Inject lateinit var presenter: OngoingPresenter
   private lateinit var binding: FragmentOngoingBinding
   private lateinit var parkingTime: Chronometer
@@ -46,11 +55,6 @@ class OngoingFragment : BaseFragment(), OngoingContract {
 
   fun newInstance(): OngoingFragment {
     return OngoingFragment()
-  }
-
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    injectDependency()
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -176,11 +180,5 @@ class OngoingFragment : BaseFragment(), OngoingContract {
   override fun onDestroyView() {
     presenter.detach()
     super.onDestroyView()
-  }
-
-  private fun injectDependency() {
-    val homeComponent = DaggerFragmentComponent.builder().fragmentModule(
-        FragmentModule(this)).build()
-    homeComponent.inject(this)
   }
 }
