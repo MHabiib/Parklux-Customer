@@ -12,6 +12,7 @@
         tools:context=".ui.parkingdirection.view.ParkingDirectionFragment">
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/nsv_layout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/zero_dp"
             android:layout_marginLeft="@dimen/twelve_dp"
@@ -24,24 +25,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/appBarLayout">
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:src="@drawable/ic_towing_car"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/scroll_view" />
-
-                <ProgressBar
-                    android:id="@+id/progressBar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:indeterminateDrawable="@drawable/custom_progressbar"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ScrollView
                     android:id="@+id/scroll_view"
@@ -57,6 +40,26 @@
                         android:layout_height="wrap_content" />
                 </ScrollView>
 
+                <ImageButton
+                    android:id="@+id/ib_refresh"
+                    android:layout_width="wrap_content"
+                    android:visibility="gone"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twelve_dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_sync"
+                    android:tint="@color/colorAccent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/scroll_view" />
+
+                <ImageView
+                    android:id="@+id/image_towing"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:src="@drawable/ic_towing_car"
+                    app:layout_constraintTop_toBottomOf="@id/ib_refresh" />
+
                 <TextView
                     android:id="@+id/tv_safety_parking_tag"
                     android:layout_width="0dp"
@@ -68,7 +71,17 @@
                     android:textSize="@dimen/h2"
                     app:layout_constraintLeft_toRightOf="@id/guideline"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/scroll_view" />
+                    app:layout_constraintTop_toBottomOf="@id/ib_refresh" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:indeterminateDrawable="@drawable/custom_progressbar"
+                    android:visibility="visible"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/image_towing"/>
 
                 <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/guideline"
@@ -79,6 +92,7 @@
 
                 <include layout="@layout/numbering_left" />
             </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.core.widget.NestedScrollView>
 
         <com.google.android.material.appbar.AppBarLayout
@@ -162,6 +176,7 @@
                 android:layout_marginRight="@dimen/twelve_dp">
 
                 <ImageView
+                    android:tint="@color/colorPrimary"
                     android:layout_width="@dimen/twenty_dp"
                     android:layout_height="@dimen/twenty_dp"
                     app:srcCompat="@drawable/ic_park" />
@@ -185,6 +200,7 @@
                 <ImageView
                     android:layout_width="@dimen/twenty_dp"
                     android:layout_height="@dimen/twenty_dp"
+                    android:tint="@color/red"
                     android:layout_marginRight="@dimen/four_dp"
                     app:srcCompat="@drawable/ic_disable" />
 
@@ -206,6 +222,7 @@
                 <ImageView
                     android:layout_width="@dimen/twenty_dp"
                     android:layout_height="@dimen/twenty_dp"
+                    android:tint="@color/darkGrey"
                     android:layout_marginRight="@dimen/four_dp"
                     app:srcCompat="@drawable/ic_car" />
 
@@ -218,6 +235,7 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent" />
             </androidx.appcompat.widget.LinearLayoutCompat>
+
         </org.apmem.tools.layouts.FlowLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

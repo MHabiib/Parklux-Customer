@@ -59,6 +59,7 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
   private var parkViewList: MutableList<TextView> = ArrayList()
   private lateinit var layout: HorizontalScrollView
   private lateinit var idBooking: String
+  private lateinit var accessToken: String
 
   companion object {
     const val TAG: String = PARKING_DETAIL_FRAGMENT
@@ -80,7 +81,7 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
       savedInstanceState: Bundle?): View? {
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_parking_direction, container,
         false)
-    val accessToken = Gson().fromJson(
+    accessToken = Gson().fromJson(
         context?.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
             Constants.TOKEN, null), Token::class.java).accessToken
     presenter.attach(this)
@@ -193,6 +194,13 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
   }
 
   override fun onFailed(message: String) {
+    progressBar.visibility = View.GONE
+    binding.ibRefresh.visibility = View.VISIBLE
+    binding.ibRefresh.setOnClickListener {
+      progressBar.visibility = View.VISIBLE
+      binding.ibRefresh.visibility = View.GONE
+      presenter.getParkingLayout(idBooking, accessToken)
+    }
     Timber.tag(Constants.ERROR).e(message)
   }
 

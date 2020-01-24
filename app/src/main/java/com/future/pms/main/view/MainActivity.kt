@@ -151,8 +151,8 @@ class MainActivity : AppCompatActivity(), MainContract {
     if (requestCode == REQUEST_CAMERA_PERMISSION) {
       if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
         if (supportFragmentManager.findFragmentByTag(ScanFragment.TAG) == null) {
-          supportFragmentManager.beginTransaction().disallowAddToBackStack().replace(R.id.frame,
-              ScanFragment().newInstance(), ScanFragment.TAG).commit()
+          supportFragmentManager.beginTransaction().add(R.id.frame, ScanFragment().newInstance(),
+              ScanFragment.TAG).commit()
         }
       } else {
         presenter.onHomeIconClick()
