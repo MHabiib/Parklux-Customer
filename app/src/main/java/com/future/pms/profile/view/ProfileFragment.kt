@@ -18,6 +18,7 @@ import com.future.pms.BaseApp
 import com.future.pms.R
 import com.future.pms.core.model.Token
 import com.future.pms.core.model.customerdetails.Body
+import com.future.pms.core.network.Authentication
 import com.future.pms.databinding.FragmentProfileBinding
 import com.future.pms.login.view.LoginActivity
 import com.future.pms.main.view.MainActivity
@@ -71,7 +72,7 @@ class ProfileFragment : Fragment(), ProfileContract {
       update = btnEditProfile
       logout.setOnClickListener {
         btnLogout.visibility = View.GONE
-        presenter.signOut()
+        context?.let { context -> Authentication.delete(context) }
         onLogout()
       }
       return root
@@ -152,7 +153,7 @@ class ProfileFragment : Fragment(), ProfileContract {
       message.contains(BAD_REQUEST_CODE) -> Toast.makeText(context,
           "Failed to update profile, email already used !", Toast.LENGTH_SHORT).show()
       message.contains(NOT_FOUND_CODE) -> {
-        presenter.signOut()
+        context?.let { Authentication.delete(it) }
         onLogout()
       }
     }

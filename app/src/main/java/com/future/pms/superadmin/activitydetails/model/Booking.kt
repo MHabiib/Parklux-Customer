@@ -1,5 +1,7 @@
 package com.future.pms.superadmin.activitydetails.model
 
+import com.future.pms.core.model.Pageable
+import com.future.pms.core.model.Sort
 import com.google.gson.annotations.SerializedName
 
 data class Booking(@SerializedName("content") val content: List<Content>, @SerializedName("empty")

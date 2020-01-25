@@ -13,17 +13,14 @@ class ParkingDirectionPresenter @Inject constructor() : BasePresenter<ParkingDir
   fun getParkingLayout(idBooking: String, accessToken: String) {
     view?.apply {
       showProgress(true)
-      val subscribe = parkingDirectionApi.getParkingLayout(idBooking, accessToken).subscribeOn(
+      subscriptions.add(parkingDirectionApi.getParkingLayout(idBooking, accessToken).subscribeOn(
           Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe({
-        if (null != it) {
-          showProgress(false)
-          getLayoutSuccess(it)
-        }
+        showProgress(false)
+        getLayoutSuccess(it)
       }, {
+        showProgress(false)
         onFailed(it.message.toString())
-      })
-      showProgress(false)
-      subscriptions.add(subscribe)
+      }))
     }
   }
 }

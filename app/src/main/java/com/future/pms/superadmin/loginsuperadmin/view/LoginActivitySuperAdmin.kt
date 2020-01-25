@@ -13,6 +13,7 @@ import com.future.pms.BaseApp
 import com.future.pms.R
 import com.future.pms.core.base.BaseActivity
 import com.future.pms.core.model.Token
+import com.future.pms.core.network.Authentication
 import com.future.pms.login.view.LoginActivity
 import com.future.pms.superadmin.loginsuperadmin.injection.DaggerLoginActivitySuperAdminComponent
 import com.future.pms.superadmin.loginsuperadmin.injection.LoginActivitySuperAdminComponent
@@ -77,7 +78,8 @@ class LoginActivitySuperAdmin : BaseActivity(), LoginContractSuperAdmin {
     return true
   }
 
-  override fun onSuccess() {
+  override fun onSuccess(token: Token) {
+    Authentication.save(this, token, Constants.ROLE_SUPER_ADMIN)
     presenter.isSuperAdmin(Gson().fromJson(
         this.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
             Constants.TOKEN, null), Token::class.java).accessToken)
@@ -116,6 +118,7 @@ class LoginActivitySuperAdmin : BaseActivity(), LoginContractSuperAdmin {
   override fun onFailed(e: String) {
     loading(false)
     Toast.makeText(this, R.string.email_password_incorrect, Toast.LENGTH_LONG).show()
+    Authentication.delete(this)
   }
 
   override fun onBackPressed() {

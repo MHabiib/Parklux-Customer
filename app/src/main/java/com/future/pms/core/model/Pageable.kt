@@ -1,4 +1,4 @@
-package com.future.pms.superadmin.listuser.model.admin
+package com.future.pms.core.model
 
 import com.google.gson.annotations.SerializedName
 

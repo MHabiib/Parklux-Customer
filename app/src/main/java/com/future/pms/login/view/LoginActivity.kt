@@ -13,6 +13,7 @@ import com.future.pms.BaseApp
 import com.future.pms.R
 import com.future.pms.core.base.BaseActivity
 import com.future.pms.core.model.Token
+import com.future.pms.core.network.Authentication
 import com.future.pms.login.injection.DaggerLoginComponent
 import com.future.pms.login.injection.LoginComponent
 import com.future.pms.login.presenter.LoginPresenter
@@ -83,7 +84,8 @@ class LoginActivity : BaseActivity(), LoginContract {
     return true
   }
 
-  override fun onSuccess() {
+  override fun onSuccess(token: Token) {
+    Authentication.save(this, token, Constants.ROLE_CUSTOMER)
     presenter.loadData(Gson().fromJson(
         this.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
             Constants.TOKEN, null), Token::class.java).accessToken)
@@ -126,6 +128,7 @@ class LoginActivity : BaseActivity(), LoginContract {
   override fun onFailed(message: String) {
     loading(false)
     Toast.makeText(this, R.string.email_password_incorrect, Toast.LENGTH_LONG).show()
+    Authentication.delete(this)
   }
 
   override fun onBackPressed() {

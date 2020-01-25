@@ -1,5 +1,7 @@
 package com.future.pms.history.model
 
+import com.future.pms.core.model.Pageable
+import com.future.pms.core.model.Sort
 import com.google.gson.annotations.SerializedName
 
 data class History(@SerializedName("content") val content: List<BookingHistory>,

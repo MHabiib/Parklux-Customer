@@ -6,10 +6,6 @@ import javax.inject.Inject
 class MainPresenter @Inject constructor() {
   private lateinit var view: MainContract
 
-  fun subscribe() {
-    //No implement required
-  }
-
   fun onHomeIconClick() {
     view.showHomeFragment()
   }

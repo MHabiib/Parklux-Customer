@@ -1,5 +1,7 @@
 package com.future.pms.superadmin.listuser.model.customer
 
+import com.future.pms.core.model.Pageable
+import com.future.pms.core.model.Sort
 import com.google.gson.annotations.SerializedName
 
 data class Body(@SerializedName("content") val content: List<CustomerDetails>,

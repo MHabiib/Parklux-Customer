@@ -13,6 +13,7 @@ import com.future.pms.BaseApp
 import com.future.pms.R
 import com.future.pms.core.base.BaseFragment
 import com.future.pms.core.model.Token
+import com.future.pms.core.network.Authentication
 import com.future.pms.databinding.FragmentHomeSuperAdminBinding
 import com.future.pms.superadmin.homesuperadmin.injection.DaggerHomeComponentSuperAdmin
 import com.future.pms.superadmin.homesuperadmin.injection.HomeComponentSuperAdmin
@@ -56,7 +57,7 @@ class HomeFragmentSuperAdmin : BaseFragment(), HomeContractSuperAdmin {
       val logout = btnLogout
       logout.setOnClickListener {
         btnLogout.visibility = View.GONE
-        presenter.signOut()
+        context?.let { it1 -> Authentication.delete(it1) }
         onLogout()
       }
 
@@ -186,7 +187,7 @@ class HomeFragmentSuperAdmin : BaseFragment(), HomeContractSuperAdmin {
       message.contains(Constants.BAD_REQUEST_CODE) -> Toast.makeText(context,
           "Failed to update profile, email already used !", Toast.LENGTH_SHORT).show()
       message.contains(Constants.UNAUTHORIZED_CODE) -> {
-        presenter.signOut()
+        context?.let { Authentication.delete(it) }
         onLogout()
       }
     }

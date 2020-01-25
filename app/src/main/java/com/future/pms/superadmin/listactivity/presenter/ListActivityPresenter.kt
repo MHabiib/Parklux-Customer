@@ -11,26 +11,22 @@ class ListActivityPresenter @Inject constructor() : BasePresenter<ListActivityCo
   @Inject lateinit var listActivityApi: ListActivityApi
 
   fun loadAllBooking(accessToken: String, page: Int, filter: String) {
-    val subscribe = listActivityApi.loadAllBooking(accessToken, page, filter).subscribeOn(
+    subscriptions.add(listActivityApi.loadAllBooking(accessToken, page, filter).subscribeOn(
         Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe({
-      if (null != it) {
-        view?.loadAllBookingSuccess(it)
-      }
+      view?.loadAllBookingSuccess(it)
     }, {
-      it.message?.let { throwable -> view?.onFailed(throwable) }
-    })
-    subscriptions.add(subscribe)
+      view?.onFailed(it.message.toString())
+    }))
   }
 
   fun findBookingById(idBooking: String, accessToken: String) {
-    val subscribe = listActivityApi.findBookingById(idBooking, accessToken).subscribeOn(
+    subscriptions.add(listActivityApi.findBookingById(idBooking, accessToken).subscribeOn(
         Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe({
       if (null != it) {
         view?.findBookingByIdSuccess(it)
       }
     }, {
-      it.message?.let { throwable -> view?.onFailed(throwable) }
-    })
-    subscriptions.add(subscribe)
+      view?.onFailed(it.message.toString())
+    }))
   }
 }

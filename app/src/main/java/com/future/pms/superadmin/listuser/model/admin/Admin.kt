@@ -1,5 +1,7 @@
 package com.future.pms.superadmin.listuser.model.admin
 
+import com.future.pms.core.model.Pageable
+import com.future.pms.core.model.Sort
 import com.google.gson.annotations.SerializedName
 
 data class Admin(@SerializedName("content") val content: List<AdminDetails>,

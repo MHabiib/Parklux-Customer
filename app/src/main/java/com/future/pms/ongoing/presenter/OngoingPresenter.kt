@@ -21,10 +21,8 @@ class OngoingPresenter @Inject constructor() : BasePresenter<OngoingContract>() 
             loadCustomerOngoingSuccess(ongoing)
           }, { error ->
             showProgress(false)
-            error.message?.let {
-              loadCustomerOngoingFailed(it)
-              onFailed(it)
-            }
+            loadCustomerOngoingFailed(error.message.toString())
+            onFailed(error.message.toString())
           }))
     }
   }

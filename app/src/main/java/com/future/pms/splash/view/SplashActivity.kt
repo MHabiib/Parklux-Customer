@@ -12,6 +12,7 @@ import com.future.pms.BaseApp
 import com.future.pms.R
 import com.future.pms.core.base.BaseActivity
 import com.future.pms.core.model.Token
+import com.future.pms.core.network.Authentication
 import com.future.pms.databinding.ActivitySplashBinding
 import com.future.pms.login.view.LoginActivity
 import com.future.pms.main.view.MainActivity
@@ -44,7 +45,7 @@ class SplashActivity : BaseActivity(), SplashContract {
     if (!firstRun) {
       presenter.attach(this)
       if (isOnline()) {
-        presenter.isAuthenticated()
+        checkAuthenticated()
       } else {
         binding.ibRefresh.visibility = View.VISIBLE
         binding.progressBar.visibility = View.GONE
@@ -53,7 +54,7 @@ class SplashActivity : BaseActivity(), SplashContract {
           if (isOnline()) {
             binding.ibRefresh.visibility = View.GONE
             binding.progressBar.visibility = View.VISIBLE
-            presenter.isAuthenticated()
+            checkAuthenticated()
           } else {
             Toast.makeText(this, R.string.no_network_connection, Toast.LENGTH_LONG).show()
           }
@@ -65,7 +66,18 @@ class SplashActivity : BaseActivity(), SplashContract {
     }
   }
 
-  override fun onSuccess() {
+  override fun onSuccess(token: Token) {
+    Authentication.save(this, token, Gson().fromJson(
+        this.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
+            Constants.TOKEN, null), Token::class.java).role)
+    goToHomePage()
+  }
+
+  override fun onAuthenticated() {
+    goToHomePage()
+  }
+
+  private fun goToHomePage() {
     val intent: Intent = if (Gson().fromJson(
             this.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
                 Constants.TOKEN, null), Token::class.java).role == ROLE_CUSTOMER) {
@@ -97,6 +109,22 @@ class SplashActivity : BaseActivity(), SplashContract {
     val cm = this.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
     val activeNetwork = cm?.activeNetworkInfo
     return activeNetwork != null && activeNetwork.isConnected
+  }
+
+  private fun checkAuthenticated() {
+    try {
+      if (Authentication.isAuthenticated(isAuthenticated())) {
+        onAuthenticated()
+      } else {
+        refreshToken()
+      }
+    } catch (e: Authentication.WithoutAuthenticatedException) {
+      onLogin()
+    }
+  }
+
+  override fun refreshToken() {
+    presenter.refreshToken(Authentication.getRefresh(this))
   }
 
   override fun onFailed(message: String) {

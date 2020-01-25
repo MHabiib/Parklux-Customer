@@ -77,7 +77,20 @@ class HomeFragment : BaseFragment(), HomeContract {
     getDateNow()
     presenter.loadData(accessToken)
     val textAnnounce = binding.textAnnounceUser
-    textAnnounce.text = presenter.getTextAnnounce()
+    textAnnounce.text = getTextAnnounce()
+  }
+
+  private fun getTextAnnounce(): String {
+    return when (Calendar.getInstance(TimeZone.getTimeZone("Asia/Jakarta")).get(
+        Calendar.HOUR_OF_DAY)) {
+      in 0 .. 11 -> "Good Morning"
+      in 12 .. 15 -> "Good Afternoon"
+      in 16 .. 20 -> "Good Evening"
+      in 21 .. 23 -> "Good Night"
+      else -> {
+        "Hello,"
+      }
+    }
   }
 
   override fun showOngoingFragment() {

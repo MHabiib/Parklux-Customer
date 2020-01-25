@@ -16,9 +16,7 @@ class ScanPresenter @Inject constructor() : BasePresenter<ScanContract>() {
       subscriptions.add(
           scanApi.postCreateBooking(idSlot, accessToken).subscribeOn(Schedulers.io()).observeOn(
               AndroidSchedulers.mainThread()).subscribe({
-            if (null != it) {
-              bookingSuccess(it.idBooking)
-            }
+            bookingSuccess(it.idBooking)
           }, {
             onFailed(it.message.toString())
           }))

@@ -31,12 +31,9 @@ class BookingDetailPresenter @Inject constructor() : BasePresenter<BookingDetail
       showProgress(true)
       subscriptions.add(bookingDetailApi.getParkingLayout(idBooking, accessToken).subscribeOn(
           Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe({
-        if (null != it) {
-          showProgress(false)
-          getLayoutSuccess(it)
-        }
+        getLayoutSuccess(it)
       }, {
-        it.message?.let { throwable -> this.showErrorMessage(throwable) }
+        this.showErrorMessage(it.message.toString())
       }))
       showProgress(false)
     }

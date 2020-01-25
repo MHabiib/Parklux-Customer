@@ -18,7 +18,7 @@ class HistoryPresenter @Inject constructor() : BasePresenter<HistoryContract>() 
             view?.loadCustomerBookingSuccess(it)
           }
         }, {
-          it.message?.let { throwable -> view?.onFailed(throwable) }
+          view?.onFailed(it.message.toString())
         }))
   }
 }
