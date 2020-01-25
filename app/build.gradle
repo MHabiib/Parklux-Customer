@@ -6,6 +6,8 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
+apply from: 'jacoco.gradle'
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -27,6 +29,9 @@ android {
         jvmTarget = "1.8"
     }
     buildTypes {
+        debug {
+            testCoverageEnabled true
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -38,10 +43,6 @@ android {
     dataBinding {
         enabled = true
     }
-    kapt {
-        generateStubs = true
-    }
-
 }
 
 dependencies {
