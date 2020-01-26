@@ -30,16 +30,16 @@ class ListActivityPresenterTest : BaseTest() {
   }
 
   @Test fun findBookingByIdSuccess() {
-    `when`(listActivityApi.findBookingById(ID_BOOKING, ACCESS_TOKEN)).thenReturn(
+    `when`(listActivityApi.findBookingById(ID, ACCESS_TOKEN)).thenReturn(
         Observable.just(content()))
 
-    listActivityPresenter.findBookingById(ID_BOOKING, ACCESS_TOKEN)
+    listActivityPresenter.findBookingById(ID, ACCESS_TOKEN)
   }
 
   @Test fun findBookingByIdFailed() {
-    `when`(listActivityApi.findBookingById(ID_BOOKING, ACCESS_TOKEN)).thenReturn(
+    `when`(listActivityApi.findBookingById(ID, ACCESS_TOKEN)).thenReturn(
         Observable.error(Exception(ERROR)))
 
-    listActivityPresenter.findBookingById(ID_BOOKING, ACCESS_TOKEN)
+    listActivityPresenter.findBookingById(ID, ACCESS_TOKEN)
   }
 }

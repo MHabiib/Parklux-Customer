@@ -9,7 +9,7 @@ import io.reactivex.Observable
 import retrofit2.http.*
 
 interface UserDetailsApi {
-  @GET("api3/customer/{id}/detail") fun getCustomerDetailSA(@Path("id") idBooking: String,
+  @GET("api3/customer/{id}/detail") fun getCustomerDetailSA(@Path("id") idCustomer: String,
       @Query("access_token")
       accessToken: String?): Observable<com.future.pms.core.model.customerdetails.Customer>
 

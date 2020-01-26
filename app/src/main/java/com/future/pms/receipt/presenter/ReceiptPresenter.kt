@@ -11,9 +11,9 @@ import javax.inject.Inject
 class ReceiptPresenter @Inject constructor() : BasePresenter<ReceiptContract>() {
   @Inject lateinit var receiptApi: ReceiptApi
 
-  fun loadData(accessToken: String, idBooking: String) {
+  fun loadData(accessToken: String, id: String) {
     view?.apply {
-      subscriptions.add(receiptApi.getBookingReceipt(idBooking, accessToken).subscribeOn(
+      subscriptions.add(receiptApi.getBookingReceipt(id, accessToken).subscribeOn(
           Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe({ receipt: Receipt ->
         showProgress(false)
         loadReceiptSuccess(receipt)

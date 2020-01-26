@@ -17,79 +17,73 @@ class UserDetailsPresenter @Inject constructor() : BasePresenter<UserDetailsCont
   fun loadDataCustomer(idCustomer: String, accessToken: String) {
     view?.apply {
       showProgress(true)
-      val subscribe = userDetailsApi.getCustomerDetailSA(idCustomer, accessToken).subscribeOn(
+      subscriptions.add(userDetailsApi.getCustomerDetailSA(idCustomer, accessToken).subscribeOn(
           Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
           { customer: com.future.pms.core.model.customerdetails.Customer ->
             showProgress(false)
             loadDataCustomerSuccess(customer)
           }, { error ->
         showProgress(false)
-        onFailed(error.toString())
-      })
-      subscriptions.add(subscribe)
+        onFailed(error.message.toString())
+      }))
     }
   }
 
   fun loadDataAdmin(id: String, accessToken: String) {
     view?.apply {
       showProgress(true)
-      val subscribe = userDetailsApi.getAdminDetailSA(id, accessToken).subscribeOn(
+      subscriptions.add(userDetailsApi.getAdminDetailSA(id, accessToken).subscribeOn(
           Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe({
         showProgress(false)
         loadDataAdminSuccess(it)
       }, { error ->
         showProgress(false)
-        onFailed(error.toString())
-      })
-      subscriptions.add(subscribe)
+        onFailed(error.message.toString())
+      }))
     }
   }
 
   fun loadDataSuperAdmin(id: String, accessToken: String) {
     view?.apply {
       showProgress(true)
-      val subscribe = userDetailsApi.getUserDetailSA(id, accessToken).subscribeOn(
+      subscriptions.add(userDetailsApi.getUserDetailSA(id, accessToken).subscribeOn(
           Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
           { userDetails: UserDetails ->
             showProgress(false)
             loadDataSuperAdminSuccess(userDetails)
           }, { error ->
         showProgress(false)
-        onFailed(error.toString())
-      })
-      subscriptions.add(subscribe)
+        onFailed(error.message.toString())
+      }))
     }
   }
 
   fun getUpdatedCustomer(id: String, accessToken: String) {
-    val subscribe = userDetailsApi.getCustomerDetailSA(id, accessToken).subscribeOn(
+    subscriptions.add(userDetailsApi.getCustomerDetailSA(id, accessToken).subscribeOn(
         Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe({
       view?.getUpdatedCustomerSuccess(it)
     }, { error ->
-      view?.onFailed(error.toString())
-    })
-    subscriptions.add(subscribe)
+      view?.onFailed(error.message.toString())
+    }))
   }
 
   fun getUpdatedAdmin(id: String, accessToken: String) {
-    val subscribe = userDetailsApi.getAdminDetailSA(id, accessToken).subscribeOn(
+    subscriptions.add(userDetailsApi.getAdminDetailSA(id, accessToken).subscribeOn(
         Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe({
       view?.getUpdatedAdminSuccess(it)
     }, { error ->
-      view?.onFailed(error.toString())
-    })
-    subscriptions.add(subscribe)
+      view?.onFailed(error.message.toString())
+    }))
   }
 
   fun getUpdatedSuperAdmin(id: String, accessToken: String) {
-    val subscribe = userDetailsApi.getUserDetailSA(id, accessToken).subscribeOn(
+    subscriptions.add(userDetailsApi.getUserDetailSA(id, accessToken).subscribeOn(
         Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
         { userDetails: UserDetails ->
           view?.getUpdatedSuperAdminSuccess(userDetails)
         }, { error ->
-      view?.onFailed(error.toString())
-    })
-    subscriptions.add(subscribe)
+      view?.onFailed(error.message.toString())
+    }))
   }
 
   fun updateCustomer(id: String, name: String, email: String, password: String, phoneNumber: String,
@@ -97,38 +91,28 @@ class UserDetailsPresenter @Inject constructor() : BasePresenter<UserDetailsCont
     view?.apply {
       showProgress(true)
       val customer = Customer(email, name, password, phoneNumber)
-      val subscribe = userDetailsApi.updateCustomer(id, token, customer).subscribeOn(
+      subscriptions.add(userDetailsApi.updateCustomer(id, token, customer).subscribeOn(
           Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe({
         showProgress(false)
         updateCustomerSuccess()
       }, {
         showProgress(false)
         onFailed(it.message.toString())
-      })
-      subscriptions.add(subscribe)
+      }))
     }
   }
 
-  fun updateAdmin(id: String, name: String, email: String, phoneNumber: String, price: String,
-      openHour: String, address: String, password: String, token: String) {
+  fun updateAdmin(id: String, token: String, parkingZone: ParkingZoneResponse) {
     view?.apply {
       showProgress(true)
-      val priceInDouble: Double = if (price == "") {
-        0.0
-      } else {
-        price.toDouble()
-      }
-      val parkingZone = ParkingZoneResponse(address, email, name, openHour, password, phoneNumber,
-          priceInDouble, "")
-      val subscribe = userDetailsApi.updateAdmin(id, token, parkingZone).subscribeOn(
+      subscriptions.add(userDetailsApi.updateAdmin(id, token, parkingZone).subscribeOn(
           Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe({
         showProgress(false)
         updateAdminSuccess()
       }, {
         showProgress(false)
         onFailed(it.message.toString())
-      })
-      subscriptions.add(subscribe)
+      }))
     }
   }
 
@@ -137,35 +121,32 @@ class UserDetailsPresenter @Inject constructor() : BasePresenter<UserDetailsCont
     view?.apply {
       showProgress(true)
       val user = User(email, password, role)
-      val subscribe = userDetailsApi.updateUserFromList(id, accessToken, user).subscribeOn(
+      subscriptions.add(userDetailsApi.updateUserFromList(id, accessToken, user).subscribeOn(
           Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe({
         showProgress(false)
         updateSuperAdminSuccess()
       }, {
         showProgress(false)
         onFailed(it.message.toString())
-      })
-      subscriptions.add(subscribe)
+      }))
     }
   }
 
   fun banCustomer(id: String, accessToken: String) {
-    val subscribe = userDetailsApi.banCustomer(id, accessToken).subscribeOn(
+    subscriptions.add(userDetailsApi.banCustomer(id, accessToken).subscribeOn(
         Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe({
       view?.updateCustomerSuccess()
     }, {
       view?.onFailed(it.toString())
-    })
-    subscriptions.add(subscribe)
+    }))
   }
 
   fun deleteSuperAdmin(id: String, accessToken: String) {
-    val subscribe = userDetailsApi.deleteSuperAdmin(id, accessToken).subscribeOn(
+    subscriptions.add(userDetailsApi.deleteSuperAdmin(id, accessToken).subscribeOn(
         Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe({
       view?.deleteSuperAdminSuccess(it)
     }, {
       view?.onFailed(it.toString())
-    })
-    subscriptions.add(subscribe)
+    }))
   }
 }

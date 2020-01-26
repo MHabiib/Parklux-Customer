@@ -16,30 +16,30 @@ class ActivityDetailsPresenterTest : BaseTest() {
   @InjectMocks lateinit var activityDetailsPresenter: ActivityDetailsPresenter
 
   @Test fun bookingReceiptSASuccess() {
-    `when`(activityDetailsApi.bookingReceiptSA(ID_BOOKING, ACCESS_TOKEN)).thenReturn(
+    `when`(activityDetailsApi.bookingReceiptSA(ID, ACCESS_TOKEN)).thenReturn(
         Observable.just(receipt()))
 
-    activityDetailsPresenter.bookingReceiptSA(ID_BOOKING, ACCESS_TOKEN)
+    activityDetailsPresenter.bookingReceiptSA(ID, ACCESS_TOKEN)
   }
 
   @Test fun bookingReceiptSAFailed() {
-    `when`(activityDetailsApi.bookingReceiptSA(ID_BOOKING, ACCESS_TOKEN)).thenReturn(
+    `when`(activityDetailsApi.bookingReceiptSA(ID, ACCESS_TOKEN)).thenReturn(
         Observable.error(Exception(ERROR)))
 
-    activityDetailsPresenter.bookingReceiptSA(ID_BOOKING, ACCESS_TOKEN)
+    activityDetailsPresenter.bookingReceiptSA(ID, ACCESS_TOKEN)
   }
 
   @Test fun checkoutBookingSASuccess() {
-    `when`(activityDetailsApi.checkoutBookingSA(ID_BOOKING, ACCESS_TOKEN)).thenReturn(
+    `when`(activityDetailsApi.checkoutBookingSA(ID, ACCESS_TOKEN)).thenReturn(
         Observable.just(receipt()))
 
-    activityDetailsPresenter.checkoutBookingSA(ID_BOOKING, ACCESS_TOKEN)
+    activityDetailsPresenter.checkoutBookingSA(ID, ACCESS_TOKEN)
   }
 
   @Test fun checkoutBookingSAFailed() {
-    `when`(activityDetailsApi.checkoutBookingSA(ID_BOOKING, ACCESS_TOKEN)).thenReturn(
+    `when`(activityDetailsApi.checkoutBookingSA(ID, ACCESS_TOKEN)).thenReturn(
         Observable.error(Exception(ERROR)))
 
-    activityDetailsPresenter.checkoutBookingSA(ID_BOOKING, ACCESS_TOKEN)
+    activityDetailsPresenter.checkoutBookingSA(ID, ACCESS_TOKEN)
   }
 }

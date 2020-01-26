@@ -6,9 +6,13 @@ import com.future.pms.history.model.History
 import com.future.pms.superadmin.activitydetails.model.Booking
 import com.future.pms.superadmin.activitydetails.model.Content
 import com.future.pms.superadmin.listuser.model.admin.Admin
+import com.future.pms.superadmin.listuser.model.admin.ParkingZoneResponse
+import com.future.pms.superadmin.listuser.model.admin.nonPage.AdminDetail
+import com.future.pms.superadmin.listuser.model.admin.nonPage.AdminResponse
 import com.future.pms.superadmin.listuser.model.customer.CustomerResponse
 import com.future.pms.superadmin.listuser.model.superadmin.SuperAdminResponse
 import com.future.pms.superadmin.userdetails.model.User
+import com.future.pms.superadmin.userdetails.model.UserDetails
 import org.junit.Before
 import org.junit.Rule
 import org.mockito.MockitoAnnotations
@@ -24,8 +28,7 @@ open class BaseTest {
   protected val REFRESH_TOKEN = "refreshToken"
   protected val SUCCESS = "success"
   protected val ERROR = "error"
-  protected val ID_BOOKING = "idBooking"
-  protected val ID_SLOT = "idSlot"
+  protected val ID = "id"
   protected val PARKING_LAYOUT = "parkingLayout"
   protected val USERNAME = "username"
   protected val EMAIL = "email"
@@ -37,6 +40,7 @@ open class BaseTest {
   protected val LAYOUT = "layout"
   protected val PAGE = 0
   protected val FILTER = "filter"
+  protected val STR = "empty"
 
   protected fun customerBooking(): CustomerBooking {
     return CustomerBooking(0L, 0L, "idBooking", "idParkingZone", "idSlot", "idUser",
@@ -55,10 +59,24 @@ open class BaseTest {
     return User("email", "password", "role")
   }
 
+  protected fun userDetails(): UserDetails {
+    return UserDetails("email", "idUser", "password", "role")
+  }
+
   protected fun admin(): Admin {
     return Admin(emptyList(), empty = false, first = false, last = false, number = 0,
         numberOfElements = 0, pageable = page(), size = 0, sort = sort(), totalElements = 0,
         totalPages = 0)
+  }
+
+  protected fun adminDetail(): AdminDetail {
+    return AdminDetail("address", "emailAdmin", "idParkingZone", "imageUrl", "name", "openHour",
+        "phoneNumber", 0.0)
+  }
+
+  protected fun parkingZone(): ParkingZoneResponse {
+    return ParkingZoneResponse("address", "emailAdmin", "name", "openHour", "password",
+        "phoneNumber", 0.0, "imageUrl")
   }
 
   protected fun superAdmin(): SuperAdminResponse {
@@ -90,6 +108,14 @@ open class BaseTest {
 
   protected fun customerResponse(): CustomerResponse {
     return CustomerResponse(body(), "statusCode", 0)
+  }
+
+  protected fun customerUserDetails(): com.future.pms.core.model.customerdetails.Customer {
+    return com.future.pms.core.model.customerdetails.Customer(customer(), "statusCode", 0)
+  }
+
+  protected fun adminUserDetails(): AdminResponse {
+    return AdminResponse(adminDetail(), "statusCode", 0)
   }
 
   private fun body(): com.future.pms.superadmin.listuser.model.customer.Body {

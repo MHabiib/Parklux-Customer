@@ -16,6 +16,7 @@ import com.future.pms.R
 import com.future.pms.core.model.Token
 import com.future.pms.core.model.customerdetails.Customer
 import com.future.pms.databinding.FragmentBottomSheetUserDetailsBinding
+import com.future.pms.superadmin.listuser.model.admin.ParkingZoneResponse
 import com.future.pms.superadmin.listuser.model.admin.nonPage.AdminResponse
 import com.future.pms.superadmin.listuser.view.ListUserFragment
 import com.future.pms.superadmin.userdetails.injection.DaggerUserDetailsComponent
@@ -77,12 +78,19 @@ class UserDetailsFragment : BottomSheetDialogFragment(), UserDetailsContract {
         }
       }
       btnSaveAdmin.setOnClickListener {
-        presenter.updateAdmin(this@UserDetailsFragment.id, binding.profileNameAdmin.text.toString(),
-            binding.profileEmailAdmin.text.toString(),
-            binding.profilePhoneNumberAdmin.text.toString(), binding.priceAdmin.text.toString(),
+        val price = binding.priceAdmin.text.toString()
+        val priceInDouble: Double = if (price == "") {
+          0.0
+        } else {
+          price.toDouble()
+        }
+
+        val parkingZone = ParkingZoneResponse(binding.addressAdmin.text.toString(),
+            binding.profileEmailAdmin.text.toString(), binding.profileNameAdmin.text.toString(),
             String.format(getString(R.string.range2), binding.openHourAdmin.text.toString(),
-                binding.openHour2Admin.text.toString()), binding.addressAdmin.text.toString(),
-            binding.passwordAdmin.text.toString(), accessToken)
+                binding.openHour2Admin.text.toString()), binding.passwordAdmin.text.toString(),
+            binding.profilePhoneNumberAdmin.text.toString(), priceInDouble, "")
+        presenter.updateAdmin(this@UserDetailsFragment.id, accessToken, parkingZone)
       }
 
       btnDeleteProfileSuperAdmin.setOnClickListener {

@@ -39,10 +39,10 @@ class BookingDetailPresenterBaseTest : BaseTest() {
   }
 
   @Test fun getParkingLayoutSuccess() {
-    `when`(bookingDetailApi.getParkingLayout(ID_BOOKING, ACCESS_TOKEN)).thenReturn(
+    `when`(bookingDetailApi.getParkingLayout(ID, ACCESS_TOKEN)).thenReturn(
         Observable.just(PARKING_LAYOUT))
 
-    bookingDetailPresenter.getParkingLayout(ID_BOOKING, ACCESS_TOKEN)
+    bookingDetailPresenter.getParkingLayout(ID, ACCESS_TOKEN)
 
     verify(bookingDetailContract).showProgress(false)
     verify(bookingDetailContract).showProgress(true)
@@ -50,10 +50,10 @@ class BookingDetailPresenterBaseTest : BaseTest() {
   }
 
   @Test fun getParkingLayoutFailed() {
-    `when`(bookingDetailApi.getParkingLayout(ID_BOOKING, ACCESS_TOKEN)).thenReturn(
+    `when`(bookingDetailApi.getParkingLayout(ID, ACCESS_TOKEN)).thenReturn(
         Observable.error(Exception(ERROR)))
 
-    bookingDetailPresenter.getParkingLayout(ID_BOOKING, ACCESS_TOKEN)
+    bookingDetailPresenter.getParkingLayout(ID, ACCESS_TOKEN)
 
     verify(bookingDetailContract).showProgress(false)
     verify(bookingDetailContract).showProgress(true)

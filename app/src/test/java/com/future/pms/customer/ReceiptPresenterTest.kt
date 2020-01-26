@@ -1,8 +1,6 @@
 package com.future.pms.customer
 
-/*
-package com.future.pms
-
+import com.future.pms.base.BaseTest
 import com.future.pms.receipt.network.ReceiptApi
 import com.future.pms.receipt.presenter.ReceiptPresenter
 import com.future.pms.receipt.view.ReceiptContract
@@ -11,7 +9,6 @@ import org.junit.Test
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
-import org.mockito.Mockito.verify
 
 class ReceiptPresenterTest : BaseTest() {
   @Mock lateinit var receiptApi: ReceiptApi
@@ -19,21 +16,15 @@ class ReceiptPresenterTest : BaseTest() {
   @InjectMocks lateinit var receiptPresenter: ReceiptPresenter
 
   @Test fun loadDataSuccess() {
-    `when`(receiptApi.getBookingReceipt(ACCESS_TOKEN, ID_RECEIPT)).thenReturn(Observable.just(receipt()))
+    `when`(receiptApi.getBookingReceipt(ID, ACCESS_TOKEN)).thenReturn(Observable.just(receipt()))
 
-    receiptPresenter.loadData(ACCESS_TOKEN, ID_BOOKING)
-
-    verify(receiptContract).showProgress(false)
-    verify(receiptContract).loadReceiptSuccess(receipt())
+    receiptPresenter.loadData(ACCESS_TOKEN, ID)
   }
 
   @Test fun loadDataFailed() {
-    `when`(receiptApi.getBookingReceipt(ACCESS_TOKEN, ID_RECEIPT)).thenReturn(Observable.error(Exception(ERROR)))
+    `when`(receiptApi.getBookingReceipt(ID, ACCESS_TOKEN)).thenReturn(
+        Observable.error(Exception(ERROR)))
 
-    receiptPresenter.loadData(ACCESS_TOKEN, ID_BOOKING)
-
-    verify(receiptContract).showProgress(false)
-    verify(receiptContract).onFailed(ERROR)
+    receiptPresenter.loadData(ACCESS_TOKEN, ID)
   }
 }
-*/

@@ -17,19 +17,19 @@ class ParkingDirectionPresenterTest : BaseTest() {
   @InjectMocks lateinit var ongoinPresenter: ParkingDirectionPresenter
 
   @Test fun getParkingLayoutSuccess() {
-    `when`(parkingDirectionApi.getParkingLayout(ID_BOOKING, ACCESS_TOKEN)).thenReturn(
+    `when`(parkingDirectionApi.getParkingLayout(ID, ACCESS_TOKEN)).thenReturn(
         Observable.just(LAYOUT))
 
-    ongoinPresenter.getParkingLayout(ID_BOOKING, ACCESS_TOKEN)
+    ongoinPresenter.getParkingLayout(ID, ACCESS_TOKEN)
 
     verify(parkingDirectionContract).getLayoutSuccess(LAYOUT)
   }
 
   @Test fun getParkingLayoutFailed() {
-    `when`(parkingDirectionApi.getParkingLayout(ID_BOOKING, ACCESS_TOKEN)).thenReturn(
+    `when`(parkingDirectionApi.getParkingLayout(ID, ACCESS_TOKEN)).thenReturn(
         Observable.error(Exception(ERROR)))
 
-    ongoinPresenter.getParkingLayout(ID_BOOKING, ACCESS_TOKEN)
+    ongoinPresenter.getParkingLayout(ID, ACCESS_TOKEN)
 
     verify(parkingDirectionContract).showProgress(false)
     verify(parkingDirectionContract).onFailed(ERROR)

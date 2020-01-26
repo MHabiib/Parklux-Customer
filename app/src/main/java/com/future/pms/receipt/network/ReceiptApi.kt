@@ -7,7 +7,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ReceiptApi {
-  @GET("api/booking/{id}/receipt") fun getBookingReceipt(@Path("id") idReceipt: String,
+  @GET("api/booking/{id}/receipt") fun getBookingReceipt(@Path("id") id: String,
       @Query("access_token") accessToken: String?): Observable<Receipt>
 
 }

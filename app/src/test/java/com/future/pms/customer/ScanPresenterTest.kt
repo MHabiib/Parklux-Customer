@@ -16,16 +16,16 @@ class ScanPresenterTest : BaseTest() {
   @InjectMocks lateinit var scanPresenter: ScanPresenter
 
   @Test fun createBookingSuccess() {
-    `when`(scanApi.postCreateBooking(ID_SLOT, ACCESS_TOKEN)).thenReturn(
+    `when`(scanApi.postCreateBooking(ID, ACCESS_TOKEN)).thenReturn(
         Observable.just(customerBooking()))
 
-    scanPresenter.createBooking(ID_SLOT, ACCESS_TOKEN)
+    scanPresenter.createBooking(ID, ACCESS_TOKEN)
   }
 
   @Test fun createBookingFailed() {
-    `when`(scanApi.postCreateBooking(ID_SLOT, ACCESS_TOKEN)).thenReturn(
+    `when`(scanApi.postCreateBooking(ID, ACCESS_TOKEN)).thenReturn(
         Observable.error(Exception(ERROR)))
 
-    scanPresenter.createBooking(ID_SLOT, ACCESS_TOKEN)
+    scanPresenter.createBooking(ID, ACCESS_TOKEN)
   }
 }

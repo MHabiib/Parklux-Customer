@@ -28,8 +28,8 @@ class MainPresenterTest : BaseTest() {
   }
 
   @Test fun showBookingDetail() {
-    mainPresenter.showBookingDetail(ID_BOOKING)
-    verify(mainContract).showBookingDetail(ID_BOOKING)
+    mainPresenter.showBookingDetail(ID)
+    verify(mainContract).showBookingDetail(ID)
   }
 
   @Test fun showBookingFailed() {
@@ -38,8 +38,8 @@ class MainPresenterTest : BaseTest() {
   }
 
   @Test fun showParkingDirection() {
-    mainPresenter.showParkingDirection(ID_BOOKING, LEVEL_NAME)
-    verify(mainContract).showParkingDirection(ID_BOOKING, LEVEL_NAME)
+    mainPresenter.showParkingDirection(ID, LEVEL_NAME)
+    verify(mainContract).showParkingDirection(ID, LEVEL_NAME)
   }
 
   @Test fun attach() {
