@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">P M S</string>
+    <string name="app_name">Parkiva</string>
     <string name="title_home">Home</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
@@ -87,4 +87,5 @@
     <string name="completed">Completed</string>
     <string name="search">Search</string>
     <string name="ban_customer">Ban customer</string>
+    <string name="parkiva">Parkiva</string>
 </resources>
