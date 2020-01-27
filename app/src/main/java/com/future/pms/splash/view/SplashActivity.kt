@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.os.Bundle
-import android.os.Handler
 import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
@@ -98,11 +97,9 @@ class SplashActivity : BaseActivity(), SplashContract {
   }
 
   private fun showLogin() {
-    Handler().postDelayed({
-      val intent = Intent(this, LoginActivity::class.java)
-      startActivity(intent)
-      finish()
-    }, 500)
+    val intent = Intent(this, LoginActivity::class.java)
+    startActivity(intent)
+    finish()
   }
 
   private fun isOnline(): Boolean {
