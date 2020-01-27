@@ -4,12 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
+import android.text.TextUtils
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
@@ -46,7 +45,7 @@ class ProfileFragment : Fragment(), ProfileContract {
   @Inject lateinit var presenter: ProfilePresenter
   private lateinit var binding: FragmentProfileBinding
   private lateinit var accessToken: String
-  private var update: Button? = null
+  private var editMode = false
 
   companion object {
     const val TAG: String = PROFILE_FRAGMENT
@@ -69,11 +68,50 @@ class ProfileFragment : Fragment(), ProfileContract {
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container, false)
     with(binding) {
       val logout = btnLogout
-      update = btnEditProfile
       logout.setOnClickListener {
         btnLogout.visibility = View.GONE
         context?.let { context -> Authentication.delete(context) }
         onLogout()
+      }
+
+      var profileNameTxt = ""
+      var profileEmailTxt = ""
+      var profilePasswordTxt = ""
+      var profilePhoneNumberTxt = ""
+      btnEditProfile.setOnClickListener {
+        if (!editMode) {
+          editMode = true
+          btnSaveProfile.visibility = View.VISIBLE
+          btnEditProfile.setTextColor(resources.getColor(R.color.red))
+          btnEditProfile.text = getString(R.string.cancel)
+          profileNameTxt = profileName.text.toString()
+          profileEmailTxt = profileEmail.text.toString()
+          profilePasswordTxt = profilePassword.text.toString()
+          profilePhoneNumberTxt = profilePhoneNumber.text.toString()
+          profileName.isEnabled = true
+          profileName.isCursorVisible = true
+          profileName.requestFocus()
+          profileEmail.isEnabled = true
+          profilePassword.isEnabled = true
+          profilePhoneNumber.isEnabled = true
+        } else {
+          profileName.setText(profileNameTxt)
+          profileEmail.setText(profileEmailTxt)
+          profilePassword.setText(profilePasswordTxt)
+          profilePhoneNumber.setText(profilePhoneNumberTxt)
+          exitEditMode()
+        }
+      }
+      btnSaveProfile.setOnClickListener {
+        if (isValid()) {
+          exitEditMode()
+          showProgress(true)
+          presenter.update(profileName.text.toString(), profileEmail.text.toString(),
+              profilePassword.text.toString(), profilePhoneNumber.text.toString(), accessToken)
+        } else {
+          Toast.makeText(context, "Please fill all the entries with valid input",
+              Toast.LENGTH_LONG).show()
+        }
       }
       return root
     }
@@ -89,13 +127,29 @@ class ProfileFragment : Fragment(), ProfileContract {
       showProgress(true)
       subscribe()
       loadData(accessToken)
-      update?.setOnClickListener {
-        showProgress(true)
-        update(binding.profileName.text.toString(), binding.profileEmail.text.toString(),
-            binding.profilePassword.text.toString(), binding.profilePhoneNumber.text.toString(),
-            accessToken)
-      }
     }
+  }
+
+  private fun FragmentProfileBinding.exitEditMode() {
+    profileName.isEnabled = false
+    profileEmail.isEnabled = false
+    profilePassword.isEnabled = false
+    profilePhoneNumber.isEnabled = false
+    editMode = false
+    btnSaveProfile.visibility = View.GONE
+    btnEditProfile.setTextColor(resources.getColor(R.color.colorAccent))
+    btnEditProfile.text = getString(R.string.edit_profile)
+  }
+
+  private fun isValid(): Boolean {
+    if (binding.profileName?.text.toString().isEmpty()) return false
+    if (!binding.profileEmail?.text.toString().isEmailValid()) return false
+    if (binding.profilePhoneNumber?.text.toString().isEmpty()) return false
+    return true
+  }
+
+  private fun String.isEmailValid(): Boolean {
+    return !TextUtils.isEmpty(this) && Patterns.EMAIL_ADDRESS.matcher(this).matches()
   }
 
   override fun showProgress(show: Boolean) {
@@ -115,29 +169,9 @@ class ProfileFragment : Fragment(), ProfileContract {
       profileName.setText(customer.name)
       profileEmail.setText(customer.email)
       profilePassword.hint = "********"
-      if (customer.phoneNumber == "") {
-        profilePhoneNumber.hint = "You haven't enter your phone number yet !"
-      } else {
-        profilePhoneNumber.setText(customer.phoneNumber)
-      }
-      profileName.addTextChangedListener(textWatcher())
-      profileEmail.addTextChangedListener(textWatcher())
-      profilePassword.addTextChangedListener(textWatcher())
-      profilePhoneNumber.addTextChangedListener(textWatcher())
+      profilePhoneNumber.setText(customer.phoneNumber)
     }
     showProgress(false)
-  }
-
-  private fun textWatcher(): TextWatcher {
-    return object : TextWatcher {
-      override fun afterTextChanged(s: Editable?) {}
-      override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-        binding.btnEditProfile.setBackgroundResource(R.drawable.card_layout_purple)
-        binding.btnEditProfile.isEnabled = true
-      }
-
-      override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-    }
   }
 
   override fun onSuccess() {

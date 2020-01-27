@@ -88,4 +88,6 @@
     <string name="search">Search</string>
     <string name="ban_customer">Ban customer</string>
     <string name="parklux">Parklux</string>
+    <string name="cancel">Cancel</string>
+    <string name="edit_profile">Edit profile</string>
 </resources>

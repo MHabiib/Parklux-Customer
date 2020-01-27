@@ -6,17 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/lightGrey">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:adjustViewBounds="true"
-        android:scaleType="fitXY"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/header_with_logo"
-        tools:ignore="MissingConstraints" />
-
     <ProgressBar
         android:id="@+id/progressBarReg"
         style="?android:attr/progressBarStyle"
@@ -34,15 +23,27 @@
         android:id="@+id/register_layout"
         android:layout_height="@dimen/zero_dp"
         android:overScrollMode="never"
+        android:fadeScrollbars="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageView">
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/twenty_four_dp">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/header_with_logo"
+                tools:ignore="MissingConstraints" />
 
             <Button
                 android:id="@+id/btnRegister"
@@ -126,7 +127,7 @@
                 android:paddingBottom="@dimen/twelve_dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imageView"
                 app:startIconDrawable="@drawable/ic_name">
 
                 <com.google.android.material.textfield.TextInputEditText

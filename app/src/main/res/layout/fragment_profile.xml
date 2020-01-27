@@ -109,17 +109,32 @@
                         app:layout_constraintVertical_bias="0.0">
 
                         <Button
+                            android:id="@+id/btn_save_profile"
+                            style="@style/NoCaps"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/card_layout_white"
+                            android:fontFamily="sans-serif-light"
+                            android:padding="@dimen/sixteen_dp"
+                            android:text="@string/save"
+                            android:textColor="@color/colorPrimary"
+                            android:visibility="gone"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/profile_password" />
+
+
+                        <Button
                             android:id="@+id/btn_edit_profile"
                             style="@style/NoCaps"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/card_layout_grey_gradient"
-                            android:enabled="false"
+                            android:layout_marginRight="@dimen/twelve_dp"
                             android:fontFamily="sans-serif-light"
                             android:padding="@dimen/sixteen_dp"
-                            android:text="@string/update_profile"
-                            android:textColor="@color/white"
-                            app:layout_constraintRight_toRightOf="parent"
+                            android:background="@drawable/card_layout_white"
+                            android:text="Edit profile"
+                            android:textColor="@color/colorAccent"
+                            app:layout_constraintRight_toLeftOf="@id/btn_save_profile"
                             app:layout_constraintTop_toBottomOf="@id/profile_password" />
 
                         <TextView
@@ -170,6 +185,7 @@
                             android:maxLines="1"
                             android:paddingBottom="@dimen/twelve_dp"
                             android:singleLine="true"
+                            android:enabled="false"
                             android:textColor="@color/darkGrey"
                             android:textSize="@dimen/h2"
                             app:layout_constraintLeft_toLeftOf="@id/constraint_layout_profile"
@@ -184,6 +200,7 @@
                             android:inputType="textEmailAddress"
                             android:maxLines="1"
                             android:paddingBottom="@dimen/twelve_dp"
+                            android:enabled="false"
                             android:singleLine="true"
                             android:textColor="@color/darkGrey"
                             android:textSize="@dimen/h2"
@@ -199,6 +216,7 @@
                             android:inputType="textPassword"
                             android:maxLines="1"
                             android:paddingBottom="@dimen/twelve_dp"
+                            android:enabled="false"
                             android:singleLine="true"
                             android:textColor="@color/darkGrey"
                             android:textSize="@dimen/h2"
@@ -213,6 +231,7 @@
                             android:background="@android:color/transparent"
                             android:inputType="phone"
                             android:maxLines="1"
+                            android:enabled="false"
                             android:paddingBottom="@dimen/twelve_dp"
                             android:singleLine="true"
                             android:textColor="@color/darkGrey"

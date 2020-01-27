@@ -3,6 +3,7 @@ package com.future.pms.register.view
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Patterns
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -38,8 +39,12 @@ class RegisterActivity : BaseActivity(), RegisterContract {
         hideKeyboard()
         presenter.register(txtName.text.toString(), txtEmail.text.toString(),
             txtPassword.text.toString(), txtPhone.text.toString())
+      } else {
+        Toast.makeText(this, "Please fill all the entries with valid input",
+            Toast.LENGTH_LONG).show()
       }
     }
+
     login.setOnClickListener {
       val intent = Intent(this, LoginActivity::class.java)
       startActivity(intent)
@@ -49,11 +54,14 @@ class RegisterActivity : BaseActivity(), RegisterContract {
 
   private fun isValid(): Boolean {
     if (txtName?.text.toString().isEmpty()) return false
-    if (txtEmail?.text.toString().isEmpty() && Patterns.EMAIL_ADDRESS.matcher(
-            txtEmail?.text.toString()).matches()) return false
+    if (!txtEmail?.text.toString().isEmailValid()) return false
     if (txtPassword?.text.toString().isEmpty()) return false
     if (txtPhone?.text.toString().isEmpty()) return false
     return true
+  }
+
+  private fun String.isEmailValid(): Boolean {
+    return !TextUtils.isEmpty(this) && Patterns.EMAIL_ADDRESS.matcher(this).matches()
   }
 
   private fun loading(isLoading: Boolean) {
