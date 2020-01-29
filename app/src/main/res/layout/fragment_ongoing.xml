@@ -189,6 +189,31 @@
                             tools:text="00 : 00 : 02" />
 
                         <TextView
+                            android:id="@+id/booking_id_tag"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/six_dp"
+                            android:text="@string/booking_id"
+                            android:textColor="@color/darkGrey"
+                            android:textSize="@dimen/h3"
+                            android:visibility="gone"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/parking_slot"
+                            tools:visibility="visible" />
+
+                        <TextView
+                            android:id="@+id/booking_id_value"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/darkGrey"
+                            android:textSize="@dimen/h3"
+                            android:visibility="gone"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/booking_id_tag"
+                            tools:text="1324654653454"
+                            tools:visibility="visible" />
+
+                        <TextView
                             android:id="@+id/parking_slot"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -207,7 +232,7 @@
                             android:textColor="@color/colorPrimary"
                             android:textSize="@dimen/h_medium2"
                             app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="@id/your_parking_spot" />
 
                         <TextView
                             android:id="@+id/your_parking_spot"
@@ -279,7 +304,7 @@
                             android:layout_marginTop="@dimen/six_dp"
                             android:background="@color/lightGrey"
                             android:visibility="gone"
-                            app:layout_constraintTop_toBottomOf="@id/parking_time" />
+                            app:layout_constraintTop_toBottomOf="@id/booking_id_tag" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

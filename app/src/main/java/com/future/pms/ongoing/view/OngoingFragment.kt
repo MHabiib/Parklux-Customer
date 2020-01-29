@@ -125,6 +125,7 @@ class OngoingFragment : BaseFragment(), OngoingContract {
       ongoingParkingLayout.visibility = View.VISIBLE
       parkingZoneName.text = ongoing.parkingZoneName
       parkingZoneAddress.text = ongoing.address
+      bookingIdValue.text = ongoing.idBooking
       parkingSlot.text = ongoing.slotName
     }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

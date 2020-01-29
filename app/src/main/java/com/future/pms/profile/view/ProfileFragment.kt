@@ -1,5 +1,6 @@
 package com.future.pms.profile.view
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -9,6 +10,8 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethod
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
@@ -94,6 +97,7 @@ class ProfileFragment : Fragment(), ProfileContract {
           profileEmail.isEnabled = true
           profilePassword.isEnabled = true
           profilePhoneNumber.isEnabled = true
+          showKeyboard()
         } else {
           profileName.setText(profileNameTxt)
           profileEmail.setText(profileEmailTxt)
@@ -205,6 +209,15 @@ class ProfileFragment : Fragment(), ProfileContract {
     val intent = Intent(activity, LoginActivity::class.java)
     startActivity(intent)
     activity?.finish()
+  }
+
+  private fun showKeyboard() {
+    val view = activity?.currentFocus
+    view?.let {
+      val mInputMethodManager = activity?.getSystemService(
+          Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+      mInputMethodManager.toggleSoftInput(InputMethod.SHOW_FORCED, 0)
+    }
   }
 
   private fun refreshPage() {
