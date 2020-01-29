@@ -61,11 +61,12 @@
     <string name="welcome_super_admin">Welcome Super Admin</string>
     <string name="minus">-</string>
     <string name="activity">Activity</string>
-    <string name="update"><u>Update</u></string>
+    <string name="update">Update</string>
     <string name="no_network_connection">No network connection</string>
     <string name="success">Success</string>
     <string name="update_account_success">Update account success</string>
     <string name="fill_all_the_entries">Please fill all the entries</string>
+    <string name="fill_all_the_entries_value">Please fill all the entries with correct value</string>
     <string name="admin">Admin</string>
     <string name="id">ID</string>
     <string name="update_customer">Update customer</string>
@@ -90,4 +91,5 @@
     <string name="parklux">Parklux</string>
     <string name="cancel">Cancel</string>
     <string name="edit_profile">Edit profile</string>
+    <string name="hide">Hide</string>
 </resources>

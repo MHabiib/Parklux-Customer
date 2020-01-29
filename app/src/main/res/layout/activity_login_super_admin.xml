@@ -72,6 +72,7 @@
                 android:layout_marginEnd="@dimen/twelve_dp"
                 android:background="@drawable/card_layout_white_dark"
                 android:paddingStart="@dimen/sixteen_dp"
+                android:paddingEnd="@dimen/sixteen_dp"
                 android:paddingTop="@dimen/eight_dp"
                 android:paddingBottom="@dimen/twelve_dp"
                 android:textColorHint="@color/darkGrey"

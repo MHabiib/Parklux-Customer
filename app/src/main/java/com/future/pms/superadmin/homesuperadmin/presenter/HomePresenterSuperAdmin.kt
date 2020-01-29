@@ -1,9 +1,11 @@
 package com.future.pms.superadmin.homesuperadmin.presenter
 
 import com.future.pms.core.base.BasePresenter
+import com.future.pms.core.model.Token
 import com.future.pms.superadmin.homesuperadmin.network.HomeApiSuperAdmin
 import com.future.pms.superadmin.homesuperadmin.view.HomeContractSuperAdmin
 import com.future.pms.superadmin.userdetails.model.User
+import com.future.pms.util.Constants
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -38,6 +40,16 @@ class HomePresenterSuperAdmin @Inject constructor() : BasePresenter<HomeContract
       view?.getEmailSuccess(it)
     }, {
       view?.onFailed(it.message.toString())
+        }))
+  }
+
+  fun refreshToken(refreshToken: String) {
+    subscriptions.add(
+        homeApiSuperAdmin.refresh(Constants.GRANT_TYPE_REFRESH, refreshToken).subscribeOn(
+            Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe({ token: Token ->
+          view?.onSuccess(token)
+        }, {
+          view?.onLogout()
         }))
   }
 }

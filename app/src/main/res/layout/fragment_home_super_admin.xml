@@ -8,6 +8,16 @@
         android:layout_height="match_parent"
         android:background="@color/baseBlack">
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminateDrawable="@drawable/custom_progressbar_dark"
+            android:visibility="gone"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -345,7 +355,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/update_account"
-                        android:textColor="@color/white"
+                        android:textColor="@color/darkGrey"
                         android:textSize="@dimen/h2"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -371,22 +381,57 @@
                             app:layout_constraintRight_toRightOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/inputLayoutPassword" />
 
+                        <Button
+                            android:id="@+id/btn_save_account"
+                            style="@style/NoCaps"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/twelve_dp"
+                            android:layout_marginBottom="@dimen/sixty_dp"
+                            android:background="@drawable/card_layout_white_dark"
+                            android:fontFamily="sans-serif-light"
+                            android:padding="@dimen/twelve_dp"
+                            android:text="@string/save"
+                            android:textColor="@color/colorPrimary"
+                            android:visibility="gone"
+                            app:layout_constraintRight_toLeftOf="@id/btn_update_account"
+                            app:layout_constraintTop_toBottomOf="@id/inputLayoutPassword" />
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/txtEmail"
+                            android:layout_width="@dimen/zero_dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/twelve_dp"
+                            android:enabled="false"
+                            android:hint="@string/email"
+                            android:inputType="textEmailAddress"
+                            android:maxLines="1"
+                            android:paddingLeft="@dimen/sixteen_dp"
+                            android:paddingRight="@dimen/sixteen_dp"
+                            android:singleLine="true"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/h2"
+                            app:backgroundTint="@null"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:text="asd" />
+
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/inputLayoutPassword"
                             android:layout_width="@dimen/zero_dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/zero_dp"
-                            android:layout_marginTop="@dimen/twelve_dp"
                             android:layout_marginBottom="@dimen/twelve_dp"
-                            android:background="@drawable/card_layout_base_black"
+                            android:background="@drawable/card_layout_white_dark"
                             android:paddingStart="@dimen/sixteen_dp"
-                            android:paddingTop="@dimen/eight_dp"
+                            android:paddingTop="@dimen/four_dp"
                             android:paddingEnd="@dimen/sixteen_dp"
-                            android:paddingBottom="@dimen/twelve_dp"
+                            android:paddingBottom="@dimen/eight_dp"
                             android:textColorHint="@color/darkGrey"
-                            app:layout_constraintEnd_toEndOf="@+id/inputLayoutEmail"
-                            app:layout_constraintStart_toStartOf="@+id/inputLayoutEmail"
-                            app:layout_constraintTop_toBottomOf="@+id/inputLayoutEmail"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/txtEmail"
                             app:startIconDrawable="@drawable/ic_password"
                             app:startIconTint="@color/darkGrey">
 
@@ -395,42 +440,12 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 app:backgroundTint="@null"
+                                android:enabled="false"
                                 android:hint="@string/password"
                                 android:imeActionId="6"
                                 android:imeActionLabel="Sign in"
                                 android:imeOptions="actionUnspecified"
                                 android:inputType="textPassword"
-                                android:maxLines="1"
-                                android:singleLine="true"
-                                android:textColor="@color/white"
-                                android:textSize="@dimen/h2" />
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/inputLayoutEmail"
-                            android:layout_width="@dimen/zero_dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/twelve_dp"
-                            android:background="@drawable/card_layout_base_black"
-                            android:paddingStart="@dimen/sixteen_dp"
-                            android:paddingEnd="@dimen/sixteen_dp"
-                            android:paddingTop="@dimen/eight_dp"
-                            android:paddingBottom="@dimen/twelve_dp"
-                            android:textColorHint="@color/darkGrey"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:startIconDrawable="@drawable/ic_email"
-                            app:startIconTint="@color/darkGrey"
-                            tools:ignore="RtlSymmetry">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/txtEmail"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                app:backgroundTint="@null"
-                                android:hint="@string/email"
-                                android:inputType="textEmailAddress"
                                 android:maxLines="1"
                                 android:singleLine="true"
                                 android:textColor="@color/white"

@@ -37,17 +37,21 @@ class ListActivityAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
       bookingViewHolder.customerPhone.text = history?.customerPhone
       bookingViewHolder.slot.text = history?.slotName
       bookingViewHolder.parkingZone.text = history?.parkingZoneName
-      bookingViewHolder.totalPrice.text = String.format("IDR %s",
-          history?.totalPrice?.toInt()?.let {
-            Utils.thousandSeparator(it)
-          })
-      bookingViewHolder.timeRang.text = String.format("%s\n%s",
-          history?.dateIn?.let { Utils.convertLongToTimeShortMonth(it) },
-          history?.dateOut?.let { Utils.convertLongToTimeShortMonth(it) })
+
       if (history?.dateOut == null) {
+        bookingViewHolder.totalPrice.text = "IDR -"
+        bookingViewHolder.timeRang.text = String.format("%s\n-",
+            history?.dateIn?.let { Utils.convertLongToTimeShortMonth(it) })
         bookingViewHolder.line.setBackgroundResource(R.color.red)
         bookingViewHolder.status.text = "Ongoing"
       } else {
+        bookingViewHolder.totalPrice.text = String.format("IDR %s",
+            history.totalPrice?.toInt()?.let {
+              Utils.thousandSeparator(it)
+            })
+        bookingViewHolder.timeRang.text = String.format("%s\n%s",
+            history.dateIn?.let { Utils.convertLongToTimeShortMonth(it) },
+            history.dateOut.let { Utils.convertLongToTimeShortMonth(it) })
         bookingViewHolder.line.setBackgroundResource(R.color.gold)
         bookingViewHolder.status.text = "Completed"
       }

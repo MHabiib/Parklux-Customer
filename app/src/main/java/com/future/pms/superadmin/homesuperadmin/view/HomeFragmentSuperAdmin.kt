@@ -1,12 +1,16 @@
 package com.future.pms.superadmin.homesuperadmin.view
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.inputmethod.InputMethod
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.future.pms.BaseApp
@@ -63,46 +67,53 @@ class HomeFragmentSuperAdmin : BaseFragment(), HomeContractSuperAdmin {
 
       var isOpen = ""
       btnAddAdmin.setOnClickListener {
+        hideKeyboard()
         if (btnAddAdmin.text == getString(R.string.plus)) {
           if (isOpen == ROLE_SUPER_ADMIN) {
             inputLayoutSuperAdmin.visibility = View.GONE
             btnSaveSuperAdmin.visibility = View.GONE
             btnAddSuperAdmin.text = getString(R.string.plus)
+            ivSuperAdmin.visibility = View.VISIBLE
           }
           inputLayoutAdmin.visibility = View.VISIBLE
           btnSaveAdmin.visibility = View.VISIBLE
-          btnAddAdmin.text = getString(R.string.minus)
+          btnAddAdmin.text = getString(R.string.hide)
+          ivAdmin.visibility = View.GONE
           isOpen = ROLE_ADMIN
         } else {
           inputLayoutAdmin.visibility = View.GONE
+          ivAdmin.visibility = View.VISIBLE
           btnSaveAdmin.visibility = View.GONE
           btnAddAdmin.text = getString(R.string.plus)
-          hideKeyboard()
           isOpen = ""
         }
       }
       btnAddSuperAdmin.setOnClickListener {
+        hideKeyboard()
         if (btnAddSuperAdmin.text == getString(R.string.plus)) {
           if (isOpen == ROLE_ADMIN) {
             inputLayoutAdmin.visibility = View.GONE
             btnSaveAdmin.visibility = View.GONE
             btnAddAdmin.text = getString(R.string.plus)
+            ivAdmin.visibility = View.VISIBLE
           }
           inputLayoutSuperAdmin.visibility = View.VISIBLE
           btnSaveSuperAdmin.visibility = View.VISIBLE
-          btnAddSuperAdmin.text = getString(R.string.minus)
+          btnAddSuperAdmin.text = getString(R.string.hide)
+          ivSuperAdmin.visibility = View.GONE
           isOpen = ROLE_SUPER_ADMIN
         } else {
           inputLayoutSuperAdmin.visibility = View.GONE
+          ivSuperAdmin.visibility = View.VISIBLE
           btnSaveSuperAdmin.visibility = View.GONE
           btnAddSuperAdmin.text = getString(R.string.plus)
-          hideKeyboard()
           isOpen = ""
         }
       }
       btnSaveAdmin.setOnClickListener {
         hideKeyboard()
         if (isValid(ROLE_ADMIN)) {
+          showProgress(true)
           presenter.createUser(accessToken, inputEmailAdmin.text.toString(),
               inputPasswordAdmin.text.toString(), ROLE_ADMIN)
         } else {
@@ -115,6 +126,7 @@ class HomeFragmentSuperAdmin : BaseFragment(), HomeContractSuperAdmin {
       btnSaveSuperAdmin.setOnClickListener {
         hideKeyboard()
         if (isValid(ROLE_SUPER_ADMIN)) {
+          showProgress(true)
           presenter.createUser(accessToken, inputEmailSuperAdmin.text.toString(),
               inputPasswordSuperAdmin.text.toString(), ROLE_SUPER_ADMIN)
         } else {
@@ -125,8 +137,26 @@ class HomeFragmentSuperAdmin : BaseFragment(), HomeContractSuperAdmin {
         inputPasswordSuperAdmin.text?.clear()
       }
       btnUpdateAccount.setOnClickListener {
-        hideKeyboard()
+        if (txtPassword.isEnabled) {
+          txtPassword.isEnabled = false
+          txtPassword.setText("")
+          btnSaveAccount.visibility = View.GONE
+          btnUpdateAccount.text = getString(R.string.update)
+          hideKeyboard()
+        } else {
+          txtPassword.isEnabled = true
+          txtPassword.requestFocus()
+          btnUpdateAccount.text = getString(R.string.cancel)
+          showKeyboard()
+          btnSaveAccount.visibility = View.VISIBLE
+        }
+      }
+      btnSaveAccount.setOnClickListener {
         if (isValid(Constants.UPDATE_SUPER_ADMIN)) {
+          txtPassword.isEnabled = false
+          btnSaveAccount.visibility = View.GONE
+          hideKeyboard()
+          showProgress(true)
           presenter.updateUser(accessToken, txtEmail.text.toString(), txtPassword.text.toString(),
               ROLE_SUPER_ADMIN)
           txtPassword.text?.clear()
@@ -145,62 +175,111 @@ class HomeFragmentSuperAdmin : BaseFragment(), HomeContractSuperAdmin {
         context?.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
             Constants.TOKEN, null), Token::class.java).accessToken
     presenter.apply {
+      showProgress(true)
       getEmail(accessToken)
       subscribe()
     }
   }
 
-  override fun createUserSuccess() = Toast.makeText(context, getString(R.string.success),
-      Toast.LENGTH_LONG).show()
+  override fun createUserSuccess() {
+    showProgress(false)
+    Toast.makeText(context, getString(R.string.success), Toast.LENGTH_LONG).show()
+  }
 
   private fun isValid(role: String): Boolean {
     when (role) {
       ROLE_ADMIN -> {
-        if (binding.inputEmailAdmin.toString().isEmpty()) return false
-        if (binding.inputPasswordAdmin.toString().isEmpty()) return false
+        if (!binding.inputEmailAdmin.text.toString().isEmailValid()) return false
+        if (binding.inputPasswordAdmin.text.toString().isEmpty()) return false
         return true
       }
       ROLE_SUPER_ADMIN -> {
-        if (binding.inputEmailSuperAdmin.toString().isEmpty()) return false
-        if (binding.inputPasswordSuperAdmin.toString().isEmpty()) return false
+        if (!binding.inputEmailSuperAdmin.text.toString().isEmailValid()) return false
+        if (binding.inputPasswordSuperAdmin.text.toString().isEmpty()) return false
         return true
       }
       else -> {
-        if (binding.txtEmail.toString().isEmpty()) return false
-        if (binding.txtPassword.toString().isEmpty()) return false
+        if (!binding.txtEmail.text.toString().isEmailValid()) return false
+        if (binding.txtPassword.text.toString().isEmpty()) return false
         return true
       }
     }
   }
 
-  override fun updateUserSuccess() {
-    Toast.makeText(context, getString(R.string.update_account_success), Toast.LENGTH_LONG).show()
-    presenter.getEmail(accessToken)
+  private fun String.isEmailValid(): Boolean {
+    return !TextUtils.isEmpty(this) && Patterns.EMAIL_ADDRESS.matcher(this).matches()
   }
 
-  override fun getEmailSuccess(email: String) = binding.txtEmail.setText(email)
+  override fun updateUserSuccess() {
+    showProgress(true)
+    Toast.makeText(context, getString(R.string.update_account_success), Toast.LENGTH_LONG).show()
+  }
+
+  override fun getEmailSuccess(email: String) {
+    showProgress(false)
+    binding.txtEmail.setText(email)
+  }
 
   override fun onFailed(message: String) {
+    showProgress(false)
     when {
-      message.contains(NO_CONNECTION) -> Toast.makeText(context,
-          getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show()
+      message.contains(NO_CONNECTION) -> {
+        Toast.makeText(context, getString(R.string.no_network_connection),
+            Toast.LENGTH_SHORT).show()
+        binding.ibRefresh.visibility = View.VISIBLE
+        binding.ibRefresh.setOnClickListener {
+          showProgress(true)
+          presenter.getEmail(accessToken)
+        }
+      }
       message.contains(Constants.BAD_REQUEST_CODE) -> Toast.makeText(context,
           "Failed to update profile, email already used !", Toast.LENGTH_SHORT).show()
       message.contains(Constants.UNAUTHORIZED_CODE) -> {
-        context?.let { Authentication.delete(it) }
-        onLogout()
+        presenter.refreshToken(accessToken)
       }
     }
     Timber.tag(Constants.ERROR).e(message)
-    binding.ibRefresh.visibility = View.VISIBLE
-    binding.ibRefresh.setOnClickListener {
-      presenter.getEmail(accessToken)
-    }
     Timber.e(message)
   }
 
-  private fun hideKeyboard() = activity?.window?.setSoftInputMode(
-      WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+  private fun hideKeyboard() {
+    val view = activity?.currentFocus
+    view?.let {
+      val mInputMethodManager = activity?.getSystemService(
+          Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+      mInputMethodManager.hideSoftInputFromWindow(it.windowToken, 0)
+    }
+  }
+
+  override fun onSuccess(token: Token) {
+    context?.let {
+      Authentication.save(it, token, Gson().fromJson(
+          it.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
+              Constants.TOKEN, null), Token::class.java).role)
+    }
+    accessToken = token.accessToken
+    showProgress(true)
+    presenter.getEmail(accessToken)
+  }
+
+  private fun showKeyboard() {
+    val view = activity?.currentFocus
+    view?.let {
+      val mInputMethodManager = activity?.getSystemService(
+          Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+      mInputMethodManager.toggleSoftInput(InputMethod.SHOW_FORCED, 0)
+    }
+  }
+
+  private fun showProgress(show: Boolean) {
+    if (null != binding.progressBar) {
+      if (show) {
+        binding.progressBar.visibility = View.VISIBLE
+      } else {
+        binding.progressBar.visibility = View.GONE
+      }
+    }
+  }
 
   override fun onLogout() {
     val intent = Intent(activity, LoginActivitySuperAdmin::class.java)

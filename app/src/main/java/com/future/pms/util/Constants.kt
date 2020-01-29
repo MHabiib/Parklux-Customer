@@ -27,6 +27,8 @@ class Constants {
     const val ROLE_SUPER_ADMIN = "ROLE_SUPER_ADMIN"
     const val ROLE_CUSTOMER = "ROLE_CUSTOMER"
     const val UPDATE_SUPER_ADMIN = "UPDATE_SUPER_ADMIN"
+    const val UPDATE_ADMIN = "UPDATE_ADMIN"
+    const val UPDATE_CUSTOMER = "UPDATE_CUSTOMER"
     const val ROLE_ADMIN = "ROLE_ADMIN"
     const val ROLE = "role"
     const val ID_USER = "idUser"

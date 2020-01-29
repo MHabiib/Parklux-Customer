@@ -88,6 +88,7 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
     layout = binding.layoutPark
     idBooking = this.arguments?.getString(Constants.ID_BOOKING).toString()
     binding.parkingLevelTitle.text = this.arguments?.getString(Constants.LEVEL_NAME).toString()
+    showProgress(true)
     presenter.getParkingLayout(idBooking, accessToken)
     val toolbar = binding.toolbar
     toolbar.setNavigationIcon(R.drawable.ic_back_white)
@@ -199,17 +200,18 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
     binding.ibRefresh.setOnClickListener {
       progressBar.visibility = View.VISIBLE
       binding.ibRefresh.visibility = View.GONE
+      showProgress(true)
       presenter.getParkingLayout(idBooking, accessToken)
     }
     Timber.tag(Constants.ERROR).e(message)
   }
 
   override fun showProgress(show: Boolean) {
-    if (null != progressBar) {
+    if (null != binding.progressBar) {
       if (show) {
-        progressBar.visibility = View.VISIBLE
+        binding.progressBar.visibility = View.VISIBLE
       } else {
-        progressBar.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
       }
     }
   }

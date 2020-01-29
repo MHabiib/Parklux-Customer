@@ -26,6 +26,7 @@ import com.future.pms.receipt.view.ReceiptFragment
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.SEC_IN_DAY
 import com.future.pms.util.Utils
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_ongoing.*
 import timber.log.Timber
@@ -114,6 +115,11 @@ class OngoingFragment : BaseFragment(), OngoingContract {
   }
 
   override fun onFailed(message: String) {
+    val fab = activity?.findViewById(R.id.fab_scan) as FloatingActionButton
+    val activity = activity as MainActivity
+    fab.setOnClickListener {
+      activity.presenter.onScanIconClick()
+    }
     Timber.tag(Constants.ERROR).e(message)
   }
 
@@ -146,6 +152,10 @@ class OngoingFragment : BaseFragment(), OngoingContract {
               (ceil(elapsedMillis.toDouble() / SEC_IN_DAY) * ongoing.price).toInt()))
         }
       }
+    }
+    val fab = activity?.findViewById(R.id.fab_scan) as FloatingActionButton
+    fab.setOnClickListener {
+      Toast.makeText(context, "You only can make booking once a time", Toast.LENGTH_LONG).show()
     }
     loadImage(ongoing.imageUrl)
   }

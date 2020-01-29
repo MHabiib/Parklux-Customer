@@ -111,6 +111,7 @@ class BookingDetailFragment : BaseFragment(), BookingDetailContract {
     if (NULL != idBooking) {
       presenter.loadBooking(accessToken)
       presenter.getParkingLayout(idBooking, accessToken)
+      showProgress(true)
     } else {
       with(binding) {
         parkingDirectionContent.apply {
@@ -158,11 +159,11 @@ class BookingDetailFragment : BaseFragment(), BookingDetailContract {
   }
 
   override fun showProgress(show: Boolean) {
-    if (null != progressBar) {
+    if (null != binding.parkingDirectionContent.progressBar) {
       if (show) {
-        progressBar.visibility = View.VISIBLE
+        binding.parkingDirectionContent.progressBar.visibility = View.VISIBLE
       } else {
-        progressBar.visibility = View.GONE
+        binding.parkingDirectionContent.progressBar.visibility = View.GONE
       }
     }
   }

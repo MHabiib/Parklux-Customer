@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.app.TimePickerDialog
 import android.content.Context
 import android.os.Bundle
+import android.text.TextUtils
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +32,9 @@ import com.future.pms.util.Constants.Companion.ROLE
 import com.future.pms.util.Constants.Companion.ROLE_ADMIN
 import com.future.pms.util.Constants.Companion.ROLE_CUSTOMER
 import com.future.pms.util.Constants.Companion.ROLE_SUPER_ADMIN
+import com.future.pms.util.Constants.Companion.UPDATE_ADMIN
+import com.future.pms.util.Constants.Companion.UPDATE_CUSTOMER
+import com.future.pms.util.Constants.Companion.UPDATE_SUPER_ADMIN
 import com.future.pms.util.Utils
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.gson.Gson
@@ -59,9 +64,14 @@ class UserDetailsFragment : BottomSheetDialogFragment(), UserDetailsContract {
     setStyle(DialogFragment.STYLE_NO_FRAME, R.style.AppBottomSheetDialogTheme)
     with(binding) {
       btnEditProfileCustomer.setOnClickListener {
-        presenter.updateCustomer(this@UserDetailsFragment.id, profileNameCustomer.text.toString(),
-            profileEmailCustomer.text.toString(), profilePasswordCustomer.text.toString(),
-            profilePhoneNumberCustomer.text.toString(), accessToken)
+        if (isValid(UPDATE_CUSTOMER)) {
+          presenter.updateCustomer(this@UserDetailsFragment.id, profileNameCustomer.text.toString(),
+              profileEmailCustomer.text.toString(), profilePasswordCustomer.text.toString(),
+              profilePhoneNumberCustomer.text.toString(), accessToken)
+        } else {
+          Toast.makeText(context, getString(R.string.fill_all_the_entries),
+              Toast.LENGTH_LONG).show()
+        }
       }
       btnBanProfileCustomer.setOnClickListener {
         presenter.banCustomer(this@UserDetailsFragment.id, accessToken)
@@ -78,19 +88,24 @@ class UserDetailsFragment : BottomSheetDialogFragment(), UserDetailsContract {
         }
       }
       btnSaveAdmin.setOnClickListener {
-        val price = binding.priceAdmin.text.toString()
-        val priceInDouble: Double = if (price == "") {
-          0.0
-        } else {
-          price.toDouble()
-        }
+        if (isValid(UPDATE_ADMIN)) {
+          val price = binding.priceAdmin.text.toString()
+          val priceInDouble: Double = if (price == "") {
+            0.0
+          } else {
+            price.toDouble()
+          }
 
-        val parkingZone = ParkingZoneResponse(binding.addressAdmin.text.toString(),
-            binding.profileEmailAdmin.text.toString(), binding.profileNameAdmin.text.toString(),
-            String.format(getString(R.string.range2), binding.openHourAdmin.text.toString(),
-                binding.openHour2Admin.text.toString()), binding.passwordAdmin.text.toString(),
-            binding.profilePhoneNumberAdmin.text.toString(), priceInDouble, "")
-        presenter.updateAdmin(this@UserDetailsFragment.id, accessToken, parkingZone)
+          val parkingZone = ParkingZoneResponse(binding.addressAdmin.text.toString(),
+              binding.profileEmailAdmin.text.toString(), binding.profileNameAdmin.text.toString(),
+              String.format(getString(R.string.range2), binding.openHourAdmin.text.toString(),
+                  binding.openHour2Admin.text.toString()), binding.passwordAdmin.text.toString(),
+              binding.profilePhoneNumberAdmin.text.toString(), priceInDouble, "")
+          presenter.updateAdmin(this@UserDetailsFragment.id, accessToken, parkingZone)
+        } else {
+          Toast.makeText(context, getString(R.string.fill_all_the_entries),
+              Toast.LENGTH_LONG).show()
+        }
       }
 
       btnDeleteProfileSuperAdmin.setOnClickListener {
@@ -228,26 +243,42 @@ class UserDetailsFragment : BottomSheetDialogFragment(), UserDetailsContract {
   }
 
   private fun isValid(role: String): Boolean {
-    when (role) {
-      ROLE_ADMIN -> {
-
+    with(binding) {
+      when (role) {
+        UPDATE_ADMIN -> {
+          if (profileNameAdmin?.text.toString().isEmpty()) return false
+          if (!profileEmailAdmin?.text.toString().isEmailValid()) return false
+          if (profilePhoneNumberAdmin?.text.toString().isEmpty()) return false
+          if (openHourAdmin?.text.toString().isEmpty()) return false
+          if (openHour2Admin?.text.toString().isEmpty()) return false
+          if (addressAdmin?.text.toString().isEmpty()) return false
         return true
       }
-      ROLE_SUPER_ADMIN -> {
-        if (binding.emailSuperAdmin.toString().isEmpty()) return false
-        if (binding.passwordSuperAdmin.toString().isEmpty()) return false
-        return true
-      }
-      else -> {
-
-        return true
+        UPDATE_SUPER_ADMIN -> {
+          if (!emailSuperAdmin.text.toString().isEmailValid()) return false
+          if (passwordSuperAdmin.text.toString().isEmpty()) return false
+          return true
+        }
+        else -> {
+          if (profileNameCustomer.text.toString().isEmpty()) return false
+          if (!profileEmailCustomer.text.toString().isEmailValid()) return false
+          if (profilePhoneNumberCustomer.text.toString().isEmpty()) return false
+          return true
+        }
       }
     }
+
+  }
+
+  private fun String.isEmailValid(): Boolean {
+    return !TextUtils.isEmpty(this) && Patterns.EMAIL_ADDRESS.matcher(this).matches()
   }
 
   override fun onFailed(e: String) {
     if (e.contains(Constants.NO_CONNECTION)) {
       Toast.makeText(context, getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show()
+    } else {
+      Toast.makeText(context, e, Toast.LENGTH_SHORT).show()
     }
     Timber.e(e)
   }
