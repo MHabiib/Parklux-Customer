@@ -134,7 +134,8 @@ class ScanFragment : Fragment(), ScanContract {
               showProgress(true)
               intentData = barcode.valueAt(0).displayValue
               val idSlot = intentData.substringAfter("idSlot=").substringBefore(')')
-              presenter.createBooking(idSlot, accessToken)
+              val fcm = intentData.substringAfter(")")
+              presenter.createBooking(idSlot, fcm, accessToken)
             }
           }
         }

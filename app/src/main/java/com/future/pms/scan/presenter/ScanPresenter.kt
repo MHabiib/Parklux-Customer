@@ -10,11 +10,11 @@ import javax.inject.Inject
 class ScanPresenter @Inject constructor() : BasePresenter<ScanContract>() {
   @Inject lateinit var scanApi: ScanApi
 
-  fun createBooking(idSlot: String, accessToken: String) {
+  fun createBooking(idSlot: String, fcm: String, accessToken: String) {
     view?.apply {
       showProgress(true)
-      subscriptions.add(
-          scanApi.postCreateBooking(idSlot, accessToken).subscribeOn(Schedulers.io()).observeOn(
+      subscriptions.add(scanApi.postCreateBooking(idSlot, fcm, accessToken).subscribeOn(
+          Schedulers.io()).observeOn(
               AndroidSchedulers.mainThread()).subscribe({
             bookingSuccess(it.idBooking)
           }, {
