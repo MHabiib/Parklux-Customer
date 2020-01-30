@@ -23,9 +23,9 @@ class ListSuperAdminAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
     publicParent = parent
-    val inflater = LayoutInflater.from(parent.context)
-    val viewItem = inflater.inflate(R.layout.item_layout_super_admin, parent, false)
-    return HistoryViewHolder(viewItem)
+    return HistoryViewHolder(
+        LayoutInflater.from(parent.context).inflate(R.layout.item_layout_super_admin, parent,
+            false))
   }
 
   override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -37,13 +37,10 @@ class ListSuperAdminAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
   }
 
-  override fun getItemCount(): Int {
-    return superAdminList?.size ?: 0
-  }
+  override fun getItemCount(): Int = superAdminList?.size ?: 0
 
-  override fun getItemViewType(position: Int): Int {
-    return if (position == superAdminList?.size?.minus(1) && isLoadingAdded) loading else item
-  }
+  override fun getItemViewType(position: Int): Int = if (position == superAdminList?.size?.minus(
+          1) && isLoadingAdded) loading else item
 
   fun add(superAdminDetails: SuperAdminDetails) {
     superAdminList?.add(superAdminDetails)
@@ -56,9 +53,8 @@ class ListSuperAdminAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
   }
 
-  fun addAt(position: Int, superAdminDetails: SuperAdminDetails) {
-    superAdminList?.add(position, superAdminDetails)
-  }
+  fun addAt(position: Int, superAdminDetails: SuperAdminDetails) = superAdminList?.add(position,
+      superAdminDetails)
 
   fun remove(position: Int) {
     superAdminList?.removeAt(position)
@@ -66,9 +62,7 @@ class ListSuperAdminAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     superAdminList?.size?.let { notifyItemRangeChanged(position, it) }
   }
 
-  fun clear() {
-    superAdminList?.clear()
-  }
+  fun clear() = superAdminList?.clear()
 
   inner class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val itemTitle: TextView = itemView.findViewById<View>(R.id.item_title) as TextView

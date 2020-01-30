@@ -36,6 +36,7 @@ class ActivityDetailsFragment : BottomSheetDialogFragment(), ActivityDetailsCont
   }
 
   @Inject lateinit var presenter: ActivityDetailsPresenter
+  @Inject lateinit var gson: Gson
   private lateinit var binding: FragmentBottomSheetActivityBinding
   private lateinit var accessToken: String
   private lateinit var idBooking: String
@@ -54,16 +55,17 @@ class ActivityDetailsFragment : BottomSheetDialogFragment(), ActivityDetailsCont
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    accessToken = Gson().fromJson(
+    accessToken = gson.fromJson(
         context?.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
             Constants.TOKEN, null), Token::class.java).accessToken
     idBooking = this.arguments?.getString(ID_BOOKING).toString()
+
     presenter.bookingReceiptSA(idBooking, accessToken)
   }
 
   override fun onFailed(message: String) {
     context?.let {
-      Toast.makeText(it, "Error", Toast.LENGTH_LONG).show()
+      Toast.makeText(it, getString(R.string.error), Toast.LENGTH_LONG).show()
     }
   }
 

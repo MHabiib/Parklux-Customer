@@ -33,6 +33,7 @@ class LoginActivitySuperAdmin : BaseActivity(), LoginContractSuperAdmin {
   }
 
   @Inject lateinit var presenter: LoginPresenterSuperAdmin
+  @Inject lateinit var gson: Gson
   private var count = 0
   private var startMillis: Long = 0
 
@@ -61,7 +62,7 @@ class LoginActivitySuperAdmin : BaseActivity(), LoginContractSuperAdmin {
         count++
       }
       if (count == 5) {
-        Toast.makeText(this, "Switched to CUSTOMER page", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, getString(R.string.switch_customer), Toast.LENGTH_LONG).show()
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finish()
@@ -80,7 +81,7 @@ class LoginActivitySuperAdmin : BaseActivity(), LoginContractSuperAdmin {
 
   override fun onSuccess(token: Token) {
     Authentication.save(this, token, Constants.ROLE_SUPER_ADMIN)
-    presenter.isSuperAdmin(Gson().fromJson(
+    presenter.isSuperAdmin(gson.fromJson(
         this.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
             Constants.TOKEN, null), Token::class.java).accessToken)
   }

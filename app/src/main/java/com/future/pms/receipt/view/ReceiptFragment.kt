@@ -50,6 +50,7 @@ class ReceiptFragment : BottomSheetDialogFragment(), ReceiptContract {
   }
 
   @Inject lateinit var presenter: ReceiptPresenter
+  @Inject lateinit var gson: Gson
   private lateinit var binding: FragmentReceiptBinding
   private lateinit var idBooking: String
   private lateinit var imagePath: File
@@ -59,21 +60,23 @@ class ReceiptFragment : BottomSheetDialogFragment(), ReceiptContract {
     const val TAG: String = RECEIPT_FRAGMENT
   }
 
-  fun newInstance(): ReceiptFragment {
-    return ReceiptFragment()
-  }
+  fun newInstance(): ReceiptFragment = ReceiptFragment()
 
   override fun setupDialog(dialog: Dialog, style: Int) {
     super.setupDialog(dialog, style)
     val inflatedView = View.inflate(context, R.layout.fragment_receipt, null)
     dialog.setContentView(inflatedView)
+
     val params = (inflatedView.parent as View).layoutParams as CoordinatorLayout.LayoutParams
     params.behavior
+
     val parent = inflatedView.parent as View
     parent.fitsSystemWindows = true
     inflatedView.measure(0, 0)
+
     val displaymetrics = DisplayMetrics()
     activity?.windowManager?.defaultDisplay?.getMetrics(displaymetrics)
+
     val screenHeight = displaymetrics.heightPixels
     BottomSheetBehavior.from(parent).peekHeight = screenHeight
     params.height = screenHeight
@@ -89,6 +92,7 @@ class ReceiptFragment : BottomSheetDialogFragment(), ReceiptContract {
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
       savedInstanceState: Bundle?): View? {
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_receipt, container, false)
+
     val shareButton = binding.buttonShareReceipt
     shareButton.setOnClickListener {
       if (checkPermission()) {
@@ -99,13 +103,13 @@ class ReceiptFragment : BottomSheetDialogFragment(), ReceiptContract {
         requestPermission()
       }
     }
-    idBooking = this.arguments?.getString("idBooking").toString()
+    idBooking = this.arguments?.getString(getString(R.string.id_booking)).toString()
     return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    val accessToken = Gson().fromJson(
+    val accessToken = gson.fromJson(
         context?.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
             Constants.TOKEN, null), Token::class.java).accessToken
     presenter.attach(this)
@@ -123,9 +127,7 @@ class ReceiptFragment : BottomSheetDialogFragment(), ReceiptContract {
     }
   }
 
-  override fun onFailed(message: String) {
-    Timber.tag(Constants.ERROR).e(message)
-  }
+  override fun onFailed(message: String) = Timber.tag(Constants.ERROR).e(message)
 
   override fun loadReceiptSuccess(receipt: Receipt) {
     println(receipt)
@@ -170,19 +172,17 @@ class ReceiptFragment : BottomSheetDialogFragment(), ReceiptContract {
   private fun shareIt() {
     val uri = context?.let {
       FileProvider.getUriForFile(it, context?.applicationContext?.packageName + ".provider",
-          imagePath
-          //https://stackoverflow.com/questions/38200282/android-os-fileuriexposedexception-file-storage-emulated-0-test-txt-exposed
-      )
+          imagePath)
     }
     val sharingIntent = Intent(Intent.ACTION_SEND)
     sharingIntent.apply {
       type = "image/*"
-      val shareBody = "This is my parking receipt using PMS apps."
-      putExtra(Intent.EXTRA_SUBJECT, "Parking Management System (P M S)")
+      val shareBody = getString(R.string.share_body)
+      putExtra(Intent.EXTRA_SUBJECT, getString(R.string.parklux))
       putExtra(Intent.EXTRA_TEXT, shareBody)
       putExtra(Intent.EXTRA_STREAM, uri)
 
-      startActivity(Intent.createChooser(sharingIntent, "Share via"))
+      startActivity(Intent.createChooser(sharingIntent, getString(R.string.share_via)))
     }
   }
 

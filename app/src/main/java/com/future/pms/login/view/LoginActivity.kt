@@ -34,6 +34,7 @@ class LoginActivity : BaseActivity(), LoginContract {
   }
 
   @Inject lateinit var presenter: LoginPresenter
+  @Inject lateinit var gson: Gson
   private var count = 0
   private var startMillis: Long = 0
 
@@ -43,9 +44,9 @@ class LoginActivity : BaseActivity(), LoginContract {
     presenter.attach(this)
     presenter.subscribe()
     btnSign.setOnClickListener {
+      hideKeyboard()
       if (isValid()) {
         loading(true)
-        hideKeyboard()
         presenter.login(txtEmail.text.toString(), txtPassword.text.toString())
       }
     }
@@ -67,7 +68,7 @@ class LoginActivity : BaseActivity(), LoginContract {
         count++
       }
       if (count == 5) {
-        Toast.makeText(this, "Switched to SUPER ADMIN page", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, getString(R.string.switch_super_admin), Toast.LENGTH_LONG).show()
         val intent = Intent(this, LoginActivitySuperAdmin::class.java)
         startActivity(intent)
         finish()
@@ -86,7 +87,7 @@ class LoginActivity : BaseActivity(), LoginContract {
 
   override fun onSuccess(token: Token) {
     Authentication.save(this, token, Constants.ROLE_CUSTOMER)
-    presenter.loadData(Gson().fromJson(
+    presenter.loadData(gson.fromJson(
         this.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
             Constants.TOKEN, null), Token::class.java).accessToken)
   }

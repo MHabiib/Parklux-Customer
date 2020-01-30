@@ -61,6 +61,7 @@ class BookingDetailFragment : BaseFragment(), BookingDetailContract {
   }
 
   @Inject lateinit var presenter: BookingDetailPresenter
+  @Inject lateinit var gson: Gson
   private lateinit var idBooking: String
   private lateinit var accessToken: String
   private lateinit var layout: HorizontalScrollView
@@ -72,17 +73,16 @@ class BookingDetailFragment : BaseFragment(), BookingDetailContract {
     const val TAG: String = BOOKING_DETAIL_FRAGMENT
   }
 
-  fun newInstance(): BookingDetailFragment {
-    return BookingDetailFragment()
-  }
+  fun newInstance(): BookingDetailFragment = BookingDetailFragment()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     requireActivity().onBackPressedDispatcher.addCallback(this) {
       val ongoingFragment = fragmentManager?.findFragmentByTag(
           OngoingFragment.TAG) as OngoingFragment
-      ongoingFragment.refreshPage()
       val activity = activity as MainActivity?
+
+      ongoingFragment.refreshPage()
       activity?.presenter?.onHomeIconClick()
     }
   }
@@ -92,22 +92,25 @@ class BookingDetailFragment : BaseFragment(), BookingDetailContract {
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_booking_detail, container, false)
     bindingActivityMain = DataBindingUtil.inflate(inflater, R.layout.activity_main, null, false)
 
-    accessToken = Gson().fromJson(
-        context?.getSharedPreferences(AUTHENTICATION, Context.MODE_PRIVATE)?.getString(TOKEN, null),
-        Token::class.java).accessToken
-    idBooking = this.arguments?.getString(ID_BOOKING).toString()
     with(binding) {
       parkingDirectionContent.backBookingDetail.setOnClickListener { backToHome() }
       parkingDirectionContent.buttonScanAgain.setOnClickListener { scanAgain() }
       layout = parkingDirectionSheet.layoutPark.findViewById(R.id.layoutPark)
-      return root
     }
+
+    return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     presenter.attach(this)
     presenter.subscribe()
+
+    accessToken = gson.fromJson(
+        context?.getSharedPreferences(AUTHENTICATION, Context.MODE_PRIVATE)?.getString(TOKEN, null),
+        Token::class.java).accessToken
+    idBooking = this.arguments?.getString(ID_BOOKING).toString()
+
     if (NULL != idBooking) {
       presenter.loadBooking(accessToken)
       presenter.getParkingLayout(idBooking, accessToken)
@@ -126,9 +129,7 @@ class BookingDetailFragment : BaseFragment(), BookingDetailContract {
     }
   }
 
-  override fun getLayoutSuccess(slotsLayout: String) {
-    showParkingLayout(slotsLayout)
-  }
+  override fun getLayoutSuccess(slotsLayout: String) = showParkingLayout(slotsLayout)
 
   override fun loadBookingSuccess(booking: CustomerBooking) {
     with(binding) {
@@ -148,8 +149,9 @@ class BookingDetailFragment : BaseFragment(), BookingDetailContract {
 
   private fun backToHome() {
     val activity = activity as MainActivity?
-    activity?.presenter?.onHomeIconClick()
     val ongoingFragment = fragmentManager?.findFragmentByTag(OngoingFragment.TAG) as OngoingFragment
+
+    activity?.presenter?.onHomeIconClick()
     ongoingFragment.refreshPage()
   }
 
@@ -168,9 +170,7 @@ class BookingDetailFragment : BaseFragment(), BookingDetailContract {
     }
   }
 
-  override fun showErrorMessage(error: String) {
-    Timber.tag(ERROR).e(error)
-  }
+  override fun showErrorMessage(error: String) = Timber.tag(ERROR).e(error)
 
   private fun showParkingLayout(slotsLayout: String) {
     val layoutPark = LinearLayout(context)
@@ -178,6 +178,7 @@ class BookingDetailFragment : BaseFragment(), BookingDetailContract {
     var totalSlot = 0
     val params = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
         ViewGroup.LayoutParams.WRAP_CONTENT)
+
     layoutPark.apply {
       orientation = LinearLayout.VERTICAL
       layoutParams = params
@@ -250,9 +251,7 @@ class BookingDetailFragment : BaseFragment(), BookingDetailContract {
     return view
   }
 
-  override fun onFailed(message: String) {
-    Timber.tag("e").e(message)
-  }
+  override fun onFailed(message: String) = Timber.tag("e").e(message)
 
   override fun onDestroyView() {
     presenter.detach()

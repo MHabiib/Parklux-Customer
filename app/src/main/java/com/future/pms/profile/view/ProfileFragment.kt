@@ -46,6 +46,7 @@ class ProfileFragment : Fragment(), ProfileContract {
   }
 
   @Inject lateinit var presenter: ProfilePresenter
+  @Inject lateinit var gson: Gson
   private lateinit var binding: FragmentProfileBinding
   private lateinit var accessToken: String
   private var editMode = false
@@ -54,9 +55,7 @@ class ProfileFragment : Fragment(), ProfileContract {
     const val TAG: String = PROFILE_FRAGMENT
   }
 
-  fun newInstance(): ProfileFragment {
-    return ProfileFragment()
-  }
+  fun newInstance(): ProfileFragment = ProfileFragment()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -113,17 +112,17 @@ class ProfileFragment : Fragment(), ProfileContract {
           presenter.update(profileName.text.toString(), profileEmail.text.toString(),
               profilePassword.text.toString(), profilePhoneNumber.text.toString(), accessToken)
         } else {
-          Toast.makeText(context, "Please fill all the entries with valid input",
+          Toast.makeText(context, getString(R.string.fill_all_entries),
               Toast.LENGTH_LONG).show()
         }
       }
-      return root
     }
+    return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    accessToken = Gson().fromJson(
+    accessToken = gson.fromJson(
         context?.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
             Constants.TOKEN, null), Token::class.java).accessToken
     presenter.attach(this)
@@ -172,14 +171,14 @@ class ProfileFragment : Fragment(), ProfileContract {
       profileNameDisplay.text = customer.name
       profileName.setText(customer.name)
       profileEmail.setText(customer.email)
-      profilePassword.hint = "********"
+      profilePassword.hint = getString(R.string.password_hint)
       profilePhoneNumber.setText(customer.phoneNumber)
     }
     showProgress(false)
   }
 
   override fun onSuccess() {
-    Toast.makeText(context, "Updated", Toast.LENGTH_LONG).show()
+    Toast.makeText(context, getString(R.string.updated), Toast.LENGTH_LONG).show()
     profile_password.text?.clear()
     refreshPage()
   }
@@ -189,7 +188,7 @@ class ProfileFragment : Fragment(), ProfileContract {
       message.contains(NO_CONNECTION) -> Toast.makeText(context,
           getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show()
       message.contains(BAD_REQUEST_CODE) -> Toast.makeText(context,
-          "Failed to update profile, email already used !", Toast.LENGTH_SHORT).show()
+          getString(R.string.email_already_registered), Toast.LENGTH_SHORT).show()
       message.contains(NOT_FOUND_CODE) -> {
         context?.let { Authentication.delete(it) }
         onLogout()

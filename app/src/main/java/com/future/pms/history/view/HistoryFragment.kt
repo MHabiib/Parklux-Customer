@@ -24,7 +24,6 @@ import com.future.pms.util.Constants.Companion.ERROR
 import com.future.pms.util.Constants.Companion.HISTORY_FRAGMENT
 import com.future.pms.util.PaginationScrollListener
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.fragment_history.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -37,6 +36,7 @@ class HistoryFragment : BaseFragment(), HistoryContract {
   }
 
   @Inject lateinit var presenter: HistoryPresenter
+  @Inject lateinit var gson: Gson
   private lateinit var binding: FragmentHistoryBinding
   private lateinit var historyAdapter: HistoryAdapter
   private var currentPage = 0
@@ -47,27 +47,25 @@ class HistoryFragment : BaseFragment(), HistoryContract {
     const val TAG = HISTORY_FRAGMENT
   }
 
-  fun newInstance(): HistoryFragment {
-    return HistoryFragment()
-  }
+  fun newInstance(): HistoryFragment = HistoryFragment()
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
       savedInstanceState: Bundle?): View? {
-    accessToken = Gson().fromJson(
-        context?.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
-            Constants.TOKEN, null), Token::class.java).accessToken
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_history, container, false)
     val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
     binding.shimmerHistory.startShimmerAnimation()
     binding.refreshHistory.setOnRefreshListener {
       refreshListHistory()
     }
+
     historyAdapter = HistoryAdapter()
     binding.rvHistory.layoutManager = linearLayoutManager
     binding.rvHistory.adapter = this.historyAdapter
     historyAdapter.onItemClick = { history ->
       customerBookingClick(history)
     }
+
     binding.rvHistory.addOnScrollListener(object :
         PaginationScrollListener(linearLayoutManager, isLastPage) {
       override fun loadMoreItems() {
@@ -76,25 +74,18 @@ class HistoryFragment : BaseFragment(), HistoryContract {
         }
       }
     })
-    presenter.loadCustomerBooking(accessToken, currentPage)
     return binding.root
-  }
-
-  fun refreshListHistory() {
-    shimmer_history.visibility = View.VISIBLE
-    shimmer_history.startShimmerAnimation()
-    historyAdapter.clear()
-    historyAdapter.notifyDataSetChanged()
-    currentPage = 0
-    isLastPage = false
-    presenter.loadCustomerBooking(accessToken, currentPage)
-    binding.refreshHistory.isRefreshing = false
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    accessToken = gson.fromJson(
+        context?.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
+            Constants.TOKEN, null), Token::class.java).accessToken
+
     presenter.attach(this)
     presenter.subscribe()
+    presenter.loadCustomerBooking(accessToken, currentPage)
   }
 
   override fun onFailed(message: String) {
@@ -103,8 +94,8 @@ class HistoryFragment : BaseFragment(), HistoryContract {
   }
 
   override fun loadCustomerBookingSuccess(history: History) {
-    shimmer_history.visibility = View.GONE
-    shimmer_history.stopShimmerAnimation()
+    binding.shimmerHistory.visibility = View.GONE
+    binding.shimmerHistory.stopShimmerAnimation()
     if (currentPage != 0) {
       if (currentPage <= history.totalPages - 1) {
         historyAdapter.addAll(history.content)
@@ -135,6 +126,17 @@ class HistoryFragment : BaseFragment(), HistoryContract {
         fragment.show(fragmentManager, fragment.tag)
       }
     }
+  }
+
+  fun refreshListHistory() {
+    binding.shimmerHistory.visibility = View.VISIBLE
+    binding.shimmerHistory.startShimmerAnimation()
+    historyAdapter.clear()
+    historyAdapter.notifyDataSetChanged()
+    currentPage = 0
+    isLastPage = false
+    presenter.loadCustomerBooking(accessToken, currentPage)
+    binding.refreshHistory.isRefreshing = false
   }
 
   override fun loadCustomerBookingError() {

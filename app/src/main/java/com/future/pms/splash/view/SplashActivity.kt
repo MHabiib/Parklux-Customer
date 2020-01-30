@@ -34,6 +34,7 @@ class SplashActivity : BaseActivity(), SplashContract {
   }
 
   @Inject lateinit var presenter: SplashPresenter
+  @Inject lateinit var gson: Gson
   private lateinit var binding: ActivitySplashBinding
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,18 +67,16 @@ class SplashActivity : BaseActivity(), SplashContract {
   }
 
   override fun onSuccess(token: Token) {
-    Authentication.save(this, token, Gson().fromJson(
+    Authentication.save(this, token, gson.fromJson(
         this.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
             Constants.TOKEN, null), Token::class.java).role)
     goToHomePage()
   }
 
-  override fun onAuthenticated() {
-    goToHomePage()
-  }
+  override fun onAuthenticated() = goToHomePage()
 
   private fun goToHomePage() {
-    val intent: Intent = if (Gson().fromJson(
+    val intent: Intent = if (gson.fromJson(
             this.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
                 Constants.TOKEN, null), Token::class.java).role == ROLE_CUSTOMER) {
       Intent(this, MainActivity::class.java)
@@ -88,9 +87,7 @@ class SplashActivity : BaseActivity(), SplashContract {
     finish()
   }
 
-  override fun onLogin() {
-    showLogin()
-  }
+  override fun onLogin() = showLogin()
 
   override fun isAuthenticated(): Context? {
     return applicationContext
@@ -120,9 +117,7 @@ class SplashActivity : BaseActivity(), SplashContract {
     }
   }
 
-  override fun refreshToken() {
-    presenter.refreshToken(Authentication.getRefresh(this))
-  }
+  override fun refreshToken() = presenter.refreshToken(Authentication.getRefresh(this))
 
   override fun onFailed(message: String) {
     Toast.makeText(this, message, Toast.LENGTH_LONG).show()

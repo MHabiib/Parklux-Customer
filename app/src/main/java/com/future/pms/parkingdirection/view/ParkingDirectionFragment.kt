@@ -55,6 +55,7 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
   }
 
   @Inject lateinit var presenter: ParkingDirectionPresenter
+  @Inject lateinit var gson: Gson
   private lateinit var binding: FragmentParkingDirectionBinding
   private var parkViewList: MutableList<TextView> = ArrayList()
   private lateinit var layout: HorizontalScrollView
@@ -65,9 +66,7 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
     const val TAG: String = PARKING_DETAIL_FRAGMENT
   }
 
-  fun newInstance(): ParkingDirectionFragment {
-    return ParkingDirectionFragment()
-  }
+  fun newInstance(): ParkingDirectionFragment = ParkingDirectionFragment()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -81,15 +80,11 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
       savedInstanceState: Bundle?): View? {
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_parking_direction, container,
         false)
-    accessToken = Gson().fromJson(
-        context?.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
-            Constants.TOKEN, null), Token::class.java).accessToken
-    presenter.attach(this)
+
     layout = binding.layoutPark
     idBooking = this.arguments?.getString(Constants.ID_BOOKING).toString()
     binding.parkingLevelTitle.text = this.arguments?.getString(Constants.LEVEL_NAME).toString()
-    showProgress(true)
-    presenter.getParkingLayout(idBooking, accessToken)
+
     val toolbar = binding.toolbar
     toolbar.setNavigationIcon(R.drawable.ic_back_white)
     toolbar.setNavigationOnClickListener { backToHome() }
@@ -98,11 +93,14 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    presenter.attach(this)
     presenter.subscribe()
-    initView()
+    accessToken = gson.fromJson(
+        context?.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
+            Constants.TOKEN, null), Token::class.java).accessToken
+    showProgress(true)
+    presenter.getParkingLayout(idBooking, accessToken)
   }
-
-  private fun initView() {}
 
   private fun showParkingLayout(slotsLayout: String) {
     val layoutPark = LinearLayout(context)
@@ -110,6 +108,7 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
     var totalSlot = 0
     val params = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
         ViewGroup.LayoutParams.WRAP_CONTENT)
+
     layoutPark.apply {
       orientation = LinearLayout.VERTICAL
       layoutParams = params
@@ -190,9 +189,7 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
     return view
   }
 
-  override fun getLayoutSuccess(slotsLayout: String) {
-    showParkingLayout(slotsLayout)
-  }
+  override fun getLayoutSuccess(slotsLayout: String) = showParkingLayout(slotsLayout)
 
   override fun onFailed(message: String) {
     progressBar.visibility = View.GONE

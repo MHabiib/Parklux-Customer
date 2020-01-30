@@ -43,6 +43,7 @@ class ListActivityFragment : BaseFragment(), ListActivityContract {
   }
 
   @Inject lateinit var presenter: ListActivityPresenter
+  @Inject lateinit var gson: Gson
   private lateinit var binding: FragmentListActivityBinding
   private lateinit var listActivityAdapter: ListActivityAdapter
   private var currentPage = 0
@@ -59,14 +60,13 @@ class ListActivityFragment : BaseFragment(), ListActivityContract {
     const val TAG: String = LIST_ACTIVITY_FRAGMENT
   }
 
-  fun newInstance(): ListActivityFragment {
-    return ListActivityFragment()
-  }
+  fun newInstance(): ListActivityFragment = ListActivityFragment()
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
       savedInstanceState: Bundle?): View? {
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_list_activity, container, false)
     presenter.attach(this)
+
     val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
     with(binding) {
       shimmerActivity.startShimmerAnimation()
@@ -137,22 +137,13 @@ class ListActivityFragment : BaseFragment(), ListActivityContract {
           }
         }
       }
-      return root
     }
-  }
-
-  private fun FragmentListActivityBinding.refreshList() {
-    shimmerActivity.startShimmerAnimation()
-    binding.shimmerActivity.visibility = View.VISIBLE
-    listActivityAdapter.clear()
-    listActivityAdapter.notifyDataSetChanged()
-    currentPage = 0
-    isLastPage = false
+    return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    accessToken = Gson().fromJson(
+    accessToken = gson.fromJson(
         context?.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
             Constants.TOKEN, null), Token::class.java).accessToken
     presenter.apply {
@@ -181,6 +172,15 @@ class ListActivityFragment : BaseFragment(), ListActivityContract {
     isLoading = false
   }
 
+  private fun FragmentListActivityBinding.refreshList() {
+    shimmerActivity.startShimmerAnimation()
+    binding.shimmerActivity.visibility = View.VISIBLE
+    listActivityAdapter.clear()
+    listActivityAdapter.notifyDataSetChanged()
+    currentPage = 0
+    isLastPage = false
+  }
+
   fun updatedList() {
     bottomSheetFragment.dismiss()
     presenter.findBookingById(idItem, accessToken)
@@ -194,7 +194,5 @@ class ListActivityFragment : BaseFragment(), ListActivityContract {
     }
   }
 
-  override fun onFailed(e: String) {
-    Timber.e(e)
-  }
+  override fun onFailed(e: String) = Timber.e(e)
 }

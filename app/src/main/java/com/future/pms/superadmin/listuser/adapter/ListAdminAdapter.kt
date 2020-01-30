@@ -13,21 +13,17 @@ import java.util.*
 
 class ListAdminAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
   var onItemClick: ((AdminDetails) -> Unit)? = null
-  private var parkingZoneList: MutableList<AdminDetails>? = null
+  private var parkingZoneList: MutableList<AdminDetails>? = LinkedList()
   private lateinit var publicParent: ViewGroup
   private var isLoadingAdded = false
   private val loading = 0
   private val item = 1
 
-  init {
-    parkingZoneList = LinkedList()
-  }
-
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
     publicParent = parent
-    val inflater = LayoutInflater.from(parent.context)
-    val viewItem = inflater.inflate(R.layout.item_layout_parking_zone, parent, false)
-    return HistoryViewHolder(viewItem)
+    return HistoryViewHolder(
+        LayoutInflater.from(parent.context).inflate(R.layout.item_layout_parking_zone, parent,
+            false))
   }
 
   override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -41,13 +37,10 @@ class ListAdminAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
   }
 
-  override fun getItemCount(): Int {
-    return parkingZoneList?.size ?: 0
-  }
+  override fun getItemCount(): Int = parkingZoneList?.size ?: 0
 
-  override fun getItemViewType(position: Int): Int {
-    return if (position == parkingZoneList?.size?.minus(1) && isLoadingAdded) loading else item
-  }
+  override fun getItemViewType(position: Int): Int = if (position == parkingZoneList?.size?.minus(
+          1) && isLoadingAdded) loading else item
 
   fun add(parkingZone: AdminDetails) {
     parkingZoneList?.add(parkingZone)
@@ -60,9 +53,8 @@ class ListAdminAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
   }
 
-  fun addAt(position: Int, adminDetails: AdminDetails) {
-    parkingZoneList?.add(position, adminDetails)
-  }
+  fun addAt(position: Int, adminDetails: AdminDetails) = parkingZoneList?.add(position,
+      adminDetails)
 
   fun remove(position: Int) {
     parkingZoneList?.removeAt(position)
@@ -70,13 +62,10 @@ class ListAdminAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     parkingZoneList?.size?.let { notifyItemRangeChanged(position, it) }
   }
 
-  fun clear() {
-    parkingZoneList?.clear()
-  }
+  fun clear() = parkingZoneList?.clear()
 
-  private fun loadImage(viewGroup: ViewGroup, imageName: String, imageView: ImageView) {
-    Utils.imageLoader(viewGroup, imageName, imageView)
-  }
+  private fun loadImage(view: View, imageName: String, imageView: ImageView) = Utils.imageLoader(
+      view, imageName, imageView)
 
   inner class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val itemTitle: TextView = itemView.findViewById<View>(R.id.item_title) as TextView

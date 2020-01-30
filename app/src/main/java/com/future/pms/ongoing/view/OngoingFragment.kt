@@ -7,7 +7,6 @@ import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Chronometer
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.future.pms.BaseApp
@@ -44,8 +43,8 @@ class OngoingFragment : BaseFragment(), OngoingContract {
   }
 
   @Inject lateinit var presenter: OngoingPresenter
+  @Inject lateinit var gson: Gson
   private lateinit var binding: FragmentOngoingBinding
-  private lateinit var parkingTime: Chronometer
   private lateinit var idBooking: String
   private lateinit var levelName: String
   private lateinit var accessToken: String
@@ -54,22 +53,19 @@ class OngoingFragment : BaseFragment(), OngoingContract {
     const val TAG: String = Constants.ONGOING_FRAGMENT
   }
 
-  fun newInstance(): OngoingFragment {
-    return OngoingFragment()
-  }
+  fun newInstance(): OngoingFragment = OngoingFragment()
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
       savedInstanceState: Bundle?): View? {
-    accessToken = Gson().fromJson(
-        context?.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
-            Constants.TOKEN, null), Token::class.java).accessToken
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_ongoing, container, false)
+
     val directionLayout = binding.directionsLayout
+
     directionLayout.setOnClickListener {
       val activity = activity as MainActivity?
       activity?.presenter?.showParkingDirection(idBooking, levelName)
     }
-    parkingTime = binding.parkingTime
+
     val checkout = binding.checkoutButton
     checkout.setOnClickListener { presenter.checkoutBooking(accessToken) }
     return binding.root
@@ -77,6 +73,9 @@ class OngoingFragment : BaseFragment(), OngoingContract {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    accessToken = gson.fromJson(
+        context?.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
+            Constants.TOKEN, null), Token::class.java).accessToken
     presenter.attach(this)
     presenter.subscribe()
     presenter.loadOngoingBooking(accessToken)
@@ -105,11 +104,13 @@ class OngoingFragment : BaseFragment(), OngoingContract {
     val bundle = Bundle()
     bundle.putString(Constants.ID_BOOKING, idBooking)
     fragment.arguments = bundle
+
     activity?.supportFragmentManager?.let { bottomSheetFragment ->
       if (!fragment.isAdded) {
         fragment.show(bottomSheetFragment, fragment.tag)
       }
     }
+
     val historyFragment = fragmentManager?.findFragmentByTag(HistoryFragment.TAG) as HistoryFragment
     historyFragment.refreshListHistory()
   }
@@ -117,6 +118,7 @@ class OngoingFragment : BaseFragment(), OngoingContract {
   override fun onFailed(message: String) {
     val fab = activity?.findViewById(R.id.fab_scan) as FloatingActionButton
     val activity = activity as MainActivity
+
     fab.setOnClickListener {
       activity.presenter.onScanIconClick()
     }
@@ -134,6 +136,7 @@ class OngoingFragment : BaseFragment(), OngoingContract {
       bookingIdValue.text = ongoing.idBooking
       parkingSlot.text = ongoing.slotName
     }
+
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       with(binding) {
         yourPrice.visibility = View.VISIBLE
@@ -153,10 +156,12 @@ class OngoingFragment : BaseFragment(), OngoingContract {
         }
       }
     }
+
     val fab = activity?.findViewById(R.id.fab_scan) as FloatingActionButton
     fab.setOnClickListener {
-      Toast.makeText(context, "You only can make booking once a time", Toast.LENGTH_LONG).show()
+      Toast.makeText(context, getString(R.string.only_have_booking_one), Toast.LENGTH_LONG).show()
     }
+
     loadImage(ongoing.imageUrl)
   }
 
@@ -172,13 +177,13 @@ class OngoingFragment : BaseFragment(), OngoingContract {
         homeFragment.presenter.loadData(accessToken)
       }
     }
+
     Timber.tag(Constants.ERROR).e(error)
     binding.dontHaveOngoing.visibility = View.VISIBLE
   }
 
-  private fun loadImage(imageUrl: String) {
-    Utils.imageLoaderView(binding.root, imageUrl, binding.ongoingIv)
-  }
+  private fun loadImage(imageUrl: String) = Utils.imageLoader(binding.root, imageUrl,
+      binding.ongoingIv)
 
   fun refreshPage() {
     val ft = fragmentManager?.beginTransaction()

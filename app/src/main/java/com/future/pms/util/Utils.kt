@@ -1,7 +1,6 @@
 package com.future.pms.util
 
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -35,14 +34,7 @@ class Utils {
       return DecimalFormat("#,###,###").format(int)
     }
 
-    fun imageLoader(viewGroup: ViewGroup, imageName: String, imageView: ImageView) {
-      Glide.with(viewGroup).load(imageName).transform(CenterCrop(), RoundedCorners(80)).apply(
-          RequestOptions().signature(ObjectKey(imageName))).placeholder(
-          R.drawable.ic_parking_zone_default).error(R.drawable.ic_parking_zone_default).fallback(
-          R.drawable.ic_parking_zone_default).into(imageView)
-    }
-
-    fun imageLoaderView(view: View, imageName: String, imageView: ImageView) {
+    fun imageLoader(view: View, imageName: String, imageView: ImageView) {
       Glide.with(view).load(imageName).transform(CenterCrop(), RoundedCorners(80)).apply(
           RequestOptions().signature(ObjectKey(imageName))).placeholder(
           R.drawable.ic_parking_zone_default).error(R.drawable.ic_parking_zone_default).fallback(

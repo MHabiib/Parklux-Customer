@@ -56,6 +56,7 @@ class ListUserFragment : BaseFragment(), ListUserContract {
   }
 
   @Inject lateinit var presenter: ListUserPresenter
+  @Inject lateinit var gson: Gson
   private lateinit var binding: FragmentListUserBinding
   private lateinit var listCustomerAdapter: ListCustomerAdapter
   private lateinit var listSuperAdminAdapter: ListSuperAdminAdapter
@@ -76,9 +77,7 @@ class ListUserFragment : BaseFragment(), ListUserContract {
     const val TAG: String = LIST_USER_FRAGMENT
   }
 
-  fun newInstance(): ListUserFragment {
-    return ListUserFragment()
-  }
+  fun newInstance(): ListUserFragment = ListUserFragment()
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
       savedInstanceState: Bundle?): View? {
@@ -277,13 +276,13 @@ class ListUserFragment : BaseFragment(), ListUserContract {
         }
         handler.postDelayed(workRunnable, 500 /*delay*/)
       }
-      return root
     }
+    return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    accessToken = Gson().fromJson(
+    accessToken = gson.fromJson(
         context?.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
             Constants.TOKEN, null), Token::class.java).accessToken
     presenter.apply {
@@ -415,9 +414,7 @@ class ListUserFragment : BaseFragment(), ListUserContract {
     isLastPage = false
   }
 
-  override fun onFailed(e: String) {
-    Timber.e(e)
-  }
+  override fun onFailed(e: String) = Timber.e(e)
 
   override fun onDestroyView() {
     presenter.detach()

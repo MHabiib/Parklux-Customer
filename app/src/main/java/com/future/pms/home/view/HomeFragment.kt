@@ -35,26 +35,18 @@ class HomeFragment : BaseFragment(), HomeContract {
   }
 
   @Inject lateinit var presenter: HomePresenter
+  @Inject lateinit var gson: Gson
   private lateinit var binding: FragmentHomeBinding
 
   companion object {
     const val TAG: String = HOME_FRAGMENT
   }
 
-  fun newInstance(): HomeFragment {
-    return HomeFragment()
-  }
+  fun newInstance(): HomeFragment = HomeFragment()
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
       savedInstanceState: Bundle?): View? {
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
-    return binding.root
-  }
-
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    super.onViewCreated(view, savedInstanceState)
-    presenter.attach(this)
-    presenter.onOngoingIconClick()
     with(binding) {
       ongoing.setOnClickListener {
         presenter.onOngoingIconClick()
@@ -67,28 +59,32 @@ class HomeFragment : BaseFragment(), HomeContract {
         historyIndicator.visibility = View.VISIBLE
       }
     }
-    initView()
+    return binding.root
   }
 
-  private fun initView() {
-    val accessToken = Gson().fromJson(
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    presenter.attach(this)
+    presenter.onOngoingIconClick()
+    val accessToken = gson.fromJson(
         context?.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
             Constants.TOKEN, null), Token::class.java).accessToken
     getDateNow()
     presenter.loadData(accessToken)
+
     val textAnnounce = binding.textAnnounceUser
     textAnnounce.text = getTextAnnounce()
   }
 
   private fun getTextAnnounce(): String {
-    return when (Calendar.getInstance(TimeZone.getTimeZone("Asia/Jakarta")).get(
+    return when (Calendar.getInstance(TimeZone.getTimeZone(getString(R.string.asiajakarta))).get(
         Calendar.HOUR_OF_DAY)) {
-      in 0 .. 11 -> "Good Morning"
-      in 12 .. 15 -> "Good Afternoon"
-      in 16 .. 20 -> "Good Evening"
-      in 21 .. 23 -> "Good Night"
+      in 0 .. 11 -> getString(R.string.good_morning)
+      in 12 .. 15 -> getString(R.string.good_afternoon)
+      in 16 .. 20 -> getString(R.string.good_evening)
+      in 21 .. 23 -> getString(R.string.good_night)
       else -> {
-        "Hello,"
+        getString(R.string.hello)
       }
     }
   }
@@ -147,9 +143,7 @@ class HomeFragment : BaseFragment(), HomeContract {
     binding.userName.text = customer.name
   }
 
-  override fun onFailed(message: String) {
-    Timber.tag(ERROR).e(message)
-  }
+  override fun onFailed(message: String) = Timber.tag(ERROR).e(message)
 
   override fun getDateNow() {
     val currentDateTimeString = DateFormat.getDateInstance(DateFormat.FULL).format(Date())

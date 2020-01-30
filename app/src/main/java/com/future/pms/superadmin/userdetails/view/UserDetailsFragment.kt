@@ -52,6 +52,7 @@ class UserDetailsFragment : BottomSheetDialogFragment(), UserDetailsContract {
   }
 
   @Inject lateinit var presenter: UserDetailsPresenter
+  @Inject lateinit var gson: Gson
   private lateinit var binding: FragmentBottomSheetUserDetailsBinding
   private lateinit var accessToken: String
   private lateinit var id: String
@@ -112,7 +113,7 @@ class UserDetailsFragment : BottomSheetDialogFragment(), UserDetailsContract {
         presenter.deleteSuperAdmin(this@UserDetailsFragment.id, accessToken)
       }
       btnEditProfileSuperAdmin.setOnClickListener {
-        if (isValid(Constants.UPDATE_SUPER_ADMIN)) {
+        if (isValid(UPDATE_SUPER_ADMIN)) {
           presenter.updateSuperAdmin(this@UserDetailsFragment.id, accessToken,
               emailSuperAdmin.text.toString(), passwordSuperAdmin.text.toString(), ROLE_SUPER_ADMIN)
           passwordSuperAdmin.text?.clear()
@@ -121,15 +122,16 @@ class UserDetailsFragment : BottomSheetDialogFragment(), UserDetailsContract {
               Toast.LENGTH_LONG).show()
         }
       }
-      return root
     }
+    return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    accessToken = Gson().fromJson(
+    accessToken = gson.fromJson(
         context?.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
             Constants.TOKEN, null), Token::class.java).accessToken
+
     id = this.arguments?.getString(ID_USER).toString()
     when (this.arguments?.getString(ROLE).toString()) {
       ROLE_CUSTOMER -> {
@@ -196,7 +198,7 @@ class UserDetailsFragment : BottomSheetDialogFragment(), UserDetailsContract {
     val dateSetListener = TimePickerDialog.OnTimeSetListener { _, hour, minute ->
       cal.set(Calendar.HOUR_OF_DAY, hour)
       cal.set(Calendar.MINUTE, minute)
-      textView.text = SimpleDateFormat("HH:mm").format(cal.time)
+      textView.text = SimpleDateFormat(getString(R.string.pattern)).format(cal.time)
     }
 
     textView.setOnClickListener {
@@ -205,17 +207,11 @@ class UserDetailsFragment : BottomSheetDialogFragment(), UserDetailsContract {
     }
   }
 
-  override fun updateCustomerSuccess() {
-    presenter.getUpdatedCustomer(id, accessToken)
-  }
+  override fun updateCustomerSuccess() = presenter.getUpdatedCustomer(id, accessToken)
 
-  override fun updateAdminSuccess() {
-    presenter.getUpdatedAdmin(id, accessToken)
-  }
+  override fun updateAdminSuccess() = presenter.getUpdatedAdmin(id, accessToken)
 
-  override fun updateSuperAdminSuccess() {
-    presenter.getUpdatedSuperAdmin(id, accessToken)
-  }
+  override fun updateSuperAdminSuccess() = presenter.getUpdatedSuperAdmin(id, accessToken)
 
   override fun getUpdatedCustomerSuccess(customer: Customer) {
     val listUserFragment = fragmentManager?.findFragmentByTag(
@@ -270,9 +266,8 @@ class UserDetailsFragment : BottomSheetDialogFragment(), UserDetailsContract {
 
   }
 
-  private fun String.isEmailValid(): Boolean {
-    return !TextUtils.isEmpty(this) && Patterns.EMAIL_ADDRESS.matcher(this).matches()
-  }
+  private fun String.isEmailValid(): Boolean = !TextUtils.isEmpty(
+      this) && Patterns.EMAIL_ADDRESS.matcher(this).matches()
 
   override fun onFailed(e: String) {
     if (e.contains(Constants.NO_CONNECTION)) {

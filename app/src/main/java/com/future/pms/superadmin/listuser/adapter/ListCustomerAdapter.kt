@@ -24,9 +24,8 @@ class ListCustomerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
     publicParent = parent
-    val inflater = LayoutInflater.from(parent.context)
-    val viewItem = inflater.inflate(R.layout.item_layout_customer, parent, false)
-    return HistoryViewHolder(viewItem)
+    return HistoryViewHolder(
+        LayoutInflater.from(parent.context).inflate(R.layout.item_layout_customer, parent, false))
   }
 
   override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -46,13 +45,10 @@ class ListCustomerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
   }
 
-  override fun getItemCount(): Int {
-    return customerList?.size ?: 0
-  }
+  override fun getItemCount(): Int = customerList?.size ?: 0
 
-  override fun getItemViewType(position: Int): Int {
-    return if (position == customerList?.size?.minus(1) && isLoadingAdded) loading else item
-  }
+  override fun getItemViewType(position: Int): Int = if (position == customerList?.size?.minus(
+          1) && isLoadingAdded) loading else item
 
   fun add(customer: CustomerDetails) {
     customerList?.add(customer)
@@ -65,9 +61,7 @@ class ListCustomerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
   }
 
-  fun addAt(position: Int, customer: CustomerDetails) {
-    customerList?.add(position, customer)
-  }
+  fun addAt(position: Int, customer: CustomerDetails) = customerList?.add(position, customer)
 
   fun remove(position: Int) {
     customerList?.removeAt(position)
@@ -75,9 +69,7 @@ class ListCustomerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     customerList?.size?.let { notifyItemRangeChanged(position, it) }
   }
 
-  fun clear() {
-    customerList?.clear()
-  }
+  fun clear() = customerList?.clear()
 
   inner class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val itemTitle: TextView = itemView.findViewById<View>(R.id.item_title) as TextView

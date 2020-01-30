@@ -13,21 +13,16 @@ import java.util.*
 
 class HistoryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
   var onItemClick: ((BookingHistory) -> Unit)? = null
-  private var historyList: MutableList<BookingHistory>? = null
+  private var historyList: MutableList<BookingHistory>? = LinkedList()
   private lateinit var publicParent: ViewGroup
   private var isLoadingAdded = false
   private val loading = 0
   private val item = 1
 
-  init {
-    historyList = LinkedList()
-  }
-
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
     publicParent = parent
-    val inflater = LayoutInflater.from(parent.context)
-    val viewItem = inflater.inflate(R.layout.item_layout_home, parent, false)
-    return HistoryViewHolder(viewItem)
+    return HistoryViewHolder(
+        LayoutInflater.from(parent.context).inflate(R.layout.item_layout_home, parent, false))
   }
 
   override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -36,17 +31,16 @@ class HistoryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
       val historyViewHolder = holder as HistoryViewHolder
       historyViewHolder.itemTitle.text = booking?.parkingZoneName
       historyViewHolder.itemDate.text = booking?.dateIn?.let { Utils.convertLongToTime(it) }
-      booking?.imageUrl?.let { loadImage(publicParent, it, historyViewHolder.imageView) }
+      booking?.imageUrl?.let {
+        loadImage(publicParent, it, historyViewHolder.imageView)
+      }
     }
   }
 
-  override fun getItemCount(): Int {
-    return historyList?.size ?: 0
-  }
+  override fun getItemCount(): Int = historyList?.size ?: 0
 
-  override fun getItemViewType(position: Int): Int {
-    return if (position == historyList?.size?.minus(1) && isLoadingAdded) loading else item
-  }
+  override fun getItemViewType(position: Int): Int = if (position == historyList?.size?.minus(
+          1) && isLoadingAdded) loading else item
 
   fun add(booking: BookingHistory) {
     historyList?.add(booking)
@@ -59,13 +53,10 @@ class HistoryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
   }
 
-  fun clear() {
-    historyList?.clear()
-  }
+  fun clear() = historyList?.clear()
 
-  private fun loadImage(viewGroup: ViewGroup, imageName: String, imageView: ImageView) {
-    Utils.imageLoader(viewGroup, imageName, imageView)
-  }
+  private fun loadImage(view: View, imageName: String, imageView: ImageView) = Utils.imageLoader(
+      view, imageName, imageView)
 
   inner class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val itemTitle: TextView = itemView.findViewById<View>(R.id.item_title) as TextView

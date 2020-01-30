@@ -41,6 +41,7 @@ class HomeFragmentSuperAdmin : BaseFragment(), HomeContractSuperAdmin {
   }
 
   @Inject lateinit var presenter: HomePresenterSuperAdmin
+  @Inject lateinit var gson: Gson
   private lateinit var binding: FragmentHomeSuperAdminBinding
   private lateinit var accessToken: String
 
@@ -48,9 +49,7 @@ class HomeFragmentSuperAdmin : BaseFragment(), HomeContractSuperAdmin {
     const val TAG: String = HOME_FRAGMENT_SUPER_ADMIN
   }
 
-  fun newInstance(): HomeFragmentSuperAdmin {
-    return HomeFragmentSuperAdmin()
-  }
+  fun newInstance(): HomeFragmentSuperAdmin = HomeFragmentSuperAdmin()
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
       savedInstanceState: Bundle?): View? {
@@ -165,13 +164,13 @@ class HomeFragmentSuperAdmin : BaseFragment(), HomeContractSuperAdmin {
               Toast.LENGTH_LONG).show()
         }
       }
-      return root
     }
+    return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    accessToken = Gson().fromJson(
+    accessToken = gson.fromJson(
         context?.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
             Constants.TOKEN, null), Token::class.java).accessToken
     presenter.apply {
@@ -206,9 +205,8 @@ class HomeFragmentSuperAdmin : BaseFragment(), HomeContractSuperAdmin {
     }
   }
 
-  private fun String.isEmailValid(): Boolean {
-    return !TextUtils.isEmpty(this) && Patterns.EMAIL_ADDRESS.matcher(this).matches()
-  }
+  private fun String.isEmailValid(): Boolean = !TextUtils.isEmpty(
+      this) && Patterns.EMAIL_ADDRESS.matcher(this).matches()
 
   override fun updateUserSuccess() {
     showProgress(true)
@@ -233,7 +231,7 @@ class HomeFragmentSuperAdmin : BaseFragment(), HomeContractSuperAdmin {
         }
       }
       message.contains(Constants.BAD_REQUEST_CODE) -> Toast.makeText(context,
-          "Failed to update profile, email already used !", Toast.LENGTH_SHORT).show()
+          getString(R.string.email_already_registered), Toast.LENGTH_SHORT).show()
       message.contains(Constants.UNAUTHORIZED_CODE) -> {
         presenter.refreshToken(accessToken)
       }
@@ -253,7 +251,7 @@ class HomeFragmentSuperAdmin : BaseFragment(), HomeContractSuperAdmin {
 
   override fun onSuccess(token: Token) {
     context?.let {
-      Authentication.save(it, token, Gson().fromJson(
+      Authentication.save(it, token, gson.fromJson(
           it.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
               Constants.TOKEN, null), Token::class.java).role)
     }

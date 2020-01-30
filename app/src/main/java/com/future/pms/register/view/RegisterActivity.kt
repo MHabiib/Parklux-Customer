@@ -40,7 +40,7 @@ class RegisterActivity : BaseActivity(), RegisterContract {
         presenter.register(txtName.text.toString(), txtEmail.text.toString(),
             txtPassword.text.toString(), txtPhone.text.toString())
       } else {
-        Toast.makeText(this, "Please fill all the entries with valid input",
+        Toast.makeText(this, getString(R.string.fill_all_entries),
             Toast.LENGTH_LONG).show()
       }
     }
@@ -60,9 +60,8 @@ class RegisterActivity : BaseActivity(), RegisterContract {
     return true
   }
 
-  private fun String.isEmailValid(): Boolean {
-    return !TextUtils.isEmpty(this) && Patterns.EMAIL_ADDRESS.matcher(this).matches()
-  }
+  private fun String.isEmailValid(): Boolean = !TextUtils.isEmpty(
+      this) && Patterns.EMAIL_ADDRESS.matcher(this).matches()
 
   private fun loading(isLoading: Boolean) {
     if (isLoading) {
@@ -75,7 +74,7 @@ class RegisterActivity : BaseActivity(), RegisterContract {
   }
 
   override fun onSuccess() {
-    Toast.makeText(this, "Success create user, please login", Toast.LENGTH_LONG).show()
+    Toast.makeText(this, getString(R.string.success_create_user), Toast.LENGTH_LONG).show()
     val intent = Intent(this, LoginActivity::class.java)
     startActivity(intent)
     finish()

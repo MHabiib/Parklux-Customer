@@ -13,20 +13,14 @@ import java.util.*
 
 class ListActivityAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
   var onItemClick: ((Content) -> Unit)? = null
-  private var bookingList: MutableList<Content>? = null
+  private var bookingList: MutableList<Content>? = LinkedList()
   private var isLoadingAdded = false
   private val loading = 0
   private val item = 1
 
-  init {
-    bookingList = LinkedList()
-  }
-
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-    val inflater = LayoutInflater.from(parent.context)
-    val viewItem = inflater.inflate(R.layout.item_layout_activity, parent, false)
-    return BookingViewHolder(viewItem)
-  }
+  override fun onCreateViewHolder(parent: ViewGroup,
+      viewType: Int): RecyclerView.ViewHolder = BookingViewHolder(
+      LayoutInflater.from(parent.context).inflate(R.layout.item_layout_activity, parent, false))
 
   @SuppressLint("SetTextI18n") override fun onBindViewHolder(holder: RecyclerView.ViewHolder,
       position: Int) {
@@ -58,13 +52,10 @@ class ListActivityAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
   }
 
-  override fun getItemCount(): Int {
-    return bookingList?.size ?: 0
-  }
+  override fun getItemCount(): Int = bookingList?.size ?: 0
 
-  override fun getItemViewType(position: Int): Int {
-    return if (position == bookingList?.size?.minus(1) && isLoadingAdded) loading else item
-  }
+  override fun getItemViewType(position: Int): Int = if (position == bookingList?.size?.minus(
+          1) && isLoadingAdded) loading else item
 
   fun add(booking: Content) {
     bookingList?.add(booking)
@@ -77,9 +68,7 @@ class ListActivityAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
   }
 
-  fun addAt(position: Int, booking: Content) {
-    bookingList?.add(position, booking)
-  }
+  fun addAt(position: Int, booking: Content) = bookingList?.add(position, booking)
 
   fun remove(position: Int) {
     bookingList?.removeAt(position)
@@ -87,9 +76,7 @@ class ListActivityAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     bookingList?.size?.let { notifyItemRangeChanged(position, it) }
   }
 
-  fun clear() {
-    bookingList?.clear()
-  }
+  fun clear() = bookingList?.clear()
 
   inner class BookingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val customerName: TextView = itemView.findViewById<View>(R.id.tv_customer_name) as TextView

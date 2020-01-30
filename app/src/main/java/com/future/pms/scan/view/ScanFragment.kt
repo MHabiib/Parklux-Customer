@@ -38,6 +38,7 @@ class ScanFragment : Fragment(), ScanContract {
   }
 
   @Inject lateinit var presenter: ScanPresenter
+  @Inject lateinit var gson: Gson
   private var barcodeDetector: BarcodeDetector? = null
   private var cameraSource: CameraSource? = null
   private lateinit var intentData: String
@@ -50,9 +51,7 @@ class ScanFragment : Fragment(), ScanContract {
     const val TAG: String = SCAN_FRAGMENT
   }
 
-  fun newInstance(): ScanFragment {
-    return ScanFragment()
-  }
+  fun newInstance(): ScanFragment = ScanFragment()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -65,16 +64,12 @@ class ScanFragment : Fragment(), ScanContract {
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
       savedInstanceState: Bundle?): View? {
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_scan, container, false)
-    accessToken = Gson().fromJson(
-        context?.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
-            Constants.TOKEN, null), Token::class.java).accessToken
-    val toggleFlash = binding.toggleFlash
     context?.let {
       if (!it.packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)) {
         binding.toggleFlash.visibility = View.GONE
       }
     }
-    toggleFlash.setOnClickListener { flashToggle() }
+    binding.toggleFlash.setOnClickListener { flashToggle() }
     mSurfaceView = binding.surfaceView
     return binding.root
   }
@@ -82,6 +77,9 @@ class ScanFragment : Fragment(), ScanContract {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     presenter.attach(this)
+    accessToken = gson.fromJson(
+        context?.getSharedPreferences(Constants.AUTHENTICATION, Context.MODE_PRIVATE)?.getString(
+            Constants.TOKEN, null), Token::class.java).accessToken
     initialiseDetectorsAndSources()
   }
 
