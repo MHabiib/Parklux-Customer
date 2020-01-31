@@ -270,12 +270,14 @@ class UserDetailsFragment : BottomSheetDialogFragment(), UserDetailsContract {
       this) && Patterns.EMAIL_ADDRESS.matcher(this).matches()
 
   override fun onFailed(e: String) {
-    if (e.contains(Constants.NO_CONNECTION)) {
-      Toast.makeText(context, getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show()
-    } else {
-      Toast.makeText(context, e, Toast.LENGTH_SHORT).show()
+    context?.let {
+      if (e.contains(Constants.NO_CONNECTION)) {
+        Toast.makeText(it, getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show()
+      } else {
+        Toast.makeText(it, e, Toast.LENGTH_SHORT).show()
+      }
+      Timber.e(e)
     }
-    Timber.e(e)
   }
 
   override fun showProgress(show: Boolean) {

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "213995902303",
+    "firebase_url": "https://parkluxcustomer.firebaseio.com",
+    "project_id": "parkluxcustomer",
+    "storage_bucket": "parkluxcustomer.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:213995902303:android:93997de55c2b4f378352ea",
+        "android_client_info": {
+          "package_name": "com.future.pms"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "213995902303-f2irv7a8t819lmumqa38ah21fiikgi30.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.future.pms",
+            "certificate_hash": "c6f25a0d1ce01316c54232894018e8cede4030a3"
+          }
+        },
+        {
+          "client_id": "213995902303-uau0d14htu4g9i6bhj22j3l33id9gjal.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqRXssDbS30cgeG7VM4QjrY1Xc-TzpCk4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "213995902303-uau0d14htu4g9i6bhj22j3l33id9gjal.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
