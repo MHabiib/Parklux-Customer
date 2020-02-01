@@ -111,4 +111,5 @@
     <string name="switch_customer">Switched to CUSTOMER page</string>
     <string name="click_again_exit">Please click back again to exit</string>
     <string name="pattern">HH:mm</string>
+    <string name="re_type_password">Re-type password</string>
 </resources>

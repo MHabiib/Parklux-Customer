@@ -11,10 +11,14 @@ import android.widget.Toast
 import com.future.pms.BaseApp
 import com.future.pms.R
 import com.future.pms.core.base.BaseActivity
+import com.future.pms.core.model.Token
+import com.future.pms.core.network.Authentication
 import com.future.pms.login.view.LoginActivity
+import com.future.pms.main.view.MainActivity
 import com.future.pms.register.injection.DaggerRegisterComponent
 import com.future.pms.register.injection.RegisterComponent
 import com.future.pms.register.presenter.RegisterPresenter
+import com.future.pms.util.Constants
 import kotlinx.android.synthetic.main.activity_register.*
 import javax.inject.Inject
 
@@ -57,6 +61,7 @@ class RegisterActivity : BaseActivity(), RegisterContract {
     if (!txtEmail?.text.toString().isEmailValid()) return false
     if (txtPassword?.text.toString().isEmpty()) return false
     if (txtPhone?.text.toString().isEmpty()) return false
+    if (txtPassword?.text.toString() != txtReTypePassword?.text.toString()) return false
     return true
   }
 
@@ -73,9 +78,9 @@ class RegisterActivity : BaseActivity(), RegisterContract {
     }
   }
 
-  override fun onSuccess() {
-    Toast.makeText(this, getString(R.string.success_create_user), Toast.LENGTH_LONG).show()
-    val intent = Intent(this, LoginActivity::class.java)
+  override fun onSuccess(token: Token) {
+    Authentication.save(this, token, Constants.ROLE_CUSTOMER)
+    val intent = Intent(this, MainActivity::class.java)
     startActivity(intent)
     finish()
   }
