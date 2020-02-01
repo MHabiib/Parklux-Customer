@@ -21,6 +21,7 @@ import com.future.pms.main.view.MainActivity
 import com.future.pms.ongoing.injection.DaggerOngoingComponent
 import com.future.pms.ongoing.injection.OngoingComponent
 import com.future.pms.ongoing.presenter.OngoingPresenter
+import com.future.pms.parkingdirection.view.ParkingDirectionFragment
 import com.future.pms.receipt.view.ReceiptFragment
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.SEC_IN_DAY
@@ -108,6 +109,15 @@ class OngoingFragment : BaseFragment(), OngoingContract {
     activity?.supportFragmentManager?.let { bottomSheetFragment ->
       if (!fragment.isAdded) {
         fragment.show(bottomSheetFragment, fragment.tag)
+      }
+    }
+
+    val fragmentParkingDirection = fragmentManager?.findFragmentByTag(ParkingDirectionFragment.TAG)
+    if (fragmentParkingDirection != null) {
+      fragmentManager?.run {
+        fragmentParkingDirection.let {
+          beginTransaction().remove(it).commit()
+        }
       }
     }
 
