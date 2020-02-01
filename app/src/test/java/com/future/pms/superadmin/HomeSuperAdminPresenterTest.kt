@@ -4,10 +4,12 @@ import com.future.pms.base.BaseTest
 import com.future.pms.superadmin.homesuperadmin.network.HomeApiSuperAdmin
 import com.future.pms.superadmin.homesuperadmin.presenter.HomePresenterSuperAdmin
 import com.future.pms.superadmin.homesuperadmin.view.HomeContractSuperAdmin
+import com.future.pms.util.Constants
 import io.reactivex.Observable
 import org.junit.Test
 import org.mockito.InjectMocks
 import org.mockito.Mock
+import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 
 class HomeSuperAdminPresenterTest : BaseTest() {
@@ -51,5 +53,23 @@ class HomeSuperAdminPresenterTest : BaseTest() {
     `when`(homeSuperAdminApi.getEmail(ACCESS_TOKEN)).thenReturn(Observable.error(Exception(ERROR)))
 
     homeSuperAdminPresenter.getEmail(ACCESS_TOKEN)
+  }
+
+  @Test fun refreshTokenSuccess() {
+    `when`(homeSuperAdminApi.refresh(Constants.GRANT_TYPE_REFRESH, REFRESH_TOKEN)).thenReturn(
+        Observable.just(token()))
+
+    homeSuperAdminPresenter.refreshToken(REFRESH_TOKEN)
+
+    Mockito.verify(homeSuperAdminContract).onSuccess(token())
+  }
+
+  @Test fun refreshTokenFailed() {
+    `when`(homeSuperAdminApi.refresh(Constants.GRANT_TYPE_REFRESH, REFRESH_TOKEN)).thenReturn(
+        Observable.error(Exception(ERROR)))
+
+    homeSuperAdminPresenter.refreshToken(REFRESH_TOKEN)
+
+    Mockito.verify(homeSuperAdminContract).onLogout()
   }
 }
