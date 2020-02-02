@@ -3,205 +3,246 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <ScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="12dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginRight="12dp"
-        android:background="@color/baseWhite"
-        android:clipChildren="false"
-        android:clipToPadding="false">
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:clipChildren="false"
-            android:clipToPadding="false">
+            android:layout_height="match_parent"
+            android:background="@color/baseWhite"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <Button
-                android:id="@+id/btnLogout"
-                style="@style/NoCaps"
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="12dp"
-                android:background="@drawable/card_layout_grey"
-                android:fontFamily="sans-serif-light"
-                android:text="@string/logout"
-                android:textAlignment="center"
-                android:textColor="@color/red"
-                android:textSize="@dimen/h2"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/constraint_layout_profile" />
-
-            <ImageView
-                android:id="@+id/user_image"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:contentDescription="@string/user_avatar"
-                android:paddingTop="@dimen/space_between_card"
-                android:paddingBottom="@dimen/space_between_card"
-                android:src="@drawable/ic_person"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/profile_name_display"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingBottom="20dp"
-                android:textAlignment="center"
-                android:textColor="@color/colorSecondary"
-                android:textSize="@dimen/h1"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/user_image"
-                tools:text="Customer" />
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraint_layout_profile"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/card_layout_grey"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/twelve_dp"
+                android:layout_marginRight="@dimen/twelve_dp"
+                android:background="@color/baseWhite"
                 android:clipChildren="false"
                 android:clipToPadding="false"
-                android:padding="@dimen/space_between_card"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/profile_name_display"
-                app:layout_constraintVertical_bias="0.0">
+                android:overScrollMode="never"
+                android:paddingBottom="@dimen/hundred_margin"
+                android:scrollbars="none">
 
-                <Button
-                    android:id="@+id/btn_edit_profile"
-                    style="@style/NoCaps"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/card_layout_grey_gradient"
-                    android:fontFamily="sans-serif-light"
-                    android:padding="16dp"
-                    android:enabled="false"
-                    android:text="@string/update_profile"
-                    android:textColor="@color/white"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/profile_password" />
-
-                <ProgressBar
-                    android:id="@+id/progressBar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:indeterminateDrawable="@drawable/custom_progressbar"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:visibility="gone"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/name_tag"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="@dimen/title_and_input"
-                    android:text="@string/full_name"
-                    android:textColor="@color/colorPrimary"
-                    app:layout_constraintLeft_toLeftOf="@id/constraint_layout_profile"
-                    app:layout_constraintTop_toTopOf="@id/constraint_layout_profile" />
+                    android:layout_height="@dimen/zero_dp"
+                    android:clipChildren="false"
+                    android:clipToPadding="false">
 
-                <TextView
-                    android:id="@+id/email_tag"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="@dimen/title_and_input"
-                    android:text="@string/email"
-                    android:textColor="@color/colorPrimary"
-                    app:layout_constraintLeft_toLeftOf="@id/constraint_layout_profile"
-                    app:layout_constraintTop_toBottomOf="@id/profile_name" />
+                    <Button
+                        android:id="@+id/btnLogout"
+                        style="@style/NoCaps"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/twenty_dp"
+                        android:background="@drawable/card_layout_grey"
+                        android:fontFamily="sans-serif-light"
+                        android:text="@string/logout"
+                        android:textAlignment="center"
+                        android:textColor="@color/red"
+                        android:textSize="@dimen/h2"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/constraint_layout_profile" />
 
-                <TextView
-                    android:id="@+id/password_tag"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="@dimen/title_and_input"
-                    android:text="@string/password"
-                    android:textColor="@color/colorPrimary"
-                    app:layout_constraintLeft_toLeftOf="@id/constraint_layout_profile"
-                    app:layout_constraintTop_toBottomOf="@id/profile_phone_number" />
+                    <ImageButton
+                        android:id="@+id/ib_refresh"
+                        android:layout_width="wrap_content"
+                        android:visibility="gone"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/twelve_dp"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/ic_sync"
+                        android:tint="@color/colorAccent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/profile_phone_number_tag"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="@dimen/title_and_input"
-                    android:text="@string/phone_number"
-                    android:textColor="@color/colorPrimary"
-                    app:layout_constraintLeft_toLeftOf="@id/constraint_layout_profile"
-                    app:layout_constraintTop_toBottomOf="@id/profile_email" />
+                    <ImageView
+                        android:id="@+id/user_image"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:contentDescription="@string/user_avatar"
+                        android:paddingTop="@dimen/twenty_dp"
+                        android:paddingBottom="@dimen/twenty_dp"
+                        android:src="@drawable/ic_person"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/profile_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:maxLines="1"
-                    android:paddingBottom="@dimen/input_and_title"
-                    android:singleLine="true"
-                    android:textColor="@color/darkGrey"
-                    android:textSize="16sp"
-                    app:layout_constraintLeft_toLeftOf="@id/constraint_layout_profile"
-                    app:layout_constraintTop_toBottomOf="@id/name_tag"
-                    tools:text="Customer" />
+                    <TextView
+                        android:id="@+id/profile_name_display"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:paddingBottom="@dimen/twenty_dp"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorSecondary"
+                        android:textSize="@dimen/h1"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/user_image"
+                        tools:text="Customer" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/profile_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:inputType="textEmailAddress"
-                    android:maxLines="1"
-                    android:paddingBottom="@dimen/input_and_title"
-                    android:singleLine="true"
-                    android:textColor="@color/darkGrey"
-                    android:textSize="16sp"
-                    app:layout_constraintLeft_toLeftOf="@id/constraint_layout_profile"
-                    app:layout_constraintTop_toBottomOf="@id/email_tag"
-                    tools:text="Email" />
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:indeterminateDrawable="@drawable/custom_progressbar"
+                        android:visibility="gone"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/user_image"/>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/profile_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:inputType="textPassword"
-                    android:maxLines="1"
-                    android:paddingBottom="@dimen/input_and_title"
-                    android:singleLine="true"
-                    android:textColor="@color/darkGrey"
-                    android:textSize="16sp"
-                    app:layout_constraintLeft_toLeftOf="@id/constraint_layout_profile"
-                    app:layout_constraintTop_toBottomOf="@id/password_tag"
-                    tools:text="******" />
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/constraint_layout_profile"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/card_layout_grey"
+                        android:clipChildren="false"
+                        android:clipToPadding="false"
+                        android:padding="@dimen/twenty_dp"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/profile_name_display"
+                        app:layout_constraintVertical_bias="0.0">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/profile_phone_number"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:inputType="phone"
-                    android:maxLines="1"
-                    android:paddingBottom="@dimen/input_and_title"
-                    android:singleLine="true"
-                    android:textColor="@color/darkGrey"
-                    android:textSize="16sp"
-                    app:layout_constraintLeft_toLeftOf="@id/constraint_layout_profile"
-                    app:layout_constraintTop_toBottomOf="@id/profile_phone_number_tag"
-                    tools:text="0812362672" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                        <Button
+                            android:id="@+id/btn_save_profile"
+                            style="@style/NoCaps"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/card_layout_white"
+                            android:fontFamily="sans-serif-light"
+                            android:padding="@dimen/sixteen_dp"
+                            android:text="@string/save"
+                            android:textColor="@color/colorPrimary"
+                            android:visibility="gone"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/profile_password" />
+
+
+                        <Button
+                            android:id="@+id/btn_edit_profile"
+                            style="@style/NoCaps"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/twelve_dp"
+                            android:fontFamily="sans-serif-light"
+                            android:padding="@dimen/sixteen_dp"
+                            android:background="@drawable/card_layout_white"
+                            android:text="Edit profile"
+                            android:textColor="@color/colorAccent"
+                            app:layout_constraintRight_toLeftOf="@id/btn_save_profile"
+                            app:layout_constraintTop_toBottomOf="@id/profile_password" />
+
+                        <TextView
+                            android:id="@+id/name_tag"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="@dimen/four_dp"
+                            android:text="@string/full_name"
+                            android:textColor="@color/colorPrimary"
+                            app:layout_constraintLeft_toLeftOf="@id/constraint_layout_profile"
+                            app:layout_constraintTop_toTopOf="@id/constraint_layout_profile" />
+
+                        <TextView
+                            android:id="@+id/email_tag"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="@dimen/four_dp"
+                            android:text="@string/email"
+                            android:textColor="@color/colorPrimary"
+                            app:layout_constraintLeft_toLeftOf="@id/constraint_layout_profile"
+                            app:layout_constraintTop_toBottomOf="@id/profile_name" />
+
+                        <TextView
+                            android:id="@+id/password_tag"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="@dimen/four_dp"
+                            android:text="@string/password"
+                            android:textColor="@color/colorPrimary"
+                            app:layout_constraintLeft_toLeftOf="@id/constraint_layout_profile"
+                            app:layout_constraintTop_toBottomOf="@id/profile_phone_number" />
+
+                        <TextView
+                            android:id="@+id/profile_phone_number_tag"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="@dimen/four_dp"
+                            android:text="@string/phone_number"
+                            android:textColor="@color/colorPrimary"
+                            app:layout_constraintLeft_toLeftOf="@id/constraint_layout_profile"
+                            app:layout_constraintTop_toBottomOf="@id/profile_email" />
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/profile_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:backgroundTint="@null"
+                            android:maxLines="1"
+                            android:paddingBottom="@dimen/twelve_dp"
+                            android:singleLine="true"
+                            android:enabled="false"
+                            android:textColor="@color/darkGrey"
+                            android:textSize="@dimen/h2"
+                            app:layout_constraintLeft_toLeftOf="@id/constraint_layout_profile"
+                            app:layout_constraintTop_toBottomOf="@id/name_tag"
+                            tools:text="Customer" />
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/profile_email"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:backgroundTint="@null"
+                            android:inputType="textEmailAddress"
+                            android:maxLines="1"
+                            android:paddingBottom="@dimen/twelve_dp"
+                            android:enabled="false"
+                            android:singleLine="true"
+                            android:textColor="@color/darkGrey"
+                            android:textSize="@dimen/h2"
+                            app:layout_constraintLeft_toLeftOf="@id/constraint_layout_profile"
+                            app:layout_constraintTop_toBottomOf="@id/email_tag"
+                            tools:text="Email" />
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/profile_password"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:backgroundTint="@null"
+                            android:inputType="textPassword"
+                            android:maxLines="1"
+                            android:paddingBottom="@dimen/twelve_dp"
+                            android:enabled="false"
+                            android:singleLine="true"
+                            android:textColor="@color/darkGrey"
+                            android:textSize="@dimen/h2"
+                            app:layout_constraintLeft_toLeftOf="@id/constraint_layout_profile"
+                            app:layout_constraintTop_toBottomOf="@id/password_tag"
+                            tools:text="******" />
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/profile_phone_number"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:backgroundTint="@null"
+                            android:inputType="phone"
+                            android:maxLines="1"
+                            android:enabled="false"
+                            android:paddingBottom="@dimen/twelve_dp"
+                            android:singleLine="true"
+                            android:textColor="@color/darkGrey"
+                            android:textSize="@dimen/h2"
+                            app:layout_constraintLeft_toLeftOf="@id/constraint_layout_profile"
+                            app:layout_constraintTop_toBottomOf="@id/profile_phone_number_tag"
+                            tools:text="0812362672" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </ScrollView>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

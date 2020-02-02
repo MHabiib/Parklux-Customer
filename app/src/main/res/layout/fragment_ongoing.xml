@@ -10,12 +10,15 @@
         android:clipChildren="false"
         android:clipToPadding="false"
         android:orientation="vertical"
-        android:paddingBottom="20dp">
+        android:overScrollMode="never"
+        android:paddingBottom="@dimen/hundred_margin"
+        android:scrollbars="none">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_margin="12dp"
+            android:layout_height="@dimen/zero_dp"
+            android:layout_marginLeft="@dimen/twelve_dp"
+            android:layout_marginRight="@dimen/twelve_dp"
             android:clipChildren="false"
             android:clipToPadding="false">
 
@@ -30,6 +33,19 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <ImageButton
+                android:id="@+id/ib_refresh"
+                android:layout_width="wrap_content"
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/twelve_dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_sync"
+                android:tint="@color/colorAccent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/dont_have_ongoing"
                 android:layout_width="match_parent"
@@ -40,7 +56,7 @@
                     android:id="@+id/no_order_icon"
                     android:layout_width="240dp"
                     android:layout_height="240dp"
-                    android:src="@drawable/ic_no_order"
+                    android:src="@drawable/ic_no_ongoing"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -64,7 +80,49 @@
                 android:id="@+id/ongoing_parking_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone">
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <Button
+                    android:id="@+id/checkout_button"
+                    style="@style/NoCaps"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twelve_dp"
+                    android:background="@drawable/card_layout_grey"
+                    android:fontFamily="sans-serif-light"
+                    android:text="@string/check_out"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/h2"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/directions_layout" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/directions_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twelve_dp"
+                    android:background="@drawable/card_layout_purple"
+                    android:padding="@dimen/sixteen_dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/parking_layout">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-light"
+                        android:gravity="center"
+                        android:text="@string/directions"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/h2"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/parking_layout"
@@ -87,11 +145,11 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-medium"
                         android:gravity="center"
-                        android:paddingLeft="12dp"
-                        android:paddingTop="12dp"
-                        android:paddingRight="12dp"
+                        android:paddingLeft="@dimen/twelve_dp"
+                        android:paddingTop="@dimen/twelve_dp"
+                        android:paddingRight="@dimen/twelve_dp"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="24sp"
+                        android:textSize="@dimen/h_medium"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/ongoing_iv"
@@ -103,9 +161,8 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-light"
                         android:gravity="center"
-                        android:paddingLeft="12dp"
-                        android:paddingRight="12dp"
-                        android:paddingBottom="12dp"
+                        android:paddingLeft="@dimen/twelve_dp"
+                        android:paddingRight="@dimen/twelve_dp"
                         android:textColor="@color/colorPrimary"
                         android:textSize="@dimen/h2"
                         app:layout_constraintLeft_toLeftOf="parent"
@@ -117,20 +174,44 @@
                         android:id="@+id/parking_spot_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="16dp"
+                        android:padding="@dimen/sixteen_dp"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/parking_zone_address">
 
-                        <TextView
-                            android:id="@+id/your_parking_spot"
+                        <Chronometer
+                            android:id="@+id/parking_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/your_parking_spot_is_on"
-                            android:textColor="@color/colorSecondary"
-                            android:textSize="20sp"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="@dimen/h_medium"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/your_parking_time"
+                            tools:text="00 : 00 : 02" />
+
+                        <TextView
+                            android:id="@+id/booking_id_tag"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/six_dp"
+                            android:text="@string/booking_id"
+                            android:textColor="@color/darkGrey"
+                            android:textSize="@dimen/h3"
+                            android:visibility="gone"
                             app:layout_constraintLeft_toLeftOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toBottomOf="@id/parking_slot"
+                            tools:visibility="visible" />
+
+                        <TextView
+                            android:id="@+id/booking_id_value"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/darkGrey"
+                            android:textSize="@dimen/h3"
+                            android:visibility="gone"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/booking_id_tag"
+                            tools:text="1324654653454"
+                            tools:visibility="visible" />
 
                         <TextView
                             android:id="@+id/parking_slot"
@@ -147,64 +228,85 @@
                             android:id="@+id/your_parking_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/you_ve_parked_here_for"
+                            android:text="@string/duration"
                             android:textColor="@color/colorPrimary"
-                            android:textSize="20sp"
+                            android:textSize="@dimen/h_medium2"
                             app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="@id/your_parking_spot" />
 
-                        <Chronometer
-                            android:id="@+id/parking_time"
+                        <TextView
+                            android:id="@+id/your_parking_spot"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="@dimen/h_medium"
+                            android:gravity="center"
+                            android:text="@string/your_parking_spot_is_on"
+                            android:textColor="@color/colorSecondary"
+                            android:textSize="@dimen/h_medium2"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/price_per_hour_tag"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/six_dp"
+                            android:text="@string/price_hour"
+                            android:textColor="@color/darkGrey"
+                            android:textSize="@dimen/h3"
+                            android:visibility="gone"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/line1"
+                            tools:text="Total price"
+                            tools:visibility="visible" />
+
+                        <TextView
+                            android:id="@+id/price_per_hour"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/six_dp"
+                            android:textColor="@color/darkGrey"
+                            android:textSize="@dimen/h3"
+                            android:visibility="gone"
                             app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/your_parking_time"
-                            tools:text="00 : 00 : 02" />
+                            app:layout_constraintTop_toBottomOf="@id/line1"
+                            tools:text="IDR 100000" />
+
+                        <TextView
+                            android:id="@+id/your_price_tag"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/six_dp"
+                            android:text="@string/total_price_only"
+                            android:textColor="@color/darkGrey"
+                            android:textSize="@dimen/h3"
+                            android:visibility="gone"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/price_per_hour"
+                            tools:text="Total price"
+                            tools:visibility="visible" />
+
+                        <TextView
+                            android:id="@+id/your_price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/six_dp"
+                            android:textColor="@color/darkGrey"
+                            android:textSize="@dimen/h3"
+                            android:visibility="gone"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/price_per_hour"
+                            tools:text="IDR 100000" />
+
+                        <View
+                            android:id="@+id/line1"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="@dimen/six_dp"
+                            android:background="@color/lightGrey"
+                            android:visibility="gone"
+                            app:layout_constraintTop_toBottomOf="@id/booking_id_tag" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/directions_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:background="@drawable/card_layout_purple"
-                    android:padding="16dp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/parking_layout">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-light"
-                        android:gravity="center"
-                        android:text="@string/directions"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/h2"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <Button
-                    android:id="@+id/checkout_button"
-                    style="@style/NoCaps"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:background="@drawable/card_layout_grey"
-                    android:fontFamily="sans-serif-light"
-                    android:text="@string/check_out"
-                    android:textColor="@color/red"
-                    android:textSize="@dimen/h2"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/directions_layout" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

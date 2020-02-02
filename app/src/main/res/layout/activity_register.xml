@@ -6,18 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/lightGrey">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_weight="1"
-        android:adjustViewBounds="true"
-        android:scaleType="fitXY"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/header_with_logo"
-        tools:ignore="MissingConstraints" />
-
     <ProgressBar
         android:id="@+id/progressBarReg"
         style="?android:attr/progressBarStyle"
@@ -31,43 +19,56 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
+        android:layout_width="@dimen/zero_dp"
         android:id="@+id/register_layout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="@dimen/zero_dp"
+        android:overScrollMode="never"
+        android:fadeScrollbars="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageView">
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="24dp">
+            android:paddingBottom="@dimen/twenty_four_dp">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/header_with_logo"
+                tools:ignore="MissingConstraints" />
 
             <Button
                 android:id="@+id/btnRegister"
                 style="@style/NoCaps"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
+                android:layout_marginStart="@dimen/twelve_dp"
                 android:fontFamily="sans-serif-light"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="12dp"
+                android:layout_marginTop="@dimen/twenty_four_dp"
+                android:layout_marginEnd="@dimen/twelve_dp"
                 android:background="@drawable/card_layout_blue_primary"
                 android:gravity="center"
-                android:paddingStart="@dimen/margin_padding_vertical_for_card"
-                android:paddingEnd="@dimen/margin_padding_vertical_for_card"
+                android:paddingStart="@dimen/twelve_dp"
+                android:paddingEnd="@dimen/twelve_dp"
                 android:text="@string/register"
                 android:textColor="@color/white"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/inputLayoutPassword" />
+                app:layout_constraintTop_toBottomOf="@id/inputLayoutReTypePassword" />
 
             <TextView
                 android:id="@+id/have_account"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="@dimen/twenty_four_dp"
                 android:paddingLeft="100dp"
                 android:text="@string/already_a_member"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -77,8 +78,8 @@
                 android:id="@+id/login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:paddingLeft="4dp"
+                android:layout_marginTop="@dimen/twenty_four_dp"
+                android:paddingLeft="@dimen/four_dp"
                 android:text="@string/login"
                 android:textColor="@color/colorSecondary"
                 android:textStyle="bold"
@@ -87,15 +88,16 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/inputLayoutPassword"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/zero_dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="12dp"
+                android:layout_marginStart="@dimen/twelve_dp"
+                android:layout_marginTop="@dimen/twelve_dp"
+                android:layout_marginEnd="@dimen/twelve_dp"
                 android:background="@drawable/card_layout_white"
-                android:paddingStart="16dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="12dp"
+                android:paddingStart="@dimen/sixteen_dp"
+                android:paddingEnd="@dimen/sixteen_dp"
+                android:paddingTop="@dimen/eight_dp"
+                android:paddingBottom="@dimen/twelve_dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/inputLayoutPhone"
@@ -106,52 +108,84 @@
                     android:id="@+id/txtPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
                     android:hint="@string/password"
+                    android:background="@android:color/transparent"
                     android:inputType="textPassword"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/h2" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/inputLayoutReTypePassword"
+                android:layout_width="@dimen/zero_dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/twelve_dp"
+                android:layout_marginTop="@dimen/twelve_dp"
+                android:layout_marginEnd="@dimen/twelve_dp"
+                android:background="@drawable/card_layout_white"
+                android:paddingStart="@dimen/sixteen_dp"
+                android:paddingTop="@dimen/eight_dp"
+                android:paddingEnd="@dimen/sixteen_dp"
+                android:paddingBottom="@dimen/twelve_dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/inputLayoutPassword"
+                app:startIconDrawable="@drawable/ic_password"
+                tools:ignore="RtlSymmetry">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtReTypePassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:hint="@string/re_type_password"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textSize="@dimen/h2" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/inputLayoutName"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/zero_dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginEnd="12dp"
+                android:layout_marginStart="@dimen/twelve_dp"
+                android:layout_marginEnd="@dimen/twelve_dp"
                 android:background="@drawable/card_layout_white"
-                android:paddingStart="16dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="12dp"
+                android:paddingStart="@dimen/sixteen_dp"
+                android:paddingEnd="@dimen/sixteen_dp"
+                android:paddingTop="@dimen/eight_dp"
+                android:paddingBottom="@dimen/twelve_dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imageView"
                 app:startIconDrawable="@drawable/ic_name">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/txtName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
                     android:hint="@string/full_name"
+                    android:background="@android:color/transparent"
                     android:inputType="textPersonName"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/h2" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/inputLayoutEmail"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/zero_dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="12dp"
+                android:layout_marginStart="@dimen/twelve_dp"
+                android:layout_marginTop="@dimen/twelve_dp"
+                android:layout_marginEnd="@dimen/twelve_dp"
                 android:background="@drawable/card_layout_white"
-                android:paddingStart="16dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="12dp"
+                android:paddingStart="@dimen/sixteen_dp"
+                android:paddingEnd="@dimen/sixteen_dp"
+                android:paddingTop="@dimen/eight_dp"
+                android:paddingBottom="@dimen/twelve_dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/inputLayoutName"
@@ -167,20 +201,21 @@
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/h2" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/inputLayoutPhone"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/zero_dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="12dp"
+                android:layout_marginStart="@dimen/twelve_dp"
+                android:layout_marginTop="@dimen/twelve_dp"
+                android:layout_marginEnd="@dimen/twelve_dp"
                 android:background="@drawable/card_layout_white"
-                android:paddingStart="16dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="12dp"
+                android:paddingStart="@dimen/sixteen_dp"
+                android:paddingEnd="@dimen/sixteen_dp"
+                android:paddingTop="@dimen/eight_dp"
+                android:paddingBottom="@dimen/twelve_dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/inputLayoutEmail"
@@ -195,9 +230,8 @@
                     android:hint="@string/phone"
                     android:inputType="phone"
                     android:maxLines="1"
-
                     android:singleLine="true"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/h2" />
             </com.google.android.material.textfield.TextInputLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
