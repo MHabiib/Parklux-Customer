@@ -194,5 +194,5 @@ class ListActivityFragment : BaseFragment(), ListActivityContract {
     }
   }
 
-  override fun onFailed(e: String) = Timber.e(e)
+  override fun onFailed(message: String) = Timber.e(message)
 }

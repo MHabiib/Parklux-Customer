@@ -36,6 +36,14 @@ class Constants {
     const val NULL = "null"
     const val ID_BOOKING = "idBooking"
     const val LEVEL_NAME = "levelName"
+    const val PARKING_ZONE_NAME = "name"
+    const val PARKING_ZONE_ADDRESS = "address"
+    const val PARKING_ZONE_PHONE = "phone"
+    const val PARKING_ZONE_PRICE = "price"
+    const val PARKING_ZONE_OPEN_HOUR = "openHour"
+    const val PARKING_ZONE_IMG = "img"
+    const val PARKING_ZONE_LONGITUDE = "longitude"
+    const val PARKING_ZONE_LATITUDE = "latitude"
 
     const val REQUEST_CAMERA_PERMISSION = 2020
 
@@ -77,5 +85,7 @@ class Constants {
     const val SLOT_BLOCK = 'B'
     const val MY_SLOT = 'V'
     const val DISABLED_SLOT = 'D'
+
+    const val REQUEST_LOCATION_PERMISSION = 1
   }
 }

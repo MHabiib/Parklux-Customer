@@ -56,6 +56,8 @@ class UserDetailsFragment : BottomSheetDialogFragment(), UserDetailsContract {
   private lateinit var binding: FragmentBottomSheetUserDetailsBinding
   private lateinit var accessToken: String
   private lateinit var id: String
+  private var lat = 0.0
+  private var lng = 0.0
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
       savedInstanceState: Bundle?): View? {
@@ -101,7 +103,7 @@ class UserDetailsFragment : BottomSheetDialogFragment(), UserDetailsContract {
               binding.profileEmailAdmin.text.toString(), binding.profileNameAdmin.text.toString(),
               String.format(getString(R.string.range2), binding.openHourAdmin.text.toString(),
                   binding.openHour2Admin.text.toString()), binding.passwordAdmin.text.toString(),
-              binding.profilePhoneNumberAdmin.text.toString(), priceInDouble, "")
+              binding.profilePhoneNumberAdmin.text.toString(), priceInDouble, "", lat, lng)
           presenter.updateAdmin(this@UserDetailsFragment.id, accessToken, parkingZone)
         } else {
           Toast.makeText(context, getString(R.string.fill_all_the_entries),
@@ -180,6 +182,8 @@ class UserDetailsFragment : BottomSheetDialogFragment(), UserDetailsContract {
         openHour2Admin.text = it.openHour.substring(8, 13)
         addressAdmin.setText(it.address)
         passwordAdmin.hint = getString(R.string.password_hint)
+        lat = it.latitude
+        lng = it.longitude
       }
     }
   }
@@ -242,14 +246,14 @@ class UserDetailsFragment : BottomSheetDialogFragment(), UserDetailsContract {
     with(binding) {
       when (role) {
         UPDATE_ADMIN -> {
-          if (profileNameAdmin?.text.toString().isEmpty()) return false
-          if (!profileEmailAdmin?.text.toString().isEmailValid()) return false
-          if (profilePhoneNumberAdmin?.text.toString().isEmpty()) return false
-          if (openHourAdmin?.text.toString().isEmpty()) return false
-          if (openHour2Admin?.text.toString().isEmpty()) return false
-          if (addressAdmin?.text.toString().isEmpty()) return false
-        return true
-      }
+          if (profileNameAdmin.text.toString().isEmpty()) return false
+          if (!profileEmailAdmin.text.toString().isEmailValid()) return false
+          if (profilePhoneNumberAdmin.text.toString().isEmpty()) return false
+          if (openHourAdmin.text.toString().isEmpty()) return false
+          if (openHour2Admin.text.toString().isEmpty()) return false
+          if (addressAdmin.text.toString().isEmpty()) return false
+          return true
+        }
         UPDATE_SUPER_ADMIN -> {
           if (!emailSuperAdmin.text.toString().isEmailValid()) return false
           if (passwordSuperAdmin.text.toString().isEmpty()) return false
@@ -269,24 +273,22 @@ class UserDetailsFragment : BottomSheetDialogFragment(), UserDetailsContract {
   private fun String.isEmailValid(): Boolean = !TextUtils.isEmpty(
       this) && Patterns.EMAIL_ADDRESS.matcher(this).matches()
 
-  override fun onFailed(e: String) {
+  override fun onFailed(message: String) {
     context?.let {
-      if (e.contains(Constants.NO_CONNECTION)) {
+      if (message.contains(Constants.NO_CONNECTION)) {
         Toast.makeText(it, getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show()
       } else {
-        Toast.makeText(it, e, Toast.LENGTH_SHORT).show()
+        Toast.makeText(it, message, Toast.LENGTH_SHORT).show()
       }
-      Timber.e(e)
+      Timber.e(message)
     }
   }
 
   override fun showProgress(show: Boolean) {
-    if (null != binding.progressBar) {
-      if (show) {
-        binding.progressBar.visibility = View.VISIBLE
-      } else {
-        binding.progressBar.visibility = View.GONE
-      }
+    if (show) {
+      binding.progressBar.visibility = View.VISIBLE
+    } else {
+      binding.progressBar.visibility = View.GONE
     }
   }
 

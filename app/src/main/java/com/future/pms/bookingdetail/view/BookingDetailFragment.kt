@@ -161,12 +161,10 @@ class BookingDetailFragment : BaseFragment(), BookingDetailContract {
   }
 
   override fun showProgress(show: Boolean) {
-    if (null != binding.parkingDirectionContent.progressBar) {
-      if (show) {
-        binding.parkingDirectionContent.progressBar.visibility = View.VISIBLE
-      } else {
-        binding.parkingDirectionContent.progressBar.visibility = View.GONE
-      }
+    if (show) {
+      binding.parkingDirectionContent.progressBar.visibility = View.VISIBLE
+    } else {
+      binding.parkingDirectionContent.progressBar.visibility = View.GONE
     }
   }
 

@@ -90,9 +90,9 @@ class ListActivityAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     init {
       itemView.setOnClickListener {
-        bookingList?.get(adapterPosition)?.let { it ->
-          it.position = adapterPosition
-          onItemClick?.invoke(it)
+        bookingList?.get(adapterPosition)?.let { content ->
+          content.position = adapterPosition
+          onItemClick?.invoke(content)
         }
       }
     }

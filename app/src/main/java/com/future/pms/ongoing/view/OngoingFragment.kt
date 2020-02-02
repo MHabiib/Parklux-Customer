@@ -1,6 +1,7 @@
 package com.future.pms.ongoing.view
 
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
@@ -26,6 +27,7 @@ import com.future.pms.receipt.view.ReceiptFragment
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.SEC_IN_DAY
 import com.future.pms.util.Utils
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_ongoing.*
@@ -67,8 +69,15 @@ class OngoingFragment : BaseFragment(), OngoingContract {
       activity?.presenter?.showParkingDirection(idBooking, levelName)
     }
 
-    val checkout = binding.checkoutButton
-    checkout.setOnClickListener { presenter.checkoutBooking(accessToken) }
+    binding.checkoutButton.setOnClickListener {
+      MaterialAlertDialogBuilder(context).setTitle(
+          getString(R.string.complete_order_title)).setMessage(
+          getString(R.string.complete_order_description)).setPositiveButton(
+          getString(R.string.yes)) { _: DialogInterface, _: Int ->
+        presenter.checkoutBooking(accessToken)
+      }.setNegativeButton(getString(R.string.cancel), null).show()
+    }
+
     return binding.root
   }
 
@@ -105,7 +114,6 @@ class OngoingFragment : BaseFragment(), OngoingContract {
     val bundle = Bundle()
     bundle.putString(Constants.ID_BOOKING, idBooking)
     fragment.arguments = bundle
-
     activity?.supportFragmentManager?.let { bottomSheetFragment ->
       if (!fragment.isAdded) {
         fragment.show(bottomSheetFragment, fragment.tag)
@@ -176,20 +184,23 @@ class OngoingFragment : BaseFragment(), OngoingContract {
   }
 
   override fun loadCustomerOngoingFailed(error: String) {
-    if (error.contains(Constants.NO_CONNECTION)) {
-      Toast.makeText(context, getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show()
-      binding.ibRefresh.visibility = View.VISIBLE
-      binding.ibRefresh.setOnClickListener {
-        presenter.loadOngoingBooking(accessToken)
-        binding.ibRefresh.visibility = View.GONE
-        binding.dontHaveOngoing.visibility = View.GONE
-        val homeFragment = fragmentManager?.findFragmentByTag(HomeFragment.TAG) as HomeFragment
-        homeFragment.presenter.loadData(accessToken)
+    with(binding) {
+      if (error.contains(Constants.NO_CONNECTION)) {
+        Toast.makeText(context, getString(R.string.no_network_connection),
+            Toast.LENGTH_SHORT).show()
+        ibRefresh.visibility = View.VISIBLE
+        ibRefresh.setOnClickListener {
+          presenter.loadOngoingBooking(accessToken)
+          ibRefresh.visibility = View.GONE
+          dontHaveOngoing.visibility = View.GONE
+          val homeFragment = fragmentManager?.findFragmentByTag(HomeFragment.TAG) as HomeFragment
+          homeFragment.presenter.loadData(accessToken)
+        }
       }
-    }
 
-    Timber.tag(Constants.ERROR).e(error)
-    binding.dontHaveOngoing.visibility = View.VISIBLE
+      Timber.tag(Constants.ERROR).e(error)
+      dontHaveOngoing.visibility = View.VISIBLE
+    }
   }
 
   private fun loadImage(imageUrl: String) = Utils.imageLoader(binding.root, imageUrl,

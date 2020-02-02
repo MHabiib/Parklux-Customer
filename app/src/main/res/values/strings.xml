@@ -112,4 +112,12 @@
     <string name="click_again_exit">Please click back again to exit</string>
     <string name="pattern">HH:mm</string>
     <string name="re_type_password">Re-type password</string>
+    <string name="lat_long_snippet">Lat: %1$.5f, Long: %2$.5f</string>
+    <string name="dropped_pin">Dropped Pin</string>
+    <string name="complete_order_title">Are you sure want to complete this Order?</string>
+    <string name="complete_order_description">You must show the receipt to security exit gate guard within 15 minutes after completed this Order</string>
+    <string name="yes">Yes</string>
+    <string name="digits">abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,.()-</string>
+    <string name="open_on_google_maps">Open on Google Maps</string>
+    <string name="history">History</string>
 </resources>

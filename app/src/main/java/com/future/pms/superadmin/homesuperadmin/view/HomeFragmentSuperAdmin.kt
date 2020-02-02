@@ -270,12 +270,10 @@ class HomeFragmentSuperAdmin : BaseFragment(), HomeContractSuperAdmin {
   }
 
   private fun showProgress(show: Boolean) {
-    if (null != binding.progressBar) {
-      if (show) {
-        binding.progressBar.visibility = View.VISIBLE
-      } else {
-        binding.progressBar.visibility = View.GONE
-      }
+    if (show) {
+      binding.progressBar.visibility = View.VISIBLE
+    } else {
+      binding.progressBar.visibility = View.GONE
     }
   }
 
