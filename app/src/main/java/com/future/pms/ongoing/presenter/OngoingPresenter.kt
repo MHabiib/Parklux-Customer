@@ -8,8 +8,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class OngoingPresenter @Inject constructor() : BasePresenter<OngoingContract>() {
-  @Inject lateinit var ongoingApi: OngoingApi
+class OngoingPresenter @Inject constructor(private val ongoingApi: OngoingApi) :
+    BasePresenter<OngoingContract>() {
 
   fun loadOngoingBooking(accessToken: String) {
     view?.apply {

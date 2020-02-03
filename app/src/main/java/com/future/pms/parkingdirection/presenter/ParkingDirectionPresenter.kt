@@ -7,8 +7,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class ParkingDirectionPresenter @Inject constructor() : BasePresenter<ParkingDirectionContract>() {
-  @Inject lateinit var parkingDirectionApi: ParkingDirectionApi
+class ParkingDirectionPresenter @Inject constructor(
+    private val parkingDirectionApi: ParkingDirectionApi) :
+    BasePresenter<ParkingDirectionContract>() {
 
   fun getParkingLayout(idBooking: String, accessToken: String) {
     view?.apply {

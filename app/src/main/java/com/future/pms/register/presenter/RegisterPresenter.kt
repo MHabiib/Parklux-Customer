@@ -10,8 +10,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class RegisterPresenter @Inject constructor() : BasePresenter<RegisterContract>() {
-  @Inject lateinit var registerApi: RegisterApi
+class RegisterPresenter @Inject constructor(private val registerApi: RegisterApi) :
+    BasePresenter<RegisterContract>() {
 
   fun register(name: String, email: String, password: String, phoneNumber: String) {
     val customer = Customer(email, name, password, phoneNumber)

@@ -11,8 +11,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class UserDetailsPresenter @Inject constructor() : BasePresenter<UserDetailsContract>() {
-  @Inject lateinit var userDetailsApi: UserDetailsApi
+class UserDetailsPresenter @Inject constructor(private val userDetailsApi: UserDetailsApi) :
+    BasePresenter<UserDetailsContract>() {
 
   fun loadDataCustomer(idCustomer: String, accessToken: String) {
     view?.apply {

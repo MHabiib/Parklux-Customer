@@ -38,12 +38,13 @@ class OngoingPresenterTest : BaseTest() {
   }
 
   @Test fun checkoutBookingSuccess() {
-    `when`(ongoingApi.postBookingCheckout(ACCESS_TOKEN)).thenReturn(Observable.just(receipt()))
+    `when`(ongoingApi.postBookingCheckout(ACCESS_TOKEN)).thenReturn(
+        Observable.just(customerBooking()))
 
     ongoinPresenter.checkoutBooking(ACCESS_TOKEN)
 
     verify(ongoingContract).showProgress(false)
-    verify(ongoingContract).checkoutSuccess(receipt().idBooking)
+    verify(ongoingContract).checkoutSuccess(customerBooking().idBooking)
     verify(ongoingContract).refreshHome()
   }
 

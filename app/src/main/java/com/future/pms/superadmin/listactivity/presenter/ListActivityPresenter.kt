@@ -7,8 +7,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class ListActivityPresenter @Inject constructor() : BasePresenter<ListActivityContract>() {
-  @Inject lateinit var listActivityApi: ListActivityApi
+class ListActivityPresenter @Inject constructor(private val listActivityApi: ListActivityApi) :
+    BasePresenter<ListActivityContract>() {
 
   fun loadAllBooking(accessToken: String, page: Int, filter: String) {
     subscriptions.add(listActivityApi.loadAllBooking(accessToken, page, filter).subscribeOn(

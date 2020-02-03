@@ -7,8 +7,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class MapsPresenter @Inject constructor() : BasePresenter<MapsContract>() {
-  @Inject lateinit var mapsApi: MapsApi
+class MapsPresenter @Inject constructor(private val mapsApi: MapsApi) :
+    BasePresenter<MapsContract>() {
 
   fun loadLocation(accessToken: String) {
     subscriptions.add(mapsApi.getLatLng(accessToken).subscribeOn(Schedulers.io()).observeOn(

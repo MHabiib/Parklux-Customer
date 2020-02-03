@@ -8,8 +8,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class ReceiptPresenter @Inject constructor() : BasePresenter<ReceiptContract>() {
-  @Inject lateinit var receiptApi: ReceiptApi
+class ReceiptPresenter @Inject constructor(private val receiptApi: ReceiptApi) :
+    BasePresenter<ReceiptContract>() {
 
   fun loadData(accessToken: String, id: String) {
     view?.apply {

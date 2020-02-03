@@ -7,8 +7,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class ScanPresenter @Inject constructor() : BasePresenter<ScanContract>() {
-  @Inject lateinit var scanApi: ScanApi
+class ScanPresenter @Inject constructor(private val scanApi: ScanApi) :
+    BasePresenter<ScanContract>() {
 
   fun createBooking(idSlot: String, fcm: String, accessToken: String) {
     view?.apply {

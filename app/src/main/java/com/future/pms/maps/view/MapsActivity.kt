@@ -90,7 +90,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, MapsContract {
       map.addMarker(
           MarkerOptions().position(LatLng(parkingZone.latitude, parkingZone.longitude)).title(
               parkingZone.name).snippet(snippet).icon(
-              BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)))
+              BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)))
       map.setOnMarkerClickListener { marker ->
         if (!marker.isInfoWindowShown) {
           val parkingZoneLatLng = gson.fromJson(marker.snippet, ParkingZoneLatLng::class.java)

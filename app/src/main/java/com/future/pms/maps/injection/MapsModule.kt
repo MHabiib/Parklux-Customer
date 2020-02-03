@@ -6,7 +6,7 @@ import dagger.Provides
 import retrofit2.Retrofit
 
 @Module class MapsModule {
-  @Provides fun provideLoginApi(retrofit: Retrofit): MapsApi {
+  @Provides fun provideMapsApi(retrofit: Retrofit): MapsApi {
     return retrofit.create(MapsApi::class.java)
   }
 }

@@ -3,6 +3,7 @@ package com.future.pms.base
 import com.future.pms.core.model.*
 import com.future.pms.core.model.customerdetails.Body
 import com.future.pms.history.model.History
+import com.future.pms.maps.model.ParkingZoneLatLng
 import com.future.pms.superadmin.activitydetails.model.Booking
 import com.future.pms.superadmin.activitydetails.model.Content
 import com.future.pms.superadmin.listuser.model.admin.Admin
@@ -72,12 +73,12 @@ open class BaseTest {
 
   protected fun adminDetail(): AdminDetail {
     return AdminDetail("address", "emailAdmin", "idParkingZone", "imageUrl", "name", "openHour",
-        "phoneNumber", 0.0)
+        "phoneNumber", 0.0, 0.0, 0.0)
   }
 
   protected fun parkingZone(): ParkingZoneResponse {
     return ParkingZoneResponse("address", "emailAdmin", "name", "openHour", "password",
-        "phoneNumber", 0.0, "imageUrl")
+        "phoneNumber", 0.0, "imageUrl", 0.0, 0.0)
   }
 
   protected fun superAdmin(): SuperAdminResponse {
@@ -141,5 +142,13 @@ open class BaseTest {
 
   private fun page(): Pageable {
     return Pageable(0, 0, 0, false, sort(), false)
+  }
+
+  private fun parkingZoneLatLng(): ParkingZoneLatLng {
+    return ParkingZoneLatLng("", 0.0, 0.0, "name", "openHours", "phoneNumber", "imageUrl", 0.0)
+  }
+
+  protected fun listParkingZoneLatLng(): List<ParkingZoneLatLng> {
+    return listOf(parkingZoneLatLng())
   }
 }

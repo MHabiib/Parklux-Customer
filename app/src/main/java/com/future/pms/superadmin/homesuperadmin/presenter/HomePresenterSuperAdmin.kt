@@ -10,8 +10,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class HomePresenterSuperAdmin @Inject constructor() : BasePresenter<HomeContractSuperAdmin>() {
-  @Inject lateinit var homeApiSuperAdmin: HomeApiSuperAdmin
+class HomePresenterSuperAdmin @Inject constructor(
+    private val homeApiSuperAdmin: HomeApiSuperAdmin) : BasePresenter<HomeContractSuperAdmin>() {
 
   fun createUser(accessToken: String, email: String, password: String, role: String) {
     val user = User(email, password, role)
