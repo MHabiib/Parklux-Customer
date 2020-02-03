@@ -1,7 +1,6 @@
 package com.future.pms.ongoing.network
 
 import com.future.pms.core.model.CustomerBooking
-import com.future.pms.core.model.Receipt
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -12,5 +11,5 @@ interface OngoingApi {
   accessToken: String?): Observable<CustomerBooking>
 
   @POST("api/booking/checkout") fun postBookingCheckout(@Query("access_token")
-  accessToken: String?): Observable<Receipt>
+  accessToken: String?): Observable<CustomerBooking>
 }

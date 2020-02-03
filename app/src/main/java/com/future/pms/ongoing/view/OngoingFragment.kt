@@ -30,7 +30,6 @@ import com.future.pms.util.Utils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.fragment_ongoing.*
 import timber.log.Timber
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -92,12 +91,10 @@ class OngoingFragment : BaseFragment(), OngoingContract {
   }
 
   override fun showProgress(show: Boolean) {
-    if (null != progressBar) {
-      if (show) {
-        progressBar.visibility = View.VISIBLE
-      } else {
-        progressBar.visibility = View.GONE
-      }
+    if (show) {
+      binding.progressBar.visibility = View.VISIBLE
+    } else {
+      binding.progressBar.visibility = View.GONE
     }
   }
 
@@ -129,8 +126,11 @@ class OngoingFragment : BaseFragment(), OngoingContract {
       }
     }
 
-    val historyFragment = fragmentManager?.findFragmentByTag(HistoryFragment.TAG) as HistoryFragment
-    historyFragment.refreshListHistory()
+    val historyFragment = fragmentManager?.findFragmentByTag(HistoryFragment.TAG)
+    if (historyFragment != null) {
+      historyFragment as HistoryFragment
+      historyFragment.refreshListHistory()
+    }
   }
 
   override fun onFailed(message: String) {

@@ -209,7 +209,7 @@ class HomeFragmentSuperAdmin : BaseFragment(), HomeContractSuperAdmin {
       this) && Patterns.EMAIL_ADDRESS.matcher(this).matches()
 
   override fun updateUserSuccess() {
-    showProgress(true)
+    showProgress(false)
     Toast.makeText(context, getString(R.string.update_account_success), Toast.LENGTH_LONG).show()
   }
 

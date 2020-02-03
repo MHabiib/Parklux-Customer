@@ -21,16 +21,16 @@
     <string name="directions">Click me to show the directions</string>
     <string name="full_name">Full name</string>
     <string name="phone_number">Phone number</string>
-    <string name="already_a_member">Already a member ?</string>
+    <string name="already_a_member">Already a member?</string>
     <string name="user_avatar">User avatar</string>
     <string name="logout">Logout</string>
     <string name="customer">Customer</string>
     <string name="duration">Duration</string>
-    <string name="you_dont_have_any_ongoing_order">You dont have any ongoing order</string>
+    <string name="you_dont_have_any_ongoing_order">You don\'t have any ongoing order</string>
     <string name="parking_completed">Parking completed</string>
-    <string name="you_dont_have_any_order">You dont have any completed order</string>
+    <string name="you_dont_have_any_order">You don\'t have any completed order</string>
     <string name="oops">Oops…</string>
-    <string name="failed_create_booking">Failed to create booking, something went wrong.</string>
+    <string name="failed_create_booking">Failed to create a booking, something went wrong.</string>
     <string name="welcome_to">Welcome to %s</string>
     <string name="slot_name">Slot name</string>
     <string name="scan_again">Scan again</string>
@@ -66,7 +66,7 @@
     <string name="success">Success</string>
     <string name="update_account_success">Update account success</string>
     <string name="fill_all_the_entries">Please fill all the entries</string>
-    <string name="fill_all_the_entries_value">Please fill all the entries with correct value</string>
+    <string name="fill_all_the_entries_value">Please fill all the entries with the correct value</string>
     <string name="admin">Admin</string>
     <string name="id">ID</string>
     <string name="update_customer">Update customer</string>
@@ -99,10 +99,10 @@
     <string name="good_night">Good Night</string>
     <string name="hello">Hello,</string>
     <string name="switch_super_admin">Switched to SUPER ADMIN page</string>
-    <string name="only_have_booking_one">You only can make booking once a time</string>
+    <string name="only_have_booking_one">You only can make a booking once a time</string>
     <string name="fill_all_entries">Please fill all the entries with valid input</string>
     <string name="updated">Updated</string>
-    <string name="email_already_registered">Failed to update profile, email already used !</string>
+    <string name="email_already_registered">Failed to update profile, email already used!</string>
     <string name="id_booking">idBooking</string>
     <string name="share_body">This is my parking receipt using Parklux apps.</string>
     <string name="share_via">Share via</string>
@@ -114,10 +114,10 @@
     <string name="re_type_password">Re-type password</string>
     <string name="lat_long_snippet">Lat: %1$.5f, Long: %2$.5f</string>
     <string name="dropped_pin">Dropped Pin</string>
-    <string name="complete_order_title">Are you sure want to complete this Order?</string>
-    <string name="complete_order_description">You must show the receipt to security exit gate guard within 15 minutes after completed this Order</string>
+    <string name="complete_order_title">Are you sure want to complete this order?</string>
+    <string name="complete_order_description">You must show the receipt to security exit gate guard within 15 minutes after completing this Order</string>
     <string name="yes">Yes</string>
     <string name="digits">abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,.()-</string>
-    <string name="open_on_google_maps">Open on Google Maps</string>
+    <string name="open_on_google_maps">Open with Google Maps</string>
     <string name="history">History</string>
 </resources>
