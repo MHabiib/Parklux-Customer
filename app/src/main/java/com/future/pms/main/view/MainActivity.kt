@@ -1,15 +1,21 @@
 package com.future.pms.main.view
 
 import android.Manifest
+import android.app.Activity
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
+import android.speech.tts.TextToSpeech
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.future.pms.BaseApp
 import com.future.pms.R
 import com.future.pms.bookingdetail.view.BookingDetailFragment
@@ -22,9 +28,14 @@ import com.future.pms.main.presenter.MainPresenter
 import com.future.pms.parkingdirection.view.ParkingDirectionFragment
 import com.future.pms.profile.view.ProfileFragment
 import com.future.pms.scan.view.ScanFragment
+import com.future.pms.util.Constants.Companion.FCM_PARKING_ZONE
+import com.future.pms.util.Constants.Companion.FCM_TOTAL_PRICE
 import com.future.pms.util.Constants.Companion.ID_BOOKING
 import com.future.pms.util.Constants.Companion.LEVEL_NAME
+import com.future.pms.util.Constants.Companion.MY_FIREBASE_MESSAGING
 import com.future.pms.util.Constants.Companion.REQUEST_CAMERA_PERMISSION
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.util.*
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), MainContract {
@@ -37,6 +48,7 @@ class MainActivity : AppCompatActivity(), MainContract {
 
   @Inject lateinit var presenter: MainPresenter
   private lateinit var binding: ActivityMainBinding
+    private lateinit var mTTS: TextToSpeech
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -51,6 +63,11 @@ class MainActivity : AppCompatActivity(), MainContract {
     binding.fabScan.setOnClickListener {
       presenter.onScanIconClick()
     }
+      mTTS = TextToSpeech(applicationContext, TextToSpeech.OnInitListener { status ->
+          if (status != TextToSpeech.ERROR) {
+              mTTS.language = Locale.US
+          }
+      })
   }
 
   private var doubleBackToExitPressedOnce = false
@@ -267,6 +284,36 @@ class MainActivity : AppCompatActivity(), MainContract {
       }
     }
   }
+
+    override fun onResume() {
+        super.onResume()
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+            mMessageReceiver,
+            IntentFilter(MY_FIREBASE_MESSAGING)
+        )
+    }
+
+    private val mMessageReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            val parkingZoneName = intent.getStringExtra(FCM_PARKING_ZONE)
+            val totalPrice = intent.getStringExtra(FCM_TOTAL_PRICE)
+
+            val title = "haaiiiiiii"
+            val message = "$parkingZoneName Sudahhh nih bayar segini $totalPrice"
+            showDialog(title, message)
+            mTTS.speak(title + message, TextToSpeech.QUEUE_FLUSH, null)
+        }
+    }
+
+    private fun showDialog(title: String, body: String) {
+        if (!(this as Activity).isFinishing) {
+            val dialog = MaterialAlertDialogBuilder(this).setTitle(title).setMessage(body).show()
+            Handler().postDelayed({
+                dialog?.dismiss()
+            }, 7000)
+        }
+    }
 
   private fun navigationBarVisibility(visibility: Int) {
     binding.navView.visibility = visibility

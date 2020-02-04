@@ -10,25 +10,25 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.future.pms.BaseApp
 import com.future.pms.R
 import com.future.pms.core.base.BaseFragment
 import com.future.pms.core.model.CustomerBooking
 import com.future.pms.core.model.Token
 import com.future.pms.databinding.FragmentOngoingBinding
-import com.future.pms.history.view.HistoryFragment
 import com.future.pms.home.view.HomeFragment
 import com.future.pms.main.view.MainActivity
 import com.future.pms.ongoing.injection.DaggerOngoingComponent
 import com.future.pms.ongoing.injection.OngoingComponent
 import com.future.pms.ongoing.presenter.OngoingPresenter
-import com.future.pms.parkingdirection.view.ParkingDirectionFragment
-import com.future.pms.receipt.view.ReceiptFragment
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.SEC_IN_DAY
 import com.future.pms.util.Utils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.iid.FirebaseInstanceId
 import com.google.gson.Gson
 import timber.log.Timber
 import java.time.LocalDateTime
@@ -50,6 +50,7 @@ class OngoingFragment : BaseFragment(), OngoingContract {
   private lateinit var idBooking: String
   private lateinit var levelName: String
   private lateinit var accessToken: String
+  private lateinit var fcmToken: String
 
   companion object {
     const val TAG: String = Constants.ONGOING_FRAGMENT
@@ -73,7 +74,7 @@ class OngoingFragment : BaseFragment(), OngoingContract {
           getString(R.string.complete_order_title)).setMessage(
           getString(R.string.complete_order_description)).setPositiveButton(
           getString(R.string.yes)) { _: DialogInterface, _: Int ->
-        presenter.checkoutBooking(accessToken)
+        presenter.checkoutBooking(accessToken, fcmToken)
       }.setNegativeButton(getString(R.string.cancel), null).show()
     }
 
@@ -106,8 +107,14 @@ class OngoingFragment : BaseFragment(), OngoingContract {
     ft?.detach(this)?.attach(this)?.commit()
   }
 
-  override fun checkoutSuccess(idBooking: String) {
-    val fragment = ReceiptFragment()
+  override fun checkoutSuccess(imageName: String) {
+    binding.dontHaveOngoing.visibility = View.GONE
+    binding.ongoingParkingLayout.visibility = View.GONE
+    binding.checkoutQr.visibility = View.VISIBLE
+    Glide.with(binding.root).load(imageName).transform(CenterCrop()).into(
+      binding.ivCheckoutQr
+    )
+    /*val fragment = ReceiptFragment()
     val bundle = Bundle()
     bundle.putString(Constants.ID_BOOKING, idBooking)
     fragment.arguments = bundle
@@ -130,7 +137,7 @@ class OngoingFragment : BaseFragment(), OngoingContract {
     if (historyFragment != null) {
       historyFragment as HistoryFragment
       historyFragment.refreshListHistory()
-    }
+    }*/
   }
 
   override fun onFailed(message: String) {
@@ -178,6 +185,12 @@ class OngoingFragment : BaseFragment(), OngoingContract {
     val fab = activity?.findViewById(R.id.fab_scan) as FloatingActionButton
     fab.setOnClickListener {
       Toast.makeText(context, getString(R.string.only_have_booking_one), Toast.LENGTH_LONG).show()
+    }
+
+    FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener { task ->
+      if (task.isSuccessful) {
+        fcmToken = task.result?.token.toString() //asyc
+      }
     }
 
     loadImage(ongoing.imageUrl)

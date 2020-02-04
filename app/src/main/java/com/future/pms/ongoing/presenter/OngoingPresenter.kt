@@ -27,14 +27,17 @@ class OngoingPresenter @Inject constructor(private val ongoingApi: OngoingApi) :
     }
   }
 
-  fun checkoutBooking(accessToken: String) {
+    fun checkoutBooking(accessToken: String, fcmToken: String) {
     view?.apply {
       showProgress(true)
       subscriptions.add(
-          ongoingApi.postBookingCheckout(accessToken).subscribeOn(Schedulers.io()).observeOn(
+          ongoingApi.postBookingCheckout(
+              fcmToken,
+              accessToken
+          ).subscribeOn(Schedulers.io()).observeOn(
               AndroidSchedulers.mainThread()).subscribe({
             showProgress(false)
-            checkoutSuccess(it.idBooking)
+              checkoutSuccess(it.string())
           }, {
             showProgress(false)
             onFailed(it.message.toString())

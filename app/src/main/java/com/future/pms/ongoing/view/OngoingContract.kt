@@ -8,5 +8,5 @@ interface OngoingContract : BaseView {
   fun refreshHome()
   fun loadCustomerOngoingSuccess(ongoing: CustomerBooking)
   fun loadCustomerOngoingFailed(error: String)
-  fun checkoutSuccess(idBooking: String)
+  fun checkoutSuccess(imageName: String)
 }

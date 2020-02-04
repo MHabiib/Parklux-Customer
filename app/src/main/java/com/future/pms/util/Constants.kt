@@ -2,7 +2,7 @@ package com.future.pms.util
 
 class Constants {
   companion object {
-    const val BASE = "https://pms-future.herokuapp.com/"
+    const val BASE = "https://parklux-improvements.herokuapp.com/"
     const val USERNAME = "pms-client"
     const val PASSWORD = "pms-secret"
     const val GRANT_TYPE = "password"
@@ -44,6 +44,10 @@ class Constants {
     const val PARKING_ZONE_IMG = "img"
     const val PARKING_ZONE_LONGITUDE = "longitude"
     const val PARKING_ZONE_LATITUDE = "latitude"
+
+    const val MY_FIREBASE_MESSAGING = "firebaseMessaging"
+    const val FCM_PARKING_ZONE = "parkingZoneName"
+    const val FCM_TOTAL_PRICE = "totalPrice"
 
     const val REQUEST_CAMERA_PERMISSION = 2020
 
