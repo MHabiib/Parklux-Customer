@@ -25,6 +25,7 @@ import com.future.pms.login.view.LoginActivity
 import com.future.pms.main.injection.DaggerMainComponent
 import com.future.pms.main.injection.MainComponent
 import com.future.pms.main.presenter.MainPresenter
+import com.future.pms.ongoing.view.OngoingFragment
 import com.future.pms.parkingdirection.view.ParkingDirectionFragment
 import com.future.pms.profile.view.ProfileFragment
 import com.future.pms.scan.view.ScanFragment
@@ -48,7 +49,7 @@ class MainActivity : AppCompatActivity(), MainContract {
 
   @Inject lateinit var presenter: MainPresenter
   private lateinit var binding: ActivityMainBinding
-    private lateinit var mTTS: TextToSpeech
+  private lateinit var mTTS: TextToSpeech
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -63,11 +64,11 @@ class MainActivity : AppCompatActivity(), MainContract {
     binding.fabScan.setOnClickListener {
       presenter.onScanIconClick()
     }
-      mTTS = TextToSpeech(applicationContext, TextToSpeech.OnInitListener { status ->
-          if (status != TextToSpeech.ERROR) {
-              mTTS.language = Locale.US
-          }
-      })
+    mTTS = TextToSpeech(applicationContext, TextToSpeech.OnInitListener { status ->
+      if (status != TextToSpeech.ERROR) {
+        mTTS.language = Locale.US
+      }
+    })
   }
 
   private var doubleBackToExitPressedOnce = false
@@ -285,35 +286,42 @@ class MainActivity : AppCompatActivity(), MainContract {
     }
   }
 
-    override fun onResume() {
-        super.onResume()
+  override fun onResume() {
+    super.onResume()
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(
-            mMessageReceiver,
-            IntentFilter(MY_FIREBASE_MESSAGING)
-        )
+    LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
+        IntentFilter(MY_FIREBASE_MESSAGING))
+  }
+
+  private val mMessageReceiver = object : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
+      val parkingZoneName = intent.getStringExtra(FCM_PARKING_ZONE)
+      val totalPrice = intent.getStringExtra(FCM_TOTAL_PRICE)
+
+      if (parkingZoneName == "Timeout !") {
+        totalPrice?.toString()?.let { showDialog(parkingZoneName, it) }
+        val ongoingFragment = supportFragmentManager.findFragmentByTag(
+            OngoingFragment.TAG) as OngoingFragment
+        ongoingFragment.refreshPage()
+      } else {
+        val ongoingFragment = supportFragmentManager.findFragmentByTag(
+            OngoingFragment.TAG) as OngoingFragment
+        ongoingFragment.refreshPage()
+        val title = "Thank you for using Parklux apps"
+        val message = "Your parking at $parkingZoneName completed !\nYour total billing is IDR $totalPrice"
+        showDialog(title, message)
+      }
     }
+  }
 
-    private val mMessageReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            val parkingZoneName = intent.getStringExtra(FCM_PARKING_ZONE)
-            val totalPrice = intent.getStringExtra(FCM_TOTAL_PRICE)
-
-            val title = "haaiiiiiii"
-            val message = "$parkingZoneName Sudahhh nih bayar segini $totalPrice"
-            showDialog(title, message)
-            mTTS.speak(title + message, TextToSpeech.QUEUE_FLUSH, null)
-        }
+  private fun showDialog(title: String, body: String) {
+    if (!(this as Activity).isFinishing) {
+      val dialog = MaterialAlertDialogBuilder(this).setTitle(title).setMessage(body).show()
+      Handler().postDelayed({
+        dialog?.dismiss()
+      }, 7000)
     }
-
-    private fun showDialog(title: String, body: String) {
-        if (!(this as Activity).isFinishing) {
-            val dialog = MaterialAlertDialogBuilder(this).setTitle(title).setMessage(body).show()
-            Handler().postDelayed({
-                dialog?.dismiss()
-            }, 7000)
-        }
-    }
+  }
 
   private fun navigationBarVisibility(visibility: Int) {
     binding.navView.visibility = visibility

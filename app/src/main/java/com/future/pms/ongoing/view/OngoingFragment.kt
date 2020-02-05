@@ -111,33 +111,7 @@ class OngoingFragment : BaseFragment(), OngoingContract {
     binding.dontHaveOngoing.visibility = View.GONE
     binding.ongoingParkingLayout.visibility = View.GONE
     binding.checkoutQr.visibility = View.VISIBLE
-    Glide.with(binding.root).load(imageName).transform(CenterCrop()).into(
-      binding.ivCheckoutQr
-    )
-    /*val fragment = ReceiptFragment()
-    val bundle = Bundle()
-    bundle.putString(Constants.ID_BOOKING, idBooking)
-    fragment.arguments = bundle
-    activity?.supportFragmentManager?.let { bottomSheetFragment ->
-      if (!fragment.isAdded) {
-        fragment.show(bottomSheetFragment, fragment.tag)
-      }
-    }
-
-    val fragmentParkingDirection = fragmentManager?.findFragmentByTag(ParkingDirectionFragment.TAG)
-    if (fragmentParkingDirection != null) {
-      fragmentManager?.run {
-        fragmentParkingDirection.let {
-          beginTransaction().remove(it).commit()
-        }
-      }
-    }
-
-    val historyFragment = fragmentManager?.findFragmentByTag(HistoryFragment.TAG)
-    if (historyFragment != null) {
-      historyFragment as HistoryFragment
-      historyFragment.refreshListHistory()
-    }*/
+    Glide.with(binding.root).load(imageName).transform(CenterCrop()).into(binding.ivCheckoutQr)
   }
 
   override fun onFailed(message: String) {
@@ -154,6 +128,7 @@ class OngoingFragment : BaseFragment(), OngoingContract {
     with(binding) {
       idBooking = ongoing.idBooking
       levelName = ongoing.levelName
+      parkingTime.stop()
       dontHaveOngoing.visibility = View.GONE
       ongoingParkingLayout.visibility = View.VISIBLE
       parkingZoneName.text = ongoing.parkingZoneName
@@ -228,6 +203,7 @@ class OngoingFragment : BaseFragment(), OngoingContract {
   }
 
   override fun onDestroyView() {
+    binding.parkingTime.stop()
     presenter.detach()
     super.onDestroyView()
   }

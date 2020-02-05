@@ -68,7 +68,7 @@ class Constants {
     const val STATUS_ONGOING = "Ongoing"
 
     const val parkSize = 88
-    const val SLOTS_IN_ROW = 16
+    const val SLOTS_IN_ROW = 26
     const val parkMargin = 0
     const val parkPadding = 0
     const val STATUS_AVAILABLE = 1

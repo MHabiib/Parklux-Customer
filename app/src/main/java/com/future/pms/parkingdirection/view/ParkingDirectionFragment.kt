@@ -111,7 +111,7 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
 
     for (index in 0 until slotsLayout.length) {
       totalSlot++
-      if (index == 0 || totalSlot == SLOTS_IN_ROW) {
+      if (index == 0 || totalSlot == 26) {
         totalSlot = 0
         parkingLayout = LinearLayout(context)
         parkingLayout.orientation = LinearLayout.HORIZONTAL
