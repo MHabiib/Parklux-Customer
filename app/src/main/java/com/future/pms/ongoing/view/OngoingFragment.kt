@@ -1,5 +1,6 @@
 package com.future.pms.ongoing.view
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Build
@@ -8,10 +9,10 @@ import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.future.pms.BaseApp
 import com.future.pms.R
 import com.future.pms.core.base.BaseFragment
@@ -51,6 +52,7 @@ class OngoingFragment : BaseFragment(), OngoingContract {
   private lateinit var levelName: String
   private lateinit var accessToken: String
   private lateinit var fcmToken: String
+  private var price = 0.0
 
   companion object {
     const val TAG: String = Constants.ONGOING_FRAGMENT
@@ -108,10 +110,19 @@ class OngoingFragment : BaseFragment(), OngoingContract {
   }
 
   override fun checkoutSuccess(imageName: String) {
-    binding.dontHaveOngoing.visibility = View.GONE
-    binding.ongoingParkingLayout.visibility = View.GONE
-    binding.checkoutQr.visibility = View.VISIBLE
-    Glide.with(binding.root).load(imageName).transform(CenterCrop()).into(binding.ivCheckoutQr)
+    with(binding) {
+      directionsLayout.visibility = View.GONE
+      checkoutButton.visibility = View.GONE
+      btnShowCheckoutQr.visibility = View.VISIBLE
+      parkingTime.stop()
+      val elapsedMillis = SystemClock.elapsedRealtime() - parkingTime.base
+      yourPrice.text = String.format(getString(R.string.idr),
+          Utils.thousandSeparator((ceil(elapsedMillis.toDouble() / SEC_IN_DAY) * price).toInt()))
+      btnShowCheckoutQr.setOnClickListener {
+        context?.let { Glide.with(it).load(imageName).into(ImageView(context)) }
+        AlertDialog.Builder(context).show()
+      }
+    }
   }
 
   override fun onFailed(message: String) {
@@ -154,6 +165,7 @@ class OngoingFragment : BaseFragment(), OngoingContract {
           yourPrice.text = String.format(getString(R.string.idr), Utils.thousandSeparator(
               (ceil(elapsedMillis.toDouble() / SEC_IN_DAY) * ongoing.price).toInt()))
         }
+        price = ongoing.price
       }
     }
 
