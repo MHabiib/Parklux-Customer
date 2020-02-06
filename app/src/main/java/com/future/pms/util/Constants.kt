@@ -45,6 +45,10 @@ class Constants {
     const val PARKING_ZONE_LONGITUDE = "longitude"
     const val PARKING_ZONE_LATITUDE = "latitude"
 
+    const val MY_FIREBASE_MESSAGING = "firebaseMessaging"
+    const val FCM_PARKING_ZONE = "parkingZoneName"
+    const val FCM_TOTAL_PRICE = "totalPrice"
+
     const val REQUEST_CAMERA_PERMISSION = 2020
 
     const val NOT_FOUND_CODE = "404"
@@ -64,7 +68,7 @@ class Constants {
     const val STATUS_ONGOING = "Ongoing"
 
     const val parkSize = 88
-    const val SLOTS_IN_ROW = 16
+    const val SLOTS_IN_ROW = 26
     const val parkMargin = 0
     const val parkPadding = 0
     const val STATUS_AVAILABLE = 1
