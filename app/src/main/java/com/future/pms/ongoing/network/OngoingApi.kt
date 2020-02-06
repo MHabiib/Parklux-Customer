@@ -12,9 +12,6 @@ interface OngoingApi {
   @GET("api/booking/customer/ongoing") fun getOngoingBooking(@Query("access_token")
   accessToken: String?): Observable<CustomerBooking>
 
-  @GET("api/booking/customer/checkoutStepOne") fun findCheckoutStepOneCustomer(
-      @Query("access_token") accessToken: String?): Observable<CustomerBooking>
-
   @POST("api/booking/checkoutStepOne/{fcmToken}") fun postBookingCheckout(@Path("fcmToken")
   fcm: String, @Query("access_token") accessToken: String?): Observable<ResponseBody>
 }

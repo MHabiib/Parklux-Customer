@@ -69,7 +69,7 @@ class ListActivityFragment : BaseFragment(), ListActivityContract {
 
     val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
     with(binding) {
-      shimmerActivity.startShimmerAnimation()
+      shimmerActivity.startShimmer()
       refreshActivity.setOnRefreshListener {
         refreshList()
         presenter.loadAllBooking(accessToken, currentPage, filterBy)
@@ -152,7 +152,7 @@ class ListActivityFragment : BaseFragment(), ListActivityContract {
   }
 
   override fun loadAllBookingSuccess(booking: Booking) {
-    binding.shimmerActivity.stopShimmerAnimation()
+    binding.shimmerActivity.stopShimmer()
     binding.shimmerActivity.visibility = View.GONE
     if (currentPage != 0) {
       if (currentPage <= booking.totalPages - 1) {
@@ -173,7 +173,7 @@ class ListActivityFragment : BaseFragment(), ListActivityContract {
   }
 
   private fun FragmentListActivityBinding.refreshList() {
-    shimmerActivity.startShimmerAnimation()
+    shimmerActivity.startShimmer()
     binding.shimmerActivity.visibility = View.VISIBLE
     listActivityAdapter.clear()
     listActivityAdapter.notifyDataSetChanged()

@@ -7,6 +7,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 apply from: 'jacoco.gradle'
+
 apply plugin: 'com.google.gms.google-services'
 
 android {
@@ -110,13 +111,8 @@ dependencies {
     implementation 'androidx.paging:paging-runtime:2.1.1'
 
     //shimmer loading
-    implementation 'com.facebook.shimmer:shimmer:0.1.0@aar'
+    implementation 'com.facebook.shimmer:shimmer:0.3.0@aar'
 
     //maps
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
-
-    // Room
-    implementation "androidx.room:room-runtime:$room_version"
-    implementation "androidx.room:room-rxjava2:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
 }

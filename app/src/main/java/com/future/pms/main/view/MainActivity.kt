@@ -300,19 +300,12 @@ class MainActivity : AppCompatActivity(), MainContract {
         val parkingZoneName = intent.getStringExtra(FCM_PARKING_ZONE)
         val totalPrice = intent.getStringExtra(FCM_TOTAL_PRICE)
 
-        if (parkingZoneName == "Timeout !") {
-          totalPrice?.toString()?.let { showDialog(parkingZoneName, it) }
-          val ongoingFragment = supportFragmentManager.findFragmentByTag(
-              OngoingFragment.TAG) as OngoingFragment
-          ongoingFragment.refreshPage()
-        } else {
-          val ongoingFragment = supportFragmentManager.findFragmentByTag(
-              OngoingFragment.TAG) as OngoingFragment
-          ongoingFragment.refreshPage()
-          val title = "Thank you for using Parklux apps"
-          val message = "Your parking at $parkingZoneName completed !\nYour total billing is IDR $totalPrice"
-          showDialog(title, message)
-        }
+        val ongoingFragment = supportFragmentManager.findFragmentByTag(
+            OngoingFragment.TAG) as OngoingFragment
+        ongoingFragment.refreshPage()
+        val title = getString(R.string.thank_you_using_parklux)
+        val message = "Your parking at $parkingZoneName completed !\nYour total billing is IDR $totalPrice"
+        showDialog(title, message)
       }
     }
   }

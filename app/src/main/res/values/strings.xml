@@ -120,4 +120,6 @@
     <string name="digits">abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,.()-</string>
     <string name="open_on_google_maps">Open with Google Maps</string>
     <string name="history">History</string>
+    <string name="thank_you_using_parklux">Thank you for using Parklux apps</string>
+    <string name="show_this_qr_to_exit_gate_guard_for_check_out">Show this QR to exit gate guard for check out</string>
 </resources>

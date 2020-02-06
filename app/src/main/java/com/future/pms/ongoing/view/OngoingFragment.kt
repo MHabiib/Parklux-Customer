@@ -2,7 +2,6 @@ package com.future.pms.ongoing.view
 
 import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
@@ -13,6 +12,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.DrawableImageViewTarget
 import com.future.pms.BaseApp
 import com.future.pms.R
 import com.future.pms.core.base.BaseFragment
@@ -27,7 +27,6 @@ import com.future.pms.ongoing.presenter.OngoingPresenter
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.SEC_IN_DAY
 import com.future.pms.util.Utils
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.gson.Gson
@@ -52,6 +51,7 @@ class OngoingFragment : BaseFragment(), OngoingContract {
   private lateinit var levelName: String
   private lateinit var accessToken: String
   private lateinit var fcmToken: String
+  private lateinit var dialog: AlertDialog
   private var price = 0.0
 
   companion object {
@@ -72,12 +72,9 @@ class OngoingFragment : BaseFragment(), OngoingContract {
     }
 
     binding.checkoutButton.setOnClickListener {
-      MaterialAlertDialogBuilder(context).setTitle(
-          getString(R.string.complete_order_title)).setMessage(
-          getString(R.string.complete_order_description)).setPositiveButton(
-          getString(R.string.yes)) { _: DialogInterface, _: Int ->
-        presenter.checkoutBooking(accessToken, fcmToken)
-      }.setNegativeButton(getString(R.string.cancel), null).show()
+      showProgressCheckout(true)
+      binding.checkoutButton.isEnabled = false
+      presenter.checkoutBooking(accessToken, fcmToken)
     }
 
     return binding.root
@@ -90,6 +87,7 @@ class OngoingFragment : BaseFragment(), OngoingContract {
             Constants.TOKEN, null), Token::class.java).accessToken
     presenter.attach(this)
     presenter.subscribe()
+    showProgress(true)
     presenter.loadOngoingBooking(accessToken)
   }
 
@@ -101,27 +99,24 @@ class OngoingFragment : BaseFragment(), OngoingContract {
     }
   }
 
-  override fun refreshHome() {
-    val ft = fragmentManager?.beginTransaction()
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      ft?.setReorderingAllowed(false)
+  private fun showProgressCheckout(show: Boolean) {
+    if (show) {
+      binding.progressBarCheckout.visibility = View.VISIBLE
+      binding.checkoutButton.setTextColor(resources.getColor(R.color.darkGrey))
+    } else {
+      binding.checkoutButton.isEnabled = true
+      binding.checkoutButton.setTextColor(resources.getColor(R.color.red))
+      binding.progressBarCheckout.visibility = View.GONE
     }
-    ft?.detach(this)?.attach(this)?.commit()
   }
 
   override fun checkoutSuccess(imageName: String) {
-    with(binding) {
-      directionsLayout.visibility = View.GONE
-      checkoutButton.visibility = View.GONE
-      btnShowCheckoutQr.visibility = View.VISIBLE
-      parkingTime.stop()
-      val elapsedMillis = SystemClock.elapsedRealtime() - parkingTime.base
-      yourPrice.text = String.format(getString(R.string.idr),
-          Utils.thousandSeparator((ceil(elapsedMillis.toDouble() / SEC_IN_DAY) * price).toInt()))
-      btnShowCheckoutQr.setOnClickListener {
-        context?.let { Glide.with(it).load(imageName).into(ImageView(context)) }
-        AlertDialog.Builder(context).show()
-      }
+    showProgressCheckout(false)
+    context?.let { it1 ->
+      val view = LayoutInflater.from(context).inflate(R.layout.dialog_checkout_qr, null)
+      val imageView = view.findViewById<ImageView>(R.id.iv_checkout_step_one_qr)
+      Glide.with(it1).load(imageName).into(DrawableImageViewTarget(imageView))
+      dialog = AlertDialog.Builder(it1).setView(view).show()
     }
   }
 
@@ -132,22 +127,13 @@ class OngoingFragment : BaseFragment(), OngoingContract {
     fab.setOnClickListener {
       activity.presenter.onScanIconClick()
     }
+    showProgress(false)
+    showProgressCheckout(false)
     Timber.tag(Constants.ERROR).e(message)
   }
 
   override fun loadCustomerOngoingSuccess(ongoing: CustomerBooking) {
-    with(binding) {
-      idBooking = ongoing.idBooking
-      levelName = ongoing.levelName
-      parkingTime.stop()
-      dontHaveOngoing.visibility = View.GONE
-      ongoingParkingLayout.visibility = View.VISIBLE
-      parkingZoneName.text = ongoing.parkingZoneName
-      parkingZoneAddress.text = ongoing.address
-      bookingIdValue.text = ongoing.idBooking
-      parkingSlot.text = ongoing.slotName
-    }
-
+    showProgress(false)
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       with(binding) {
         yourPrice.visibility = View.VISIBLE
@@ -169,15 +155,27 @@ class OngoingFragment : BaseFragment(), OngoingContract {
       }
     }
 
-    val fab = activity?.findViewById(R.id.fab_scan) as FloatingActionButton
-    fab.setOnClickListener {
-      Toast.makeText(context, getString(R.string.only_have_booking_one), Toast.LENGTH_LONG).show()
-    }
-
     FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener { task ->
       if (task.isSuccessful) {
         fcmToken = task.result?.token.toString() //asyc
       }
+    }
+
+    idBooking = ongoing.idBooking
+    levelName = ongoing.levelName
+
+    with(binding) {
+      dontHaveOngoing.visibility = View.GONE
+      ongoingParkingLayout.visibility = View.VISIBLE
+      parkingZoneName.text = ongoing.parkingZoneName
+      parkingZoneAddress.text = ongoing.address
+      bookingIdValue.text = ongoing.idBooking
+      parkingSlot.text = ongoing.slotName
+    }
+
+    val fab = activity?.findViewById(R.id.fab_scan) as FloatingActionButton
+    fab.setOnClickListener {
+      Toast.makeText(context, getString(R.string.only_have_booking_one), Toast.LENGTH_LONG).show()
     }
 
     loadImage(ongoing.imageUrl)
@@ -207,6 +205,9 @@ class OngoingFragment : BaseFragment(), OngoingContract {
       binding.ongoingIv)
 
   fun refreshPage() {
+    if (::dialog.isInitialized) {
+      dialog.dismiss()
+    }
     val ft = fragmentManager?.beginTransaction()
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       ft?.setReorderingAllowed(false)

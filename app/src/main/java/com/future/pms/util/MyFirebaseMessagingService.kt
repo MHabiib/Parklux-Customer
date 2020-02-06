@@ -12,8 +12,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage?) {
         if (remoteMessage?.data != null) {
             val intent = Intent(MY_FIREBASE_MESSAGING)
-            intent.putExtra(FCM_PARKING_ZONE, remoteMessage.data["parkingZoneName"])
-            intent.putExtra(FCM_TOTAL_PRICE, remoteMessage.data["totalPrice"])
+            intent.putExtra(FCM_PARKING_ZONE, remoteMessage.data[FCM_PARKING_ZONE])
+            intent.putExtra(FCM_TOTAL_PRICE, remoteMessage.data[FCM_TOTAL_PRICE])
 
             LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
         }
