@@ -69,7 +69,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/twenty_four_dp"
-                android:paddingLeft="100dp"
+                android:paddingStart="100dp"
                 android:text="@string/already_a_member"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/btnRegister" />
@@ -79,7 +79,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/twenty_four_dp"
-                android:paddingLeft="@dimen/four_dp"
+                android:paddingStart="@dimen/four_dp"
                 android:text="@string/login"
                 android:textColor="@color/colorSecondary"
                 android:textStyle="bold"

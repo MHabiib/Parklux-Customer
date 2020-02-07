@@ -5,6 +5,8 @@ import com.future.pms.ongoing.network.OngoingApi
 import com.future.pms.ongoing.presenter.OngoingPresenter
 import com.future.pms.ongoing.view.OngoingContract
 import io.reactivex.Observable
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Test
 import org.mockito.InjectMocks
 import org.mockito.Mock
@@ -38,24 +40,22 @@ class OngoingPresenterTest : BaseTest() {
   }
 
   @Test fun checkoutBookingSuccess() {
-    `when`(ongoingApi.postBookingCheckout(ACCESS_TOKEN)).thenReturn(
-        Observable.just(customerBooking()))
+    `when`(ongoingApi.postBookingCheckout(FCM_TOKEN, ACCESS_TOKEN)).thenReturn(
+        Observable.just("".toResponseBody("".toMediaTypeOrNull())))
 
-    ongoinPresenter.checkoutBooking(ACCESS_TOKEN)
+    ongoinPresenter.checkoutBooking(FCM_TOKEN, ACCESS_TOKEN)
 
     verify(ongoingContract).showProgress(false)
     verify(ongoingContract).checkoutSuccess(customerBooking().idBooking)
-    verify(ongoingContract).refreshHome()
   }
 
   @Test fun checkoutBookingFailed() {
-    `when`(ongoingApi.postBookingCheckout(ACCESS_TOKEN)).thenReturn(
+    `when`(ongoingApi.postBookingCheckout(FCM_TOKEN, ACCESS_TOKEN)).thenReturn(
         Observable.error(Exception(ERROR)))
 
-    ongoinPresenter.checkoutBooking(ACCESS_TOKEN)
+    ongoinPresenter.checkoutBooking(FCM_TOKEN, ACCESS_TOKEN)
 
     verify(ongoingContract).showProgress(false)
     verify(ongoingContract).onFailed(ERROR)
-    verify(ongoingContract).refreshHome()
   }
 }

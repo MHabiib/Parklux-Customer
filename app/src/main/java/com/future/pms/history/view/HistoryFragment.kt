@@ -128,7 +128,7 @@ class HistoryFragment : BaseFragment(), HistoryContract {
     }
   }
 
-  fun refreshListHistory() {
+  private fun refreshListHistory() {
     binding.shimmerHistory.visibility = View.VISIBLE
     binding.shimmerHistory.startShimmer()
     historyAdapter.clear()

@@ -20,6 +20,7 @@ import com.future.pms.maps.injection.MapsComponent
 import com.future.pms.maps.model.ParkingZoneLatLng
 import com.future.pms.maps.presenter.MapsPresenter
 import com.future.pms.util.Constants
+import com.future.pms.util.Constants.Companion.MAPS_ACTIVITY
 import com.future.pms.util.Constants.Companion.PARKING_ZONE_ADDRESS
 import com.future.pms.util.Constants.Companion.PARKING_ZONE_IMG
 import com.future.pms.util.Constants.Companion.PARKING_ZONE_LATITUDE
@@ -52,7 +53,6 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, MapsContract {
   @Inject lateinit var presenter: MapsPresenter
   @Inject lateinit var gson: Gson
   private lateinit var map: GoogleMap
-  private val TAG = MapsActivity::class.java.simpleName
   private var homeLatLng = LatLng(-6.175392, 106.827153)
   private val bottomSheetFragment = ParkingZoneDetailsFragment()
 
@@ -117,10 +117,10 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, MapsContract {
   private fun setMapStyle(map: GoogleMap) {
     try {
       if (!map.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style))) {
-        Log.e(TAG, "Style parsing failed.")
+        Log.e(MAPS_ACTIVITY, "Style parsing failed.")
       }
     } catch (e: Resources.NotFoundException) {
-      Log.e(TAG, "Can't find style. Error: ", e)
+      Log.e(MAPS_ACTIVITY, "Can't find style. Error: ", e)
     }
   }
 

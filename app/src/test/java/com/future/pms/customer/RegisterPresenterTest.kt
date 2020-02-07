@@ -3,7 +3,6 @@ package com.future.pms.customer
 import com.future.pms.base.BaseTest
 import com.future.pms.register.network.RegisterApi
 import com.future.pms.register.presenter.RegisterPresenter
-import com.future.pms.register.view.RegisterContract
 import com.future.pms.util.Constants
 import io.reactivex.Observable
 import org.junit.Test
@@ -13,7 +12,6 @@ import org.mockito.Mockito.`when`
 
 class RegisterPresenterTest : BaseTest() {
   @Mock lateinit var registerApi: RegisterApi
-  @Mock lateinit var registerContract: RegisterContract
   @InjectMocks lateinit var registerPresenter: RegisterPresenter
 
   @Test fun registerSuccess() {

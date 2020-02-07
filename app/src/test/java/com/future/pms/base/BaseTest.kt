@@ -71,7 +71,7 @@ open class BaseTest {
         totalPages = 0)
   }
 
-  protected fun adminDetail(): AdminDetail {
+  private fun adminDetail(): AdminDetail {
     return AdminDetail("address", "emailAdmin", "idParkingZone", "imageUrl", "name", "openHour",
         "phoneNumber", 0.0, 0.0, 0.0)
   }

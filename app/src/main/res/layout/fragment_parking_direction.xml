@@ -41,7 +41,7 @@
                     android:id="@+id/scroll_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/sixteen_dp"
+                    android:layout_marginStart="@dimen/sixteen_dp"
                     android:scrollbars="vertical"
                     app:layout_constraintTop_toTopOf="parent">
 
@@ -75,7 +75,7 @@
                     android:id="@+id/tv_safety_parking_tag"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="right"
+                    android:gravity="end"
                     android:text="@string/safety_parking"
                     android:textAlignment="gravity"
                     android:textColor="@color/colorPrimary"
@@ -154,12 +154,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/eight_dp"
-                android:layout_marginRight="@dimen/twelve_dp">
+                android:layout_marginEnd="@dimen/twelve_dp">
 
                 <ImageView
                     android:layout_width="@dimen/twenty_dp"
                     android:layout_height="@dimen/twenty_dp"
-                    android:layout_marginRight="@dimen/four_dp"
+                    android:layout_marginEnd="@dimen/four_dp"
                     app:srcCompat="@drawable/ic_my_location" />
 
                 <TextView
@@ -176,12 +176,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/eight_dp"
-                android:layout_marginRight="@dimen/twelve_dp">
+                android:layout_marginEnd="@dimen/twelve_dp">
 
                 <ImageView
                     android:layout_width="@dimen/twenty_dp"
                     android:layout_height="@dimen/twenty_dp"
-                    android:layout_marginRight="@dimen/four_dp"
+                    android:layout_marginEnd="@dimen/four_dp"
                     android:tint="@color/colorPrimary"
                     app:srcCompat="@drawable/ic_park" />
 
@@ -200,12 +200,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/eight_dp"
-                android:layout_marginRight="@dimen/twelve_dp">
+                android:layout_marginEnd="@dimen/twelve_dp">
 
                 <ImageView
                     android:layout_width="@dimen/twenty_dp"
                     android:layout_height="@dimen/twenty_dp"
-                    android:layout_marginRight="@dimen/four_dp"
+                    android:layout_marginEnd="@dimen/four_dp"
                     android:tint="@color/red"
                     app:srcCompat="@drawable/ic_disable" />
 
@@ -223,12 +223,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/eight_dp"
-                android:layout_marginLeft="@dimen/twelve_dp">
+                android:layout_marginStart="@dimen/twelve_dp">
 
                 <ImageView
                     android:layout_width="@dimen/twenty_dp"
                     android:layout_height="@dimen/twenty_dp"
-                    android:layout_marginRight="@dimen/four_dp"
+                    android:layout_marginEnd="@dimen/four_dp"
                     android:tint="@color/darkGrey"
                     app:srcCompat="@drawable/ic_car" />
 
@@ -246,19 +246,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/eight_dp"
-                android:layout_marginLeft="@dimen/twelve_dp">
+                android:layout_marginStart="@dimen/twelve_dp">
 
                 <ImageView
                     android:layout_width="@dimen/twenty_dp"
                     android:layout_height="@dimen/twenty_dp"
-                    android:layout_marginRight="@dimen/four_dp"
+                    android:layout_marginEnd="@dimen/four_dp"
                     android:tint="@color/darkGrey"
                     app:srcCompat="@drawable/ic_in" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Entrance"
+                    android:text="@string/entrance"
                     android:textColor="@color/goldDark"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -269,18 +269,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/eight_dp"
-                android:layout_marginLeft="@dimen/twelve_dp">
+                android:layout_marginStart="@dimen/twelve_dp">
 
                 <ImageView
                     android:layout_width="@dimen/twenty_dp"
                     android:layout_height="@dimen/twenty_dp"
-                    android:layout_marginRight="@dimen/four_dp"
+                    android:layout_marginEnd="@dimen/four_dp"
                     app:srcCompat="@drawable/ic_out" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Exit"
+                    android:text="@string/exit"
                     android:textColor="@color/red"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -291,18 +291,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/eight_dp"
-                android:layout_marginLeft="@dimen/twelve_dp">
+                android:layout_marginStart="@dimen/twelve_dp">
 
                 <ImageView
                     android:layout_width="@dimen/twenty_dp"
                     android:layout_height="@dimen/twenty_dp"
-                    android:layout_marginRight="@dimen/four_dp"
+                    android:layout_marginEnd="@dimen/four_dp"
                     app:srcCompat="@drawable/ic_road" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Obstacle"
+                    android:text="@string/obstacle"
                     android:textColor="@color/darkGrey"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"

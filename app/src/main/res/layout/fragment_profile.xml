@@ -128,7 +128,7 @@
                             style="@style/NoCaps"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/twelve_dp"
+                            android:layout_marginEnd="@dimen/twelve_dp"
                             android:fontFamily="sans-serif-light"
                             android:padding="@dimen/sixteen_dp"
                             android:background="@drawable/card_layout_white"
