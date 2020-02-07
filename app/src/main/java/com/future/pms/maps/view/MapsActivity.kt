@@ -155,4 +155,9 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, MapsContract {
   override fun onFailed(message: String) {
     Toast.makeText(this, message, Toast.LENGTH_LONG).show()
   }
+
+  override fun onDestroy() {
+    presenter.detach()
+    super.onDestroy()
+  }
 }

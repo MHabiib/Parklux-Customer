@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Typeface
 import android.os.AsyncTask
 import android.os.Bundle
+import android.os.Handler
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -23,19 +24,26 @@ import com.future.pms.parkingdirection.injection.DaggerParkingDirectionComponent
 import com.future.pms.parkingdirection.injection.ParkingDirectionComponent
 import com.future.pms.parkingdirection.presenter.ParkingDirectionPresenter
 import com.future.pms.util.Constants
+import com.future.pms.util.Constants.Companion.DISABLED_SLOT
+import com.future.pms.util.Constants.Companion.MY_SLOT
 import com.future.pms.util.Constants.Companion.PARKING_DETAIL_FRAGMENT
+import com.future.pms.util.Constants.Companion.SLOTS_IN_ROW
 import com.future.pms.util.Constants.Companion.SLOT_BLOCK
+import com.future.pms.util.Constants.Companion.SLOT_EMPTY
 import com.future.pms.util.Constants.Companion.SLOT_IN
 import com.future.pms.util.Constants.Companion.SLOT_NULL
 import com.future.pms.util.Constants.Companion.SLOT_OUT
 import com.future.pms.util.Constants.Companion.SLOT_READY
 import com.future.pms.util.Constants.Companion.SLOT_ROAD
+import com.future.pms.util.Constants.Companion.SLOT_SCAN_ME
+import com.future.pms.util.Constants.Companion.SLOT_TAKEN
 import com.future.pms.util.Constants.Companion.parkMargin
 import com.future.pms.util.Constants.Companion.parkPadding
 import com.future.pms.util.Constants.Companion.parkSize
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_parking_direction.*
 import timber.log.Timber
+import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
@@ -52,6 +60,8 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
   private lateinit var layout: HorizontalScrollView
   private lateinit var idBooking: String
   private lateinit var accessToken: String
+  private lateinit var layoutPark: LinearLayout
+  private lateinit var parkingLayout: LinearLayout
 
   companion object {
     const val TAG: String = PARKING_DETAIL_FRAGMENT
@@ -94,7 +104,7 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
   }
 
   private fun showParkingLayout(slotsLayout: String) {
-    val layoutPark = LinearLayout(context)
+    layoutPark = LinearLayout(context)
     val params = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
         ViewGroup.LayoutParams.WRAP_CONTENT)
 
@@ -105,72 +115,84 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
     }
     layout.addView(layoutPark)
 
-    CountLayout().execute(slotsLayout)
+    SetupLayoutAsyc(activity as MainActivity).execute(slotsLayout)
 
     showProgress(false)
   }
 
-  private inner class CountLayout : AsyncTask<String, Void, String>() {
+  private class SetupLayoutAsyc internal constructor(context: MainActivity) :
+      AsyncTask<String, String, String>() {
+    private val activityReference: WeakReference<MainActivity> = WeakReference(context)
+    private val parkingDirectionFragment = activityReference.get()?.supportFragmentManager?.run {
+      findFragmentByTag(TAG)
+    }
+    private val mParkingDirectionFragment = parkingDirectionFragment as ParkingDirectionFragment
+
+    private val handler = Handler()
     override fun doInBackground(vararg params: String?): String? {
-      var int = ""
-      for (index in params.indices) {
-        int = "$index$params"
+      val slots = params[0]
+      if (slots != null) {
+        for (index in 0 until slots.length) {
+          handler.postDelayed({
+            publishProgress("$index${slots[index]}")
+          }, 100)
+        }
       }
-      //todo
-      return int
+      return ""
+    }
+
+    override fun onProgressUpdate(vararg result: String?) {
+      if (parkingDirectionFragment == null) return
+      mParkingDirectionFragment.setSlotStatus(result[0])
     }
 
     override fun onPostExecute(result: String?) {
-      super.onPostExecute(result)
-      setUppppppp(result)
+      if (parkingDirectionFragment == null) return
+      mParkingDirectionFragment.binding.numberingLeft.visibility = View.VISIBLE
     }
-
   }
 
-  fun setUppppppp(result: String?) {
+  fun setSlotStatus(result: String?) {
     val slotsLayout = result?.substring(result.length - 1)?.single()
-    val index = result?.substring(0, result.length-1)?.toInt()
+    val index = result?.substring(0, result.length - 1)?.toInt()
 
-    val parkingLayout: LinearLayout?
     if (index != null) {
-      if (index == 0 || index % 60 == 0) {
+      if (index == 0 || index % SLOTS_IN_ROW == 0) {
         parkingLayout = LinearLayout(context)
         parkingLayout.orientation = LinearLayout.HORIZONTAL
         layoutPark.addView(parkingLayout)
+      }
 
-        when (slotsLayout) {
-          SLOT_NULL -> {
-            setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_blank)
-          }
-          Constants.SLOT_SCAN_ME, Constants.SLOT_TAKEN -> {
-            setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_car)
-          }
-          Constants.SLOT_EMPTY -> {
-            setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_park)
-          }
-          Constants.DISABLED_SLOT -> {
-            setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_disable)
-          }
-          SLOT_ROAD, SLOT_READY -> {
-            setupParkingView(index, parkingLayout, slotsLayout, R.color.transparent)
-          }
-          SLOT_IN -> {
-            setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_in)
-          }
-          SLOT_OUT -> {
-            setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_out)
-          }
-          SLOT_BLOCK -> {
-            setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_road)
-          }
-          Constants.MY_SLOT -> {
-            setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_my_location)
-          }
+      when (slotsLayout) {
+        SLOT_NULL -> {
+          setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_blank)
+        }
+        SLOT_SCAN_ME, SLOT_TAKEN -> {
+          setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_car)
+        }
+        SLOT_EMPTY -> {
+          setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_park)
+        }
+        DISABLED_SLOT -> {
+          setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_disable)
+        }
+        SLOT_ROAD, SLOT_READY -> {
+          setupParkingView(index, parkingLayout, slotsLayout, R.color.transparent)
+        }
+        SLOT_IN -> {
+          setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_in)
+        }
+        SLOT_OUT -> {
+          setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_out)
+        }
+        SLOT_BLOCK -> {
+          setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_road)
+        }
+        MY_SLOT -> {
+          setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_my_location)
         }
       }
     }
-
-
   }
 
   private fun setupParkingView(count: Int, layout: LinearLayout?, code: Char, icon: Int) {
@@ -188,13 +210,11 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
 
       if (icon == R.drawable.ic_park || icon == R.drawable.ic_disable || icon == R.drawable.ic_car) {
         setTextColor(resources.getColor(R.color.darkGrey))
-        text = ((id % 60) + 1).toString()
+        text = ((id % SLOTS_IN_ROW) + 1).toString()
         setTypeface(this.typeface, Typeface.BOLD)
       }
     }
-    layout?.post {
-      layout.addView(view)
-    }
+    layout?.addView(view)
   }
 
   override fun getLayoutSuccess(slotsLayout: String) = showParkingLayout(slotsLayout)
@@ -224,8 +244,8 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
     activity?.presenter?.onHomeIconClick()
   }
 
-  override fun onDestroyView() {
+  override fun onDestroy() {
     presenter.detach()
-    super.onDestroyView()
+    super.onDestroy()
   }
 }

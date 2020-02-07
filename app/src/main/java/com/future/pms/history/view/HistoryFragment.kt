@@ -143,8 +143,8 @@ class HistoryFragment : BaseFragment(), HistoryContract {
     binding.dontHaveOrder.visibility = View.VISIBLE
   }
 
-  override fun onDestroyView() {
+  override fun onDestroy() {
     presenter.detach()
-    super.onDestroyView()
+    super.onDestroy()
   }
 }

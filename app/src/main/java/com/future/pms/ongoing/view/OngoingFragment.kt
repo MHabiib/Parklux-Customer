@@ -215,9 +215,9 @@ class OngoingFragment : BaseFragment(), OngoingContract {
     ft?.detach(this)?.attach(this)?.commit()
   }
 
-  override fun onDestroyView() {
+  override fun onDestroy() {
     binding.parkingTime.stop()
     presenter.detach()
-    super.onDestroyView()
+    super.onDestroy()
   }
 }

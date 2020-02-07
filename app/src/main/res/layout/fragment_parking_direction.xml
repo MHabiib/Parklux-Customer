@@ -94,7 +94,10 @@
                     android:orientation="vertical"
                     app:layout_constraintGuide_percent="0.4" />
 
-                <include layout="@layout/numbering_left" />
+                <include
+                    android:id="@+id/numbering_left"
+                    layout="@layout/numbering_left"
+                    android:visibility="gone" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>

@@ -2,7 +2,9 @@ package com.future.pms.bookingdetail.view
 
 import android.content.Context
 import android.graphics.Typeface
+import android.os.AsyncTask
 import android.os.Bundle
+import android.os.Handler
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -24,23 +26,14 @@ import com.future.pms.databinding.ActivityMainBinding
 import com.future.pms.databinding.FragmentBookingDetailBinding
 import com.future.pms.main.view.MainActivity
 import com.future.pms.ongoing.view.OngoingFragment
+import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.AUTHENTICATION
 import com.future.pms.util.Constants.Companion.BOOKING_DETAIL_FRAGMENT
-import com.future.pms.util.Constants.Companion.DISABLED_SLOT
 import com.future.pms.util.Constants.Companion.ERROR
 import com.future.pms.util.Constants.Companion.ID_BOOKING
-import com.future.pms.util.Constants.Companion.MY_SLOT
 import com.future.pms.util.Constants.Companion.NULL
 import com.future.pms.util.Constants.Companion.SLOTS_IN_ROW
-import com.future.pms.util.Constants.Companion.SLOT_BLOCK
-import com.future.pms.util.Constants.Companion.SLOT_EMPTY
-import com.future.pms.util.Constants.Companion.SLOT_IN
 import com.future.pms.util.Constants.Companion.SLOT_NULL
-import com.future.pms.util.Constants.Companion.SLOT_OUT
-import com.future.pms.util.Constants.Companion.SLOT_READY
-import com.future.pms.util.Constants.Companion.SLOT_ROAD
-import com.future.pms.util.Constants.Companion.SLOT_SCAN_ME
-import com.future.pms.util.Constants.Companion.SLOT_TAKEN
 import com.future.pms.util.Constants.Companion.TOKEN
 import com.future.pms.util.Constants.Companion.parkMargin
 import com.future.pms.util.Constants.Companion.parkPadding
@@ -49,7 +42,7 @@ import com.future.pms.util.Utils
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_parking_direction.*
 import timber.log.Timber
-import java.util.*
+import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 class BookingDetailFragment : BaseFragment(), BookingDetailContract {
@@ -67,7 +60,8 @@ class BookingDetailFragment : BaseFragment(), BookingDetailContract {
   private lateinit var layout: HorizontalScrollView
   private lateinit var binding: FragmentBookingDetailBinding
   private lateinit var bindingActivityMain: ActivityMainBinding
-  private var parkViewList: MutableList<TextView> = ArrayList()
+  private lateinit var layoutPark: LinearLayout
+  private lateinit var parkingLayout: LinearLayout
 
   companion object {
     const val TAG: String = BOOKING_DETAIL_FRAGMENT
@@ -171,9 +165,7 @@ class BookingDetailFragment : BaseFragment(), BookingDetailContract {
   override fun showErrorMessage(error: String) = Timber.tag(ERROR).e(error)
 
   private fun showParkingLayout(slotsLayout: String) {
-    val layoutPark = LinearLayout(context)
-    var parkingLayout: LinearLayout? = null
-    var totalSlot = 0
+    layoutPark = LinearLayout(context)
     val params = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
         ViewGroup.LayoutParams.WRAP_CONTENT)
 
@@ -184,48 +176,87 @@ class BookingDetailFragment : BaseFragment(), BookingDetailContract {
     }
     layout.addView(layoutPark)
 
-    for (index in slotsLayout.indices) { //0 - slotLayout.length
-      totalSlot++
-      if (index == 0 || totalSlot == 60) {
-        totalSlot = 0
+    BookingDetailFragment.SetupLayoutAsyc(activity as MainActivity).execute(slotsLayout)
+
+    showProgress(false)
+  }
+
+  private class SetupLayoutAsyc internal constructor(context: MainActivity) :
+      AsyncTask<String, String, String>() {
+    private val activityReference: WeakReference<MainActivity> = WeakReference(context)
+    private val bookingDetailFragment = activityReference.get()?.supportFragmentManager?.run {
+      findFragmentByTag(TAG)
+    }
+    private val mBookingDetailFragment = bookingDetailFragment as BookingDetailFragment
+
+    private val handler = Handler()
+    override fun doInBackground(vararg params: String?): String? {
+      val slots = params[0]
+      if (slots != null) {
+        for (index in 0 until slots.length) {
+          handler.postDelayed({
+            publishProgress("$index${slots[index]}")
+          }, 100)
+        }
+      }
+      return ""
+    }
+
+    override fun onProgressUpdate(vararg result: String?) {
+      if (bookingDetailFragment == null) return
+      mBookingDetailFragment.setSlotStatus(result[0])
+    }
+
+    override fun onPostExecute(result: String?) {
+      if (bookingDetailFragment == null) return
+      mBookingDetailFragment.binding.parkingDirectionSheet.numberingLeft.visibility = View.VISIBLE
+    }
+  }
+
+  fun setSlotStatus(result: String?) {
+    val slotsLayout = result?.substring(result.length - 1)?.single()
+    val index = result?.substring(0, result.length - 1)?.toInt()
+
+    if (index != null) {
+      if (index == 0 || index % SLOTS_IN_ROW == 0) {
         parkingLayout = LinearLayout(context)
         parkingLayout.orientation = LinearLayout.HORIZONTAL
         layoutPark.addView(parkingLayout)
       }
 
-      when {
-        slotsLayout[index] == SLOT_NULL -> {
-          setupParkingView(index, parkingLayout, slotsLayout[index], R.drawable.ic_blank)
+      when (slotsLayout) {
+        SLOT_NULL -> {
+          setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_blank)
         }
-        slotsLayout[index] == SLOT_SCAN_ME || slotsLayout[index] == SLOT_TAKEN -> {
-          setupParkingView(index, parkingLayout, slotsLayout[index], R.drawable.ic_car)
+        Constants.SLOT_SCAN_ME, Constants.SLOT_TAKEN -> {
+          setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_car)
         }
-        slotsLayout[index] == SLOT_EMPTY -> {
-          setupParkingView(index, parkingLayout, slotsLayout[index], R.drawable.ic_park)
+        Constants.SLOT_EMPTY -> {
+          setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_park)
         }
-        slotsLayout[index] == DISABLED_SLOT -> {
-          setupParkingView(index, parkingLayout, slotsLayout[index], R.drawable.ic_disable)
+        Constants.DISABLED_SLOT -> {
+          setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_disable)
         }
-        slotsLayout[index] == SLOT_ROAD || slotsLayout[index] == SLOT_READY -> {
-          setupParkingView(index, parkingLayout, slotsLayout[index], R.color.transparent)
+        Constants.SLOT_ROAD, Constants.SLOT_READY -> {
+          setupParkingView(index, parkingLayout, slotsLayout, R.color.transparent)
         }
-        slotsLayout[index] == SLOT_IN -> {
-          setupParkingView(index, parkingLayout, slotsLayout[index], R.drawable.ic_in)
+        Constants.SLOT_IN -> {
+          setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_in)
         }
-        slotsLayout[index] == SLOT_OUT -> {
-          setupParkingView(index, parkingLayout, slotsLayout[index], R.drawable.ic_out)
+        Constants.SLOT_OUT -> {
+          setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_out)
         }
-        slotsLayout[index] == SLOT_BLOCK -> {
-          setupParkingView(index, parkingLayout, slotsLayout[index], R.drawable.ic_road)
+        Constants.SLOT_BLOCK -> {
+          setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_road)
         }
-        slotsLayout[index] == MY_SLOT -> {
-          setupParkingView(index, parkingLayout, slotsLayout[index], R.drawable.ic_my_location)
+        Constants.MY_SLOT -> {
+          setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_my_location)
         }
       }
     }
   }
 
-  private fun setupParkingView(count: Int, layout: LinearLayout?, code: Char, icon: Int): TextView {
+  private fun setupParkingView(count: Int, layout: LinearLayout?, code: Char, icon: Int) {
     val view = TextView(context)
     view.apply {
       layoutParams = LinearLayout.LayoutParams(parkSize, parkSize).apply {
@@ -240,19 +271,17 @@ class BookingDetailFragment : BaseFragment(), BookingDetailContract {
 
       if (icon == R.drawable.ic_park || icon == R.drawable.ic_disable || icon == R.drawable.ic_car) {
         setTextColor(resources.getColor(R.color.darkGrey))
-        text = ((id % 60) + 1).toString()
+        text = ((id % SLOTS_IN_ROW) + 1).toString()
         setTypeface(this.typeface, Typeface.BOLD)
       }
     }
     layout?.addView(view)
-    parkViewList.add(view)
-    return view
   }
 
   override fun onFailed(message: String) = Timber.tag("e").e(message)
 
-  override fun onDestroyView() {
+  override fun onDestroy() {
     presenter.detach()
-    super.onDestroyView()
+    super.onDestroy()
   }
 }
