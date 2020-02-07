@@ -103,8 +103,8 @@ class ActivityDetailsFragment : BottomSheetDialogFragment(), ActivityDetailsCont
     }
   }
 
-  override fun onDestroyView() {
+  override fun onDestroy() {
     presenter.detach()
-    super.onDestroyView()
+    super.onDestroy()
   }
 }

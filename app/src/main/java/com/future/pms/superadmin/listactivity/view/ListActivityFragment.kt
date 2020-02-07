@@ -195,4 +195,9 @@ class ListActivityFragment : BaseFragment(), ListActivityContract {
   }
 
   override fun onFailed(message: String) = Timber.e(message)
+
+  override fun onDestroy() {
+    presenter.detach()
+    super.onDestroy()
+  }
 }

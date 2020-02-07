@@ -416,8 +416,8 @@ class ListUserFragment : BaseFragment(), ListUserContract {
 
   override fun onFailed(message: String) = Timber.e(message)
 
-  override fun onDestroyView() {
+  override fun onDestroy() {
     presenter.detach()
-    super.onDestroyView()
+    super.onDestroy()
   }
 }

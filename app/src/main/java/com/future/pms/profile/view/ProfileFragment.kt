@@ -225,8 +225,8 @@ class ProfileFragment : Fragment(), ProfileContract {
     ft?.detach(this)?.attach(this)?.commit()
   }
 
-  override fun onDestroyView() {
+  override fun onDestroy() {
     presenter.detach()
-    super.onDestroyView()
+    super.onDestroy()
   }
 }

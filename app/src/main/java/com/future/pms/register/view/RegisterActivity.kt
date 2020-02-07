@@ -104,4 +104,9 @@ class RegisterActivity : BaseActivity(), RegisterContract {
     startActivity(intent)
     finish()
   }
+
+  override fun onDestroy() {
+    presenter.detach()
+    super.onDestroy()
+  }
 }
