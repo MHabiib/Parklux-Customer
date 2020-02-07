@@ -7,8 +7,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class HistoryPresenter @Inject constructor() : BasePresenter<HistoryContract>() {
-  @Inject lateinit var historyApi: HistoryApi
+class HistoryPresenter @Inject constructor(private val historyApi: HistoryApi) :
+    BasePresenter<HistoryContract>() {
 
   fun loadCustomerBooking(accessToken: String, page: Int) {
     subscriptions.add(

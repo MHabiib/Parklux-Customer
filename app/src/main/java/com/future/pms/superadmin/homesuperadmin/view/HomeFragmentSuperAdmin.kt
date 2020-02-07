@@ -60,7 +60,7 @@ class HomeFragmentSuperAdmin : BaseFragment(), HomeContractSuperAdmin {
       val logout = btnLogout
       logout.setOnClickListener {
         btnLogout.visibility = View.GONE
-        context?.let { it1 -> Authentication.delete(it1) }
+        context?.let { context -> Authentication.delete(context) }
         onLogout()
       }
 
@@ -209,7 +209,7 @@ class HomeFragmentSuperAdmin : BaseFragment(), HomeContractSuperAdmin {
       this) && Patterns.EMAIL_ADDRESS.matcher(this).matches()
 
   override fun updateUserSuccess() {
-    showProgress(true)
+    showProgress(false)
     Toast.makeText(context, getString(R.string.update_account_success), Toast.LENGTH_LONG).show()
   }
 
@@ -270,12 +270,10 @@ class HomeFragmentSuperAdmin : BaseFragment(), HomeContractSuperAdmin {
   }
 
   private fun showProgress(show: Boolean) {
-    if (null != binding.progressBar) {
-      if (show) {
-        binding.progressBar.visibility = View.VISIBLE
-      } else {
-        binding.progressBar.visibility = View.GONE
-      }
+    if (show) {
+      binding.progressBar.visibility = View.VISIBLE
+    } else {
+      binding.progressBar.visibility = View.GONE
     }
   }
 

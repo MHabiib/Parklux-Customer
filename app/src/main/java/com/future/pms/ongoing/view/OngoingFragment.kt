@@ -1,5 +1,6 @@
 package com.future.pms.ongoing.view
 
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
@@ -7,28 +8,28 @@ import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.DrawableImageViewTarget
 import com.future.pms.BaseApp
 import com.future.pms.R
 import com.future.pms.core.base.BaseFragment
 import com.future.pms.core.model.CustomerBooking
 import com.future.pms.core.model.Token
 import com.future.pms.databinding.FragmentOngoingBinding
-import com.future.pms.history.view.HistoryFragment
 import com.future.pms.home.view.HomeFragment
 import com.future.pms.main.view.MainActivity
 import com.future.pms.ongoing.injection.DaggerOngoingComponent
 import com.future.pms.ongoing.injection.OngoingComponent
 import com.future.pms.ongoing.presenter.OngoingPresenter
-import com.future.pms.parkingdirection.view.ParkingDirectionFragment
-import com.future.pms.receipt.view.ReceiptFragment
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.SEC_IN_DAY
 import com.future.pms.util.Utils
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.iid.FirebaseInstanceId
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.fragment_ongoing.*
 import timber.log.Timber
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -49,6 +50,9 @@ class OngoingFragment : BaseFragment(), OngoingContract {
   private lateinit var idBooking: String
   private lateinit var levelName: String
   private lateinit var accessToken: String
+  private lateinit var fcmToken: String
+  private lateinit var dialog: AlertDialog
+  private var price = 0.0
 
   companion object {
     const val TAG: String = Constants.ONGOING_FRAGMENT
@@ -67,8 +71,12 @@ class OngoingFragment : BaseFragment(), OngoingContract {
       activity?.presenter?.showParkingDirection(idBooking, levelName)
     }
 
-    val checkout = binding.checkoutButton
-    checkout.setOnClickListener { presenter.checkoutBooking(accessToken) }
+    binding.checkoutButton.setOnClickListener {
+      showProgressCheckout(true)
+      binding.checkoutButton.isEnabled = false
+      presenter.checkoutBooking(accessToken, fcmToken)
+    }
+
     return binding.root
   }
 
@@ -79,50 +87,37 @@ class OngoingFragment : BaseFragment(), OngoingContract {
             Constants.TOKEN, null), Token::class.java).accessToken
     presenter.attach(this)
     presenter.subscribe()
+    showProgress(true)
     presenter.loadOngoingBooking(accessToken)
   }
 
   override fun showProgress(show: Boolean) {
-    if (null != progressBar) {
-      if (show) {
-        progressBar.visibility = View.VISIBLE
-      } else {
-        progressBar.visibility = View.GONE
-      }
+    if (show) {
+      binding.progressBar.visibility = View.VISIBLE
+    } else {
+      binding.progressBar.visibility = View.GONE
     }
   }
 
-  override fun refreshHome() {
-    val ft = fragmentManager?.beginTransaction()
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      ft?.setReorderingAllowed(false)
+  private fun showProgressCheckout(show: Boolean) {
+    if (show) {
+      binding.progressBarCheckout.visibility = View.VISIBLE
+      binding.checkoutButton.setTextColor(resources.getColor(R.color.darkGrey))
+    } else {
+      binding.checkoutButton.isEnabled = true
+      binding.checkoutButton.setTextColor(resources.getColor(R.color.red))
+      binding.progressBarCheckout.visibility = View.GONE
     }
-    ft?.detach(this)?.attach(this)?.commit()
   }
 
-  override fun checkoutSuccess(idBooking: String) {
-    val fragment = ReceiptFragment()
-    val bundle = Bundle()
-    bundle.putString(Constants.ID_BOOKING, idBooking)
-    fragment.arguments = bundle
-
-    activity?.supportFragmentManager?.let { bottomSheetFragment ->
-      if (!fragment.isAdded) {
-        fragment.show(bottomSheetFragment, fragment.tag)
-      }
+  override fun checkoutSuccess(imageName: String) {
+    showProgressCheckout(false)
+    context?.let { context ->
+      val view = View.inflate(context, R.layout.dialog_checkout_qr, null)
+      val imageView = view.findViewById<ImageView>(R.id.iv_checkout_step_one_qr)
+      Glide.with(context).load(imageName).into(DrawableImageViewTarget(imageView))
+      dialog = AlertDialog.Builder(context).setView(view).show()
     }
-
-    val fragmentParkingDirection = fragmentManager?.findFragmentByTag(ParkingDirectionFragment.TAG)
-    if (fragmentParkingDirection != null) {
-      fragmentManager?.run {
-        fragmentParkingDirection.let {
-          beginTransaction().remove(it).commit()
-        }
-      }
-    }
-
-    val historyFragment = fragmentManager?.findFragmentByTag(HistoryFragment.TAG) as HistoryFragment
-    historyFragment.refreshListHistory()
   }
 
   override fun onFailed(message: String) {
@@ -132,21 +127,13 @@ class OngoingFragment : BaseFragment(), OngoingContract {
     fab.setOnClickListener {
       activity.presenter.onScanIconClick()
     }
+    showProgress(false)
+    showProgressCheckout(false)
     Timber.tag(Constants.ERROR).e(message)
   }
 
   override fun loadCustomerOngoingSuccess(ongoing: CustomerBooking) {
-    with(binding) {
-      idBooking = ongoing.idBooking
-      levelName = ongoing.levelName
-      dontHaveOngoing.visibility = View.GONE
-      ongoingParkingLayout.visibility = View.VISIBLE
-      parkingZoneName.text = ongoing.parkingZoneName
-      parkingZoneAddress.text = ongoing.address
-      bookingIdValue.text = ongoing.idBooking
-      parkingSlot.text = ongoing.slotName
-    }
-
+    showProgress(false)
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       with(binding) {
         yourPrice.visibility = View.VISIBLE
@@ -164,7 +151,26 @@ class OngoingFragment : BaseFragment(), OngoingContract {
           yourPrice.text = String.format(getString(R.string.idr), Utils.thousandSeparator(
               (ceil(elapsedMillis.toDouble() / SEC_IN_DAY) * ongoing.price).toInt()))
         }
+        price = ongoing.price
       }
+    }
+
+    FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener { task ->
+      if (task.isSuccessful) {
+        fcmToken = task.result?.token.toString() //asyc
+      }
+    }
+
+    idBooking = ongoing.idBooking
+    levelName = ongoing.levelName
+
+    with(binding) {
+      dontHaveOngoing.visibility = View.GONE
+      ongoingParkingLayout.visibility = View.VISIBLE
+      parkingZoneName.text = ongoing.parkingZoneName
+      parkingZoneAddress.text = ongoing.address
+      bookingIdValue.text = ongoing.idBooking
+      parkingSlot.text = ongoing.slotName
     }
 
     val fab = activity?.findViewById(R.id.fab_scan) as FloatingActionButton
@@ -176,26 +182,32 @@ class OngoingFragment : BaseFragment(), OngoingContract {
   }
 
   override fun loadCustomerOngoingFailed(error: String) {
-    if (error.contains(Constants.NO_CONNECTION)) {
-      Toast.makeText(context, getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show()
-      binding.ibRefresh.visibility = View.VISIBLE
-      binding.ibRefresh.setOnClickListener {
-        presenter.loadOngoingBooking(accessToken)
-        binding.ibRefresh.visibility = View.GONE
-        binding.dontHaveOngoing.visibility = View.GONE
-        val homeFragment = fragmentManager?.findFragmentByTag(HomeFragment.TAG) as HomeFragment
-        homeFragment.presenter.loadData(accessToken)
+    with(binding) {
+      if (error.contains(Constants.NO_CONNECTION)) {
+        Toast.makeText(context, getString(R.string.no_network_connection),
+            Toast.LENGTH_SHORT).show()
+        ibRefresh.visibility = View.VISIBLE
+        ibRefresh.setOnClickListener {
+          presenter.loadOngoingBooking(accessToken)
+          ibRefresh.visibility = View.GONE
+          dontHaveOngoing.visibility = View.GONE
+          val homeFragment = fragmentManager?.findFragmentByTag(HomeFragment.TAG) as HomeFragment
+          homeFragment.presenter.loadData(accessToken)
+        }
       }
-    }
 
-    Timber.tag(Constants.ERROR).e(error)
-    binding.dontHaveOngoing.visibility = View.VISIBLE
+      Timber.tag(Constants.ERROR).e(error)
+      dontHaveOngoing.visibility = View.VISIBLE
+    }
   }
 
   private fun loadImage(imageUrl: String) = Utils.imageLoader(binding.root, imageUrl,
       binding.ongoingIv)
 
   fun refreshPage() {
+    if (::dialog.isInitialized) {
+      dialog.dismiss()
+    }
     val ft = fragmentManager?.beginTransaction()
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       ft?.setReorderingAllowed(false)
@@ -204,6 +216,7 @@ class OngoingFragment : BaseFragment(), OngoingContract {
   }
 
   override fun onDestroyView() {
+    binding.parkingTime.stop()
     presenter.detach()
     super.onDestroyView()
   }

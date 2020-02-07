@@ -6,4 +6,5 @@ data class AdminDetail(@SerializedName("address") val address: String, @Serializ
 val emailAdmin: String, @SerializedName("idParkingZone") val idParkingZone: String,
     @SerializedName("imageUrl") val imageUrl: String, @SerializedName("name") val name: String,
     @SerializedName("openHour") val openHour: String, @SerializedName("phoneNumber")
-    val phoneNumber: String, @SerializedName("price") val price: Double)
+    val phoneNumber: String, @SerializedName("price") val price: Double, @SerializedName("latitude")
+    val latitude: Double, @SerializedName("longitude") val longitude: Double)

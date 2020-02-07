@@ -112,8 +112,7 @@ class ProfileFragment : Fragment(), ProfileContract {
           presenter.update(profileName.text.toString(), profileEmail.text.toString(),
               profilePassword.text.toString(), profilePhoneNumber.text.toString(), accessToken)
         } else {
-          Toast.makeText(context, getString(R.string.fill_all_entries),
-              Toast.LENGTH_LONG).show()
+          Toast.makeText(context, getString(R.string.fill_all_entries), Toast.LENGTH_LONG).show()
         }
       }
     }
@@ -145,9 +144,9 @@ class ProfileFragment : Fragment(), ProfileContract {
   }
 
   private fun isValid(): Boolean {
-    if (binding.profileName?.text.toString().isEmpty()) return false
-    if (!binding.profileEmail?.text.toString().isEmailValid()) return false
-    if (binding.profilePhoneNumber?.text.toString().isEmpty()) return false
+    if (binding.profileName.text.toString().isEmpty()) return false
+    if (!binding.profileEmail.text.toString().isEmailValid()) return false
+    if (binding.profilePhoneNumber.text.toString().isEmpty()) return false
     return true
   }
 
@@ -156,12 +155,10 @@ class ProfileFragment : Fragment(), ProfileContract {
   }
 
   override fun showProgress(show: Boolean) {
-    if (null != progressBar) {
-      if (show) {
-        progressBar.visibility = View.VISIBLE
-      } else {
-        progressBar.visibility = View.GONE
-      }
+    if (show) {
+      binding.progressBar.visibility = View.VISIBLE
+    } else {
+      binding.progressBar.visibility = View.GONE
     }
   }
 
@@ -173,6 +170,7 @@ class ProfileFragment : Fragment(), ProfileContract {
       profileEmail.setText(customer.email)
       profilePassword.hint = getString(R.string.password_hint)
       profilePhoneNumber.setText(customer.phoneNumber)
+      btnEditProfile.isEnabled = true
     }
     showProgress(false)
   }

@@ -33,7 +33,6 @@ import com.future.pms.util.Utils
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.fragment_receipt.*
 import timber.log.Timber
 import java.io.File
 import java.io.FileNotFoundException
@@ -118,12 +117,10 @@ class ReceiptFragment : BottomSheetDialogFragment(), ReceiptContract {
   }
 
   override fun showProgress(show: Boolean) {
-    if (null != progressBar) {
-      if (show) {
-        progressBar.visibility = View.VISIBLE
-      } else {
-        progressBar.visibility = View.GONE
-      }
+    if (show) {
+      binding.progressBar.visibility = View.VISIBLE
+    } else {
+      binding.progressBar.visibility = View.GONE
     }
   }
 

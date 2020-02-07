@@ -8,8 +8,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class OngoingPresenter @Inject constructor() : BasePresenter<OngoingContract>() {
-  @Inject lateinit var ongoingApi: OngoingApi
+class OngoingPresenter @Inject constructor(private val ongoingApi: OngoingApi) :
+    BasePresenter<OngoingContract>() {
 
   fun loadOngoingBooking(accessToken: String) {
     view?.apply {
@@ -27,19 +27,14 @@ class OngoingPresenter @Inject constructor() : BasePresenter<OngoingContract>() 
     }
   }
 
-  fun checkoutBooking(accessToken: String) {
+  fun checkoutBooking(accessToken: String, fcmToken: String) {
     view?.apply {
-      showProgress(true)
-      subscriptions.add(
-          ongoingApi.postBookingCheckout(accessToken).subscribeOn(Schedulers.io()).observeOn(
-              AndroidSchedulers.mainThread()).subscribe({
-            showProgress(false)
-            checkoutSuccess(it.idBooking)
-          }, {
-            showProgress(false)
-            onFailed(it.message.toString())
-          }))
-      refreshHome()
+      subscriptions.add(ongoingApi.postBookingCheckout(fcmToken, accessToken).subscribeOn(
+          Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe({
+        checkoutSuccess(it.string())
+      }, {
+        onFailed(it.message.toString())
+      }))
     }
   }
 }

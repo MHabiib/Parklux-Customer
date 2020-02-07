@@ -22,6 +22,7 @@ class Constants {
     const val LIST_USER_FRAGMENT = "List User Fragment"
     const val BOOKING_DETAIL_FRAGMENT = "Booking Detail Fragment"
     const val HOME_FRAGMENT_SUPER_ADMIN = "Home Fragment Super Admin"
+    const val MAPS_ACTIVITY = "Maps Activity"
     const val TOKEN = "token"
     const val PROFILE_FRAGMENT = "Profile Fragment"
     const val ROLE_SUPER_ADMIN = "ROLE_SUPER_ADMIN"
@@ -36,6 +37,18 @@ class Constants {
     const val NULL = "null"
     const val ID_BOOKING = "idBooking"
     const val LEVEL_NAME = "levelName"
+    const val PARKING_ZONE_NAME = "name"
+    const val PARKING_ZONE_ADDRESS = "address"
+    const val PARKING_ZONE_PHONE = "phone"
+    const val PARKING_ZONE_PRICE = "price"
+    const val PARKING_ZONE_OPEN_HOUR = "openHour"
+    const val PARKING_ZONE_IMG = "img"
+    const val PARKING_ZONE_LONGITUDE = "longitude"
+    const val PARKING_ZONE_LATITUDE = "latitude"
+
+    const val MY_FIREBASE_MESSAGING = "firebaseMessaging"
+    const val FCM_PARKING_ZONE = "parkingZoneName"
+    const val FCM_TOTAL_PRICE = "totalPrice"
 
     const val REQUEST_CAMERA_PERMISSION = 2020
 
@@ -56,16 +69,9 @@ class Constants {
     const val STATUS_ONGOING = "Ongoing"
 
     const val parkSize = 88
-    const val SLOTS_IN_ROW = 16
+    const val SLOTS_IN_ROW = 26
     const val parkMargin = 0
     const val parkPadding = 0
-    const val STATUS_AVAILABLE = 1
-    const val STATUS_BOOKED = 2
-    const val STATUS_RESERVED = 3
-    const val STATUS_ROAD = 4
-    const val STATUS_IN = 5
-    const val STATUS_OUT = 6
-    const val STATUS_BLOCK = 7
     const val SLOT_TAKEN = 'T'
     const val SLOT_EMPTY = 'E'
     const val SLOT_ROAD = 'R'
@@ -77,5 +83,7 @@ class Constants {
     const val SLOT_BLOCK = 'B'
     const val MY_SLOT = 'V'
     const val DISABLED_SLOT = 'D'
+
+    const val REQUEST_LOCATION_PERMISSION = 1
   }
 }

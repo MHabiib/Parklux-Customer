@@ -54,7 +54,7 @@ class HistoryFragment : BaseFragment(), HistoryContract {
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_history, container, false)
     val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
-    binding.shimmerHistory.startShimmerAnimation()
+    binding.shimmerHistory.startShimmer()
     binding.refreshHistory.setOnRefreshListener {
       refreshListHistory()
     }
@@ -95,7 +95,7 @@ class HistoryFragment : BaseFragment(), HistoryContract {
 
   override fun loadCustomerBookingSuccess(history: History) {
     binding.shimmerHistory.visibility = View.GONE
-    binding.shimmerHistory.stopShimmerAnimation()
+    binding.shimmerHistory.stopShimmer()
     if (currentPage != 0) {
       if (currentPage <= history.totalPages - 1) {
         historyAdapter.addAll(history.content)
@@ -128,9 +128,9 @@ class HistoryFragment : BaseFragment(), HistoryContract {
     }
   }
 
-  fun refreshListHistory() {
+  private fun refreshListHistory() {
     binding.shimmerHistory.visibility = View.VISIBLE
-    binding.shimmerHistory.startShimmerAnimation()
+    binding.shimmerHistory.startShimmer()
     historyAdapter.clear()
     historyAdapter.notifyDataSetChanged()
     currentPage = 0

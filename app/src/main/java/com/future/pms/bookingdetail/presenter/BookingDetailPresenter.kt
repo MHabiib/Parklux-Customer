@@ -8,8 +8,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class BookingDetailPresenter @Inject constructor() : BasePresenter<BookingDetailContract>() {
-  @Inject lateinit var bookingDetailApi: BookingDetailApi
+class BookingDetailPresenter @Inject constructor(private val bookingDetailApi: BookingDetailApi) :
+    BasePresenter<BookingDetailContract>() {
 
   fun loadBooking(accessToken: String) {
     view?.apply {

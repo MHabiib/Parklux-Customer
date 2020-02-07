@@ -8,8 +8,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class HomePresenter @Inject constructor() : BasePresenter<HomeContract>() {
-  @Inject lateinit var mHomeApi: HomeApi
+class HomePresenter @Inject constructor(private val mHomeApi: HomeApi) :
+    BasePresenter<HomeContract>() {
 
   fun loadData(accessToken: String) {
     view?.apply {

@@ -44,8 +44,7 @@ class RegisterActivity : BaseActivity(), RegisterContract {
         presenter.register(txtName.text.toString(), txtEmail.text.toString(),
             txtPassword.text.toString(), txtPhone.text.toString())
       } else {
-        Toast.makeText(this, getString(R.string.fill_all_entries),
-            Toast.LENGTH_LONG).show()
+        Toast.makeText(this, getString(R.string.fill_all_entries), Toast.LENGTH_LONG).show()
       }
     }
 
@@ -85,9 +84,9 @@ class RegisterActivity : BaseActivity(), RegisterContract {
     finish()
   }
 
-  override fun onFailed(e: String) {
+  override fun onFailed(message: String) {
     loading(false)
-    Toast.makeText(this, e, Toast.LENGTH_SHORT).show()
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
   }
 
   private fun hideKeyboard() {

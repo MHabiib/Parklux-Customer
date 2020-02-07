@@ -3,8 +3,14 @@ package com.future.pms.scan.view
 import android.content.Context
 import android.content.pm.PackageManager
 import android.hardware.Camera
+import android.os.Build
 import android.os.Bundle
-import android.view.*
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.view.LayoutInflater
+import android.view.SurfaceHolder
+import android.view.View
+import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -43,7 +49,6 @@ class ScanFragment : Fragment(), ScanContract {
   private var cameraSource: CameraSource? = null
   private lateinit var intentData: String
   private lateinit var accessToken: String
-  private var mSurfaceView: SurfaceView? = null
   private lateinit var binding: FragmentScanBinding
   private var isFlashOn = false
 
@@ -70,7 +75,6 @@ class ScanFragment : Fragment(), ScanContract {
       }
     }
     binding.toggleFlash.setOnClickListener { flashToggle() }
-    mSurfaceView = binding.surfaceView
     return binding.root
   }
 
@@ -84,12 +88,10 @@ class ScanFragment : Fragment(), ScanContract {
   }
 
   override fun showProgress(show: Boolean) {
-    if (null != progressBar) {
-      if (show) {
-        progressBar.visibility = View.VISIBLE
-      } else {
-        progressBar.visibility = View.GONE
-      }
+    if (show) {
+      binding.progressBar.visibility = View.VISIBLE
+    } else {
+      binding.progressBar.visibility = View.GONE
     }
   }
 
@@ -128,7 +130,7 @@ class ScanFragment : Fragment(), ScanContract {
       override fun receiveDetections(detections: Detector.Detections<Barcode>) {
         val barcode = detections.detectedItems
         if (barcode.size() != 0) {
-          txtBarcodeValue.post {
+          binding.surfaceView.post {
             if (barcode.valueAt(0).displayValue.startsWith("QR")) {
               stopCamera()
               showProgress(true)
@@ -138,6 +140,7 @@ class ScanFragment : Fragment(), ScanContract {
               presenter.createBooking(idSlot, fcm, accessToken)
             }
           }
+          vibratePhone()
         }
       }
     })
@@ -191,6 +194,15 @@ class ScanFragment : Fragment(), ScanContract {
       }
       it.parameters = param
       isFlashOn = isFlashOn.not()
+    }
+  }
+
+  fun Fragment.vibratePhone() {
+    val vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+    if (Build.VERSION.SDK_INT >= 26) {
+      vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE))
+    } else {
+      vibrator.vibrate(200)
     }
   }
 

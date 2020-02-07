@@ -1,6 +1,7 @@
 package com.future.pms.home.view
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,7 @@ import com.future.pms.history.view.HistoryFragment
 import com.future.pms.home.injection.DaggerHomeComponent
 import com.future.pms.home.injection.HomeComponent
 import com.future.pms.home.presenter.HomePresenter
+import com.future.pms.maps.view.MapsActivity
 import com.future.pms.ongoing.view.OngoingFragment
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.ERROR
@@ -58,7 +60,11 @@ class HomeFragment : BaseFragment(), HomeContract {
         ongoingIndicator.visibility = View.GONE
         historyIndicator.visibility = View.VISIBLE
       }
+      ibSearch.setOnClickListener {
+        startActivity(Intent(activity, MapsActivity::class.java))
+      }
     }
+
     return binding.root
   }
 

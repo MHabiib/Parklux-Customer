@@ -9,8 +9,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class LoginPresenterSuperAdmin @Inject constructor() : BasePresenter<LoginContractSuperAdmin>() {
-  @Inject lateinit var loginSuperAdminApi: LoginSuperAdminApi
+class LoginPresenterSuperAdmin @Inject constructor(
+    private val loginSuperAdminApi: LoginSuperAdminApi) : BasePresenter<LoginContractSuperAdmin>() {
 
   fun login(username: String, password: String) {
     subscriptions.add(loginSuperAdminApi.auth(username, password, GRANT_TYPE).subscribeOn(

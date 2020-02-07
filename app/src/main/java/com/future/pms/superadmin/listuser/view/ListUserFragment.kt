@@ -91,9 +91,9 @@ class ListUserFragment : BaseFragment(), ListUserContract {
         false)
 
     with(binding) {
-      shimmerUser.startShimmerAnimation()
+      shimmerUser.startShimmer()
       refreshCustomer.setOnRefreshListener {
-        shimmerUser.startShimmerAnimation()
+        shimmerUser.startShimmer()
         shimmerUser.visibility = View.VISIBLE
         listCustomerAdapter.clear()
         listCustomerAdapter.notifyDataSetChanged()
@@ -103,7 +103,7 @@ class ListUserFragment : BaseFragment(), ListUserContract {
         refreshCustomer.isRefreshing = false
       }
       refreshAdmin.setOnRefreshListener {
-        shimmerUser.startShimmerAnimation()
+        shimmerUser.startShimmer()
         shimmerUser.visibility = View.VISIBLE
         listAdminAdapter.clear()
         listAdminAdapter.notifyDataSetChanged()
@@ -113,7 +113,7 @@ class ListUserFragment : BaseFragment(), ListUserContract {
         refreshAdmin.isRefreshing = false
       }
       refreshSuperAdmin.setOnRefreshListener {
-        shimmerUser.startShimmerAnimation()
+        shimmerUser.startShimmer()
         shimmerUser.visibility = View.VISIBLE
         listSuperAdminAdapter.clear()
         listSuperAdminAdapter.notifyDataSetChanged()
@@ -214,7 +214,7 @@ class ListUserFragment : BaseFragment(), ListUserContract {
 
         override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
           (p0?.getChildAt(0) as TextView).setTextColor(resources.getColor(R.color.white))
-          shimmerUser.startShimmerAnimation()
+          shimmerUser.startShimmer()
           shimmerUser.visibility = View.VISIBLE
           when (p2) {
             0 -> {
@@ -253,7 +253,7 @@ class ListUserFragment : BaseFragment(), ListUserContract {
         workRunnable = Runnable {
           when {
             name.selectedItem == getString(R.string.customer) -> {
-              shimmerUser.startShimmerAnimation()
+              shimmerUser.startShimmer()
               shimmerUser.visibility = View.VISIBLE
               listCustomerAdapter.clear()
               listCustomerAdapter.notifyDataSetChanged()
@@ -263,7 +263,7 @@ class ListUserFragment : BaseFragment(), ListUserContract {
               refreshCustomer.isRefreshing = false
             }
             name.selectedItem == getString(R.string.admin) -> {
-              shimmerUser.startShimmerAnimation()
+              shimmerUser.startShimmer()
               shimmerUser.visibility = View.VISIBLE
               listAdminAdapter.clear()
               listAdminAdapter.notifyDataSetChanged()
@@ -291,7 +291,7 @@ class ListUserFragment : BaseFragment(), ListUserContract {
   }
 
   override fun loadAllCustomerSuccess(customer: CustomerResponse) {
-    binding.shimmerUser.stopShimmerAnimation()
+    binding.shimmerUser.stopShimmer()
     binding.shimmerUser.visibility = View.GONE
     if (currentPage != 0) {
       if (currentPage <= customer.body.totalPages - 1) {
@@ -312,7 +312,7 @@ class ListUserFragment : BaseFragment(), ListUserContract {
   }
 
   override fun loadAllAdminSuccess(admin: Admin) {
-    binding.shimmerUser.stopShimmerAnimation()
+    binding.shimmerUser.stopShimmer()
     binding.shimmerUser.visibility = View.GONE
     if (currentPage != 0) {
       if (currentPage <= admin.totalPages - 1) {
@@ -333,7 +333,7 @@ class ListUserFragment : BaseFragment(), ListUserContract {
   }
 
   override fun loadAllSuperAdminSuccess(superAdmin: SuperAdminResponse) {
-    binding.shimmerUser.stopShimmerAnimation()
+    binding.shimmerUser.stopShimmer()
     binding.shimmerUser.visibility = View.GONE
     if (currentPage != 0) {
       if (currentPage <= superAdmin.body.totalPages - 1) {
@@ -414,7 +414,7 @@ class ListUserFragment : BaseFragment(), ListUserContract {
     isLastPage = false
   }
 
-  override fun onFailed(e: String) = Timber.e(e)
+  override fun onFailed(message: String) = Timber.e(message)
 
   override fun onDestroyView() {
     presenter.detach()

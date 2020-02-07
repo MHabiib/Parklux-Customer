@@ -116,7 +116,7 @@ class LoginActivitySuperAdmin : BaseActivity(), LoginContractSuperAdmin {
     }
   }
 
-  override fun onFailed(e: String) {
+  override fun onFailed(message: String) {
     loading(false)
     Toast.makeText(this, R.string.email_password_incorrect, Toast.LENGTH_LONG).show()
     Authentication.delete(this)
