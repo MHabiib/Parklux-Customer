@@ -184,7 +184,7 @@ class BookingDetailFragment : BaseFragment(), BookingDetailContract {
     }
     layout.addView(layoutPark)
 
-    for (index in 0 until slotsLayout.length) {
+    for (index in slotsLayout.indices) { //0 - slotLayout.length
       totalSlot++
       if (index == 0 || totalSlot == SLOTS_IN_ROW) {
         totalSlot = 0

@@ -3,7 +3,6 @@ package com.future.pms.superadmin
 import com.future.pms.base.BaseTest
 import com.future.pms.superadmin.activitydetails.network.ActivityDetailsApi
 import com.future.pms.superadmin.activitydetails.presenter.ActivityDetailsPresenter
-import com.future.pms.superadmin.activitydetails.view.ActivityDetailsContract
 import io.reactivex.Observable
 import org.junit.Test
 import org.mockito.InjectMocks
@@ -12,7 +11,6 @@ import org.mockito.Mockito.`when`
 
 class ActivityDetailsPresenterTest : BaseTest() {
   @Mock lateinit var activityDetailsApi: ActivityDetailsApi
-  @Mock lateinit var activityDetailsContract: ActivityDetailsContract
   @InjectMocks lateinit var activityDetailsPresenter: ActivityDetailsPresenter
 
   @Test fun bookingReceiptSASuccess() {

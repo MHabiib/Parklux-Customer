@@ -3,7 +3,6 @@ package com.future.pms.customer
 import com.future.pms.base.BaseTest
 import com.future.pms.scan.network.ScanApi
 import com.future.pms.scan.presenter.ScanPresenter
-import com.future.pms.scan.view.ScanContract
 import io.reactivex.Observable
 import org.junit.Test
 import org.mockito.InjectMocks
@@ -12,7 +11,6 @@ import org.mockito.Mockito.`when`
 
 class ScanPresenterTest : BaseTest() {
   @Mock lateinit var scanApi: ScanApi
-  @Mock lateinit var scanContract: ScanContract
   @InjectMocks lateinit var scanPresenter: ScanPresenter
 
   @Test fun createBookingSuccess() {

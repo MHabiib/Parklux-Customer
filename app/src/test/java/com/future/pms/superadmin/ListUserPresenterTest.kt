@@ -3,7 +3,6 @@ package com.future.pms.superadmin
 import com.future.pms.base.BaseTest
 import com.future.pms.superadmin.listuser.network.ListUserApi
 import com.future.pms.superadmin.listuser.presenter.ListUserPresenter
-import com.future.pms.superadmin.listuser.view.ListUserContract
 import io.reactivex.Observable
 import org.junit.Test
 import org.mockito.InjectMocks
@@ -12,7 +11,6 @@ import org.mockito.Mockito.`when`
 
 class ListUserPresenterTest : BaseTest() {
   @Mock lateinit var listUserApi: ListUserApi
-  @Mock lateinit var listUserContract: ListUserContract
   @InjectMocks lateinit var listUserPresenter: ListUserPresenter
 
   @Test fun loadAllCustomerSuccess() {
