@@ -112,11 +112,11 @@ class OngoingFragment : BaseFragment(), OngoingContract {
 
   override fun checkoutSuccess(imageName: String) {
     showProgressCheckout(false)
-    context?.let { it1 ->
+    context?.let { context ->
       val view = View.inflate(context, R.layout.dialog_checkout_qr, null)
       val imageView = view.findViewById<ImageView>(R.id.iv_checkout_step_one_qr)
-      Glide.with(it1).load(imageName).into(DrawableImageViewTarget(imageView))
-      dialog = AlertDialog.Builder(it1).setView(view).show()
+      Glide.with(context).load(imageName).into(DrawableImageViewTarget(imageView))
+      dialog = AlertDialog.Builder(context).setView(view).show()
     }
   }
 
