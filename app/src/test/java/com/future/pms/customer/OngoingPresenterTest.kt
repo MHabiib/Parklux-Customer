@@ -43,19 +43,17 @@ class OngoingPresenterTest : BaseTest() {
     `when`(ongoingApi.postBookingCheckout(FCM_TOKEN, ACCESS_TOKEN)).thenReturn(
         Observable.just("".toResponseBody("".toMediaTypeOrNull())))
 
-    ongoinPresenter.checkoutBooking(FCM_TOKEN, ACCESS_TOKEN)
+    ongoinPresenter.checkoutBooking(ACCESS_TOKEN, FCM_TOKEN)
 
-    verify(ongoingContract).showProgress(false)
-    verify(ongoingContract).checkoutSuccess(customerBooking().idBooking)
+    verify(ongoingContract).checkoutSuccess("".toResponseBody().string())
   }
 
   @Test fun checkoutBookingFailed() {
     `when`(ongoingApi.postBookingCheckout(FCM_TOKEN, ACCESS_TOKEN)).thenReturn(
         Observable.error(Exception(ERROR)))
 
-    ongoinPresenter.checkoutBooking(FCM_TOKEN, ACCESS_TOKEN)
+    ongoinPresenter.checkoutBooking(ACCESS_TOKEN, FCM_TOKEN)
 
-    verify(ongoingContract).showProgress(false)
     verify(ongoingContract).onFailed(ERROR)
   }
 }

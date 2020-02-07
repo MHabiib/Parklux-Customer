@@ -186,7 +186,7 @@ class BookingDetailFragment : BaseFragment(), BookingDetailContract {
 
     for (index in slotsLayout.indices) { //0 - slotLayout.length
       totalSlot++
-      if (index == 0 || totalSlot == SLOTS_IN_ROW) {
+      if (index == 0 || totalSlot == 60) {
         totalSlot = 0
         parkingLayout = LinearLayout(context)
         parkingLayout.orientation = LinearLayout.HORIZONTAL
@@ -240,7 +240,7 @@ class BookingDetailFragment : BaseFragment(), BookingDetailContract {
 
       if (icon == R.drawable.ic_park || icon == R.drawable.ic_disable || icon == R.drawable.ic_car) {
         setTextColor(resources.getColor(R.color.darkGrey))
-        text = ((id % SLOTS_IN_ROW) + 1).toString()
+        text = ((id % 60) + 1).toString()
         setTypeface(this.typeface, Typeface.BOLD)
       }
     }

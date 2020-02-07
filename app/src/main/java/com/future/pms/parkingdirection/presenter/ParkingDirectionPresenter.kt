@@ -15,7 +15,6 @@ class ParkingDirectionPresenter @Inject constructor(
     view?.apply {
       subscriptions.add(parkingDirectionApi.getParkingLayout(idBooking, accessToken).subscribeOn(
           Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe({
-        showProgress(false)
         getLayoutSuccess(it)
       }, {
         showProgress(false)

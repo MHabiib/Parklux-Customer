@@ -2,6 +2,7 @@ package com.future.pms.parkingdirection.view
 
 import android.content.Context
 import android.graphics.Typeface
+import android.os.AsyncTask
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -23,7 +24,6 @@ import com.future.pms.parkingdirection.injection.ParkingDirectionComponent
 import com.future.pms.parkingdirection.presenter.ParkingDirectionPresenter
 import com.future.pms.util.Constants
 import com.future.pms.util.Constants.Companion.PARKING_DETAIL_FRAGMENT
-import com.future.pms.util.Constants.Companion.SLOTS_IN_ROW
 import com.future.pms.util.Constants.Companion.SLOT_BLOCK
 import com.future.pms.util.Constants.Companion.SLOT_IN
 import com.future.pms.util.Constants.Companion.SLOT_NULL
@@ -36,7 +36,6 @@ import com.future.pms.util.Constants.Companion.parkSize
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_parking_direction.*
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
@@ -50,7 +49,6 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
   @Inject lateinit var presenter: ParkingDirectionPresenter
   @Inject lateinit var gson: Gson
   private lateinit var binding: FragmentParkingDirectionBinding
-  private var parkViewList: MutableList<TextView> = ArrayList()
   private lateinit var layout: HorizontalScrollView
   private lateinit var idBooking: String
   private lateinit var accessToken: String
@@ -97,8 +95,6 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
 
   private fun showParkingLayout(slotsLayout: String) {
     val layoutPark = LinearLayout(context)
-    var parkingLayout: LinearLayout? = null
-    var totalSlot = 0
     val params = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
         ViewGroup.LayoutParams.WRAP_CONTENT)
 
@@ -109,48 +105,75 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
     }
     layout.addView(layoutPark)
 
-    for (index in slotsLayout.indices) {
-      totalSlot++
-      if (index == 0 || totalSlot == SLOTS_IN_ROW) {
-        totalSlot = 0
+    CountLayout().execute(slotsLayout)
+
+    showProgress(false)
+  }
+
+  private inner class CountLayout : AsyncTask<String, Void, String>() {
+    override fun doInBackground(vararg params: String?): String? {
+      var int = ""
+      for (index in params.indices) {
+        int = "$index$params"
+      }
+      //todo
+      return int
+    }
+
+    override fun onPostExecute(result: String?) {
+      super.onPostExecute(result)
+      setUppppppp(result)
+    }
+
+  }
+
+  fun setUppppppp(result: String?) {
+    val slotsLayout = result?.substring(result.length - 1)?.single()
+    val index = result?.substring(0, result.length-1)?.toInt()
+
+    val parkingLayout: LinearLayout?
+    if (index != null) {
+      if (index == 0 || index % 60 == 0) {
         parkingLayout = LinearLayout(context)
         parkingLayout.orientation = LinearLayout.HORIZONTAL
         layoutPark.addView(parkingLayout)
-      }
 
-      when {
-        slotsLayout[index] == SLOT_NULL -> {
-          setupParkingView(index, parkingLayout, slotsLayout[index], R.drawable.ic_blank)
-        }
-        slotsLayout[index] == Constants.SLOT_SCAN_ME || slotsLayout[index] == Constants.SLOT_TAKEN -> {
-          setupParkingView(index, parkingLayout, slotsLayout[index], R.drawable.ic_car)
-        }
-        slotsLayout[index] == Constants.SLOT_EMPTY -> {
-          setupParkingView(index, parkingLayout, slotsLayout[index], R.drawable.ic_park)
-        }
-        slotsLayout[index] == Constants.DISABLED_SLOT -> {
-          setupParkingView(index, parkingLayout, slotsLayout[index], R.drawable.ic_disable)
-        }
-        slotsLayout[index] == SLOT_ROAD || slotsLayout[index] == SLOT_READY -> {
-          setupParkingView(index, parkingLayout, slotsLayout[index], R.color.transparent)
-        }
-        slotsLayout[index] == SLOT_IN -> {
-          setupParkingView(index, parkingLayout, slotsLayout[index], R.drawable.ic_in)
-        }
-        slotsLayout[index] == SLOT_OUT -> {
-          setupParkingView(index, parkingLayout, slotsLayout[index], R.drawable.ic_out)
-        }
-        slotsLayout[index] == SLOT_BLOCK -> {
-          setupParkingView(index, parkingLayout, slotsLayout[index], R.drawable.ic_road)
-        }
-        slotsLayout[index] == Constants.MY_SLOT -> {
-          setupParkingView(index, parkingLayout, slotsLayout[index], R.drawable.ic_my_location)
+        when (slotsLayout) {
+          SLOT_NULL -> {
+            setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_blank)
+          }
+          Constants.SLOT_SCAN_ME, Constants.SLOT_TAKEN -> {
+            setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_car)
+          }
+          Constants.SLOT_EMPTY -> {
+            setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_park)
+          }
+          Constants.DISABLED_SLOT -> {
+            setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_disable)
+          }
+          SLOT_ROAD, SLOT_READY -> {
+            setupParkingView(index, parkingLayout, slotsLayout, R.color.transparent)
+          }
+          SLOT_IN -> {
+            setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_in)
+          }
+          SLOT_OUT -> {
+            setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_out)
+          }
+          SLOT_BLOCK -> {
+            setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_road)
+          }
+          Constants.MY_SLOT -> {
+            setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_my_location)
+          }
         }
       }
     }
+
+
   }
 
-  private fun setupParkingView(count: Int, layout: LinearLayout?, code: Char, icon: Int): TextView {
+  private fun setupParkingView(count: Int, layout: LinearLayout?, code: Char, icon: Int) {
     val view = TextView(context)
     view.apply {
       layoutParams = LinearLayout.LayoutParams(parkSize, parkSize).apply {
@@ -165,13 +188,13 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
 
       if (icon == R.drawable.ic_park || icon == R.drawable.ic_disable || icon == R.drawable.ic_car) {
         setTextColor(resources.getColor(R.color.darkGrey))
-        text = ((id % SLOTS_IN_ROW) + 1).toString()
+        text = ((id % 60) + 1).toString()
         setTypeface(this.typeface, Typeface.BOLD)
       }
     }
-    layout?.addView(view)
-    parkViewList.add(view)
-    return view
+    layout?.post {
+      layout.addView(view)
+    }
   }
 
   override fun getLayoutSuccess(slotsLayout: String) = showParkingLayout(slotsLayout)
