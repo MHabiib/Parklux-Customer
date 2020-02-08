@@ -61,6 +61,7 @@ class BookingDetailFragment : BaseFragment(), BookingDetailContract {
   private lateinit var bindingActivityMain: ActivityMainBinding
   private lateinit var layoutPark: LinearLayout
   private lateinit var parkingLayout: LinearLayout
+  private lateinit var asyncTask: SetupLayoutAsyc
 
   companion object {
     const val TAG: String = BOOKING_DETAIL_FRAGMENT
@@ -175,7 +176,8 @@ class BookingDetailFragment : BaseFragment(), BookingDetailContract {
     }
     layout.addView(layoutPark)
 
-    SetupLayoutAsyc(activity as MainActivity).execute(slotsLayout)
+    asyncTask = SetupLayoutAsyc(activity as MainActivity)
+    asyncTask.execute(slotsLayout)
   }
 
   private class SetupLayoutAsyc internal constructor(context: MainActivity) :
@@ -280,6 +282,7 @@ class BookingDetailFragment : BaseFragment(), BookingDetailContract {
   override fun onFailed(message: String) = Timber.tag("e").e(message)
 
   override fun onDestroy() {
+    asyncTask.cancel(true)
     presenter.detach()
     super.onDestroy()
   }

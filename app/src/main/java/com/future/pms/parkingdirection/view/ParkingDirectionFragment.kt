@@ -61,6 +61,7 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
   private lateinit var accessToken: String
   private lateinit var layoutPark: LinearLayout
   private lateinit var parkingLayout: LinearLayout
+  private lateinit var asyncTask: SetupLayoutAsyc
 
   companion object {
     const val TAG: String = PARKING_DETAIL_FRAGMENT
@@ -114,7 +115,8 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
     }
     layout.addView(layoutPark)
 
-    SetupLayoutAsyc(activity as MainActivity).execute(slotsLayout)
+    asyncTask = SetupLayoutAsyc(activity as MainActivity)
+    asyncTask.execute(slotsLayout)
   }
 
   private class SetupLayoutAsyc internal constructor(context: MainActivity) :
@@ -244,6 +246,7 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
   }
 
   override fun onDestroy() {
+    asyncTask.cancel(true)
     presenter.detach()
     super.onDestroy()
   }
