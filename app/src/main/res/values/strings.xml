@@ -49,7 +49,7 @@
     <string name="minutes">Minutes</string>
     <string name="idr">IDR %s</string>
     <string name="total_price_only">Total price</string>
-    <string name="safety_parking">Safety is number one priority\nParking on your slot</string>
+    <string name="safety_parking">Safety is number one priority\nPlease park on your slot</string>
     <string name="price">Price</string>
     <string name="price_hour">Price/hour</string>
     <string name="update_account">Update super admin account</string>
