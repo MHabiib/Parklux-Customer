@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Typeface
 import android.os.AsyncTask
 import android.os.Bundle
-import android.os.Handler
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -116,8 +115,6 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
     layout.addView(layoutPark)
 
     SetupLayoutAsyc(activity as MainActivity).execute(slotsLayout)
-
-    showProgress(false)
   }
 
   private class SetupLayoutAsyc internal constructor(context: MainActivity) :
@@ -128,68 +125,68 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
     }
     private val mParkingDirectionFragment = parkingDirectionFragment as ParkingDirectionFragment
 
-    private val handler = Handler()
     override fun doInBackground(vararg params: String?): String? {
       val slots = params[0]
       if (slots != null) {
         for (index in 0 until slots.length) {
-          handler.postDelayed({
-            publishProgress("$index${slots[index]}")
-          }, 100)
+          Thread.sleep(1)
+          publishProgress("$index${slots[index]}")
         }
       }
       return ""
     }
 
     override fun onProgressUpdate(vararg result: String?) {
-      if (parkingDirectionFragment == null) return
-      mParkingDirectionFragment.setSlotStatus(result[0])
-    }
-
-    override fun onPostExecute(result: String?) {
-      if (parkingDirectionFragment == null) return
-      mParkingDirectionFragment.binding.numberingLeft.visibility = View.VISIBLE
+      if (parkingDirectionFragment != null && activityReference.get() != null) {
+        mParkingDirectionFragment.setSlotStatus(result[0])
+      }
     }
   }
 
   fun setSlotStatus(result: String?) {
-    val slotsLayout = result?.substring(result.length - 1)?.single()
-    val index = result?.substring(0, result.length - 1)?.toInt()
+    if (result != "" && context != null) {
+      val slotsLayout = result?.substring(result.length - 1)?.single()
+      val index = result?.substring(0, result.length - 1)?.toInt()
 
-    if (index != null) {
-      if (index == 0 || index % SLOTS_IN_ROW == 0) {
-        parkingLayout = LinearLayout(context)
-        parkingLayout.orientation = LinearLayout.HORIZONTAL
-        layoutPark.addView(parkingLayout)
-      }
+      if (index != null) {
+        if (index == 0 || index % SLOTS_IN_ROW == 0) {
+          parkingLayout = LinearLayout(context)
+          parkingLayout.orientation = LinearLayout.HORIZONTAL
+          layoutPark.addView(parkingLayout)
+        }
 
-      when (slotsLayout) {
-        SLOT_NULL -> {
-          setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_blank)
+        when (slotsLayout) {
+          SLOT_NULL -> {
+            setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_blank)
+          }
+          SLOT_SCAN_ME, SLOT_TAKEN -> {
+            setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_car)
+          }
+          SLOT_EMPTY -> {
+            setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_park)
+          }
+          DISABLED_SLOT -> {
+            setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_disable)
+          }
+          SLOT_ROAD, SLOT_READY -> {
+            setupParkingView(index, parkingLayout, slotsLayout, R.color.transparent)
+          }
+          SLOT_IN -> {
+            setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_in)
+          }
+          SLOT_OUT -> {
+            setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_out)
+          }
+          SLOT_BLOCK -> {
+            setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_road)
+          }
+          MY_SLOT -> {
+            setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_my_location)
+          }
         }
-        SLOT_SCAN_ME, SLOT_TAKEN -> {
-          setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_car)
-        }
-        SLOT_EMPTY -> {
-          setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_park)
-        }
-        DISABLED_SLOT -> {
-          setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_disable)
-        }
-        SLOT_ROAD, SLOT_READY -> {
-          setupParkingView(index, parkingLayout, slotsLayout, R.color.transparent)
-        }
-        SLOT_IN -> {
-          setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_in)
-        }
-        SLOT_OUT -> {
-          setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_out)
-        }
-        SLOT_BLOCK -> {
-          setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_road)
-        }
-        MY_SLOT -> {
-          setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_my_location)
+        if (index == SLOTS_IN_ROW * SLOTS_IN_ROW - 1) {
+          binding.numberingLeft.visibility = View.VISIBLE
+          showProgress(false)
         }
       }
     }

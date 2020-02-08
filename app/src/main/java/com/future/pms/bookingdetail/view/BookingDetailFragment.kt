@@ -176,9 +176,7 @@ class BookingDetailFragment : BaseFragment(), BookingDetailContract {
     }
     layout.addView(layoutPark)
 
-    BookingDetailFragment.SetupLayoutAsyc(activity as MainActivity).execute(slotsLayout)
-
-    showProgress(false)
+    SetupLayoutAsyc(activity as MainActivity).execute(slotsLayout)
   }
 
   private class SetupLayoutAsyc internal constructor(context: MainActivity) :
@@ -194,63 +192,64 @@ class BookingDetailFragment : BaseFragment(), BookingDetailContract {
       val slots = params[0]
       if (slots != null) {
         for (index in 0 until slots.length) {
-          handler.postDelayed({
-            publishProgress("$index${slots[index]}")
-          }, 100)
+          Thread.sleep(1)
+          publishProgress("$index${slots[index]}")
         }
       }
       return ""
     }
 
     override fun onProgressUpdate(vararg result: String?) {
-      if (bookingDetailFragment == null) return
-      mBookingDetailFragment.setSlotStatus(result[0])
-    }
-
-    override fun onPostExecute(result: String?) {
-      if (bookingDetailFragment == null) return
-      mBookingDetailFragment.binding.parkingDirectionSheet.numberingLeft.visibility = View.VISIBLE
+      if (bookingDetailFragment != null && activityReference.get() != null) {
+        mBookingDetailFragment.setSlotStatus(result[0])
+      }
     }
   }
 
   fun setSlotStatus(result: String?) {
-    val slotsLayout = result?.substring(result.length - 1)?.single()
-    val index = result?.substring(0, result.length - 1)?.toInt()
+    if (result != "" && context != null) {
+      val slotsLayout = result?.substring(result.length - 1)?.single()
+      val index = result?.substring(0, result.length - 1)?.toInt()
 
-    if (index != null) {
-      if (index == 0 || index % SLOTS_IN_ROW == 0) {
-        parkingLayout = LinearLayout(context)
-        parkingLayout.orientation = LinearLayout.HORIZONTAL
-        layoutPark.addView(parkingLayout)
-      }
+      if (index != null) {
+        if (index == 0 || index % SLOTS_IN_ROW == 0) {
+          parkingLayout = LinearLayout(context)
+          parkingLayout.orientation = LinearLayout.HORIZONTAL
+          layoutPark.addView(parkingLayout)
+        }
 
-      when (slotsLayout) {
-        SLOT_NULL -> {
-          setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_blank)
+        when (slotsLayout) {
+          SLOT_NULL -> {
+            setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_blank)
+          }
+          Constants.SLOT_SCAN_ME, Constants.SLOT_TAKEN -> {
+            setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_car)
+          }
+          Constants.SLOT_EMPTY -> {
+            setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_park)
+          }
+          Constants.DISABLED_SLOT -> {
+            setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_disable)
+          }
+          Constants.SLOT_ROAD, Constants.SLOT_READY -> {
+            setupParkingView(index, parkingLayout, slotsLayout, R.color.transparent)
+          }
+          Constants.SLOT_IN -> {
+            setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_in)
+          }
+          Constants.SLOT_OUT -> {
+            setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_out)
+          }
+          Constants.SLOT_BLOCK -> {
+            setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_road)
+          }
+          Constants.MY_SLOT -> {
+            setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_my_location)
+          }
         }
-        Constants.SLOT_SCAN_ME, Constants.SLOT_TAKEN -> {
-          setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_car)
-        }
-        Constants.SLOT_EMPTY -> {
-          setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_park)
-        }
-        Constants.DISABLED_SLOT -> {
-          setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_disable)
-        }
-        Constants.SLOT_ROAD, Constants.SLOT_READY -> {
-          setupParkingView(index, parkingLayout, slotsLayout, R.color.transparent)
-        }
-        Constants.SLOT_IN -> {
-          setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_in)
-        }
-        Constants.SLOT_OUT -> {
-          setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_out)
-        }
-        Constants.SLOT_BLOCK -> {
-          setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_road)
-        }
-        Constants.MY_SLOT -> {
-          setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_my_location)
+        if (index == SLOTS_IN_ROW * SLOTS_IN_ROW - 1) {
+          binding.parkingDirectionSheet.numberingLeft.visibility = View.VISIBLE
+          showProgress(false)
         }
       }
     }
