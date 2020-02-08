@@ -129,7 +129,9 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
       val slots = params[0]
       if (slots != null) {
         for (index in 0 until slots.length) {
-          Thread.sleep(1)
+          if (index % 60 == 0) {
+            Thread.sleep(100)
+          }
           publishProgress("$index${slots[index]}")
         }
       }

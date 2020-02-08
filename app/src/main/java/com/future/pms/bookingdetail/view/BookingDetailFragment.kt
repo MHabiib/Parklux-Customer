@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Typeface
 import android.os.AsyncTask
 import android.os.Bundle
-import android.os.Handler
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -187,12 +186,13 @@ class BookingDetailFragment : BaseFragment(), BookingDetailContract {
     }
     private val mBookingDetailFragment = bookingDetailFragment as BookingDetailFragment
 
-    private val handler = Handler()
     override fun doInBackground(vararg params: String?): String? {
       val slots = params[0]
       if (slots != null) {
         for (index in 0 until slots.length) {
-          Thread.sleep(1)
+          if (index % 60 == 0) {
+            Thread.sleep(100)
+          }
           publishProgress("$index${slots[index]}")
         }
       }
