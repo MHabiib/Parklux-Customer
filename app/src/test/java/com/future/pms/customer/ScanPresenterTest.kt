@@ -9,7 +9,7 @@ import org.junit.Test
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
+import org.mockito.Mockito.verify
 
 class ScanPresenterTest : BaseTest() {
   @Mock lateinit var scanApi: ScanApi
@@ -21,6 +21,10 @@ class ScanPresenterTest : BaseTest() {
         Observable.just(customerBooking()))
 
     scanPresenter.createBooking(ID, FCM_TOKEN, ACCESS_TOKEN)
+
+    verify(scanContract).showProgress(true)
+    verify(scanContract).showProgress(false)
+    verify(scanContract).bookingSuccess(customerBooking().idBooking)
   }
 
   @Test fun createBookingFailed() {
@@ -28,10 +32,9 @@ class ScanPresenterTest : BaseTest() {
         Observable.error(Exception(ERROR)))
 
     scanPresenter.createBooking(ID, FCM_TOKEN, ACCESS_TOKEN)
-  }
 
-  @Test fun scanContractNull() {
-    scanContract = mock(null)
-    scanPresenter.createBooking(ID, FCM_TOKEN, ACCESS_TOKEN)
+    verify(scanContract).showProgress(true)
+    verify(scanContract).showProgress(false)
+    verify(scanContract).onFailed(ERROR)
   }
 }
