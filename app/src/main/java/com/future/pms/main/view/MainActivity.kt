@@ -97,13 +97,12 @@ class MainActivity : AppCompatActivity(), MainContract {
     binding.homeIndicator.visibility = View.VISIBLE
     binding.profileIndicator.visibility = View.GONE
     if (supportFragmentManager.findFragmentByTag(HomeFragment.TAG) == null) {
-      supportFragmentManager.beginTransaction().setCustomAnimations(R.animator.fade_in,
-          R.animator.fade_out).add(R.id.frame, HomeFragment().newInstance(),
+        supportFragmentManager.beginTransaction().add(
+            R.id.frame, HomeFragment().newInstance(),
           HomeFragment.TAG).commit()
     } else {
       supportFragmentManager.run { findFragmentByTag(HomeFragment.TAG) }?.let {
-        supportFragmentManager.beginTransaction().setCustomAnimations(R.animator.fade_in,
-            R.animator.fade_out).show(it).commit()
+          supportFragmentManager.beginTransaction().show(it).commit()
       }
     }
     if (supportFragmentManager.findFragmentByTag(ProfileFragment.TAG) != null) {
@@ -181,13 +180,12 @@ class MainActivity : AppCompatActivity(), MainContract {
   override fun showProfileFragment() {
     buttonIndicator(View.GONE, View.VISIBLE)
     if (supportFragmentManager.findFragmentByTag(ProfileFragment.TAG) == null) {
-      supportFragmentManager.beginTransaction().setCustomAnimations(R.animator.fade_in,
-          R.animator.fade_out).add(R.id.frame, ProfileFragment().newInstance(),
+        supportFragmentManager.beginTransaction().add(
+            R.id.frame, ProfileFragment().newInstance(),
           ProfileFragment.TAG).commit()
     } else {
       supportFragmentManager.run { findFragmentByTag(ProfileFragment.TAG) }?.let {
-        supportFragmentManager.beginTransaction().setCustomAnimations(R.animator.fade_in,
-            R.animator.fade_out).show(it).commit()
+          supportFragmentManager.beginTransaction().show(it).commit()
       }
     }
     if (supportFragmentManager.findFragmentByTag(HomeFragment.TAG) != null) {

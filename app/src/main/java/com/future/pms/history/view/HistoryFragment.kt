@@ -129,6 +129,7 @@ class HistoryFragment : BaseFragment(), HistoryContract {
   }
 
   private fun refreshListHistory() {
+    binding.dontHaveOrder.visibility = View.GONE
     binding.shimmerHistory.visibility = View.VISIBLE
     binding.shimmerHistory.startShimmer()
     historyAdapter.clear()

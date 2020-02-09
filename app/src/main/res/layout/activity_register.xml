@@ -170,6 +170,7 @@
                     android:background="@android:color/transparent"
                     android:inputType="textPersonName"
                     android:maxLines="1"
+                    android:maxLength="40"
                     android:singleLine="true"
                     android:textSize="@dimen/h2" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -230,6 +231,8 @@
                     android:hint="@string/phone"
                     android:inputType="phone"
                     android:maxLines="1"
+                    android:digits="@string/digits_number"
+                    android:maxLength="16"
                     android:singleLine="true"
                     android:textSize="@dimen/h2" />
             </com.google.android.material.textfield.TextInputLayout>
