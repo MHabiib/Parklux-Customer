@@ -83,6 +83,7 @@ class OngoingFragment : BaseFragment(), OngoingContract {
         dontHaveOngoing.visibility = View.GONE
         ongoingParkingLayout.visibility = View.GONE
         swipeRefreshOngoing.isRefreshing = false
+        swipeRefreshOngoing.isEnabled = false
       }
     }
 
@@ -179,6 +180,7 @@ class OngoingFragment : BaseFragment(), OngoingContract {
       parkingZoneAddress.text = ongoing.address
       bookingIdValue.text = ongoing.idBooking
       parkingSlot.text = ongoing.slotName
+      swipeRefreshOngoing.isEnabled = true
     }
 
     val fab = activity?.findViewById(R.id.fab_scan) as FloatingActionButton
@@ -203,6 +205,7 @@ class OngoingFragment : BaseFragment(), OngoingContract {
           homeFragment.presenter.loadData(accessToken)
         }
       }
+      swipeRefreshOngoing.isEnabled = true
 
       Timber.tag(Constants.ERROR).e(error)
       dontHaveOngoing.visibility = View.VISIBLE

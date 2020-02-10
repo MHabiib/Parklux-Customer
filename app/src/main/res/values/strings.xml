@@ -110,7 +110,7 @@
     <string name="pattern">HH:mm</string>
     <string name="re_type_password">Re-type password</string>
     <string name="digits">abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,.()-</string>
-    <string name="digits_number">0123456789</string>
+    <string name="digits_number">+0123456789</string>
     <string name="open_on_google_maps">Open with Google Maps</string>
     <string name="history">History</string>
     <string name="thank_you_using_parklux">Thank you for using Parklux apps</string>
