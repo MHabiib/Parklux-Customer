@@ -246,7 +246,9 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
   }
 
   override fun onDestroy() {
-    asyncTask.cancel(true)
+    if (::asyncTask.isInitialized) {
+      asyncTask.cancel(true)
+    }
     presenter.detach()
     super.onDestroy()
   }

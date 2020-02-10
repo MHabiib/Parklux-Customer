@@ -282,7 +282,9 @@ class BookingDetailFragment : BaseFragment(), BookingDetailContract {
   override fun onFailed(message: String) = Timber.tag("e").e(message)
 
   override fun onDestroy() {
-    asyncTask.cancel(true)
+    if (::asyncTask.isInitialized) {
+      asyncTask.cancel(true)
+    }
     presenter.detach()
     super.onDestroy()
   }
