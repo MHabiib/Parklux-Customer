@@ -62,6 +62,7 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
   private lateinit var layoutPark: LinearLayout
   private lateinit var parkingLayout: LinearLayout
   private lateinit var asyncTask: SetupLayoutAsyc
+  private var totalRow = 0
 
   companion object {
     const val TAG: String = PARKING_DETAIL_FRAGMENT
@@ -115,6 +116,7 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
     }
     layout.addView(layoutPark)
 
+    totalRow = 0
     asyncTask = SetupLayoutAsyc(activity as MainActivity)
     asyncTask.execute(slotsLayout)
   }
@@ -130,11 +132,19 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
     override fun doInBackground(vararg params: String?): String? {
       val slots = params[0]
       if (slots != null) {
-        for (index in 0 until slots.length) {
+        var index = 0
+        while (index in 0 until slots.length) {
+          if (index == 1800 && slots[1800] == '_' && slots[1830] == '_') {
+            index = slots.length - 1
+          }
+          if (index % 30 == 0 && slots[index] == '_' && index != 0 && index % 60 != 0) {
+            index += 29
+          }
           if (index % 60 == 0) {
             Thread.sleep(100)
           }
           publishProgress("$index${slots[index]}")
+          index++
         }
       }
       return ""
@@ -157,6 +167,7 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
           parkingLayout = LinearLayout(context)
           parkingLayout.orientation = LinearLayout.HORIZONTAL
           layoutPark.addView(parkingLayout)
+          totalRow++
         }
 
         when (slotsLayout) {
@@ -188,8 +199,17 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
             setupParkingView(index, parkingLayout, slotsLayout, R.drawable.ic_my_location)
           }
         }
-        if (index == SLOTS_IN_ROW * SLOTS_IN_ROW - 1) {
+        if (totalRow == 30) {
+          binding.numberingLeft.visibility = View.GONE
+          binding.numberingLeftOneRow.visibility = View.VISIBLE
+          showProgress(false)
+        }
+        if (totalRow == 31) {
           binding.numberingLeft.visibility = View.VISIBLE
+          binding.numberingLeftOneRow.visibility = View.GONE
+          showProgress(true)
+        }
+        if (totalRow == 60) {
           showProgress(false)
         }
       }
