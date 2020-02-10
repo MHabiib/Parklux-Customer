@@ -288,18 +288,21 @@ class MainActivity : AppCompatActivity(), MainContract {
         IntentFilter(MY_FIREBASE_MESSAGING))
   }
 
+  override fun onPause() {
+    LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver)
+    super.onPause()
+  }
+
   private val mMessageReceiver = object : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
 
-      if (supportFragmentManager.findFragmentByTag(
-              OngoingFragment.TAG) != null && supportFragmentManager.findFragmentByTag(
-              ReceiptFragment.TAG) == null) {
+      if (supportFragmentManager.findFragmentByTag(OngoingFragment.TAG) != null) {
         val totalPrice = intent.getStringExtra(FCM_TOTAL_PRICE)
 
         val fragment = ReceiptFragment()
         val bundle = Bundle()
         bundle.putString(ID_BOOKING, totalPrice)
-        fragment.arguments = bundle
+        fragment.arguments =     bundle
         supportFragmentManager.let { bottomSheetFragment ->
           if (!fragment.isAdded) {
             fragment.show(bottomSheetFragment, fragment.tag)
