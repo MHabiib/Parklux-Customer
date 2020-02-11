@@ -71,10 +71,20 @@ class OngoingFragment : BaseFragment(), OngoingContract {
       activity?.presenter?.showParkingDirection(idBooking, levelName)
     }
 
-    binding.checkoutButton.setOnClickListener {
-      showProgressCheckout(true)
-      binding.checkoutButton.isEnabled = false
-      presenter.checkoutBooking(accessToken, fcmToken)
+    with(binding) {
+      checkoutButton.setOnClickListener {
+        showProgressCheckout(true)
+        checkoutButton.isEnabled = false
+        presenter.checkoutBooking(accessToken, fcmToken)
+      }
+
+      swipeRefreshOngoing.setOnRefreshListener {
+        presenter.loadOngoingBooking(accessToken)
+        dontHaveOngoing.visibility = View.GONE
+        ongoingParkingLayout.visibility = View.GONE
+        swipeRefreshOngoing.isRefreshing = false
+        swipeRefreshOngoing.isEnabled = false
+      }
     }
 
     return binding.root
@@ -133,7 +143,6 @@ class OngoingFragment : BaseFragment(), OngoingContract {
   }
 
   override fun loadCustomerOngoingSuccess(ongoing: CustomerBooking) {
-    showProgress(false)
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       with(binding) {
         yourPrice.visibility = View.VISIBLE
@@ -171,6 +180,7 @@ class OngoingFragment : BaseFragment(), OngoingContract {
       parkingZoneAddress.text = ongoing.address
       bookingIdValue.text = ongoing.idBooking
       parkingSlot.text = ongoing.slotName
+      swipeRefreshOngoing.isEnabled = true
     }
 
     val fab = activity?.findViewById(R.id.fab_scan) as FloatingActionButton
@@ -195,6 +205,7 @@ class OngoingFragment : BaseFragment(), OngoingContract {
           homeFragment.presenter.loadData(accessToken)
         }
       }
+      swipeRefreshOngoing.isEnabled = true
 
       Timber.tag(Constants.ERROR).e(error)
       dontHaveOngoing.visibility = View.VISIBLE
@@ -215,9 +226,9 @@ class OngoingFragment : BaseFragment(), OngoingContract {
     ft?.detach(this)?.attach(this)?.commit()
   }
 
-  override fun onDestroyView() {
+  override fun onDestroy() {
     binding.parkingTime.stop()
     presenter.detach()
-    super.onDestroyView()
+    super.onDestroy()
   }
 }

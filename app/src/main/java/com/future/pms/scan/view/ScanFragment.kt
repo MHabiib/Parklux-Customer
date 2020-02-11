@@ -206,8 +206,8 @@ class ScanFragment : Fragment(), ScanContract {
     }
   }
 
-  override fun onDestroyView() {
+  override fun onDestroy() {
     presenter.detach()
-    super.onDestroyView()
+    super.onDestroy()
   }
 }

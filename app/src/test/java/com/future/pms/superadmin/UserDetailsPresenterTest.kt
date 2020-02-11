@@ -165,6 +165,10 @@ class UserDetailsPresenterTest : BaseTest() {
         Observable.just(STR))
 
     userDetailsPresenter.updateSuperAdmin(ID, ACCESS_TOKEN, EMAIL, PASSWORD, ROLE)
+
+    verify(userDetailsContract).showProgress(true)
+    verify(userDetailsContract).showProgress(false)
+    verify(userDetailsContract).updateSuperAdminSuccess()
   }
 
   @Test fun updateSuperAdminFailed() {
@@ -172,12 +176,18 @@ class UserDetailsPresenterTest : BaseTest() {
         Observable.error(Exception(ERROR)))
 
     userDetailsPresenter.updateSuperAdmin(ID, ACCESS_TOKEN, EMAIL, PASSWORD, ROLE)
+
+    verify(userDetailsContract).showProgress(true)
+    verify(userDetailsContract).showProgress(false)
+    verify(userDetailsContract).onFailed(ERROR)
   }
 
   @Test fun banCustomerSuccess() {
     `when`(userDetailsApi.banCustomer(ID, ACCESS_TOKEN)).thenReturn(Observable.just(STR))
 
     userDetailsPresenter.banCustomer(ID, ACCESS_TOKEN)
+
+    verify(userDetailsContract).updateCustomerSuccess()
   }
 
   @Test fun banCustomerFailed() {
@@ -185,12 +195,16 @@ class UserDetailsPresenterTest : BaseTest() {
         Observable.error(Exception(ERROR)))
 
     userDetailsPresenter.banCustomer(ID, ACCESS_TOKEN)
+
+    verify(userDetailsContract).onFailed("java.lang.Exception: error")
   }
 
   @Test fun deleteSuperAdminSuccess() {
     `when`(userDetailsApi.deleteSuperAdmin(ID, ACCESS_TOKEN)).thenReturn(Observable.just(STR))
 
     userDetailsPresenter.deleteSuperAdmin(ID, ACCESS_TOKEN)
+
+    verify(userDetailsContract).deleteSuperAdminSuccess(STR)
   }
 
   @Test fun deleteSuperAdminFailed() {
@@ -198,5 +212,7 @@ class UserDetailsPresenterTest : BaseTest() {
         Observable.error(Exception(ERROR)))
 
     userDetailsPresenter.deleteSuperAdmin(ID, ACCESS_TOKEN)
+
+    verify(userDetailsContract).onFailed("java.lang.Exception: error")
   }
 }

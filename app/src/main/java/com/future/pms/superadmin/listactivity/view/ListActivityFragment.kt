@@ -74,6 +74,7 @@ class ListActivityFragment : BaseFragment(), ListActivityContract {
         refreshList()
         presenter.loadAllBooking(accessToken, currentPage, filterBy)
         refreshActivity.isRefreshing = false
+        refreshActivity.isEnabled = false
       }
       listActivityAdapter = ListActivityAdapter()
       rvActivity.layoutManager = linearLayoutManager
@@ -121,18 +122,21 @@ class ListActivityFragment : BaseFragment(), ListActivityContract {
               refreshList()
               presenter.loadAllBooking(accessToken, currentPage, ALL)
               refreshActivity.isRefreshing = false
+              refreshActivity.isEnabled = false
             }
             1 -> {
               filterBy = ONGOING
               refreshList()
               presenter.loadAllBooking(accessToken, currentPage, ONGOING)
               refreshActivity.isRefreshing = false
+              refreshActivity.isEnabled = false
             }
             else -> {
               filterBy = PAST
               refreshList()
               presenter.loadAllBooking(accessToken, currentPage, PAST)
               refreshActivity.isRefreshing = false
+              refreshActivity.isEnabled = false
             }
           }
         }
@@ -154,6 +158,7 @@ class ListActivityFragment : BaseFragment(), ListActivityContract {
   override fun loadAllBookingSuccess(booking: Booking) {
     binding.shimmerActivity.stopShimmer()
     binding.shimmerActivity.visibility = View.GONE
+    binding.refreshActivity.isEnabled = true
     if (currentPage != 0) {
       if (currentPage <= booking.totalPages - 1) {
         listActivityAdapter.addAll(booking.content)
@@ -194,5 +199,13 @@ class ListActivityFragment : BaseFragment(), ListActivityContract {
     }
   }
 
-  override fun onFailed(message: String) = Timber.e(message)
+  override fun onFailed(message: String) {
+    Timber.e(message)
+    binding.refreshActivity.isEnabled = true
+  }
+
+  override fun onDestroy() {
+    presenter.detach()
+    super.onDestroy()
+  }
 }

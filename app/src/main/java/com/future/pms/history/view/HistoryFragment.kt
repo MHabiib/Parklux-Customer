@@ -89,6 +89,7 @@ class HistoryFragment : BaseFragment(), HistoryContract {
   }
 
   override fun onFailed(message: String) {
+    binding.refreshHistory.isEnabled = true
     Timber.tag(ERROR).e(message)
     isLastPage = true
   }
@@ -96,6 +97,7 @@ class HistoryFragment : BaseFragment(), HistoryContract {
   override fun loadCustomerBookingSuccess(history: History) {
     binding.shimmerHistory.visibility = View.GONE
     binding.shimmerHistory.stopShimmer()
+    binding.refreshHistory.isEnabled = true
     if (currentPage != 0) {
       if (currentPage <= history.totalPages - 1) {
         historyAdapter.addAll(history.content)
@@ -128,7 +130,8 @@ class HistoryFragment : BaseFragment(), HistoryContract {
     }
   }
 
-  private fun refreshListHistory() {
+  fun refreshListHistory() {
+    binding.dontHaveOrder.visibility = View.GONE
     binding.shimmerHistory.visibility = View.VISIBLE
     binding.shimmerHistory.startShimmer()
     historyAdapter.clear()
@@ -137,14 +140,15 @@ class HistoryFragment : BaseFragment(), HistoryContract {
     isLastPage = false
     presenter.loadCustomerBooking(accessToken, currentPage)
     binding.refreshHistory.isRefreshing = false
+    binding.refreshHistory.isEnabled = false
   }
 
   override fun loadCustomerBookingError() {
     binding.dontHaveOrder.visibility = View.VISIBLE
   }
 
-  override fun onDestroyView() {
+  override fun onDestroy() {
     presenter.detach()
-    super.onDestroyView()
+    super.onDestroy()
   }
 }

@@ -3,15 +3,18 @@ package com.future.pms.customer
 import com.future.pms.base.BaseTest
 import com.future.pms.register.network.RegisterApi
 import com.future.pms.register.presenter.RegisterPresenter
+import com.future.pms.register.view.RegisterContract
 import com.future.pms.util.Constants
 import io.reactivex.Observable
 import org.junit.Test
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
+import org.mockito.Mockito.verify
 
 class RegisterPresenterTest : BaseTest() {
   @Mock lateinit var registerApi: RegisterApi
+  @Mock lateinit var registerContract: RegisterContract
   @InjectMocks lateinit var registerPresenter: RegisterPresenter
 
   @Test fun registerSuccess() {
@@ -20,8 +23,9 @@ class RegisterPresenterTest : BaseTest() {
     `when`(registerApi.auth(customerWithPassword().email, customerWithPassword().password,
         Constants.GRANT_TYPE)).thenReturn(Observable.just(token()))
 
-
     registerPresenter.register(NAME, EMAIL, PASSWORD, PHONE_NUMBER)
+
+    verify(registerContract).onSuccess(token())
   }
 
   @Test fun registerSuccessLoginFailed() {
@@ -30,8 +34,9 @@ class RegisterPresenterTest : BaseTest() {
     `when`(registerApi.auth(customerWithPassword().email, customerWithPassword().password,
         Constants.GRANT_TYPE)).thenReturn(Observable.error(Exception(ERROR)))
 
-
     registerPresenter.register(NAME, EMAIL, PASSWORD, PHONE_NUMBER)
+
+    verify(registerContract).onFailed(ERROR)
   }
 
   @Test fun registerFailed() {
@@ -39,5 +44,7 @@ class RegisterPresenterTest : BaseTest() {
         Observable.error(Exception(ERROR)))
 
     registerPresenter.register(NAME, EMAIL, PASSWORD, PHONE_NUMBER)
+
+    verify(registerContract).onFailed(ERROR)
   }
 }

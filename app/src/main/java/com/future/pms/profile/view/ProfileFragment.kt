@@ -165,7 +165,7 @@ class ProfileFragment : Fragment(), ProfileContract {
   override fun loadCustomerDetailSuccess(customer: Body) {
     with(binding) {
       ibRefresh.visibility = View.GONE
-      profileNameDisplay.text = customer.name
+      profileNameDisplay.text = getString(R.string.hi_with_name, customer.name)
       profileName.setText(customer.name)
       profileEmail.setText(customer.email)
       profilePassword.hint = getString(R.string.password_hint)
@@ -225,8 +225,8 @@ class ProfileFragment : Fragment(), ProfileContract {
     ft?.detach(this)?.attach(this)?.commit()
   }
 
-  override fun onDestroyView() {
+  override fun onDestroy() {
     presenter.detach()
-    super.onDestroyView()
+    super.onDestroy()
   }
 }

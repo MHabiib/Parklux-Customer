@@ -126,4 +126,9 @@ class LoginActivitySuperAdmin : BaseActivity(), LoginContractSuperAdmin {
     super.onBackPressed()
     this.finishAffinity()
   }
+
+  override fun onDestroy() {
+    presenter.detach()
+    super.onDestroy()
+  }
 }

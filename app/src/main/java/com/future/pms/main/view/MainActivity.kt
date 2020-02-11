@@ -1,7 +1,6 @@
 package com.future.pms.main.view
 
 import android.Manifest
-import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -20,6 +19,7 @@ import com.future.pms.BaseApp
 import com.future.pms.R
 import com.future.pms.bookingdetail.view.BookingDetailFragment
 import com.future.pms.databinding.ActivityMainBinding
+import com.future.pms.history.view.HistoryFragment
 import com.future.pms.home.view.HomeFragment
 import com.future.pms.login.view.LoginActivity
 import com.future.pms.main.injection.DaggerMainComponent
@@ -28,14 +28,13 @@ import com.future.pms.main.presenter.MainPresenter
 import com.future.pms.ongoing.view.OngoingFragment
 import com.future.pms.parkingdirection.view.ParkingDirectionFragment
 import com.future.pms.profile.view.ProfileFragment
+import com.future.pms.receipt.view.ReceiptFragment
 import com.future.pms.scan.view.ScanFragment
-import com.future.pms.util.Constants.Companion.FCM_PARKING_ZONE
 import com.future.pms.util.Constants.Companion.FCM_TOTAL_PRICE
 import com.future.pms.util.Constants.Companion.ID_BOOKING
 import com.future.pms.util.Constants.Companion.LEVEL_NAME
 import com.future.pms.util.Constants.Companion.MY_FIREBASE_MESSAGING
 import com.future.pms.util.Constants.Companion.REQUEST_CAMERA_PERMISSION
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.util.*
 import javax.inject.Inject
 
@@ -97,13 +96,11 @@ class MainActivity : AppCompatActivity(), MainContract {
     binding.homeIndicator.visibility = View.VISIBLE
     binding.profileIndicator.visibility = View.GONE
     if (supportFragmentManager.findFragmentByTag(HomeFragment.TAG) == null) {
-      supportFragmentManager.beginTransaction().setCustomAnimations(R.animator.fade_in,
-          R.animator.fade_out).add(R.id.frame, HomeFragment().newInstance(),
+      supportFragmentManager.beginTransaction().add(R.id.frame, HomeFragment().newInstance(),
           HomeFragment.TAG).commit()
     } else {
       supportFragmentManager.run { findFragmentByTag(HomeFragment.TAG) }?.let {
-        supportFragmentManager.beginTransaction().setCustomAnimations(R.animator.fade_in,
-            R.animator.fade_out).show(it).commit()
+        supportFragmentManager.beginTransaction().show(it).commit()
       }
     }
     if (supportFragmentManager.findFragmentByTag(ProfileFragment.TAG) != null) {
@@ -181,13 +178,11 @@ class MainActivity : AppCompatActivity(), MainContract {
   override fun showProfileFragment() {
     buttonIndicator(View.GONE, View.VISIBLE)
     if (supportFragmentManager.findFragmentByTag(ProfileFragment.TAG) == null) {
-      supportFragmentManager.beginTransaction().setCustomAnimations(R.animator.fade_in,
-          R.animator.fade_out).add(R.id.frame, ProfileFragment().newInstance(),
+      supportFragmentManager.beginTransaction().add(R.id.frame, ProfileFragment().newInstance(),
           ProfileFragment.TAG).commit()
     } else {
       supportFragmentManager.run { findFragmentByTag(ProfileFragment.TAG) }?.let {
-        supportFragmentManager.beginTransaction().setCustomAnimations(R.animator.fade_in,
-            R.animator.fade_out).show(it).commit()
+        supportFragmentManager.beginTransaction().show(it).commit()
       }
     }
     if (supportFragmentManager.findFragmentByTag(HomeFragment.TAG) != null) {
@@ -293,29 +288,37 @@ class MainActivity : AppCompatActivity(), MainContract {
         IntentFilter(MY_FIREBASE_MESSAGING))
   }
 
+  override fun onPause() {
+    LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver)
+    super.onPause()
+  }
+
   private val mMessageReceiver = object : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
 
       if (supportFragmentManager.findFragmentByTag(OngoingFragment.TAG) != null) {
-        val parkingZoneName = intent.getStringExtra(FCM_PARKING_ZONE)
         val totalPrice = intent.getStringExtra(FCM_TOTAL_PRICE)
+
+        val fragment = ReceiptFragment()
+        val bundle = Bundle()
+        bundle.putString(ID_BOOKING, totalPrice)
+        fragment.arguments =     bundle
+        supportFragmentManager.let { bottomSheetFragment ->
+          if (!fragment.isAdded) {
+            fragment.show(bottomSheetFragment, fragment.tag)
+          }
+        }
 
         val ongoingFragment = supportFragmentManager.findFragmentByTag(
             OngoingFragment.TAG) as OngoingFragment
         ongoingFragment.refreshPage()
-        val title = getString(R.string.thank_you_using_parklux)
-        val message = "Your parking at $parkingZoneName completed !\nYour total billing is IDR $totalPrice"
-        showDialog(title, message)
-      }
-    }
-  }
 
-  private fun showDialog(title: String, body: String) {
-    if (!(this as Activity).isFinishing) {
-      val dialog = MaterialAlertDialogBuilder(this).setTitle(title).setMessage(body).show()
-      Handler().postDelayed({
-        dialog?.dismiss()
-      }, 7000)
+        var historyFragment = supportFragmentManager.findFragmentByTag(HistoryFragment.TAG)
+        if (historyFragment != null) {
+          historyFragment = historyFragment as HistoryFragment
+          historyFragment.refreshListHistory()
+        }
+      }
     }
   }
 

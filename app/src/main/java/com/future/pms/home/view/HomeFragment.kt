@@ -157,8 +157,8 @@ class HomeFragment : BaseFragment(), HomeContract {
     dateText.text = String.format(getString(R.string.date_now), currentDateTimeString)
   }
 
-  override fun onDestroyView() {
+  override fun onDestroy() {
     presenter.detach()
-    super.onDestroyView()
+    super.onDestroy()
   }
 }

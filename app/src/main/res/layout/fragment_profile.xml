@@ -13,11 +13,9 @@
             android:background="@color/baseWhite"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ScrollView
+            <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/twelve_dp"
-                android:layout_marginRight="@dimen/twelve_dp"
                 android:background="@color/baseWhite"
                 android:clipChildren="false"
                 android:clipToPadding="false"
@@ -37,6 +35,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/twenty_dp"
+                        android:layout_marginLeft="@dimen/twelve_dp"
+                        android:layout_marginRight="@dimen/twelve_dp"
                         android:background="@drawable/card_layout_grey"
                         android:fontFamily="sans-serif-light"
                         android:text="@string/logout"
@@ -60,30 +60,36 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
+                        android:id="@+id/iv_header"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/hundred_margin"
+                        android:src="@drawable/card_layout_blue_primary_receipt"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                    <ImageView
                         android:id="@+id/user_image"
                         android:layout_width="200dp"
                         android:layout_height="200dp"
                         android:contentDescription="@string/user_avatar"
                         android:paddingTop="@dimen/twenty_dp"
-                        android:paddingBottom="@dimen/twenty_dp"
-                        android:src="@drawable/ic_person"
+                        android:src="@drawable/ic_offroad"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@id/iv_header" />
 
                     <TextView
                         android:id="@+id/profile_name_display"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:paddingBottom="@dimen/twenty_dp"
                         android:textAlignment="center"
-                        android:textColor="@color/colorSecondary"
-                        android:textSize="@dimen/h1"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/h_medium"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/user_image"
-                        tools:text="Customer" />
+                        app:layout_constraintBottom_toBottomOf="@id/iv_header"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="Hi, Customer" />
 
                     <ProgressBar
                         android:id="@+id/progressBar"
@@ -91,21 +97,24 @@
                         android:layout_height="wrap_content"
                         android:indeterminateDrawable="@drawable/custom_progressbar"
                         android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="@id/iv_header"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/user_image"/>
+                        app:layout_constraintTop_toTopOf="parent"/>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/constraint_layout_profile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/card_layout_grey"
+                        android:layout_marginLeft="@dimen/twelve_dp"
+                        android:layout_marginRight="@dimen/twelve_dp"
                         android:clipChildren="false"
                         android:clipToPadding="false"
                         android:padding="@dimen/twenty_dp"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/profile_name_display"
+                        app:layout_constraintTop_toBottomOf="@id/user_image"
                         app:layout_constraintVertical_bias="0.0">
 
                         <Button
@@ -184,6 +193,7 @@
                             android:layout_height="wrap_content"
                             app:backgroundTint="@null"
                             android:maxLines="1"
+                            android:maxLength="40"
                             android:paddingBottom="@dimen/twelve_dp"
                             android:digits="@string/digits"
                             android:singleLine="true"
@@ -234,6 +244,7 @@
                             android:inputType="phone"
                             android:maxLines="1"
                             android:enabled="false"
+                            android:digits="@string/digits_number"
                             android:paddingBottom="@dimen/twelve_dp"
                             android:singleLine="true"
                             android:textColor="@color/darkGrey"
@@ -243,7 +254,7 @@
                             tools:text="0812362672" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
-            </ScrollView>
+            </androidx.core.widget.NestedScrollView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

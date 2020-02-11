@@ -49,7 +49,7 @@
     <string name="minutes">Minutes</string>
     <string name="idr">IDR %s</string>
     <string name="total_price_only">Total price</string>
-    <string name="safety_parking">Safety is number one priority\nParking on your slot</string>
+    <string name="safety_parking">Safety is number one priority\nPlease park on your slot</string>
     <string name="price">Price</string>
     <string name="price_hour">Price/hour</string>
     <string name="update_account">Update super admin account</string>
@@ -74,6 +74,7 @@
     <string name="opening_hours">Opening hours</string>
     <string name="address">Address</string>
     <string name="password_hint">********</string>
+    <string name="hi_with_name">Hi, %s</string>
     <string name="update_super_admin">Update super admin</string>
     <string name="delete_super_admin">Delete super admin</string>
     <string name="idr_price">IDR %s</string>
@@ -109,6 +110,7 @@
     <string name="pattern">HH:mm</string>
     <string name="re_type_password">Re-type password</string>
     <string name="digits">abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,.()-</string>
+    <string name="digits_number">+0123456789</string>
     <string name="open_on_google_maps">Open with Google Maps</string>
     <string name="history">History</string>
     <string name="thank_you_using_parklux">Thank you for using Parklux apps</string>

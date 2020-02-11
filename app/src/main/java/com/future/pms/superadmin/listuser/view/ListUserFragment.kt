@@ -101,6 +101,7 @@ class ListUserFragment : BaseFragment(), ListUserContract {
         isLastPage = false
         presenter.loadAllCustomer(accessToken, currentPage, searchByName)
         refreshCustomer.isRefreshing = false
+        refreshCustomer.isEnabled = false
       }
       refreshAdmin.setOnRefreshListener {
         shimmerUser.startShimmer()
@@ -111,6 +112,7 @@ class ListUserFragment : BaseFragment(), ListUserContract {
         isLastPage = false
         presenter.loadAllAdmin(accessToken, currentPage, searchByName)
         refreshAdmin.isRefreshing = false
+        refreshAdmin.isEnabled = false
       }
       refreshSuperAdmin.setOnRefreshListener {
         shimmerUser.startShimmer()
@@ -121,6 +123,7 @@ class ListUserFragment : BaseFragment(), ListUserContract {
         isLastPage = false
         presenter.loadAllSuperAdmin(accessToken, currentPage)
         refreshSuperAdmin.isRefreshing = false
+        refreshSuperAdmin.isEnabled = false
       }
       listCustomerAdapter = ListCustomerAdapter()
       listAdminAdapter = ListAdminAdapter()
@@ -224,6 +227,7 @@ class ListUserFragment : BaseFragment(), ListUserContract {
               refreshCustomer.visibility = View.VISIBLE
               presenter.loadAllCustomer(accessToken, currentPage, searchByName)
               refreshCustomer.isRefreshing = false
+              refreshCustomer.isEnabled = false
               searchName.visibility = View.VISIBLE
             }
             1 -> {
@@ -233,6 +237,7 @@ class ListUserFragment : BaseFragment(), ListUserContract {
               refreshAdmin.visibility = View.VISIBLE
               presenter.loadAllAdmin(accessToken, currentPage, searchByName)
               refreshAdmin.isRefreshing = false
+              refreshAdmin.isEnabled = false
               searchName.visibility = View.VISIBLE
             }
             else -> {
@@ -242,6 +247,7 @@ class ListUserFragment : BaseFragment(), ListUserContract {
               refreshSuperAdmin.visibility = View.VISIBLE
               presenter.loadAllSuperAdmin(accessToken, currentPage)
               refreshSuperAdmin.isRefreshing = false
+              refreshSuperAdmin.isEnabled = false
               searchName.visibility = View.GONE
             }
           }
@@ -261,6 +267,7 @@ class ListUserFragment : BaseFragment(), ListUserContract {
               isLastPage = false
               presenter.loadAllCustomer(accessToken, currentPage, searchByName)
               refreshCustomer.isRefreshing = false
+              refreshCustomer.isEnabled = false
             }
             name.selectedItem == getString(R.string.admin) -> {
               shimmerUser.startShimmer()
@@ -271,6 +278,7 @@ class ListUserFragment : BaseFragment(), ListUserContract {
               isLastPage = false
               presenter.loadAllAdmin(accessToken, currentPage, searchByName)
               refreshAdmin.isRefreshing = false
+              refreshAdmin.isEnabled = false
             }
           }
         }
@@ -293,6 +301,7 @@ class ListUserFragment : BaseFragment(), ListUserContract {
   override fun loadAllCustomerSuccess(customer: CustomerResponse) {
     binding.shimmerUser.stopShimmer()
     binding.shimmerUser.visibility = View.GONE
+    binding.refreshCustomer.isEnabled = true
     if (currentPage != 0) {
       if (currentPage <= customer.body.totalPages - 1) {
         listCustomerAdapter.addAll(customer.body.content)
@@ -314,6 +323,7 @@ class ListUserFragment : BaseFragment(), ListUserContract {
   override fun loadAllAdminSuccess(admin: Admin) {
     binding.shimmerUser.stopShimmer()
     binding.shimmerUser.visibility = View.GONE
+    binding.refreshAdmin.isEnabled = true
     if (currentPage != 0) {
       if (currentPage <= admin.totalPages - 1) {
         listAdminAdapter.addAll(admin.content)
@@ -335,6 +345,7 @@ class ListUserFragment : BaseFragment(), ListUserContract {
   override fun loadAllSuperAdminSuccess(superAdmin: SuperAdminResponse) {
     binding.shimmerUser.stopShimmer()
     binding.shimmerUser.visibility = View.GONE
+    binding.refreshSuperAdmin.isEnabled = true
     if (currentPage != 0) {
       if (currentPage <= superAdmin.body.totalPages - 1) {
         listSuperAdminAdapter.addAll(superAdmin.body.content)
@@ -414,10 +425,15 @@ class ListUserFragment : BaseFragment(), ListUserContract {
     isLastPage = false
   }
 
-  override fun onFailed(message: String) = Timber.e(message)
+  override fun onFailed(message: String) {
+    binding.refreshCustomer.isEnabled = true
+    binding.refreshAdmin.isEnabled = true
+    binding.refreshSuperAdmin.isEnabled = true
+    Timber.e(message)
+  }
 
-  override fun onDestroyView() {
+  override fun onDestroy() {
     presenter.detach()
-    super.onDestroyView()
+    super.onDestroy()
   }
 }
