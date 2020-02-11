@@ -94,15 +94,16 @@
                     android:orientation="vertical"
                     app:layout_constraintGuide_percent="0.4" />
 
-                <include
-                    android:id="@+id/numbering_left_one_row"
-                    layout="@layout/numbering_left_one_row"
-                    android:visibility="gone" />
-
-                <include
+                <LinearLayout
                     android:id="@+id/numbering_left"
-                    layout="@layout/numbering_left"
-                    android:visibility="gone" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:background="@android:color/transparent"
+                    android:orientation="vertical"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/scroll_view"
+                    app:layout_constraintBottom_toBottomOf="@+id/scroll_view"/>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>

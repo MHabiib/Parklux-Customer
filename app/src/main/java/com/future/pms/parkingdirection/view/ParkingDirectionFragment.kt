@@ -43,6 +43,7 @@ import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_parking_direction.*
 import timber.log.Timber
 import java.lang.ref.WeakReference
+import java.util.*
 import javax.inject.Inject
 
 class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
@@ -63,6 +64,11 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
   private lateinit var parkingLayout: LinearLayout
   private lateinit var asyncTask: SetupLayoutAsyc
   private var totalRow = 0
+  private val LETTER = ArrayList(
+      listOf("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q",
+          "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "A1", "A2", "A3", "A4", "A5", "A6", "A7",
+          "A8", "A9", "B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B9", "C1", "C2", "C3", "C4",
+          "C5", "C6", "C7", "C8", "C9", "D1", "D2", "D3", "D4", "D5", "D6", "D7"))
 
   companion object {
     const val TAG: String = PARKING_DETAIL_FRAGMENT
@@ -161,13 +167,25 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
     if (result != "" && context != null) {
       val slotsLayout = result?.substring(result.length - 1)?.single()
       val index = result?.substring(0, result.length - 1)?.toInt()
+      val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+          LinearLayout.LayoutParams.WRAP_CONTENT)
+      val numberingLeft = binding.numberingLeft as LinearLayout
 
       if (index != null) {
+
         if (index == 0 || index % SLOTS_IN_ROW == 0) {
           parkingLayout = LinearLayout(context)
           parkingLayout.orientation = LinearLayout.HORIZONTAL
           layoutPark.addView(parkingLayout)
           totalRow++
+
+          val numbering = TextView(context)
+          numbering.text = LETTER[totalRow - 1]
+          params.weight = 1f
+          numbering.layoutParams = params
+          numbering.gravity = Gravity.CENTER
+          numbering.setTextColor(resources.getColor(R.color.colorAccent))
+          numberingLeft.addView(numbering)
         }
 
         when (slotsLayout) {
@@ -200,13 +218,9 @@ class ParkingDirectionFragment : Fragment(), ParkingDirectionContract {
           }
         }
         if (totalRow == 30) {
-          binding.numberingLeft.visibility = View.GONE
-          binding.numberingLeftOneRow.visibility = View.VISIBLE
           showProgress(false)
         }
         if (totalRow == 31) {
-          binding.numberingLeft.visibility = View.VISIBLE
-          binding.numberingLeftOneRow.visibility = View.GONE
           showProgress(true)
         }
         if (totalRow == 60) {
